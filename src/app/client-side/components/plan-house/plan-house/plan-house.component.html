@@ -1,0 +1,71 @@
+<span class="planHouseModule">
+  <span class="furnitureCategory">
+    <h1 class="furnitureCategoryTitle">{{furnitureCategoryDataArray[currentIdFurnitureCategory!]}}</h1>
+    <span class="furnitureList">
+      <div *ngFor="let furnitureData of furnitureExampleList" class="furnitureItem">
+        <h2 class="furnitureTitle">{{furnitureData.name}}</h2>
+        <img class="furniturePreview" [src]="furnitureData.previewUrl" alt="">
+        <a class="furnitureLink" [href]="furnitureData.link">{{furnitureData.cost}}</a>
+      </div>
+    </span>
+  </span>
+  <span class="addModuleSpan">
+    <button 
+    (click)="
+    currentViewRoom === undefined
+    ? toggleOpenRoomModule()
+    : (currentIdFurnitureCategory !== undefined
+      ? closeCategory()
+      : closeViewRoom())
+    "
+    [style.rotate]="currentViewRoom === undefined ? '0deg' : '225deg'" 
+    class="addModuleBtn"
+    type="button"
+    tabindex="0">
+      <img src="/assets/images/addIcon.svg"
+        style="transition: all 0.5s;pointer-events: none;" alt="">
+    </button>
+    <form [style.opacity]="currentViewRoom===undefined&&currentIdFurnitureCategory===undefined?1:0" [formGroup]="roomForm"
+      (ngSubmit)="addRoom()" class="addModuleFormContent">
+      <h2 class="addModuleTitle">Room parameters</h2>
+      <span class="addModuleInputSpan">
+        <label class="inputLabel" for="width">Width</label>
+        <input placeholder="5m" formControlName="width" class="addModuleInput" id="width" type="text">
+      </span>
+      <span class="addModuleInputSpan">
+        <label class="inputLabel" for="length">Length</label>
+        <input placeholder="3m" formControlName="length" class="addModuleInput" id="length" type="text">
+      </span>
+      <span class="addModuleInputSpan">
+        <label class="inputLabel" for="height">Height</label>
+        <input placeholder="1.7m" formControlName="height" class="addModuleInput" id="height" type="text">
+      </span>
+      <span class="addModuleInputSpan">
+        <label class="inputLabel" for="name">Name</label>
+        <input placeholder="Bedroom" formControlName="name" class="addModuleInput" id="name" type="text">
+      </span>
+      <span class="functionShopsModuleBtns">
+        <button [disabled]="!roomForm.valid" [ngClass]="{'none': currentIdClickedRoom!==undefined}"
+          class="submitAddModuleFormBtn" type="submit">Continue</button>
+        <button (click)="deleteRoom()" class="deleteItemAddModuleBtn" *ngIf="currentIdClickedRoom !== undefined">
+          <img style="height: 60%" src="/assets/images/deleteIcon.svg" alt="">
+        </button>
+      </span>
+    </form>
+  </span>
+  <span class="roomSpan">
+    <ng-container *ngFor="let roomData of planHouse; let index = index">
+      <button class="room" [style.grid-area]="roomData.gridArea"
+        *ngIf="(currentViewRoom!==undefined&&currentViewRoom==index)||currentViewRoom===undefined"
+        [attr.data-index]="index"  (touchstart)="clickRoom($event, index)" (keydown.enter)="clickRoom($event, index)" (mousedown)="clickRoom($event, index)">
+        {{roomData.name}}
+      </button>
+    </ng-container>
+    <span *ngIf="currentViewRoom!==undefined" class="furnitureCategoriesButtonsSpan">
+      <button (click)="openCategory(index)" class="furnitureCategoryButton"
+        *ngFor="let categoryName of furnitureCategoryDataArray; let index = index">
+        {{categoryName}}
+      </button>
+    </span>
+  </span>
+</span>

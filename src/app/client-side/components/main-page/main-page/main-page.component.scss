@@ -1,0 +1,315 @@
+@import 'base.scss';
+@import url('https://fonts.googleapis.com/css2?family=Gloock&display=swap');
+
+.circleDecoration {
+    grid-area: 1/1/2/2;
+    height: calc(100vh - 250px);
+    overflow: hidden;
+    justify-content: center;
+    display: flex;
+}
+
+.circleDecorationSpan {
+    display: grid;
+    padding:3vw;
+    width: 84vw;
+    aspect-ratio: 1;
+    place-items: center;
+}
+
+.circleDecorationSpan > div {
+    background-color: #3A5A40;
+    border-radius: 50%;
+    grid-area: 1/1/2/2;
+    aspect-ratio: 1;
+    animation: wave 2s infinite ease-in-out;
+}
+.circleDecorationSpan div:nth-child(1) {
+    opacity: 1;
+    width: 50%;
+    animation-delay: 0s;
+}
+
+.circleDecorationSpan div:nth-child(2) {
+    opacity: 0.8;
+    width: 65%;
+    animation-delay: 0.3s;
+}
+
+.circleDecorationSpan div:nth-child(3) {
+    opacity: 0.6;
+    width: 80%;
+    animation-delay: 0.6s;
+}
+
+.circleDecorationSpan div:nth-child(4) {
+    opacity: 0.4;
+    width: 95%;
+    animation-delay: 0.9s;
+}
+@keyframes wave {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+}
+.startScreenSpan {
+    width: 100vw;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr;
+    padding-top: 250px;
+    overflow: hidden;
+    background: rgb(163, 177, 138);
+    background: linear-gradient(0deg, rgba(163, 177, 138, 1) 0%, rgba(218, 215, 205, 1) 100%);
+}
+
+.decorationFigures {
+    display: flex;
+    flex-direction: row;
+    gap: 30px;
+    height: 45px;
+    width: 350px;
+    grid-area: 1/1/2/2;
+    z-index: 1;
+    justify-content: center;
+}
+
+.parallelogram {
+    border-radius: 10px;
+    aspect-ratio: 1/2;
+    transform: skew(-20deg);
+
+    background-color: $darkGreen;
+    height: 100%;
+}
+
+.quarter-circle {
+    aspect-ratio: 1;
+    border-radius: 10px;
+    border-top-left-radius: 100%;
+
+    background-color: $darkGreen;
+    height: 100%;
+}
+
+.square {
+    border-radius: 10px;
+    aspect-ratio: 1;
+
+    background-color: $darkGreen;
+    height: 100%;
+}
+
+.circle {
+    width: 39px;
+    height: 39px;
+    position: relative;
+    border: 3px solid $darkGreen;
+    border-radius: 50%;
+}
+
+.circle::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 39px;
+    height: 39px;
+    background-color: $darkGreen;
+    border-radius: 50%;
+    clip-path: inset(0 50% 0 0);
+}
+
+.circle::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 39px;
+    height: 39px;
+    background-color: transparent;
+    border-radius: 50%;
+}
+
+.startInformationSpan {
+    display: flex;
+    gap: 20px;
+    flex-direction: column;
+    align-items: center;
+    grid-area: 1/1/2/2;
+    z-index: 1;
+    margin-top: 10px;
+}
+
+.projectTitle {
+    font-family: Gloock;
+    font-size: 8vw;
+    font-weight: 400;
+}
+
+.navigationStartMenu {
+    display: flex;
+    gap: 10px;
+}
+
+.startNavigationBtn {
+    padding: 5px;
+    background: none;
+    border: none;
+    font-size: 1.75vw;
+    cursor: pointer;
+    text-decoration: none;
+    color:black
+}
+
+.mainInformation {
+    background-color: black;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 100px;
+    padding: 50px;
+    width: calc(100vw - 100px)
+}
+
+.someSpan {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    justify-content: start;
+}
+
+.chapterTitle {
+    font-family: Gloock;
+    font-weight: 400;
+    font-size: 3.5vw;
+    color: $light;
+    width: 60%;
+}
+
+.descriptionText {
+    color: $lightGreen;
+    width: 50%;
+}
+
+.exampleFunctions {
+    height: 150px;
+    display: flex;
+    flex-direction: row;
+    gap: 50px
+}
+
+.figureFunction {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+    background-color: rgba(52, 78, 65, 0.7);
+}
+
+.exampleFunctionTitle {
+    font-family: Gloock;
+    font-weight: 400;
+    font-size: 2vw;
+    color: $light;
+    margin: 0;
+    margin-left: -10px;
+    cursor:default;
+}
+
+.exampleFunctionDescription {
+    color: $lightGreen;
+    width: 125%;
+    margin-left: -10px;
+}
+
+.chapterChangeBtnsSpan {
+    display: flex;
+    gap: 30px;
+    width: 30vw;
+}
+.changeChapterBtn {
+    padding: 10px;
+    cursor: pointer;
+    background-color: $darkGreen;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    width: 50%;
+    aspect-ratio: 4;
+    font-size: 1.15rem;
+    transition: all 0.5s ease-in-out;
+}
+.projectPreviewSpan{
+    width:70%;
+}
+.activeChapterBtn {
+    background-color: $lightGreen;
+    color: black
+}
+
+.furnitureModule {
+    cursor: pointer;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr;
+    place-items: center;
+}
+
+.furnitureModuleVariant {
+    display: block;
+    grid-area: 1/1/2/2;
+    pointer-events: none;
+    grid-area: 1/1/2/2;
+    transition: all 0.5s ease-in-out;
+    width:100%
+}
+
+.opacityDisable {
+    opacity: 0;
+}
+app-plan-house{
+    width: calc(100vw - 100px);
+}
+footer{
+    width: calc(100vw - 200px);
+    background-color: black;
+    padding: 100px;
+    display: flex;
+    flex-direction: column;
+    gap:50px;
+}
+.footerColumnsSpan{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    width:100%;
+}
+.footerColumn{
+    display: flex;
+    flex-direction: column;
+    gap:15px
+}
+.footerMenuBtn{
+    background: none;
+    color:$lightGreen;
+    font-size: 1.15vw;
+    border: none;
+    text-align: start;
+    cursor:pointer
+}
+.projectFooterTitle{
+    color:$lightGreen;
+    color:1.15vw;
+    font-weight: 400;
+    text-align: center;
+    cursor:default;
+}
+app-navigation-panel{
+    position: sticky;
+    top:30px;
+    z-index:6;
+}

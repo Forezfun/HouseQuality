@@ -1,0 +1,86 @@
+<span class="body">
+    <h1 class="furnitureTitle">{{furnitureData.name}}</h1>
+    <span class="imageSlideSpan">
+        <button *ngIf="furnitureData.imagesData.images" class="editImagesBtn"><img  alt="editImages" src="/assets/images/editIcon.svg" alt=""></button>
+        <app-image-slider *ngIf="furnitureData.imagesData.images"
+            [imagesArray]="furnitureData.imagesData"></app-image-slider>
+    </span>
+    <div class="uploadImagesDiv" *ngIf="!furnitureData.imagesData.images">
+        <input class="uploadImagesInput" type="file" accept=".png,.jpeg">
+        <img class="uploadImagesIcon" src="/assets/images/uploadIcon.png" alt="">
+    </div>
+    <span class="footer">
+        <span class="colorSlider">
+            <button (click)="openColorModule()" class="addColorBtn">
+                <img src="/assets/images/addIcon.svg"  alt="add">
+            </button>
+            <span class="colors">
+                <button (click)="openFurnitureVariant($event.target!)"
+                    *ngFor="let colorVariant of furnitureData.colors;let index=index" [attr.data-idColor]="index"
+                    [style.background-color]="colorVariant" class="colorVariant"></button>
+            </span>
+        </span>
+        <span class="informationSpan">
+            <span class="descriptionSpan">
+                <div class="descriptionTitle ">Description</div>
+                <div class="descriptionInformation">{{furnitureData.description}}</div>
+            </span>
+            <span class="shopsSpan">
+                <div class="shopsTitle">Shops</div>
+                <span class="shopsListSpan">
+                    <button (click)="openShopsModule(index)" class="shopFunctions"
+                        *ngFor="let shopData of furnitureData.shops; let index=index">
+                        <div class="furnitureCost">{{shopData.cost}}</div>
+                        <div class="linkShop">
+                            <img  src="/assets/images/linkIcon.svg" alt="">
+                        </div>
+                    </button>
+                </span>
+                <button (click)="openShopsModule()" class="addShopButton"><img src="/assets/images/addIcon.svg"
+                        alt="open"></button>
+            </span>
+        </span>
+    </span>
+</span>
+
+<div class="addModule disabled">
+    <ng-container *ngTemplateOutlet="addModuleTemplate"></ng-container>
+</div>
+<ng-template #colorModule>
+    <form class="addModuleSpan" [formGroup]="colorForm" (ngSubmit)="addColor()">
+        <button (click)="closeAddModule()" class="closeAddModuleBtn" type="button">
+            <img src="/assets/images/addIcon.svg"  alt="">
+        </button>
+        <span class="addModuleFormContent">
+            <h2 class="addModuleTitle">Furniture variant</h2>
+            <span class="addModuleInputSpan">
+                <label class="inputLabel" for="colorVariant">Color</label>
+                <input formControlName="color" class="addModuleInput" id="colorVariant" type="text">
+            </span>
+            <button [disabled]="!colorForm.valid" class="submitAddModuleFormBtn" type="submit">Continue</button>
+        </span>
+    </form>
+</ng-template>
+<ng-template #shopsModule>
+    <form class="addModuleSpan" [formGroup]="shopForm" (ngSubmit)="addShop()">
+        <button (click)="closeAddModule()" class="closeAddModuleBtn" type="button">
+            <img src="/assets/images/addIcon.svg"  alt="">
+        </button>
+        <span class="addModuleFormContent">
+            <h2 class="addModuleTitle">Shop variant</h2>
+            <span class="addModuleInputSpan">
+                <label class="inputLabel" for="cost">Cost</label>
+                <input formControlName="cost" class="addModuleInput" id="cost" type="text">
+            </span>
+            <span class="addModuleInputSpan">
+                <label class="inputLabel" for="url">Link</label>
+                <input formControlName="url" class="addModuleInput" id="url" type="text">
+            </span>
+            <span class="functionShopsModuleBtns">
+                <button [disabled]="!shopForm.valid" class="submitAddModuleFormBtn" type="submit">Continue</button>
+                <button (click)="deleteShop()" class="deleteItemAddModuleBtn" *ngIf="lastClickedShop!==undefined"><img
+                         src="/assets/images/deleteIcon.svg" alt=""></button>
+            </span>
+        </span>
+    </form>
+</ng-template>

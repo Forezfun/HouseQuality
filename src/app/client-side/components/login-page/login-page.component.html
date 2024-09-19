@@ -1,0 +1,96 @@
+<span class="body">
+    <app-navigation-panel></app-navigation-panel>
+    <span class="paralaxImageSpan">
+        <button class="scrollBtn" (click)="toggleScroll()">{{checkLoginModuleStatus()?'BACK':'LOGIN'}}</button>
+        <img draggable="false" src="/assets/images/houseFront.png" alt=""
+            class="houseFront">
+        <img draggable="false" src="/assets/images/houseBackground.png" alt="" class="houseBackground">
+    </span>
+    <div class="floorDecration"></div>
+    <span class="paralaxSecondImageSpan">
+        <img draggable="false" src="/assets/images/paralaxBasement.webp" alt="">
+    </span>
+    <span class="loginModule disabledOpacity">
+        <span class="formModule">
+            <button (click)="toggleScroll()" class="closeAddModuleBtn" type="button">
+                <img src="/assets/images/addIcon.svg" alt="">
+            </button>
+            <ng-container *ngTemplateOutlet="currentFormTemplate"></ng-container>
+        </span>
+    </span>
+</span>
+<ng-template #code>
+    <form class="addModuleSpan" (ngSubmit)="signinUser()">
+            <h2 class="addModuleTitle">Change password</h2>
+            <span class="addModuleInputSpan">
+                <label class="inputLabel" for="#input1">Code</label>
+                <span class="input-group">
+                    <input type="text" maxlength="1" #input1 (input)="onInput(input1, input2)" (keyup.backspace)="onBackspace(input1, input1)"  [(ngModel)]="inputValues[0]" [ngModelOptions]="{standalone: true}" />
+                    <input type="text" maxlength="1" #input2 (input)="onInput(input2, input3)" (keyup.backspace)="onBackspace(input2, input1)"  [(ngModel)]="inputValues[1]" [ngModelOptions]="{standalone: true}" />
+                    <input type="text" maxlength="1" #input3 (input)="onInput(input3, input4)" (keyup.backspace)="onBackspace(input3, input2)"  [(ngModel)]="inputValues[2]" [ngModelOptions]="{standalone: true}" />
+                    <input type="text" maxlength="1" #input4 (input)="onInput(input4, null)"   (keyup.backspace)="onBackspace(input4, input3)"  [(ngModel)]="inputValues[3]" [ngModelOptions]="{standalone: true}" />
+                </span>
+            </span>
+            <span class="additionalFuntions">
+                <button (click)="changeTemplate('signin')">I know</button>
+            </span>
+            <button [disabled]="!codeForm.valid" class="submitAddModuleFormBtn" type="submit">{{codeForm.valid?'Change':'Not valid'}}</button>
+    </form>
+</ng-template>
+<ng-template #signin>
+    <form class="addModuleSpan" [formGroup]="signinForm" (ngSubmit)="signinUser()">
+            <h2 class="addModuleTitle">Sign in</h2>
+            <span class="addModuleInputSpan">
+                <label class="inputLabel" for="email">Email</label>
+                <input formControlName="email" class="addModuleInput" id="email" type="text">
+            </span>
+            <span class="addModuleInputSpan">
+                <label class="inputLabel" for="password">Password</label>
+                <input formControlName="password" class="addModuleInput" id="password" type="text">
+            </span>
+            <span class="additionalFuntions">
+                <button (click)="changeTemplate('signup')">Sign up</button>
+                <button (click)="changeTemplate('code')">Reset password</button>
+            </span>
+            <button [disabled]="!signinForm.valid" class="submitAddModuleFormBtn" type="submit">{{signinForm.valid?'Sign in':'Not valid'}}</button>
+    </form>
+</ng-template>
+<ng-template #changePassword><
+    <form class="addModuleSpan" [formGroup]="signinForm" (ngSubmit)="signinUser()">
+            <h2 class="addModuleTitle">Sign in</h2>
+            <span class="addModuleInputSpan">
+                <label class="inputLabel" for="email">Password</label>
+                <input formControlName="email" class="addModuleInput" id="email" type="text">
+            </span>
+            <span class="addModuleInputSpan">
+                <label class="inputLabel" for="password">Confirm assword</label>
+                <input formControlName="password" class="addModuleInput" id="password" type="text">
+            </span>
+            <span class="additionalFuntions">
+                <button (click)="changeTemplate('signup')">Sign up</button>
+                <button (click)="changeTemplate('code')">Reset password</button>
+            </span>
+            <button [disabled]="!signinForm.valid" class="submitAddModuleFormBtn" type="submit">{{signinForm.valid?'Sign in':'Not valid'}}</button>
+    </form>
+</ng-template>
+<ng-template #signup>
+    <form class="addModuleSpan" [formGroup]="signupForm" (ngSubmit)="signUpUser()">
+            <h2 class="addModuleTitle">Sign up</h2>
+            <span class="addModuleInputSpan">
+                <label class="inputLabel" for="email">Email</label>
+                <input formControlName="email" class="addModuleInput" id="email" type="text">
+            </span>
+            <span class="addModuleInputSpan">
+                <label class="inputLabel" for="nickname">Nickname</label>
+                <input formControlName="nickname" class="addModuleInput" id="nickname" type="text">
+            </span>
+            <span class="addModuleInputSpan">
+                <label class="inputLabel" for="password">Password</label>
+                <input formControlName="password" class="addModuleInput" id="password" type="text">
+            </span>
+            <span class="additionalFuntions">
+                <button (click)="changeTemplate('signin')">Sign in</button>
+            </span>
+            <button [disabled]="!signupForm.valid" class="submitAddModuleFormBtn" type="submit">{{signupForm.valid?'Sign up':'Not valid'}}</button>
+    </form>
+</ng-template>

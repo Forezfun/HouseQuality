@@ -1,0 +1,61 @@
+@import 'base.scss';
+.navigationBtn > img,svg{
+    height:100%;
+}
+.finderBtn > img{
+    height:100%;
+}
+.finderSpan{
+    height: 80%;
+    width:50%;
+    display: flex;
+    gap:10px;
+    border-radius: 15px;
+    background-color: white;
+    padding: 0;
+}
+.homeBtn{
+    color:$light;
+    font-family: Gloock;
+    font-size: 27.5px;
+    text-decoration: none;
+    align-content: center;
+}
+.finderBtn{
+    width:15%;
+    background:none;
+    border: none;
+    cursor: pointer;
+}
+.finderInput{
+    width:75%;
+    background:none;
+    border: none;
+    outline: none;
+}
+.navigationSpan{
+    display: flex;
+    background-color: black;
+    border-radius: 10px;
+    gap:5px;
+    justify-content: space-around;
+    min-width: 350px;
+    width:75vw;
+    margin: 0 auto;
+    height: 60px;
+    align-items: center;
+    box-shadow: 0 0 10px 0px white;
+
+}
+.navigationBtn{
+    height: 80%;
+    background:none;
+    border: none;
+    cursor: pointer;
+}
+.mainBtns{
+    height: 75%;
+    display: flex;
+    gap:15px;
+    align-items: center;
+}

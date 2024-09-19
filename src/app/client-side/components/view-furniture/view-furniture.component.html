@@ -1,0 +1,37 @@
+<span class="body">
+    <h1 class="furnitureTitle">{{furnitureData.name}}</h1>
+    <app-image-slider *ngIf="furnitureData.imagesData.images"
+        [imagesArray]="furnitureData.imagesData"></app-image-slider>
+    <div class="uploadImagesDiv" *ngIf="!furnitureData.imagesData.images">
+        <input class="uploadImagesInput" type="file" accept=".png,.jpeg">
+        <img class="uploadImagesIcon" src="/assets/images/uploadIcon.png" alt="">
+    </div>
+    <span class="footer">
+        <span class="colorSlider">
+            <img src="/assets/images/paletteIcon.svg" class="addColorBtn" alt="add">
+            <span class="colors">
+                <button (click)="openFurnitureVariant($event.target!)"
+                    *ngFor="let colorVariant of furnitureData.colors;let index=index" [attr.data-idColor]="index"
+                    [style.background-color]="colorVariant" class="colorVariant"></button>
+            </span>
+        </span>
+        <span class="informationSpan">
+            <span class="descriptionSpan">
+                <div class="descriptionTitle ">Description</div>
+                <div class="descriptionInformation">{{furnitureData.description}}</div>
+            </span>
+            <span class="shopsSpan">
+                <div class="shopsTitle">Shops</div>
+                <span class="shopsListSpan">
+                    <span class="shopFunctions"
+                        *ngFor="let shopData of furnitureData.shops; let index=index">
+                        <a [href]="shopData.url" class="furnitureCost">{{shopData.cost}}</a>
+                        <button [title]="shopData.url" (click)="copyShopLink(shopData.url)" class="linkShop">
+                            <img src="/assets/images/linkIcon.svg" alt="">
+                        </button>
+                    </span>
+                </span>
+            </span>
+        </span>
+    </span>
+</span>

@@ -1,0 +1,78 @@
+@import 'base.scss';
+.body{
+    border-radius: 10px;
+    box-shadow: 0 0 3px 3px white;
+    background-color: black;
+    width:clamp(300px,35vw,400px);
+    display:flex;
+    flex-direction: row;
+    padding: 0px 10px;
+    justify-content: space-around;
+    position: absolute;
+    bottom: 0px;
+    opacity: 0;
+    left: 50%;
+    transform: translateX(-50%); 
+    transition: all 0.5s ease-in-out;
+}
+.appearBody{
+    animation: appearHandler 0.5s forwards;
+}
+.disappearBody{
+    animation: disappearHandler 0.5s forwards;
+}
+.textSpan{
+    display: flex;
+    flex-direction: column;
+    gap:5px;
+    padding: 10px 0px;
+    font-size: 125%;
+    width:70%;
+    justify-content: center;
+}
+.title{
+    color:white;
+    margin:0;
+    font-size: 1em;
+}
+.errorMessage{
+    color:red;
+    margin:0;
+    width:100%;
+    font-weight:normal;
+    font-size: 0.75em;
+    white-space: nowrap; 
+    overflow: hidden; 
+    text-overflow: ellipsis;
+}
+.reloadPageBtn{
+    width:20%;
+    aspect-ratio: 1;
+    align-self: center;
+    background:none;
+    border: none;
+    cursor: pointer;
+}
+.reloadPageBtn > img {
+    height: 60%;
+}
+@keyframes appearHandler {
+    0%{
+        opacity: 0;
+        bottom: 0px;
+    }
+    100%{
+        opacity: 1;
+        bottom: 50px;
+    }
+}
+@keyframes disappearHandler {
+    0%{
+        opacity: 1;
+        bottom: 50px;
+    }
+    100%{
+        opacity: 0;
+        bottom: 0px;
+    }
+}

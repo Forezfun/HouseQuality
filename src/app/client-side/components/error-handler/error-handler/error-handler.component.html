@@ -1,0 +1,9 @@
+<span [ngClass]="{'appearBody': errorMessage.length>0,'disappearBody':errorMessage.length<1}" class="body">
+    <span class="textSpan">
+        <h2 class="title">Something went wrong</h2>
+        <h3 class="errorMessage">{{errorMessage}}</h3>
+    </span>
+    <button (click)="reloadPage()" class="reloadPageBtn">
+        <img src="/assets/images/reloadIcon.svg" alt="">
+    </button>
+</span>

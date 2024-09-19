@@ -1,0 +1,21 @@
+@import "spinner.scss";
+:host { display: block; height: 100%; }
+.funcBtnsSpan{
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom:50px;
+    display:flex;
+    gap:10px;
+}
+.funcBtn{
+    background-color: black;
+    color:white;
+    padding: 15px;
+    border-radius: 10px;
+    border: none;
+    font-family: arial;
+    font-weight: 1000;
+    width: 25vw;
+    cursor: pointer;
+}

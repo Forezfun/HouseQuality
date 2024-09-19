@@ -1,0 +1,60 @@
+<span class="body">
+    <app-navigation-panel></app-navigation-panel>
+    <span *ngIf="userData" class="accountSpan">
+        <span class="mainInformationCard">
+            <span class="accountAvatarSpan">
+                <img [src]="userData.avatarUrl" alt="avatar" class="accountAvatarImage">
+                <div class="avatarEditBtn">
+                    <input (input)="loadAvatar($event)" accept=".png,.jpeg,.jpg" class="editAvatarInput" type="file">
+                    <img src="/assets/images/editIcon.svg" alt="">
+                </div>
+            </span>
+            <span class="mainInformationSpan">
+                <button (click)="openAddModule()" class="mainInformationEditBtn">
+                    <img src="/assets/images/editIcon.svg" alt="">
+                </button>
+                <span class="informationTextSpan">
+                    <h2 class="accountName">{{userData.nickname}}</h2>
+                    <span class="subDescriptionSpan">
+                        <div class="accountInformationBlock">Projects:{{userData.projects.length}}</div>
+                        <div class="accountInformationBlock">Email:{{userData.email}}</div>
+                        <div class="accountInformationBlock" *ngIf="userData.password!==undefined">
+                            Password:{{userData.password}}</div>
+                    </span>
+                </span>
+            </span>
+        </span>
+        <span *ngIf="userData" class="projectsSpanCard">
+            <span *ngFor="let projectData of userData.projects" class="projectCard">
+                <h3 class="projectTitle">{{projectData.nameProject}}</h3>
+                <div class="projectSchem">
+                    <div [style.grid-area]="roomData.gridArea" *ngFor="let roomData of projectData.rooms" class="room">
+                    </div>
+                </div>
+            </span>
+        </span>
+    </span>
+</span>
+<span *ngIf="userData" class="addModule disabled">
+    <form class="addModuleSpan" [formGroup]="informationForm" (ngSubmit)="submitChanges()">
+        <button (click)="closeAddModule()" class="closeAddModuleBtn" type="button">
+            <img src="/assets/images/addIcon.svg" alt="">
+        </button>
+        <span class="addModuleFormContent">
+            <h2 class="addModuleTitle">Account information</h2>
+            <span class="addModuleInputSpan">
+                <label class="inputLabel" for="nickname">Nickname</label>
+                <input formControlName="nickname" class="addModuleInput" id="nickname" type="text">
+            </span>
+            <span class="addModuleInputSpan">
+                <label class="inputLabel" for="email">Email</label>
+                <input formControlName="email" class="addModuleInput" id="email" type="text">
+            </span>
+            <span  *ngIf="userData.password!==undefined" class="addModuleInputSpan">
+                <label class="inputLabel" for="password">Password</label>
+                <input formControlName="password" class="addModuleInput" type="text" id="password">
+            </span>
+            <button [disabled]="!informationForm.valid" class="submitAddModuleFormBtn" type="submit">Continue</button>
+        </span>
+    </form>
+</span>

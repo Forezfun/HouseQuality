@@ -1,0 +1,90 @@
+<span class="startScreenSpan">
+    <div class="circleDecoration">
+        <span class="circleDecorationSpan">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </span>
+    </div>
+    <span class="startInformationSpan">
+        <span class="decorationFigures">
+            <div class="quarter-circle"></div>
+            <div class="square"></div>
+            <div class="parallelogram"></div>
+            <div class="circle"></div>
+        </span>
+        <h1 class="projectTitle">HOUSEQUALITY</h1>
+        <span class="navigationStartMenu">
+            <button class="startNavigationBtn">Design</button>
+            <button class="startNavigationBtn">Popular</button>
+            <button class="startNavigationBtn">Shop</button>
+            <a class="startNavigationBtn" href="/account">Profile</a>
+        </span>
+    </span>
+</span>
+<span class="mainInformation">
+    <app-navigation-panel></app-navigation-panel>
+    <span class="projectPreviewSpan">
+        <span class="someSpan">
+            <h2 class="chapterTitle">Your Perfect Home</h2>
+            <h3 class="descriptionText">HouseQuality is your go-to platform for creating the perfect home. Hop into our
+                digital design shop and start your journey</h3>
+            <span class="exampleFunctions">
+                <div class="quarter-circle figureFunction">
+                    <h2 class="exampleFunctionTitle">Custom</h2>
+                    <h3 class="exampleFunctionDescription">Custom life</h3>
+                </div>
+                <div style="border-radius: 20px;" class="square figureFunction">
+                    <h2 class="exampleFunctionTitle">Design</h2>
+                    <h3 class="exampleFunctionDescription">Design room</h3>
+                </div>
+                <div class="quarter-circle figureFunction">
+                    <h2 class="exampleFunctionTitle">Create</h2>
+                    <h3 class="exampleFunctionDescription">Create planhouse</h3>
+                </div>
+                <div style="border-radius: 20px;" class="square figureFunction">
+                    <h2 class="exampleFunctionTitle">Sell</h2>
+                    <h3 class="exampleFunctionDescription">Sell furniture</h3>
+                </div>
+            </span>
+        </span>
+        <span class="someSpan">
+            <h2 class="chapterTitle">Let's design and make dreams come true</h2>
+            <span class="chapterChangeBtnsSpan">
+                <button (click)="openCreateFurniture()" [ngClass]="{'activeChapterBtn': furnitureTemplate==='create'}"
+                    class="changeChapterBtn">Create furniture</button>
+                <button (click)="openViewFurniture()" [ngClass]="{'activeChapterBtn': furnitureTemplate==='view'}"
+                    class="changeChapterBtn">View furniture</button>
+            </span>
+        </span>
+        <span class="furnitureModule">
+            <app-create-furniture [furnitureData]="furnitureExamplesData"
+                [ngClass]="{'opacityDisable': furnitureTemplate==='view'}"
+                class="furnitureModuleVariant"></app-create-furniture>
+            <app-view-furniture [furnitureData]="furnitureExamplesData"
+                [ngClass]="{'opacityDisable': furnitureTemplate==='create'}"
+                class="furnitureModuleVariant"></app-view-furniture>
+        </span>
+        <span class="someSpan">
+            <h2 class="chapterTitle">Create house</h2>
+            <h3 class="descriptionText">Choose the number of rooms in your house and customize everything</h3>
+        </span>
+        <app-plan-house [planHouse]="planHouseExampleData"></app-plan-house>
+    </span>
+</span>
+<footer>
+    <span class="footerColumnsSpan">
+        <span class="footerColumn">
+            <button style="color:#DAD7CD" class="footerMenuBtn">Explore</button>
+            <button class="footerMenuBtn">Design</button>
+            <button class="footerMenuBtn">Profile</button>
+        </span>
+        <span class="footerColumn">
+            <button style="color:#DAD7CD" class="footerMenuBtn">Build</button>
+            <button class="footerMenuBtn">Upload</button>
+            <button class="footerMenuBtn">Marketplace</button>
+        </span>
+    </span>
+    <h2 class="projectFooterTitle">HouseQuality 2024.</h2>
+</footer>
