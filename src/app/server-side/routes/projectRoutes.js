@@ -1,82 +1,68 @@
 const EXPRESS = require('express');
 const ROUTER = EXPRESS.Router();
-const PUBLICATION = require('../models/furnitureCard.js');
-const findPublications = require('../findPublications.js')
-
-ROUTER.get('/', async (request, result) => {
+const PROJECT = require('../models/project.js');
+const { isTokenNoneExpired, checkUserAccess } = require('../helpers/jwtHandlers');
+ROUTER.delete('/', async (request, result) => {
   try {
-    let PUBLICATIONS
-    if(request.query.findWord){
-      const ALL_PUBLICATIONS = PUBLICATIONS = await PUBLICATION.find()
-      NEEDFUL_PUBLICATIONS_ID_ARRAY = findPublications(request.query.findWord,ALL_PUBLICATIONS)
-      PUBLICATIONS = await PUBLICATION.find({ '_id': { $in: NEEDFUL_PUBLICATIONS_ID_ARRAY } });
-    }else{
-      PUBLICATIONS = await PUBLICATION.find().limit(10);
+    console.log(request)
+    const JWT_TOKEN = request.query.jwtToken
+    const USER_ID = await checkUserAccess(JWT_TOKEN)
+    if (!USER_ID) return result.status(404).json({ message: 'User not found' });
+    const AUTH_USER_ITEM = await PROJECT.findByIdAndDelete(request.query.projectId);
+    if (!AUTH_USER_ITEM) {
+      return result.status(404).json({ message: 'Project not found' });
     }
-    result.json(PUBLICATIONS);
-  } catch (error) {
-    result.status(500).json({ message: error.message });
-  }
-});
-ROUTER.get('/:id', async (request, result) => {
-  try {
-    const publicationId = request.params.id;
-    const PUBLICATION_ITEM = await PUBLICATION.findById(publicationId);
-    if (!PUBLICATION_ITEM) {
-      return result.status(404).json({ message: 'Publication not found' });
-    }
-    result.json(PUBLICATION_ITEM);
-  } catch (error) {
-    result.status(500).json({ message: error.message });
+    result.status(201).json({ message: 'Project deleted' });
+  } catch (err) {
+    result.status(400).json({ message: err.message });
   }
 });
 ROUTER.post('/', async (request, result) => {
   try {
-    const PUBLICATION_ITEM = new PUBLICATION({
-      title: request.body.title,
-      description: request.body.description,
-      subDescription: request.body.subDescription,
-      decorationImageUrl: request.body.decorationImageUrl,
-      nameAddModulesArray: request.body.nameAddModulesArray,
-      author:request.body.author
-    });
-    const NEW_PUBLICATION = await PUBLICATION_ITEM.save();
-    result.status(201).json(NEW_PUBLICATION);
-  } catch (error) {
-    result.status(400).json({ message: error.message });
+    const JWT_TOKEN = request.body.jwtToken
+    const USER_ID = await checkUserAccess(JWT_TOKEN)
+    console.log(USER_ID)
+    if (!USER_ID) return result.status(404).json({ message: 'User not found' });
+    const NEW_PROJECT_ITEM = new PROJECT({
+      name: request.body.nameProject,
+      rooms: [],
+      authorId: USER_ID
+    })
+    await NEW_PROJECT_ITEM.save()
+    result.status(201).json({ message: 'Project created successfully' });
+  } catch (err) {
+    result.status(400).json({ message: err.message });
   }
 });
-ROUTER.put('/:id', async (request, result) => {
+ROUTER.get('/', async (request, result) => {
   try {
-    const PUBLICATION_ITEM = await PUBLICATION.findById(request.params.id);
-    if (!PUBLICATION_ITEM) {
-      return result.status(404).json({ message: 'Publication not found' });
-    }
-    
-    PUBLICATION_ITEM.title = request.body.title || PUBLICATION_ITEM.title;
-    PUBLICATION_ITEM.description = request.body.description || PUBLICATION_ITEM.description;
-    PUBLICATION_ITEM.subDescription = request.body.subDescription || PUBLICATION_ITEM.subDescription;
-    PUBLICATION_ITEM.decorationImageUrl = request.body.decorationImage || PUBLICATION_ITEM.decorationImageUrl;
-    PUBLICATION_ITEM.nameAddModulesArray = request.body.nameAddModulesArray || PUBLICATION_ITEM.nameAddModulesArray;
-
-    const updatedPublication = await PUBLICATION_ITEM.save();
-    result.json(updatedPublication);
-  } catch (error) {
-    result.status(400).json({ message: error.message });
+    const JWT_TOKEN = request.query.jwtToken
+    const USER_ID = await checkUserAccess(JWT_TOKEN)
+    console.log(USER_ID)
+    if (!USER_ID) return result.status(404).json({ message: 'User not found' });
+    const PROJECT_ITEM = await PROJECT.findById(request.query.projectId)
+    if (!PROJECT_ITEM) return result.status(404).json({ message: 'Project not found' });
+    result.status(201).json({ projectData: PROJECT_ITEM });
+  } catch (err) {
+    result.status(400).json({ message: err.message });
   }
-});
-
-ROUTER.delete('/:id', async (request, result) => {
+})
+ROUTER.put('/', async (request, result) => {
   try {
-    const deletedPublication = await PUBLICATION.findByIdAndDelete(request.params.id);
-    if (!deletedPublication) {
-      return result.status(404).json({ message: 'Publication not found' });
-    }
-    result.json({ message: 'Publication deleted',idProject:request.params.id});
-  } catch (error) {
-    result.status(500).json({ message: error.message });
+    console.log(request.body)
+    const JWT_TOKEN = request.body.jwtToken
+    const USER_ID = await checkUserAccess(JWT_TOKEN)
+    if (!USER_ID) return result.status(404).json({ message: 'User not found' });
+    const PROJECT_ITEM = await PROJECT.findOne({ authorId: USER_ID })
+    if (!PROJECT_ITEM) return result.status(404).json({ message: 'Project not found' });
+    PROJECT_ITEM.name = request.body.nameProject
+    PROJECT_ITEM.rooms = JSON.parse(request.body.rooms)
+    await PROJECT_ITEM.save()
+    result.status(201).json({ message: 'Project successfully updated' });
+  } catch (err) {
+    result.status(400).json({ message: err.message });
   }
-});
+})
 
 
 module.exports = ROUTER;

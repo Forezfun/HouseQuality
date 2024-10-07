@@ -3,7 +3,7 @@ import { AsyncPipe, NgIf, NgFor, NgClass } from '@angular/common';
 import { Observable } from 'rxjs';
 
 export interface imageSliderData {
-  images: string[];
+  images: String[];
   idMainImage: number;
 }
 

@@ -160,9 +160,11 @@ onWindowScroll() {
       next:(response)=>{
         console.log(response)
         this.userCookieService.setJwt((response as {jwt:string}).jwt,'long')
+        this.userCookieService.setUserType('email')
+        this.router.navigateByUrl('/account')
       },
       error:(error)=>{
-
+        console.log(error)
       }
     })
   }

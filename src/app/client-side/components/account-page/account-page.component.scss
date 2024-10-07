@@ -1,69 +1,77 @@
 @import 'base.scss';
-app-navigation-panel{
-    margin-top:30px;
+
+app-navigation-panel {
+    margin-top: 30px;
 }
-.body{
+
+.body {
     background-color: black;
-    width: 100v;
+    width: 100vw;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap:30px;
+    gap: 30px;
     min-height: 100vh;
 }
-.accountSpan{
+
+.accountSpan {
     display: flex;
     flex-direction: column;
-    width:50vw;
+    width: 50vw;
     align-items: center;
     margin-top: 30px;
-    gap:20px
+    gap: 20px
 }
-.mainInformationCard{
+
+.mainInformationCard {
     width: calc(100% - 40px);
     background-color: black;
     border-radius: 20px 20px 25px 25px;
     box-shadow: 0 0 10px 0 white;
     display: flex;
-    justify-content:space-around;
+    justify-content: space-around;
     padding: 20px;
     align-items: flex-start;
     z-index: 1;
 }
-.projectsSpanCard{
-    width:calc(100% - 60px);
+
+.projectsSpanCard {
+    width: calc(100% - 60px);
     background-color: black;
-    z-index:0;
+    z-index: 0;
     display: flex;
     min-height: 50vh;
     box-shadow: 0 0 10px 0 white;
     border-radius: 15px;
     padding: 0px 30px;
     padding-bottom: 30px;
+
     flex-wrap: wrap;
-    justify-content:space-between;
+    justify-content: space-between;
 }
-.accountAvatarSpan{
+
+.accountAvatarSpan {
     display: grid;
     grid-template-columns: 1fr;
-    grid-template-rows: 1fr; 
+    grid-template-rows: 1fr;
     place-items: center;
     align-self: flex-start;
     width: 40%;
     aspect-ratio: 1;
-    position: relative; 
+    position: relative;
 }
-.accountAvatarImage{
+
+.accountAvatarImage {
     grid-area: 1 / 1 / 2 / 2;
     border-radius: 50%;
     width: 100%;
     aspect-ratio: 1
 }
-.avatarEditBtn{
-    width:45px;
+
+.avatarEditBtn {
+    width: 45px;
     aspect-ratio: 1;
     border-radius: 50%;
-    border: 5px solid black ;
     background-color: $darkGreen;
     display: grid;
     place-items: center;
@@ -71,98 +79,138 @@ app-navigation-panel{
     place-self: end;
     margin-bottom: 7%;
     margin-right: 7%;
-    cursor: pointer;
+
 }
-.editAvatarInput{
+
+.avatarEditBtn:focus-visible {
+    // border:5px solid blue;
+}
+
+.editAvatarInput {
     grid-area: 1/1/2/2;
     width: 100%;
     aspect-ratio: 1;
     border-radius: 50%;
-    opacity: 0;
-    cursor: pointer;
 }
-.avatarEditBtn > img{
-    width:50%;
+
+.avatarEditBtn:focus-within .avatarLabel {
+    outline: 2px solid white;
+}
+
+.avatarLabel {
     grid-area: 1/1/2/2;
+    background-color: $darkGreen;
+    width: 100%;
+    aspect-ratio: 1;
+    z-index: 1;
+    border-radius: 50%;
+    cursor: pointer;
+    border: 5px solid black;
 }
-.mainInformationSpan{
+
+
+.avatarEditBtn>img {
+    width: 50%;
+    z-index: 2;
+    grid-area: 1/1/2/2;
+    pointer-events: none;
+}
+
+.mainInformationSpan {
     display: grid;
     grid-template-columns: 1fr;
     grid-template-rows: 1fr;
     height: 90%;
-    width:50%;
+    width: 50%;
 }
-.mainInformationEditBtn{
+
+.mainInformationEditBtn {
     grid-area: 1/1/2/2;
-    width:30px;
+    width: 30px;
     aspect-ratio: 1;
     border: none;
     background: none;
     justify-self: end;
     cursor: pointer;
-    z-index:1;
+    z-index: 1;
 }
-.informationTextSpan{
-    color:white;
+
+.informationTextSpan {
+    color: white;
     grid-area: 1/1/2/2;
 }
-.informationTextSpan{
+
+.informationTextSpan {
     font-size: 1.25vw;
 }
-.accountName{
+
+.accountName {
     font-size: 1.5em;
     font-weight: bold;
 }
-.accountInformationBlock{
+
+.accountInformationBlock {
     font-size: 1em;
 }
-.projectCard{
+
+.projectCard {
     width: 40%;
     aspect-ratio: 1;
     display: flex;
     justify-content: center;
     flex-direction: column;
-    gap:10px;
+    height: fit-content;
+    gap: 10px;
     margin-top: 20px;
 }
-.projectTitle{
-    color:white;
+
+.projectTitle {
+    color: white;
     text-align: center;
     font-weight: bold;
 }
-.projectSchem{
-    display:grid;
-    width:100%;
+
+.projectSchem {
+    display: grid;
+    width: 100%;
     aspect-ratio: 1;
-    gap:7px;
+    gap: 7px;
+    grid-template-columns: repeat(10,1fr);
+    grid-template-rows: repeat(10,1fr);
 }
-.room{
+
+.room {
     background-color: $darkGreen;
     border-radius: 5px;
 }
-.disabled{
-    filter:opacity(0);
+
+.disabled {
+    filter: opacity(0);
     pointer-events: none;
 }
-.addModule{
-    z-index:4;
+
+.addModule {
+    z-index: 4;
     transition: all 0.5s ease-in-out;
     position: fixed;
     top: 0;
     left: 0;
     width: 100vw;
     height: 100vh;
-    background-color: rgba(0, 0, 0, 0.75); /* Прозрачность фона */
+    background-color: rgba(0, 0, 0, 0.75);
+    /* Прозрачность фона */
     display: flex;
     justify-content: center;
     align-items: center;
 }
-.addModuleSpan{
+
+.addModuleSpan {
     display: grid;
     grid-template-columns: 1fr;
     grid-template-rows: 1fr;
 }
-.addModuleFormContent{
+
+.addModuleFormContent {
     grid-area: 1/1/2/2;
     width: 25vw;
     padding: 10px;
@@ -171,43 +219,50 @@ app-navigation-panel{
     padding: 30px 45px;
     display: flex;
     flex-direction: column;
-    gap:15px;
+    gap: 15px;
     box-shadow: 0 0 10px 0px white;
 }
-.addModuleInputSpan{
+
+.addModuleInputSpan {
     display: flex;
     flex-direction: column;
-    gap:5px;
+    gap: 5px;
 }
-.inputLabel{
-    color:$light
+
+.inputLabel {
+    color: $light
 }
-.addModuleInput{
+
+.addModuleInput {
     border-radius: 10px;
     background-color: transparent;
     border: #888888 1px solid;
     padding: 10px;
     outline: none;
-    color:white;
+    color: white;
 }
-.addModuleTitle{
-    color:$lightGreen;
-    text-align:center
+
+.addModuleTitle {
+    color: $lightGreen;
+    text-align: center
 }
-.submitAddModuleFormBtn{
+
+.submitAddModuleFormBtn {
     background-color: $lightGreen;
-    color:white;
+    color: white;
     border-radius: 15px;
     padding: 15px;
-    width:100%;
-    border:none;
+    width: 100%;
+    border: none;
     margin-bottom: 20px;
     cursor: pointer;
 }
-.submitAddModuleFormBtn:disabled{
+
+.submitAddModuleFormBtn:disabled {
     background-color: $darkGreen;
 }
-.closeAddModuleBtn{
+
+.closeAddModuleBtn {
     grid-area: 1/1/2/2;
     background: none;
     border: none;
@@ -219,6 +274,13 @@ app-navigation-panel{
     justify-self: end;
     cursor: pointer;
 }
-.closeAddModuleBtn > img {
+
+.closeAddModuleBtn>img {
     transform: rotate(45deg)
+}
+.furnitureCardSpan > a{
+    text-decoration: none;
+}
+.furnitureCardSpan > a > img{
+    border-radius: 10px;
 }

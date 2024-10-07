@@ -12,11 +12,14 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { AuthService } from './services/auth.service';
 import { UserCookieService } from './services/user-cookie.service';
 import { ServerImageControlService } from './services/server-image-control.service';
+import { ProjectService } from './services/project.service';
+import { FurnitureCardControlService } from './services/furniture-card-control.service';
+import { FurnitureModelControlService } from './services/furniture-model-control.service';
 @Component({
   selector: 'app-root',
   standalone: true,
   imports: [RouterOutlet,SceneComponent,CreateFurnitureComponent,PlanHouseComponent,ViewFurnitureComponent,ErrorHandlerComponent,HttpClientModule],
-  providers:[ErrorHandlerComponent,AccountService,AuthService,UserCookieService,ServerImageControlService],
+  providers:[ErrorHandlerComponent,AccountService,AuthService,UserCookieService,ServerImageControlService,ProjectService,PlanHouseComponent,FurnitureCardControlService,FurnitureModelControlService],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })

@@ -1,9 +1,10 @@
 import { Component, AfterViewInit, ElementRef, HostListener } from '@angular/core';
 import * as THREE from 'three';
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
-import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader';
-import { MTLLoader } from 'three/examples/jsm/loaders/MTLLoader';
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader.js';
+import { MTLLoader } from 'three/examples/jsm/loaders/MTLLoader.js';
 import { NgxSpinnerModule, NgxSpinnerService } from 'ngx-spinner';
+
 export interface modelInterface {
   width: number;
   height: number;
@@ -305,14 +306,7 @@ export class SceneComponent implements AfterViewInit {
   }
   load3Model(moveData?: objectLoadInterface): void {
     this.spinner.show()
-    const mtlLoader = new MTLLoader();
     const objLoader = new OBJLoader();
-
-    mtlLoader.load(
-      '/assets/models/sofa/sofa.mtl',
-      (materials) => {
-        materials.preload();
-        objLoader.setMaterials(materials);
         objLoader.load(
           '/assets/models/sofa/sofa.obj',
           (object: THREE.Object3D) => {
@@ -325,8 +319,6 @@ export class SceneComponent implements AfterViewInit {
             this.spinner.hide()
           }
         );
-      }
-    );
   }
 
   private getObjectSize(object: THREE.Object3D): { width: number; height: number; length: number } {

@@ -1,14 +1,14 @@
 <span class="body">
     <h1 class="furnitureTitle">{{furnitureData.name}}</h1>
-    <app-image-slider *ngIf="furnitureData.imagesData.images"
-        [imagesArray]="furnitureData.imagesData"></app-image-slider>
-    <div class="uploadImagesDiv" *ngIf="!furnitureData.imagesData.images">
+    <app-image-slider *ngIf="furnitureData.colors[currentColorId].imagesData"
+        [imagesArray]="furnitureData.colors[currentColorId].imagesData"></app-image-slider>
+    <div class="uploadImagesDiv" *ngIf="!furnitureData.colors[currentColorId].imagesData">
         <input class="uploadImagesInput" type="file" accept=".png,.jpeg">
-        <img class="uploadImagesIcon" src="/assets/images/uploadIcon.png" alt="">
+        <img loading="lazy"  class="uploadImagesIcon" src="assets/images/uploadIcon.png" alt="">
     </div>
     <span class="footer">
         <span class="colorSlider">
-            <img src="/assets/images/paletteIcon.svg" class="addColorBtn" alt="add">
+            <img loading="lazy"  src="assets/images/paletteIcon.svg" class="addColorBtn" alt="add">
             <span class="colors">
                 <button (click)="openFurnitureVariant($event.target!)"
                     *ngFor="let colorVariant of furnitureData.colors;let index=index" [attr.data-idColor]="index"
@@ -27,7 +27,7 @@
                         *ngFor="let shopData of furnitureData.shops; let index=index">
                         <a [href]="shopData.url" class="furnitureCost">{{shopData.cost}}</a>
                         <button [title]="shopData.url" (click)="copyShopLink(shopData.url)" class="linkShop">
-                            <img src="/assets/images/linkIcon.svg" alt="">
+                            <img loading="lazy"  src="assets/images/linkIcon.svg" alt="">
                         </button>
                     </span>
                 </span>

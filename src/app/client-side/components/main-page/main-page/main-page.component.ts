@@ -1,16 +1,16 @@
 import { Component } from '@angular/core';
-import { CreateFurnitureComponent } from '../../create-furnitre/create-furniture.component';
+import { CreateFurnitureComponent, furnitureClientData, furnitureServerData} from '../../create-furnitre/create-furniture.component';
 import { ViewFurnitureComponent } from '../../view-furniture/view-furniture.component';
 import { PlanHouseComponent } from '../../plan-house/plan-house/plan-house.component';
-
 import { NgClass } from '@angular/common';
 import { roomData } from '../../plan-house/plan-house/plan-house.component';
-import { furnitureData } from '../../view-furniture/view-furniture.component';
 import { NavigationPanelComponent } from '../../navigation-panel/navigation-panel.component';
+import { RouterLink } from '@angular/router';
+import { imageSliderData } from '../../image-slider/image-slider/image-slider.component';
 @Component({
   selector: 'app-main-page',
   standalone: true,
-  imports: [CreateFurnitureComponent,ViewFurnitureComponent,PlanHouseComponent,NgClass,NavigationPanelComponent],
+  imports: [CreateFurnitureComponent,ViewFurnitureComponent,PlanHouseComponent,NgClass,NavigationPanelComponent,RouterLink],
   templateUrl: './main-page.component.html',
   styleUrl: './main-page.component.scss'
 })
@@ -22,15 +22,28 @@ export class MainPageComponent {
   openCreateFurniture(){
     this.furnitureTemplate='create'
   }
-  furnitureExamplesData:furnitureData={
+  focusFinder(){
+    const FINDER_ELEMENT = document.querySelector('app-navigation-panel') as HTMLSpanElement
+    FINDER_ELEMENT.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+  imagesData:imageSliderData ={
+    images: ['/assets/images/sofaSliderPhotos/1.png', '/assets/images/sofaSliderPhotos/2.png', '/assets/images/sofaSliderPhotos/3.png', '/assets/images/sofaSliderPhotos/4.png'],
+    idMainImage: 0
+  }
+  furnitureExamplesData:furnitureServerData={
     name:'Onte Bucle White',
-    imagesData:{
-      images: ['/assets/images/sofaSliderPhotos/1.png', '/assets/images/sofaSliderPhotos/2.png', '/assets/images/sofaSliderPhotos/3.png', '/assets/images/sofaSliderPhotos/4.png'],
-      idMainImage: 0
-    },
-    colors:['#FFC2CC', '#344E41', '#808080', '#045B7A'],
+    colors:[],
     description:'Width: 170 cm  Length: 240 cm  Height: 83 cmRecommended-place: corner of the roomTransformation mechanism: pantographSupport material: spliced ​​solidClearance from floor: 12 cmExistence of a drawer for linen: yesArmrest color: main fabric colorRemovable cover: noDecorative pillows: without pillowsMaximum load per seat: 100 kg',
     shops:[{cost:125990,url:'https://www.divan.ru/blagoveshchensk/product/divan-uglovoj-onte-bucle-white'},{cost:84990,url:'https://avtorm.ru/catalog/product-divan-uglovoy-onte-bucle-white'}]
+  }
+  exampleClientColors=[{color:'#FFC2CC',imagesData:this.imagesData}]
+  viewExampleData:furnitureClientData = {
+    name:this.furnitureExamplesData.name,
+    colors:[
+      {color:'#FFC2CC',imagesData:this.imagesData}
+    ],
+    description:this.furnitureExamplesData.description,
+    shops:this.furnitureExamplesData.shops,
   }
   planHouseExampleData:roomData[]=[
     {

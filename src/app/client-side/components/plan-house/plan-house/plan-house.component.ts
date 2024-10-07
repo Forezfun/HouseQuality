@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, Input, Renderer2, ElementRef, HostListener } from '@angular/core';
+import { AfterViewInit, Component, Input, Renderer2, ElementRef, HostListener, EventEmitter, Output } from '@angular/core';
 import { modelInterface } from '../../scene/scene.component';
 import { NgClass, NgFor, NgIf } from '@angular/common';
 import { FormGroup, FormControl, ReactiveFormsModule, Validators, ValidatorFn, AbstractControl, ValidationErrors } from '@angular/forms';
@@ -30,53 +30,7 @@ interface furnitureData {
 })
 export class PlanHouseComponent implements AfterViewInit {
   @Input()
-  planHouse:roomData[]=[
-    {
-      name:'Гостинная',
-      gridArea: '1 / 1 / 3 / 4',
-      roomProportions:{
-        width:3,
-        length:2,
-        height:3
-      }
-    },
-    {
-      name:'Спальня',
-      gridArea: '3 / 1 / 4 / 2',
-      roomProportions:{
-        width:1,
-        length:1,
-        height:3
-      }
-    },
-    {
-      name:'Спальня',
-      gridArea: ' 4 / 1 / 5 / 2',
-      roomProportions:{
-        width:1,
-        length:1,
-        height:3
-      }
-    },
-    {
-      name:'Прихожая',
-      gridArea: '5 / 1 / 8 / 5',
-      roomProportions:{
-        width:4,
-        length:3,
-        height:3
-      }
-    },
-    {
-      name:'Санузел',
-      gridArea: ' 3 / 2 / 5 / 4',
-      roomProportions:{
-        width:2,
-        length:2,
-        height:3
-      }
-    }
-  ];
+  planHouse!:roomData[]
 
   currentIdClickedRoom: number | undefined = undefined
   private previousGridArea!: string;
@@ -89,8 +43,17 @@ export class PlanHouseComponent implements AfterViewInit {
   private isDoubleClick = false;
   private furnitureListElement!: HTMLSpanElement
   private toggleModuleButton!: HTMLButtonElement
+  @Output()
+  planHouseEmitter = new EventEmitter<roomData[]>()
+  emitPlanHouse(){
+    this.planHouseEmitter.emit(this.planHouse)
+  }
   currentIdFurnitureCategory: undefined | number = undefined
   
+  getCurrentRoomInformation(){
+    console.log('plan:',this.planHouse) 
+    return this.planHouse
+  }
   furnitureExampleList: furnitureData[] = [
     {
       name: 'Onte Bucle White',
@@ -159,6 +122,7 @@ export class PlanHouseComponent implements AfterViewInit {
     this.currentIdFurnitureCategory = undefined
   }
   openViewRoom(indexRoom: number) {
+    console.log(this.planHouse)
     this.formElement.classList.remove('openAddModule');
     this.currentViewRoom = indexRoom
     const roomElement = this.roomSpan.querySelector(`[data-index="${indexRoom}"]`) as HTMLDivElement
@@ -222,6 +186,7 @@ export class PlanHouseComponent implements AfterViewInit {
     }
     newRoom.gridArea = gridArea
     this.planHouse = [...this.planHouse, newRoom]
+    this.emitPlanHouse()
   }
   findFreeSpace(roomProportions: modelInterface): string | false {
     const gridSize = 10;
@@ -382,6 +347,7 @@ export class PlanHouseComponent implements AfterViewInit {
         this.renderer.removeStyle(draggedElement, 'cursor');
       }
       this.currentIdClickedRoom = undefined
+      this.emitPlanHouse()
     }
     this.clickTimer = setTimeout(() => {
       if (this.isClick && !this.isDragging) {
@@ -524,6 +490,11 @@ export class PlanHouseComponent implements AfterViewInit {
   @HostListener('document:contextmenu', ['$event'])
   onContextMenu(event: MouseEvent): void {
     event.preventDefault();
+  }
+  @HostListener('window:scroll')
+  scrollFunctions(){
+    if(!this.currentIdClickedRoom)return
+    this.calculateRoomSpanSettings()
   }
   @HostListener('document:keydown.Escape')
   escapeDragginMod() {

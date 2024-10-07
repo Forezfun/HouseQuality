@@ -15,14 +15,14 @@
     width: 84vw;
     aspect-ratio: 1;
     place-items: center;
+    content-visibility: auto 
 }
-
 .circleDecorationSpan > div {
     background-color: #3A5A40;
     border-radius: 50%;
     grid-area: 1/1/2/2;
     aspect-ratio: 1;
-    animation: wave 2s infinite ease-in-out;
+    animation: wave 2s infinite ease-in-out;   
 }
 .circleDecorationSpan div:nth-child(1) {
     opacity: 1;
@@ -312,4 +312,8 @@ app-navigation-panel{
     position: sticky;
     top:30px;
     z-index:6;
+}
+app-view-furniture,app-create-furniture,app-plan-house{
+    pointer-events: none;
+    width:80vw;
 }

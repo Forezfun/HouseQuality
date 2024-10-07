@@ -1,0 +1,46 @@
+<span class="body">
+    <app-navigation-panel></app-navigation-panel>
+    <span class="functionalModule">
+        <span [ngClass]="{'disabled': currentProjectId!==undefined}" *ngIf="userData!==undefined"
+            class="chooseProjectSpan">
+            <span *ngFor="let projectData of userData.projects;let index=index" class="projectCard">
+                <span class="mainProjectInformation" (click)="openProject(index)">
+                    <h3 class="projectTitle">{{projectData.name}}</h3>
+                    <div class="projectSchem">
+                        <div [style.grid-area]="roomData.gridArea" *ngFor="let roomData of projectData.rooms"
+                            class="room">
+                        </div>
+                    </div>
+                </span>
+                <button class="deleteProjectBtn" (click)="deleteProject(index)">
+                    <img src="/assets/images/deleteIcon.svg" alt="">
+                </button>
+            </span>
+            <button (click)="openAddModule()" class="addProjectCard projectCard">
+                <h3>Create</h3>
+                <img src="/assets/images/addIcon.svg" alt="">
+            </button>
+        </span>
+        <span [ngClass]="{'disabled': currentProjectId===undefined}" class="planModule">
+            <button (click)="closeProject()">
+                <img src="/assets/images/addIcon.svg" alt="">
+            </button>
+            <app-plan-house (planHouseEmitter)="updatePlanData($event)" *ngIf="currentProjectId!==undefined" [planHouse]="userData.projects[currentProjectId].rooms"></app-plan-house>
+        </span>
+    </span>
+</span>
+<span class="addModule disabled">
+    <form *ngIf="userData" class="addModuleSpan" [formGroup]="projectNameForm" (ngSubmit)="createProject()">
+        <button (click)="closeAddModule()" class="closeAddModuleBtn" type="button">
+            <img loading="lazy" src="/assets/images/addIcon.svg" alt="">
+        </button>
+        <span class="addModuleFormContent">
+            <h2 class="addModuleTitle">Project name</h2>
+            <span class="addModuleInputSpan">
+                <label class="inputLabel" for="name">Name</label>
+                <input formControlName="name" class="addModuleInput" id="name" type="text">
+            </span>
+            <button [disabled]="!projectNameForm.valid" class="submitAddModuleFormBtn" type="submit">Continue</button>
+        </span>
+    </form>
+</span>

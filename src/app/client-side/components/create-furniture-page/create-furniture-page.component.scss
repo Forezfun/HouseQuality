@@ -1,0 +1,58 @@
+@import 'base.scss';
+.body{
+    min-height: 100vh;
+    background-color: black;
+    width: 100vw;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+app-navigation-panel{
+    margin-top: 30px;
+}
+app-navigation-panel,app-create-furniture{
+    width:80%;
+}
+.confirmBtn{
+    width: 75%;
+    color: white;
+    padding: 15px;
+}
+.functionalBtns{
+    margin-top: 20px;
+    width:clamp(300px,30vw,400px);
+    display: flex;
+    height: 50px;
+    gap:10px;
+    justify-content: end;
+    margin-bottom: 30px;
+}
+.functionalBtn{
+    height: 100%;
+    border-radius: 10px;
+    background-color: $darkGreen;
+    border: none;
+    cursor: pointer;
+}
+.deleteBtn{
+    aspect-ratio: 1;
+    padding: 1em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.colorCircle{
+    border-radius: 50%;
+    height:100%;
+    aspect-ratio: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 3px solid black;
+    box-shadow: 0 0 5px 0 white
+
+}
+.deleteColorBtn{
+    padding: 5px;
+    background-color:transparent;
+}
