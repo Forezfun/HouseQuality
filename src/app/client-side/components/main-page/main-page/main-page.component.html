@@ -16,26 +16,26 @@
         </span>
         <h1 class="projectTitle">HOUSEQUALITY</h1>
         <span class="navigationStartMenu">
-            <button class="startNavigationBtn">Design</button>
-            <button class="startNavigationBtn">Popular</button>
-            <button class="startNavigationBtn">Shop</button>
-            <a class="startNavigationBtn" href="/account">Profile</a>
+            <button class="startNavigationBtn" routerLink="">Shop</button>
+            <button class="startNavigationBtn" routerLink="/create/new">Furniture</button>
+            <button class="startNavigationBtn" routerLink="/plan">Project</button>
+            <a class="startNavigationBtn" routerLink="/account">Profile</a>
         </span>
     </span>
 </span>
+
 <span class="mainInformation">
     <app-navigation-panel></app-navigation-panel>
     <span class="projectPreviewSpan">
         <span class="someSpan">
             <h2 class="chapterTitle">Your Perfect Home</h2>
-            <h3 class="descriptionText">HouseQuality is your go-to platform for creating the perfect home. Hop into our
-                digital design shop and start your journey</h3>
+            <h3 class="descriptionText">HouseQuality is your go-to platform for creating the perfect home. Hop into our digital design shop and start your journey</h3>
             <span class="exampleFunctions">
                 <div class="quarter-circle figureFunction">
                     <h2 class="exampleFunctionTitle">Custom</h2>
                     <h3 class="exampleFunctionDescription">Custom life</h3>
                 </div>
-                <div style="border-radius: 20px;" class="square figureFunction">
+                <div class="square figureFunction" style="border-radius: 20px;">
                     <h2 class="exampleFunctionTitle">Design</h2>
                     <h3 class="exampleFunctionDescription">Design room</h3>
                 </div>
@@ -43,29 +43,26 @@
                     <h2 class="exampleFunctionTitle">Create</h2>
                     <h3 class="exampleFunctionDescription">Create planhouse</h3>
                 </div>
-                <div style="border-radius: 20px;" class="square figureFunction">
+                <div class="square figureFunction" style="border-radius: 20px;">
                     <h2 class="exampleFunctionTitle">Sell</h2>
                     <h3 class="exampleFunctionDescription">Sell furniture</h3>
                 </div>
             </span>
         </span>
+
         <span class="someSpan">
             <h2 class="chapterTitle">Let's design and make dreams come true</h2>
             <span class="chapterChangeBtnsSpan">
-                <button (click)="openCreateFurniture()" [ngClass]="{'activeChapterBtn': furnitureTemplate==='create'}"
-                    class="changeChapterBtn">Create furniture</button>
-                <button (click)="openViewFurniture()" [ngClass]="{'activeChapterBtn': furnitureTemplate==='view'}"
-                    class="changeChapterBtn">View furniture</button>
+                <button (click)="openCreateFurniture()" [ngClass]="{'activeChapterBtn': furnitureTemplate==='create'}" class="changeChapterBtn">Create furniture</button>
+                <button (click)="openViewFurniture()" [ngClass]="{'activeChapterBtn': furnitureTemplate==='view'}" class="changeChapterBtn">View furniture</button>
             </span>
         </span>
+
         <span class="furnitureModule">
-            <app-create-furniture [furnitureData]="furnitureExamplesData"
-                [ngClass]="{'opacityDisable': furnitureTemplate==='view'}"
-                class="furnitureModuleVariant"></app-create-furniture>
-            <app-view-furniture [furnitureData]="furnitureExamplesData"
-                [ngClass]="{'opacityDisable': furnitureTemplate==='create'}"
-                class="furnitureModuleVariant"></app-view-furniture>
+            <app-create-furniture tabindex="-1" [furnitureData]="furnitureExamplesData" [colorsClientData]="exampleClientColors" [ngClass]="{'opacityDisable': furnitureTemplate==='view'}" class="furnitureModuleVariant"></app-create-furniture>
+            <app-view-furniture tabindex="-1" [furnitureData]="viewExampleData" [ngClass]="{'opacityDisable': furnitureTemplate==='create'}" class="furnitureModuleVariant"></app-view-furniture>
         </span>
+
         <span class="someSpan">
             <h2 class="chapterTitle">Create house</h2>
             <h3 class="descriptionText">Choose the number of rooms in your house and customize everything</h3>
@@ -73,6 +70,7 @@
         <app-plan-house [planHouse]="planHouseExampleData"></app-plan-house>
     </span>
 </span>
+
 <footer>
     <span class="footerColumnsSpan">
         <span class="footerColumn">

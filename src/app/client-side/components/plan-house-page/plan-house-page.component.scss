@@ -1,0 +1,220 @@
+@import 'base.scss';
+
+app-navigation-panel {
+    margin-top: 30px;
+}
+.planModule{
+    grid-area: 1/1/2/2;
+    display: flex;
+    flex-direction: row;
+    gap:10px;
+    transition: all 0.5s ease-in-out;
+}
+.planModule > button{
+    width: 35px;
+    height: 35px;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+.planModule > button > img{
+    rotate: 45deg;
+}
+app-plan-house {
+    width:90%;
+}
+
+.body {
+    background-color: black;
+    gap: 60px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.chooseProjectSpan {
+    width: calc(100% - 60px);
+    z-index: 0;
+    gap: 10px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    transition: all 0.5s ease-in-out;
+    grid-area: 1/1/2/2;
+}
+
+
+
+.projectCard {
+    width: 45%;
+    position: relative;
+    aspect-ratio: 4/3;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-direction: column;
+    gap: 10px;
+    border-radius: 10px;
+    border: none;
+    box-shadow: 0 0 10px 0 white;
+
+    cursor: pointer;
+    overflow: hidden;
+}
+
+.deleteProjectBtn {
+    height: 35px;
+    align-self: flex-end;
+    margin: 10px;
+    background: none;
+    border: none;
+    aspect-ratio: 1;
+    cursor: pointer;
+}
+.mainProjectInformation{
+    display: flex;
+    height: 90%;
+    width:100%;
+    flex-direction: column;
+    align-items: center;
+}
+.addProjectCard {
+    justify-content: center;
+    background-color: $darkGreen;
+    box-shadow: none;
+}
+
+.projectCard>h3 {
+    font-size: 2em;
+    color: white;
+}
+
+.addProjectCard>img {
+    width: 40px;
+}
+
+.projectTitle {
+    color: white;
+    text-align: center;
+    font-weight: bold;
+    height: 20%;
+}
+
+.projectSchem {
+    display: grid;
+    height: 80%;
+    aspect-ratio: 1;
+    gap: 7px;
+    grid-template-columns: repeat(10,1fr);
+    grid-template-rows: repeat(10,1fr);
+}
+
+.room {
+    background-color: $darkGreen;
+    border-radius: 5px;
+}
+
+.disabled {
+    filter: opacity(0);
+    pointer-events: none;
+}
+
+.functionalModule {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr;
+    align-items: flex-start;
+    justify-items: center;
+    width:90vw;
+}
+
+.addModule {
+    z-index: 4;
+    transition: all 0.5s ease-in-out;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.75);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.addModuleSpan {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr;
+}
+
+.addModuleFormContent {
+    grid-area: 1/1/2/2;
+    width: 25vw;
+    padding: 10px;
+    border-radius: 10px;
+    background-color: #000;
+    padding: 30px 45px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    box-shadow: 0 0 10px 0px white;
+}
+
+.addModuleInputSpan {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.inputLabel {
+    color: $light
+}
+
+.addModuleInput {
+    border-radius: 10px;
+    background-color: transparent;
+    border: #888888 1px solid;
+    padding: 10px;
+    outline: none;
+    color: white;
+}
+
+.addModuleTitle {
+    color: $lightGreen;
+    text-align: center
+}
+
+.submitAddModuleFormBtn {
+    background-color: $lightGreen;
+    color: white;
+    border-radius: 15px;
+    padding: 15px;
+    width: 100%;
+    border: none;
+    margin-bottom: 20px;
+    cursor: pointer;
+}
+
+.submitAddModuleFormBtn:disabled {
+    background-color: $darkGreen;
+}
+
+.closeAddModuleBtn {
+    grid-area: 1/1/2/2;
+    background: none;
+    border: none;
+    z-index: 3;
+    width: 30px;
+    aspect-ratio: 1;
+    margin-right: 10px;
+    margin-top: 10px;
+    justify-self: end;
+    cursor: pointer;
+}
+
+.closeAddModuleBtn>img {
+    transform: rotate(45deg)
+}

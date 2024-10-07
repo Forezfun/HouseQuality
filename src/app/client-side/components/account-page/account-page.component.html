@@ -3,9 +3,10 @@
     <span *ngIf="userData" class="accountSpan">
         <span class="mainInformationCard">
             <span class="accountAvatarSpan">
-                <img [src]="userData.avatarUrl" alt="avatar" class="accountAvatarImage">
+                <img   [src]="userData.avatarUrl" alt="avatar" class="accountAvatarImage">
                 <div class="avatarEditBtn">
-                    <input (input)="loadAvatar($event)" accept=".png,.jpeg,.jpg" class="editAvatarInput" type="file">
+                    <label class="avatarLabel" for="chooseAvatar"></label>
+                    <input id="chooseAvatar" (input)="uploadAvatar($event)" accept=".png,.jpeg,.jpg" class="editAvatarInput" type="file">
                     <img src="/assets/images/editIcon.svg" alt="">
                 </div>
             </span>
@@ -26,29 +27,31 @@
         </span>
         <span *ngIf="userData" class="projectsSpanCard">
             <span *ngFor="let projectData of userData.projects" class="projectCard">
-                <h3 class="projectTitle">{{projectData.nameProject}}</h3>
+                <h3 class="projectTitle">{{projectData.name}}</h3>
                 <div class="projectSchem">
                     <div [style.grid-area]="roomData.gridArea" *ngFor="let roomData of projectData.rooms" class="room">
                     </div>
                 </div>
             </span>
         </span>
+        <span *ngIf="userData" class="projectsSpanCard furnitureCardSpan">
+            <a [routerLink]="'/create/'+furnitureData.furnitureCardId"   *ngFor="let furnitureData of userData.furnitureCards;let index=index" class="projectCard">
+                <h3 class="projectTitle">{{furnitureData.name}}</h3>
+                <img loading="lazy" [src]="furnitureData.previewUrl" alt="" class="furnitureImage">
+            </a>
+        </span>
     </span>
 </span>
-<span *ngIf="userData" class="addModule disabled">
-    <form class="addModuleSpan" [formGroup]="informationForm" (ngSubmit)="submitChanges()">
+<span class="addModule disabled">
+    <form *ngIf="userData" class="addModuleSpan" [formGroup]="informationForm" (ngSubmit)="submitChanges()">
         <button (click)="closeAddModule()" class="closeAddModuleBtn" type="button">
-            <img src="/assets/images/addIcon.svg" alt="">
+            <img loading="lazy"  src="/assets/images/addIcon.svg" alt="">
         </button>
         <span class="addModuleFormContent">
             <h2 class="addModuleTitle">Account information</h2>
             <span class="addModuleInputSpan">
                 <label class="inputLabel" for="nickname">Nickname</label>
                 <input formControlName="nickname" class="addModuleInput" id="nickname" type="text">
-            </span>
-            <span class="addModuleInputSpan">
-                <label class="inputLabel" for="email">Email</label>
-                <input formControlName="email" class="addModuleInput" id="email" type="text">
             </span>
             <span  *ngIf="userData.password!==undefined" class="addModuleInputSpan">
                 <label class="inputLabel" for="password">Password</label>

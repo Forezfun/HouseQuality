@@ -2,18 +2,18 @@
     <app-navigation-panel></app-navigation-panel>
     <span class="paralaxImageSpan">
         <button class="scrollBtn" (click)="toggleScroll()">{{checkLoginModuleStatus()?'BACK':'LOGIN'}}</button>
-        <img draggable="false" src="/assets/images/houseFront.png" alt=""
+        <img loading="lazy"  draggable="false" src="/assets/images/houseFront.png" alt=""
             class="houseFront">
-        <img draggable="false" src="/assets/images/houseBackground.png" alt="" class="houseBackground">
+        <img loading="lazy"  draggable="false" src="/assets/images/houseBackground.png" alt="" class="houseBackground">
     </span>
     <div class="floorDecration"></div>
     <span class="paralaxSecondImageSpan">
-        <img draggable="false" src="/assets/images/paralaxBasement.webp" alt="">
+        <img loading="lazy"  draggable="false" src="/assets/images/paralaxBasement.webp" alt="">
     </span>
     <span class="loginModule disabledOpacity">
         <span class="formModule">
             <button (click)="toggleScroll()" class="closeAddModuleBtn" type="button">
-                <img src="/assets/images/addIcon.svg" alt="">
+                <img loading="lazy"  src="/assets/images/addIcon.svg" alt="">
             </button>
             <ng-container *ngTemplateOutlet="currentFormTemplate"></ng-container>
         </span>

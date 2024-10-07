@@ -18,23 +18,23 @@
           "builder": "@angular-devkit/build-angular:application",
           "options": {
             "outputPath": "dist/house-quality",
-            "index": "src/index.html",
-            "browser": "src/main.ts",
+            "index": "src/app/client-side/index.html",
+            "browser": "src/app/client-side/main.ts",
             "polyfills": [
               "zone.js"
             ],
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "scss",
             "assets": [
-              "src/assets/images/favicon.ico",
-              "src/assets"
+              "src/app/assets",
+              "src/app/client-side/assets/images/favicon.ico"
             ],
             "styles": [
-              "src/assets/styles/base.scss"
+              "src/app/client-side/assets/styles/base.scss"
             ],
             "stylePreprocessorOptions": {
               "includePaths": [
-                "src/assets/styles"
+                "src/app/client-side/assets/styles"
               ]
             },
             "scripts": []
@@ -44,16 +44,17 @@
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "500kB",
-                  "maximumError": "1MB"
+                  "maximumWarning": "1mb",
+                  "maximumError": "1.5mb"
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "2kB",
-                  "maximumError": "4kB"
+                  "maximumWarning": "6kb",
+                  "maximumError": "10kb"
                 }
               ],
-              "outputHashing": "all"
+              "outputHashing": "all",
+              "serviceWorker": "ngsw-config.json"
             },
             "development": {
               "optimization": false,
@@ -88,11 +89,11 @@
             "tsConfig": "tsconfig.spec.json",
             "inlineStyleLanguage": "scss",
             "assets": [
-              "src/assets/images/favicon.ico",
-              "src/assets"
+              "src/app/assets",
+              "src/app/client-side/assets/images/favicon.ico"
             ],
             "styles": [
-              "src/assets/styles/base.scss"
+              "src/app/client-side/assets/styles/base.scss"
             ],
             "scripts": []
           }

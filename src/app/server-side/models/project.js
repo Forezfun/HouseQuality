@@ -1,19 +1,19 @@
 const MONGOOSE = require('mongoose');
+const ROOM_SCHEM = new MONGOOSE.Schema({
+  name:String,
+  gridArea:String,
+  roomProportions:{
+    width:Number,
+    height:Number,
+    length:Number
+  }
+})
+const PROJECT_SCHEM = new MONGOOSE.Schema({
+  name: String,
+  rooms: [ROOM_SCHEM],
+  authorId: String
+});
 
-const PAGE_INFORMATION_SCHEM = new MONGOOSE.Schema({
-namePage:String,
-codePage:String
-  });
-  const PROJECT_SCHEM = new MONGOOSE.Schema({
-    title: String,
-    description: String,
-    subDescription: String,
-    subDescription: String,
-    decorationImageUrl: String,
-    nameAddModulesArray: [PAGE_INFORMATION_SCHEM],
-    author:String
-  });
+const PROJECT = MONGOOSE.model('Project', PROJECT_SCHEM);
 
-const PUBLICATION = MONGOOSE.model('Publication', PROJECT_SCHEM);
-
-module.exports = PUBLICATION;
+module.exports = PROJECT;

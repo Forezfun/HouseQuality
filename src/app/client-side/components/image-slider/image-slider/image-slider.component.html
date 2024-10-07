@@ -2,7 +2,7 @@
 
     <ng-container *ngFor="let imageUrl of imagesArray.images; let index = index">
         <div [ngClass]="{'mainImage': visibleId[0]==index,'sideImage': visibleId[1]==index||visibleId[2]==index,'leftSide':visibleId[2]==index,'rightSide':visibleId[1]==index}" class="imgShell" *ngIf="visibleId.includes(index)">
-          <img class="showImage" (click)="changeImage($event)" [src]="imageUrl" [attr.data-id]="index" alt="(" class="showImage">
+          <img loading="lazy"  class="showImage" (click)="changeImage($event)" [src]="imageUrl" [attr.data-id]="index" alt="(" class="showImage">
         </div>
       </ng-container>      
 </span>

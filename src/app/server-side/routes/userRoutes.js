@@ -6,8 +6,8 @@ const AUTH_USER = require('../models/authUser');
 const { v4: uuidv4 } = require('uuid');
 const CryptoJS = require("crypto-js");
 const cryptoKey = 'HouseQuality'
-const sendCheckCode = require('../sendcode');
-const FURNITURE_CARD = require('../models/furnitureCard')
+const PROJECT = require('../models/project')
+const FURNITURE_CARD =  require('../models/furnitureCard')
 const { isTokenNoneExpired, checkUserAccess } = require('../helpers/jwtHandlers')
 ROUTER.delete('/jwt/delete', async (request, result) => {
   try {
@@ -83,8 +83,10 @@ ROUTER.get('/user/get', async (request, result) => {
     if (AUTH_USER_ITEM.emailData.password !== undefined) {
       RESULT_DATA_ITEM.password = AUTH_USER_ITEM.emailData.password
     }
-    const USER_PROJECTS = await FURNITURE_CARD.find({authorId:USER_ID})
+    const USER_PROJECTS = await PROJECT.find({authorId:USER_ID})
+    const USER_FUNRITURE_CARDS = await FURNITURE_CARD.find({authorId:USER_ID})
     RESULT_DATA_ITEM.projects=USER_PROJECTS
+    RESULT_DATA_ITEM.furnitureCards=USER_FUNRITURE_CARDS
     result.status(201).json({ userData: RESULT_DATA_ITEM });
   } catch (err) {
     result.status(400).json({ message: err.message });
@@ -116,11 +118,11 @@ ROUTER.put('/user/put', async (request, result) => {
     if (!USER_ITEM) {
       return result.status(404).json({ message: 'User not found' });
     }
-    if(userType==='email'){
+    if(request.body.userType==='email'){
     USER_ITEM.nickname = request.body.nickname
     }
     await USER_ITEM.save()
-    result.status(201).json({ userData: RESULT_DATA_ITEM });
+    result.status(201).json({ message:'User successfully updated' });
   } catch (err) {
     result.status(400).json({ message: err.message });
   }
