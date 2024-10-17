@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { NavigationPanelComponent } from '../navigation-panel/navigation-panel.component';
-import { CreateFurnitureComponent, furnitureData, furnitureServerData, colorServerData } from '../create-furnitre/create-furniture.component';
+import { CreateFurnitureComponent, furnitureData, furnitureServerData, colorServerData, additionalData } from '../create-furnitre/create-furniture.component';
 import { ActivatedRoute, Router } from '@angular/router';
 import { imageSliderData } from '../image-slider/image-slider/image-slider.component';
 import { UserCookieService } from '../../services/user-cookie.service';
@@ -93,7 +93,8 @@ export class CreateFurniturePageComponent implements OnInit {
     name: '',
     description: '',
     colors: [],
-    shops: []
+    shops: [],
+    category: undefined
   }
   colorsClientData: { color: string, imagesData: imageSliderData }[] = []
   async transformUrlArrayToBlob(imagesArray: string[]) {
@@ -117,12 +118,29 @@ export class CreateFurniturePageComponent implements OnInit {
       colors: furnitureData.colors.map(colorObject => colorObject.color),
       shops: furnitureData.shops
     }
+    let ADDITIONAL_DATA: additionalData | undefined = undefined
+    if (
+      furnitureData.category !== undefined
+    ) {
+      ADDITIONAL_DATA = {
+        category: furnitureData.category
+      }
+    }
 
     const jwt = this.cookieService.getJwt()
 
     if (!jwt) return
-    this.furnitureCardService.POSTcreateFurnitureCard(jwt, FURNITURE_TEXT_DATA)
-      .subscribe({
+
+
+    (()=>{
+      if (ADDITIONAL_DATA !== undefined) {
+        return this.furnitureCardService.POSTcreateFurnitureCard(jwt, FURNITURE_TEXT_DATA, ADDITIONAL_DATA);
+      } else {
+        return this.furnitureCardService.POSTcreateFurnitureCard(jwt, FURNITURE_TEXT_DATA);
+      }
+    }
+    )()
+    .subscribe({
         next: (response) => {
 
           console.log(response)
@@ -139,7 +157,7 @@ export class CreateFurniturePageComponent implements OnInit {
             console.log(imagesData.images)
 
             if (imagesData.images.length === 0) return
-            let imagesBlobArray:Blob[]=imagesData.images
+            let imagesBlobArray: Blob[] = imagesData.images
             if (imagesData.images.length === 0) return
             if (!(imagesData.images[0] instanceof Blob)) {
               imagesBlobArray = await this.transformUrlArrayToBlob(imagesData.images.map(blobUrl => blobUrl.toString()))
@@ -173,53 +191,67 @@ export class CreateFurniturePageComponent implements OnInit {
       colors: furnitureData.colors.map(colorObject => colorObject.color),
       shops: furnitureData.shops
     }
-
+    let ADDITIONAL_DATA: additionalData | undefined = undefined
+    if (
+      furnitureData.category !== undefined
+    ) {
+      ADDITIONAL_DATA = {
+        category: furnitureData.category
+      }
+    }
     const jwt = this.cookieService.getJwt()
 
     if (!jwt) return
 
-    this.furnitureCardService.PUTupdateFurnitureCard(jwt,FURNITURE_TEXT_DATA)
-    .subscribe({
-      next:(response)=>{
-        console.log(response)
-        this.serverImageControl.DELETEproject(jwt, this.idPage)
+    (()=>{
+      if (ADDITIONAL_DATA !== undefined) {
+        return this.furnitureCardService.PUTupdateFurnitureCard(jwt, FURNITURE_TEXT_DATA, ADDITIONAL_DATA);
+      } else {
+        return this.furnitureCardService.PUTupdateFurnitureCard(jwt, FURNITURE_TEXT_DATA);
+      }
+    }
+    )()
       .subscribe({
         next: (response) => {
           console.log(response)
-          furnitureData.colors.forEach(async colorData => {
-            console.log(colorData)
+          this.serverImageControl.DELETEproject(jwt, this.idPage)
+            .subscribe({
+              next: (response) => {
+                console.log(response)
+                furnitureData.colors.forEach(async colorData => {
+                  console.log(colorData)
 
-            const { color, imagesData } = colorData
-            console.log(imagesData.images)
-            console.log(imagesData.images)
-            let imagesBlobArray:Blob[]=imagesData.images
-            if (imagesData.images.length === 0) return
-            if (!(imagesData.images[0] instanceof Blob)) {
-              imagesBlobArray = await this.transformUrlArrayToBlob(imagesData.images.map(blobUrl => blobUrl.toString()))
-            }
-            console.log(imagesBlobArray)
+                  const { color, imagesData } = colorData
+                  console.log(imagesData.images)
+                  console.log(imagesData.images)
+                  let imagesBlobArray: Blob[] = imagesData.images
+                  if (imagesData.images.length === 0) return
+                  if (!(imagesData.images[0] instanceof Blob)) {
+                    imagesBlobArray = await this.transformUrlArrayToBlob(imagesData.images.map(blobUrl => blobUrl.toString()))
+                  }
+                  console.log(imagesBlobArray)
 
-            this.serverImageControl.POSTloadProjectImages(imagesBlobArray, jwt, this.idPage, color, imagesData.idMainImage)
-              .subscribe({
-                next: (response) => {
-                  console.log(response)
-                  // window.location.href = '/create/' + this.idPage
-                },
-                error: (error) => {
-                  console.log(error)
-                }
-              })
-          })
+                  this.serverImageControl.POSTloadProjectImages(imagesBlobArray, jwt, this.idPage, color, imagesData.idMainImage)
+                    .subscribe({
+                      next: (response) => {
+                        console.log(response)
+                        // window.location.href = '/create/' + this.idPage
+                      },
+                      error: (error) => {
+                        console.log(error)
+                      }
+                    })
+                })
+              },
+              error: (error) => {
+                console.log(error)
+              }
+            })
         },
         error: (error) => {
           console.log(error)
         }
       })
-      },
-      error:(error)=>{
-        console.log(error)
-      }
-    })
 
   }
   clearFurnitureCard() {
@@ -228,7 +260,8 @@ export class CreateFurniturePageComponent implements OnInit {
       name: '',
       description: '',
       colors: [],
-      shops: []
+      shops: [],
+      category: undefined
     }
     this.colorsClientData = []
   }

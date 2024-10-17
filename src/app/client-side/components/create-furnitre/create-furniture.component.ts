@@ -11,6 +11,8 @@ import { NavigationPanelComponent } from '../navigation-panel/navigation-panel.c
 import { ActivatedRoute, Router } from '@angular/router';
 import { FurnitureCardControlService } from '../../services/furniture-card-control.service';
 
+export type categoryType = 'chair'|'sofa'|'lamp'|'table'|undefined
+
 interface shopData {
   cost: number;
   url: string;
@@ -19,6 +21,7 @@ export interface furnitureData {
   name: string;
   description: string;
   shops: shopData[];
+  category?:categoryType
 }
 interface colorClientData {
   color: string, imagesData: imageSliderData
@@ -29,6 +32,9 @@ export interface colorServerData {
     images: Blob[],
     idMainImage: number
   }
+}
+export interface additionalData{
+  category:categoryType
 }
 export interface furnitureClientData extends furnitureData {
   colors: colorClientData[]
@@ -57,6 +63,7 @@ export class CreateFurnitureComponent implements AfterViewInit{
 
   @ViewChild('colorModule') private colorModuleTemplate!: TemplateRef<any>;
   @ViewChild('shopsModule') private shopsModuleTemplate!: TemplateRef<any>;
+  @ViewChild('additionalModule') private additionalModuleTemplate!: TemplateRef<any>;
   lastClickedShop: number | undefined = undefined
   lastClickedColor: number | undefined = undefined
   addModuleTemplate!: TemplateRef<any>;
@@ -66,12 +73,13 @@ export class CreateFurnitureComponent implements AfterViewInit{
   @Input()
   colorsClientData: { color: string, imagesData: imageSliderData }[] = []
   @Input()
-  furnitureData: furnitureServerData = {
-    name: '',
-    colors: [],
-    description: '',
-    shops: []
-  }
+  furnitureData!: furnitureServerData
+  categoriesArray:categoryType[]=[
+    'sofa',
+    'chair',
+    'lamp',
+    'table'
+  ]
   async onInputImages(event: Event) {
     const inputElement = event.target as HTMLInputElement;
     const files = inputElement.files;
@@ -198,6 +206,10 @@ export class CreateFurnitureComponent implements AfterViewInit{
       })
     }
     this.addModuleTemplate = this.shopsModuleTemplate;
+    this.addModule.classList.remove('disabled');
+  }
+  openAdditional(){
+    this.addModuleTemplate = this.additionalModuleTemplate;
     this.addModule.classList.remove('disabled');
   }
   openFurnitureVariant(idColor: number) {

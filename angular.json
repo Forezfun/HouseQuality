@@ -26,15 +26,16 @@
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "scss",
             "assets": [
-              "src/app/assets",
-              "src/app/client-side/assets/images/favicon.ico"
+              "src/assets",
+              "src/favicon.ico",
+              "src/manifest.webmanifest"
             ],
             "styles": [
-              "src/app/client-side/assets/styles/base.scss"
+              "src/assets/styles/base.scss"
             ],
             "stylePreprocessorOptions": {
               "includePaths": [
-                "src/app/client-side/assets/styles"
+                "src/assets/styles"
               ]
             },
             "scripts": []
@@ -89,11 +90,12 @@
             "tsConfig": "tsconfig.spec.json",
             "inlineStyleLanguage": "scss",
             "assets": [
-              "src/app/assets",
-              "src/app/client-side/assets/images/favicon.ico"
+              "src/assets",
+              "src/favicon.ico",
+              "src/manifest.webmanifest"
             ],
             "styles": [
-              "src/app/client-side/assets/styles/base.scss"
+              "src/assets/styles/base.scss"
             ],
             "scripts": []
           }

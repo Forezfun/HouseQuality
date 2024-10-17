@@ -5,6 +5,7 @@ import { LoginPageComponent } from './components/login-page/login-page.component
 import { SceneComponent } from './components/scene/scene.component';
 import { PlanHousePageComponent } from './components/plan-house-page/plan-house-page.component';
 import { CreateFurniturePageComponent } from './components/create-furniture-page/create-furniture-page.component';
+import { ShopPageComponent } from './components/shop-page/shop-page.component';
  
 export const routes: Routes = [
     {component:MainPageComponent,path:''},
@@ -12,5 +13,8 @@ export const routes: Routes = [
     {component:LoginPageComponent,path:'login'},
     {component:PlanHousePageComponent,path:'plan'},
     {component:CreateFurniturePageComponent,path:'create/:id'},
-    {component:SceneComponent,path:'scene'}
+    {component:SceneComponent,path:'scene'},
+    { component: ShopPageComponent, path: 'shop'},
+    { component: ShopPageComponent, path: 'shop/:category'},
+    { component: ShopPageComponent, path: 'shop/:category/:furnitureId'},
 ];

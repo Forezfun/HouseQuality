@@ -3,7 +3,7 @@ const ROUTER = EXPRESS.Router();
 const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
-const IMAGES_FURNITURE = require('../models/imagesFurniure');
+const IMAGES_FURNITURE = require('../models/imagesFurniture');
 const FURNITURE_CARD = require('../models/furnitureCard')
 const { checkUserAccess } = require('../helpers/jwtHandlers');
 
@@ -30,7 +30,7 @@ function ensureProjectAndColorDirectories(furnitureCardId, color) {
         throw new Error('furnitureCardId or color is missing');
     }
 
-    const projectDir = path.join(__dirname, '..', 'uploads', furnitureCardId);
+    const projectDir = path.join(__dirname, '..', 'uploads', 'cards',furnitureCardId);
     const colorDir = path.join(projectDir, color);
 
     if (!fs.existsSync(projectDir)) {
@@ -89,7 +89,7 @@ ROUTER.get('/main', async (req, res) => {
             return res.status(404).json({ message: 'Images furniture item not found' });
         }
         const MAIN_IMAGE_NAME = IMAGES_FURNITURE_ITEM.images[IMAGES_FURNITURE_ITEM.idMainImage].filename
-        const directory = path.join(__dirname, '..', 'uploads',furnitureCardId,color);
+        const directory = path.join(__dirname, '..', 'uploads', 'cards',furnitureCardId,color);
         const filePath = path.join(directory, MAIN_IMAGE_NAME);
 
         console.log(`Looking for file: ${filePath}`);
@@ -138,7 +138,7 @@ ROUTER.get('/all', async (req, res) => {
             return res.status(404).json({ message: 'Images furniture item not found' });
         }
         let FURNITURE_IMAGES_PATH_ARRAY=[]
-        const directory = path.join(__dirname, '..', 'uploads',furnitureCardId,color);
+        const directory = path.join(__dirname, '..', 'uploads', 'cards',furnitureCardId,color);
         IMAGES_FURNITURE_ITEM.images.forEach(imageData => FURNITURE_IMAGES_PATH_ARRAY.push(path.join(directory, imageData.filename)))
 
         res.status(200).json({ imagesURLS: FURNITURE_IMAGES_PATH_ARRAY,idMainImage: IMAGES_FURNITURE_ITEM.idMainImage});
@@ -201,7 +201,7 @@ ROUTER.delete('/delete/color', async (req, res) => {
     try {
         const { furnitureCardId, color } = req.body;
         
-        const projectDir = path.join(__dirname, '..', 'uploads', furnitureCardId);
+        const projectDir = path.join(__dirname, '..', 'uploads', 'cards', furnitureCardId);
         const colorDir = path.join(projectDir, color);
 
         if (fs.existsSync(colorDir)) {
@@ -225,7 +225,7 @@ ROUTER.delete('/delete/project', async (req, res) => {
         let FURNITURE_CARD_ITEM = await FURNITURE_CARD.findById(FURNITURE_CARD_ID)
         if(FURNITURE_CARD_ITEM.authorId!==USER_ID)return res.status(409).json({ message: "User hasn't access" });
 
-        const projectDir = path.join(__dirname, '..', 'uploads', furnitureCardId);
+        const projectDir = path.join(__dirname, '..', 'uploads', 'cards', furnitureCardId);
 
         if (fs.existsSync(projectDir)) {
             fs.rmdirSync(projectDir, { recursive: true });

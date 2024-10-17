@@ -1,7 +1,7 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { furnitureData, furnitureServerData } from '../components/create-furnitre/create-furniture.component';
+import { additionalData, furnitureData, furnitureServerData } from '../components/create-furnitre/create-furniture.component';
 @Injectable({
   providedIn: 'root'
 })
@@ -30,8 +30,9 @@ export class FurnitureCardControlService {
    * @param furnitureCard Данные карточки мебели
    * @returns Observable с результатом создания карточки
    */
-  POSTcreateFurnitureCard(jwt: string, furnitureCardTextData: furnitureData): Observable<any> {
-    const HTTP_PARAMS = new HttpParams().set('jwtToken', jwt);
+  POSTcreateFurnitureCard(jwt: string, furnitureCardTextData: furnitureData,additionalData?:additionalData): Observable<any> {
+    let HTTP_PARAMS = new HttpParams().set('jwtToken', jwt);
+    if(additionalData!==undefined)HTTP_PARAMS = HTTP_PARAMS.set('additionalData',JSON.stringify(additionalData))
     return this.httpModule.post(`${this.baseUrl}`, furnitureCardTextData, { params: HTTP_PARAMS });
   }
 
@@ -41,8 +42,9 @@ export class FurnitureCardControlService {
    * @param furnitureCard Данные карточки мебели для обновления
    * @returns Observable с результатом обновления карточки
    */
-  PUTupdateFurnitureCard(jwt: string, furnitureCard: any): Observable<any> {
-    const HTTP_PARAMS = new HttpParams().set('jwtToken', jwt);
+  PUTupdateFurnitureCard(jwt: string, furnitureCard: any,additionalData?:additionalData): Observable<any> {
+    let HTTP_PARAMS = new HttpParams().set('jwtToken', jwt);
+    if(additionalData!==undefined)HTTP_PARAMS = HTTP_PARAMS.set('additionalData',JSON.stringify(additionalData))
     return this.httpModule.put(`${this.baseUrl}`, furnitureCard, { params: HTTP_PARAMS });
   }
 
@@ -56,5 +58,8 @@ export class FurnitureCardControlService {
     .set('jwtToken', jwt)
     .set('furnitureCardId', furnitureCardId)
     return this.httpModule.delete(`${this.baseUrl}`, { params: HTTP_PARAMS });
+  }
+  GETshopData(furnitureCardId:string){
+  return this.httpModule.get(`${this.baseUrl}shop?furnitureCardId=${furnitureCardId}`)
   }
 }

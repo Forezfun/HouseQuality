@@ -120,4 +120,5 @@ export class ServerImageControlService {
     GETsimpleImage(filePath:string){
       return `${this.baseUrl}furniture/images/simple?filePath=${filePath}`;
     }
+    
 }

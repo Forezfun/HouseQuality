@@ -1,4 +1,4 @@
-<span class="body">
+<span *ngIf="furnitureData" class="body">
     <h1 class="furnitureTitle">{{furnitureData.name}}</h1>
     <app-image-slider *ngIf="furnitureData.colors[currentColorId].imagesData"
         [imagesArray]="furnitureData.colors[currentColorId].imagesData"></app-image-slider>
@@ -9,10 +9,10 @@
     <span class="footer">
         <span class="colorSlider">
             <img loading="lazy"  src="assets/images/paletteIcon.svg" class="addColorBtn" alt="add">
-            <span class="colors">
+            <span [style.--total-items]="furnitureData.colors.length.toString()" class="colors">
                 <button (click)="openFurnitureVariant($event.target!)"
                     *ngFor="let colorVariant of furnitureData.colors;let index=index" [attr.data-idColor]="index"
-                    [style.background-color]="colorVariant" class="colorVariant"></button>
+                    [style.background-color]="colorVariant.color" class="colorVariant"></button>
             </span>
         </span>
         <span class="informationSpan">
