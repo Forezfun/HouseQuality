@@ -19,6 +19,7 @@ export class ClientImageControlService {
         },
         error: (err: Error) => {
           console.error('Ошибка сжатия:', err.message);
+          
           reject(err); 
         },
       });

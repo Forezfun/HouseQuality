@@ -1,14 +1,5 @@
 <span class="planHouseModule">
-  <span class="furnitureCategory">
-    <h1 class="furnitureCategoryTitle">{{furnitureCategoryDataArray[currentIdFurnitureCategory!]}}</h1>
-    <span class="furnitureList">
-      <div *ngFor="let furnitureData of furnitureExampleList" class="furnitureItem">
-        <h2 class="furnitureTitle">{{furnitureData.name}}</h2>
-        <img loading="lazy"  class="furniturePreview" [src]="furnitureData.previewUrl" alt="">
-        <a class="furnitureLink" [href]="furnitureData.link">{{furnitureData.cost}}</a>
-      </div>
-    </span>
-  </span>
+
   <span class="addModuleSpan">
     <button 
     (click)="

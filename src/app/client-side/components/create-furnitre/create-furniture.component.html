@@ -1,40 +1,42 @@
-
-    <span class="body" (click)="currentColorId ?? openColorModule($event)">
-        <input class="furnitureTitle" [(ngModel)]="furnitureData.name" placeholder="Name">
-        <span class="imageSlideSpan">
-            <button *ngIf="currentColorId!==undefined&&colorsClientData[currentColorId].imagesData.images.length>0" (click)="removeImages()" class="editImagesBtn">
-                <img loading="lazy" alt="editImages" src="/assets/images/editIcon.svg" alt=""></button>
-            <app-image-slider *ngIf="currentColorId!==undefined&&colorsClientData[currentColorId].imagesData.images.length>0"
-                [imagesArray]="colorsClientData[currentColorId].imagesData" (idMainImageEmitter)="changeIdMainImage($event)"></app-image-slider>
-        </span>
-        <div class="uploadImagesDiv"  *ngIf="currentColorId===undefined||(currentColorId!==undefined&&colorsClientData[currentColorId].imagesData.images.length<=0)">
-            <input (input)="onInputImages($event)" class="uploadImagesInput" multiple type="file"
-                accept=".png,.jpeg,.jpg">
-            <img loading="lazy" class="uploadImagesIcon" src="/assets/images/uploadIcon.png" alt="">
-        </div>
-        <span class="footer">
-            <span class="leftPiece">
-                <span class="colorSlider">
-                    <button (click)="openColorModule($event)" class="addColorBtn">
-                        <img loading="lazy" src="/assets/images/addIcon.svg" alt="add">
-                    </button>
-                    <span class="colors" [style.--total-items]="furnitureData.colors.length.toString()">
-                        <button (click)="openFurnitureVariant(index)"
-                            *ngFor="let colorVariant of furnitureData.colors;let index=index"
-                            [attr.data-idColor]="index" [style.background-color]="colorVariant.color"
-                            class="colorVariant"></button>
-                    </span>
+<span class="body" (click)="currentColorId ?? openColorModule($event)">
+    <input class="furnitureTitle" [(ngModel)]="furnitureData.name" placeholder="Name">
+    <span class="imageSlideSpan">
+        <button *ngIf="currentColorId!==undefined&&colorsClientData[currentColorId].imagesData.images.length>0"
+            (click)="removeImages()" class="editImagesBtn">
+            <img loading="lazy" alt="editImages" src="/assets/images/editIcon.svg" alt=""></button>
+        <app-image-slider
+            *ngIf="currentColorId!==undefined&&colorsClientData[currentColorId].imagesData.images.length>0"
+            [imagesArray]="colorsClientData[currentColorId].imagesData"
+            (idMainImageEmitter)="changeIdMainImage($event)"></app-image-slider>
+    </span>
+    <div class="uploadImagesDiv"
+        *ngIf="currentColorId===undefined||(currentColorId!==undefined&&colorsClientData[currentColorId].imagesData.images.length<=0)">
+        <input (input)="onInputImages($event)" class="uploadImagesInput" multiple type="file" accept=".png,.jpeg,.jpg">
+        <img loading="lazy" class="uploadImagesIcon" src="/assets/images/uploadIcon.png" alt="">
+    </div>
+    <span class="footer">
+        <span class="leftPiece">
+            <span class="colorSlider">
+                <button (click)="openColorModule($event)" class="addColorBtn">
+                    <img loading="lazy" src="/assets/images/addIcon.svg" alt="add">
+                </button>
+                <span class="colors" [style.--total-items]="furnitureData.colors.length.toString()">
+                    <button (click)="openFurnitureVariant(index)"
+                        *ngFor="let colorVariant of furnitureData.colors;let index=index" [attr.data-idColor]="index"
+                        [style.background-color]="colorVariant.color" class="colorVariant"></button>
                 </span>
-                <input type="file" accept=".obj" id="furnitureModel" class="furnitureModelInput">
             </span>
-            <span class="informationSpan">
-                <span class="descriptionSpan">
-                    <div class="descriptionTitle ">Description</div>
-                    <textarea placeholder="Some description" [(ngModel)]="furnitureData.description"
-                        class="descriptionInformation"></textarea>
-                </span>
+            <input type="file" accept=".obj" id="furnitureModel" class="furnitureModelInput">
+        </span>
+        <span class="informationSpan">
+            <span class="descriptionSpan">
+                <div class="descriptionTitle ">Description</div>
+                <textarea placeholder="Some description" [(ngModel)]="furnitureData.description"
+                    class="descriptionInformation"></textarea>
+            </span>
+            <span class="rightFunctionalSection">
+                <div class="shopsTitle">Shops</div>
                 <span class="shopsSpan">
-                    <div class="shopsTitle">Shops</div>
                     <span class="shopsListSpan">
                         <button (click)="openShopsModule(index)" class="shopFunctions"
                             *ngFor="let shopData of furnitureData.shops; let index=index">
@@ -47,9 +49,13 @@
                     <button (click)="openShopsModule()" class="addShopButton"><img loading="lazy"
                             src="/assets/images/addIcon.svg" alt="open"></button>
                 </span>
+                <button (click)="openAdditional()" class="additionalFunctions">
+                    Additional
+                </button>
             </span>
         </span>
     </span>
+</span>
 
 <div class="addModule disabled">
     <ng-container *ngTemplateOutlet="addModuleTemplate"></ng-container>
@@ -91,4 +97,21 @@
             </span>
         </span>
     </form>
+</ng-template>
+<ng-template #additionalModule>
+    <span class="addModuleSpan" (ngSubmit)="addShop()">
+        <button (click)="closeAddModule()" class="closeAddModuleBtn" type="button">
+            <img loading="lazy" src="/assets/images/addIcon.svg" alt="">
+        </button>
+        <span class="addModuleFormContent">
+            <h2 class="addModuleTitle">Additional</h2>
+            <span *ngIf="categoriesArray!==undefined" class="addModuleInputSpan">
+                <label class="inputLabel" for="category">Category</label>
+                <select aria-placeholder="Sofa" [(ngModel)]="furnitureData.category" class="categorySelect" name="category" id="category">
+                    <option [value]="category" *ngFor="let category of categoriesArray">{{category}}</option>
+                </select>
+            </span>
+            <button (click)="closeAddModule()" class="submitAddModuleFormBtn additionalBtn">Save</button>
+        </span>
+    </span>
 </ng-template>

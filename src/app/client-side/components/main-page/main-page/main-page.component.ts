@@ -34,7 +34,8 @@ export class MainPageComponent {
     name:'Onte Bucle White',
     colors:[],
     description:'Width: 170 cm  Length: 240 cm  Height: 83 cmRecommended-place: corner of the roomTransformation mechanism: pantographSupport material: spliced ​​solidClearance from floor: 12 cmExistence of a drawer for linen: yesArmrest color: main fabric colorRemovable cover: noDecorative pillows: without pillowsMaximum load per seat: 100 kg',
-    shops:[{cost:125990,url:'https://www.divan.ru/blagoveshchensk/product/divan-uglovoj-onte-bucle-white'},{cost:84990,url:'https://avtorm.ru/catalog/product-divan-uglovoy-onte-bucle-white'}]
+    shops:[{cost:125990,url:'https://www.divan.ru/blagoveshchensk/product/divan-uglovoj-onte-bucle-white'},{cost:84990,url:'https://avtorm.ru/catalog/product-divan-uglovoy-onte-bucle-white'}],
+    category:'sofa'
   }
   exampleClientColors=[{color:'#FFC2CC',imagesData:this.imagesData}]
   viewExampleData:furnitureClientData = {
@@ -44,10 +45,11 @@ export class MainPageComponent {
     ],
     description:this.furnitureExamplesData.description,
     shops:this.furnitureExamplesData.shops,
+    category:this.furnitureExamplesData.category
   }
   planHouseExampleData:roomData[]=[
     {
-      name:'Гостинная',
+      name:'Прихожая',
       gridArea: '1 / 1 / 3 / 4',
       roomProportions:{
         width:3,
@@ -56,7 +58,7 @@ export class MainPageComponent {
       }
     },
     {
-      name:'Спальня',
+      name:'Санузел',
       gridArea: '3 / 1 / 4 / 2',
       roomProportions:{
         width:1,
@@ -65,7 +67,7 @@ export class MainPageComponent {
       }
     },
     {
-      name:'Спальня',
+      name:'Санузел',
       gridArea: ' 4 / 1 / 5 / 2',
       roomProportions:{
         width:1,
@@ -74,7 +76,7 @@ export class MainPageComponent {
       }
     },
     {
-      name:'Прихожая',
+      name:'Гостинная',
       gridArea: '5 / 1 / 8 / 5',
       roomProportions:{
         width:4,
@@ -83,7 +85,7 @@ export class MainPageComponent {
       }
     },
     {
-      name:'Санузел',
+      name:'Спальня',
       gridArea: ' 3 / 2 / 5 / 4',
       roomProportions:{
         width:2,

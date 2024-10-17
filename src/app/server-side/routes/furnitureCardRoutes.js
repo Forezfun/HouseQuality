@@ -1,18 +1,12 @@
 const EXPRESS = require('express');
 const ROUTER = EXPRESS.Router();
-const USER = require('../models/user');
-// const PUBLICATION = require('../models/publication');
-const { v4: uuidv4 } = require('uuid');
-const CryptoJS = require("crypto-js");
-const cryptoKey = 'HouseQuality'
-const AUTH_USER = require('../models/authUser');
-const jwtService = require('jsonwebtoken');
-const { isTokenNoneExpired, checkUserAccess } = require('../helpers/jwtHandlers')
+const { checkUserAccess } = require('../helpers/jwtHandlers')
 const FURNITURE_CARD = require('../models/furnitureCard')
 
 
 ROUTER.post('/', async (request, result) => {
     try {
+        console.log(request.query)
         const JWT_TOKEN = request.query.jwtToken;
         const USER_ID = await checkUserAccess(JWT_TOKEN);
         if (!USER_ID) return res.status(404).json({ message: 'User not found' });
@@ -22,9 +16,21 @@ ROUTER.post('/', async (request, result) => {
             imagesFolderName: request.body.imagesFolderName,
             shops: request.body.shops,
             authorId: USER_ID,
-            idFurnitureModel: request.body.idFurnitureModel
+            idFurnitureModel: request.body.idFurnitureModel,
+            additionalData:{}
         })
         request.body.colors.forEach(color=>{FURNITURE_CARD_ITEM.colors.push({color:color,idImages:''})})
+        console.log(FURNITURE_CARD_ITEM)
+        if (request.query.additionalData !== undefined) {
+            const ADDITIONAL_DATA = JSON.parse(request.query.additionalData);
+            
+            Object.keys(ADDITIONAL_DATA).forEach(propertyKey => {
+                // Проверка на существование ключа в additionalData
+                if (propertyKey in FURNITURE_CARD.schema.paths.additionalData.schema.paths) {
+                    FURNITURE_CARD_ITEM.additionalData[propertyKey] = ADDITIONAL_DATA[propertyKey];
+                }
+            });
+        }
         await FURNITURE_CARD_ITEM.save()
         result.status(201).json({ furnitureData: FURNITURE_CARD_ITEM })
     } catch (err) {
@@ -45,6 +51,16 @@ ROUTER.put('/', async (request, result) => {
         FURNITURE_CARD_ITEM.description = request.body.description;
         FURNITURE_CARD_ITEM.colors = request.body.colors.map(color=>{return({color:color,idImages:''})})
         FURNITURE_CARD_ITEM.shops = request.body.shops;
+        if (request.query.additionalData !== undefined) {
+            const ADDITIONAL_DATA = JSON.parse(request.query.additionalData);
+            
+            Object.keys(ADDITIONAL_DATA).forEach(propertyKey => {
+                // Проверка на существование ключа в additionalData
+                if (propertyKey in FURNITURE_CARD.schema.paths.additionalData.schema.paths) {
+                    FURNITURE_CARD_ITEM.additionalData[propertyKey] = ADDITIONAL_DATA[propertyKey];
+                }
+            });
+        }
         await FURNITURE_CARD_ITEM.save()
         result.status(201).json({ message: 'Furniture card successfully updated' })
     } catch (err) {

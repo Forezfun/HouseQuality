@@ -34,7 +34,7 @@ function removeOldAvatarIfExists(userId, uploadDir) {
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        const uploadDir = path.join(__dirname, '..', 'uploads');
+        const uploadDir = path.join(__dirname, '..', 'uploads','avatars');
         if (!fs.existsSync(uploadDir)) {
             fs.mkdirSync(uploadDir);
         }
@@ -91,20 +91,23 @@ ROUTER.post('/upload', upload.single('image'), async (req, res) => {
 // Маршрут для получения аватара по userId
 ROUTER.get('', async (req, res) => {
     try {
+        let filePath
+        const directory = path.join(__dirname, '..', 'uploads','avatars');
         const IMAGE_AVATAR_ITEM = await IMAGE_AVATAR.findOne({ userId: req.query.userId });
         if (!IMAGE_AVATAR_ITEM) {
-            return res.status(404).json({ message: 'Avatar not found' });
+            filePath=path.join(directory,'default.png')
         }
 
-        const directory = path.join(__dirname, '..', 'uploads');
-        const filePath = path.join(directory, IMAGE_AVATAR_ITEM.filename);
+        if(IMAGE_AVATAR_ITEM){
+            filePath = path.join(directory, IMAGE_AVATAR_ITEM.filename);
 
-        console.log(`Looking for file: ${filePath}`);
+            console.log(`Looking for file: ${filePath}`);
 
-        if (!fs.existsSync(filePath)) {
-            return res.status(404).json({ message: 'File not found' });
+            if (!fs.existsSync(filePath)) {
+            filePath=path.join(directory,'default.png')
+            }
         }
-
+        console.log(filePath)
         res.sendFile(filePath);
     } catch (error) {
         res.status(500).json({ message: error.message });

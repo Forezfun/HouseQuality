@@ -43,6 +43,9 @@ export class PlanHouseComponent implements AfterViewInit {
   private isDoubleClick = false;
   private furnitureListElement!: HTMLSpanElement
   private toggleModuleButton!: HTMLButtonElement
+  furnitureCategoryDataArray: string[] = [
+    'Chair', 'Lamp', 'Sofa', 'Table'
+  ]
   @Output()
   planHouseEmitter = new EventEmitter<roomData[]>()
   emitPlanHouse(){
@@ -84,9 +87,7 @@ export class PlanHouseComponent implements AfterViewInit {
     height: number;
     width: number;
   } | undefined = undefined
-  furnitureCategoryDataArray: string[] = [
-    'Chair', 'Lamp', 'Sofa', 'Table'
-  ]
+
   currentViewRoom: undefined | number = undefined
 
   roomForm = new FormGroup({

@@ -1,0 +1,33 @@
+<span class="body">
+  <app-navigation-panel></app-navigation-panel>
+  <h1 class="сategoryTitle">{{capitalizeFirstLetter(categoryName??'all categories')}}</h1>
+  <span *ngIf="furnituresArray" class="shopModule">
+    <span *ngIf="furnitureId" class="viewFurnitureSpan">
+      <button (click)="closeFurniture()" class="closeFurniture">
+        <img src="/assets/images/addIcon.svg" alt="">
+      </button>
+      <app-view-furniture [furnitureId]="furnitureId"></app-view-furniture>
+    </span>
+    <span *ngIf="!furnitureId" class="mainArea">
+      <span class="params">
+        <span class="furnitureCategoriesButtonsSpan">
+          <button (click)="changeCategory(index)" class="furnitureCategoryButton"
+            *ngFor="let categoryName of furnitureCategoryDataArray; let index = index">
+            {{categoryName}}
+          </button>
+          <button (click)="changeCategory(null)" class="furnitureCategoryButton">
+            All
+          </button>
+        </span>
+      </span>
+      <span class="сategory">
+        <div *ngFor="let furnitureData of furnituresArray" class="furnitureItem">
+          <h2 class="furnitureTitle">{{furnitureData.name}}</h2>
+          <img loading="lazy" class="furniturePreview" [src]="furnitureData.preview" alt="">
+          <a class="furnitureLink"
+            [routerLink]="'/shop/'+(categoryName??'all')+'/'+furnitureData.id">{{furnitureData.cost}}</a>
+        </div>
+      </span>
+    </span>
+  </span>
+</span>

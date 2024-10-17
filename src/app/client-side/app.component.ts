@@ -15,11 +15,12 @@ import { ServerImageControlService } from './services/server-image-control.servi
 import { ProjectService } from './services/project.service';
 import { FurnitureCardControlService } from './services/furniture-card-control.service';
 import { FurnitureModelControlService } from './services/furniture-model-control.service';
+import { ShopService } from './services/shop.service';
 @Component({
   selector: 'app-root',
   standalone: true,
   imports: [RouterOutlet,SceneComponent,CreateFurnitureComponent,PlanHouseComponent,ViewFurnitureComponent,ErrorHandlerComponent,HttpClientModule],
-  providers:[ErrorHandlerComponent,AccountService,AuthService,UserCookieService,ServerImageControlService,ProjectService,PlanHouseComponent,FurnitureCardControlService,FurnitureModelControlService],
+  providers:[ErrorHandlerComponent,AccountService,AuthService,UserCookieService,ServerImageControlService,ProjectService,PlanHouseComponent,FurnitureCardControlService,FurnitureModelControlService,ShopService],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })

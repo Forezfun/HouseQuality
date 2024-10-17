@@ -2,10 +2,10 @@
   "name": "HouseQuality",
   "short_name": "HouseQuality",
   "theme_color": "#1976d2",
-  "background_color": "#fafafa",
+  "background_color": "a",
   "display": "standalone",
   "scope": "./",
-  "start_url": "./",
+  "start_url": "./src/app/client-side",
   "icons": [
     {
       "src": "icons/icon-72x72.png",
