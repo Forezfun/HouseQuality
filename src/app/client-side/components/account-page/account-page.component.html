@@ -26,7 +26,7 @@
             </span>
         </span>
         <span *ngIf="userData" class="projectsSpanCard">
-            <span *ngFor="let projectData of userData.projects" class="projectCard">
+            <span (click)="openProjectsPage(index)" *ngFor="let projectData of userData.projects;let index=index" class="projectCard">
                 <h3 class="projectTitle">{{projectData.name}}</h3>
                 <div class="projectSchem">
                     <div [style.grid-area]="roomData.gridArea" *ngFor="let roomData of projectData.rooms" class="room">

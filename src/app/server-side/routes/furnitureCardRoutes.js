@@ -16,6 +16,7 @@ ROUTER.post('/', async (request, result) => {
             imagesFolderName: request.body.imagesFolderName,
             shops: request.body.shops,
             authorId: USER_ID,
+            proportions:request.body.proportions,
             idFurnitureModel: request.body.idFurnitureModel,
             additionalData:{}
         })
@@ -40,7 +41,7 @@ ROUTER.post('/', async (request, result) => {
 
 ROUTER.put('/', async (request, result) => {
     try {
-        console.log(request.query)
+        console.log(request.body)
         console.log(request.body.colors)
         const JWT_TOKEN = request.query.jwtToken;
         const USER_ID = await checkUserAccess(JWT_TOKEN);
@@ -49,6 +50,7 @@ ROUTER.put('/', async (request, result) => {
         if (!FURNITURE_CARD_ITEM) return result.status(404).json({ message: 'Furniture card not found' });
         FURNITURE_CARD_ITEM.name = request.body.name;
         FURNITURE_CARD_ITEM.description = request.body.description;
+        FURNITURE_CARD_ITEM.proportions=request.body.proportions,
         FURNITURE_CARD_ITEM.colors = request.body.colors.map(color=>{return({color:color,idImages:''})})
         FURNITURE_CARD_ITEM.shops = request.body.shops;
         if (request.query.additionalData !== undefined) {

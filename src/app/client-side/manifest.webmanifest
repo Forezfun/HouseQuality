@@ -2,7 +2,7 @@
   "name": "HouseQuality",
   "short_name": "HouseQuality",
   "theme_color": "#1976d2",
-  "background_color": "a",
+  "background_color": "#344E41",
   "display": "standalone",
   "scope": "./",
   "start_url": "./src/app/client-side",

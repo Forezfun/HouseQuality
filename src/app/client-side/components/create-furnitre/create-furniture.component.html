@@ -107,9 +107,16 @@
             <h2 class="addModuleTitle">Additional</h2>
             <span *ngIf="categoriesArray!==undefined" class="addModuleInputSpan">
                 <label class="inputLabel" for="category">Category</label>
-                <select aria-placeholder="Sofa" [(ngModel)]="furnitureData.category" class="categorySelect" name="category" id="category">
+                <select aria-placeholder="Sofa" [(ngModel)]="furnitureData.category" class="categorySelect"
+                    name="category" id="category">
                     <option [value]="category" *ngFor="let category of categoriesArray">{{category}}</option>
                 </select>
+                <label class="inputLabel" for="width">Width</label>
+                <input [(ngModel)]="furnitureData.proportions.width" class="addModuleInput" id="width" type="text">
+                <label class="inputLabel" for="length">Length</label>
+                <input [(ngModel)]="furnitureData.proportions.length" class="addModuleInput" id="length" type="text">
+                <label class="inputLabel" for="height">Height</label>
+                <input [(ngModel)]="furnitureData.proportions.height" class="addModuleInput" id="height" type="text">
             </span>
             <button (click)="closeAddModule()" class="submitAddModuleFormBtn additionalBtn">Save</button>
         </span>

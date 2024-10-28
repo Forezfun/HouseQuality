@@ -1,11 +1,16 @@
-import { AfterViewInit, Component, Input, Renderer2, ElementRef, HostListener, EventEmitter, Output } from '@angular/core';
-import { modelInterface } from '../../scene/scene.component';
+import { AfterViewInit, Component, Input, Renderer2, ElementRef, HostListener, EventEmitter, Output, ViewChild } from '@angular/core';
+import { modelInterface, SceneComponent } from '../../scene/scene.component';
 import { NgClass, NgFor, NgIf } from '@angular/common';
 import { FormGroup, FormControl, ReactiveFormsModule, Validators, ValidatorFn, AbstractControl, ValidationErrors } from '@angular/forms';
+import { throttle } from 'lodash';
+import {objectSceneInterface} from '../../scene/scene.component'
+import { Router } from '@angular/router';
+
 export interface roomData {
   name:string;
   gridArea: string;
   roomProportions: modelInterface;
+  objects:objectSceneInterface[]
 }
 
 interface roomSpanSettings {
@@ -24,79 +29,71 @@ interface furnitureData {
 @Component({
   selector: 'app-plan-house',
   standalone: true,
-  imports: [NgFor, ReactiveFormsModule, NgIf, NgClass],
+  imports: [NgFor, ReactiveFormsModule, NgIf, NgClass,SceneComponent],
   templateUrl: './plan-house.component.html',
   styleUrls: ['./plan-house.component.scss']
 })
 export class PlanHouseComponent implements AfterViewInit {
   @Input()
   planHouse!:roomData[]
-
+  lastPlanHouse:roomData|undefined=undefined
   currentIdClickedRoom: number | undefined = undefined
   private previousGridArea!: string;
   private roomSpan!: HTMLSpanElement;
   private roomSpanSettings!: roomSpanSettings;
   private isDragging = false;
   private isClick = false;
-  private formElement!: HTMLFormElement;
+  formElement!: HTMLFormElement;
   private clickTimer: any;
   private isDoubleClick = false;
   private furnitureListElement!: HTMLSpanElement
   private toggleModuleButton!: HTMLButtonElement
+  currentViewRoom: undefined | number = undefined
+  sceneOpenToggle:boolean=false
   furnitureCategoryDataArray: string[] = [
     'Chair', 'Lamp', 'Sofa', 'Table'
   ]
+  @ViewChild('scene') sceneComponent!: SceneComponent;
+  @Output() initialized = new EventEmitter<void>();
   @Output()
   planHouseEmitter = new EventEmitter<roomData[]>()
+  @Output()
+  callSaveEmitter = new EventEmitter()
   emitPlanHouse(){
     this.planHouseEmitter.emit(this.planHouse)
   }
-  currentIdFurnitureCategory: undefined | number = undefined
-  
-  getCurrentRoomInformation(){
-    console.log('plan:',this.planHouse) 
-    return this.planHouse
-  }
-  furnitureExampleList: furnitureData[] = [
-    {
-      name: 'Onte Bucle White',
-      cost: '135.750',
-      previewUrl: '/assets/images/sofaSliderPhotos/1.png',
-      link: ''
-    },
-    {
-      name: 'Darol Velvet Beige',
-      cost: '175.000',
-      previewUrl: '/assets/images/sofaSliderPhotos/2.png',
-      link: ''
-    },
-    {
-      name: 'Onte Bucle White',
-      cost: '135.750',
-      previewUrl: '/assets/images/sofaSliderPhotos/1.png',
-      link: ''
-    },
-    {
-      name: 'Darol Velvet Beige',
-      cost: '175.000',
-      previewUrl: '/assets/images/sofaSliderPhotos/2.png',
-      link: ''
-    }
-  ]
+
   private oldSizeViewRoom: {
     height: number;
     width: number;
   } | undefined = undefined
 
-  currentViewRoom: undefined | number = undefined
+
 
   roomForm = new FormGroup({
-    width: new FormControl<number | null>(null, [Validators.required, this.numberValidator()]),
-    height: new FormControl<number | null>(null, [Validators.required, this.numberValidator()]),
-    length: new FormControl<number | null>(null, [Validators.required, this.numberValidator()]),
-    name:new FormControl<string>('', [Validators.required]),
-  });
-
+    width: new FormControl<number | null>(
+      null,
+      [Validators.required, this.numberValidator()]
+    ),
+    height: new FormControl<number | null>(
+      null,
+      [Validators.required, this.numberValidator()]
+    ),  
+    length: new FormControl<number | null>(
+      null,
+      [Validators.required, this.numberValidator()]
+    ),    
+    name: new FormControl<string>('', [Validators.required]),
+});
+  updateRoomObjects(objects:objectSceneInterface[]){
+    if(this.currentViewRoom===undefined)return
+    this.planHouse[this.currentViewRoom].objects=objects
+    this.emitPlanHouse()
+    this.saveHouse()
+  }
+  saveHouse(){
+    this.callSaveEmitter.emit()
+  }
   numberValidator(): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
       const value = control.value;
@@ -105,27 +102,34 @@ export class PlanHouseComponent implements AfterViewInit {
     };
   }
 
-  constructor(private renderer: Renderer2, private elementRef: ElementRef) { }
+  constructor(
+    private renderer: Renderer2, 
+    private elementRef: ElementRef,
+    private router:Router
+  ) { }
 
   ngAfterViewInit(): void {
+    console.log(this.planHouse)
     this.furnitureListElement = this.elementRef.nativeElement.querySelector('.furnitureCategory') as HTMLSpanElement
     this.roomSpan = this.elementRef.nativeElement.querySelector('.roomSpan') as HTMLSpanElement;
     this.calculateRoomSpanSettings();
     this.formElement = this.elementRef.nativeElement.querySelector('form') as HTMLFormElement;
     this.toggleModuleButton = this.elementRef.nativeElement.querySelector('.addModuleBtn')
+    console.log(this.formElement)
+    this.initialized.emit();
   }
-  openCategory(indexCategory: number) {
-    this.currentIdFurnitureCategory = indexCategory
-    this.renderer.addClass(this.furnitureListElement, 'openFurniturelist')
+  openScene() {
+    this.sceneOpenToggle=true
   }
-  closeCategory() {
-    this.renderer.removeClass(this.furnitureListElement, 'openFurniturelist')
-    this.currentIdFurnitureCategory = undefined
+  closeScene() {
+    this.sceneComponent.saveRoom()
+    this.sceneOpenToggle=false
   }
   openViewRoom(indexRoom: number) {
-    console.log(this.planHouse)
+    console.log(this.formElement,this.roomSpan)
     this.formElement.classList.remove('openAddModule');
     this.currentViewRoom = indexRoom
+    this.lastPlanHouse=this.planHouse[indexRoom]
     const roomElement = this.roomSpan.querySelector(`[data-index="${indexRoom}"]`) as HTMLDivElement
     console.log(roomElement)
     const { width: roomWidth, height: roomHeight } = roomElement.getBoundingClientRect()
@@ -156,7 +160,7 @@ export class PlanHouseComponent implements AfterViewInit {
     const roomElement = this.roomSpan.querySelector(`[data-index="${this.currentViewRoom}"]`) as HTMLDivElement;
     if (!roomElement || !this.oldSizeViewRoom) return;
     this.currentViewRoom = undefined;
-
+    this.currentIdClickedRoom = undefined
     this.renderer.setStyle(roomElement, 'width', this.oldSizeViewRoom.width + 'px')
     this.renderer.setStyle(roomElement, 'height', this.oldSizeViewRoom.height + 'px')
     this.renderer.removeStyle(roomElement, 'border');
@@ -169,8 +173,29 @@ export class PlanHouseComponent implements AfterViewInit {
       this.renderer.removeStyle(roomElement, 'height');
     }, 750);
   }
+  updateRoom(){
+    console.log(this.planHouse)
+    if(this.currentIdClickedRoom===undefined||!this.roomForm.value.name)return
+    if(this.roomForm.value.name===this.planHouse[this.currentIdClickedRoom].name){
+      this.toggleOpenRoomModule()
+      return
+    }
+    this.planHouse[this.currentIdClickedRoom].name=this.roomForm.value.name
+    
+    this.roomForm.patchValue({
+      width: null,
+      height: null,
+      length: null,
+      name:''
+    });
+    
+    this.emitPlanHouse()
+    this.toggleOpenRoomModule()
+    this.saveHouse()
+  }
   addRoom() {
     const { width, length, height,name } = this.roomForm.value
+    this.toggleOpenRoomModule()
     const newRoom: roomData = {
       name:name!,
       roomProportions: {
@@ -178,6 +203,7 @@ export class PlanHouseComponent implements AfterViewInit {
         height: +height!,
         length: +length!
       },
+      objects:[],
       gridArea: ''
     }
     const gridArea = this.findFreeSpace(newRoom.roomProportions)
@@ -188,6 +214,7 @@ export class PlanHouseComponent implements AfterViewInit {
     newRoom.gridArea = gridArea
     this.planHouse = [...this.planHouse, newRoom]
     this.emitPlanHouse()
+    this.saveHouse()
   }
   findFreeSpace(roomProportions: modelInterface): string | false {
     const gridSize = 10;
@@ -240,13 +267,22 @@ export class PlanHouseComponent implements AfterViewInit {
       this.planHouse.splice(this.currentIdClickedRoom, 1);
       this.currentIdClickedRoom = undefined;
       this.toggleOpenRoomModule()
+      this.saveHouse()
     }
   }
-
+  toggleControls(enable: boolean): void {
+    if (enable) {
+        this.roomForm.get('width')?.enable();
+        this.roomForm.get('height')?.enable();
+        this.roomForm.get('length')?.enable();
+    } else {
+        this.roomForm.get('width')?.disable();
+        this.roomForm.get('height')?.disable();
+        this.roomForm.get('length')?.disable();
+    }
+}
   toggleOpenRoomModule(indexRoom?: number) {
-    console.log(this.currentIdFurnitureCategory, this.currentViewRoom)
     if (!this.toggleModuleButton) return;
-
     if (indexRoom !== undefined) {
       const { width, height, length } = this.planHouse[indexRoom].roomProportions;
       this.roomForm.patchValue({
@@ -255,7 +291,7 @@ export class PlanHouseComponent implements AfterViewInit {
         length: length,
         name: this.planHouse[indexRoom].name
       });
-
+      this.toggleControls(this.currentIdClickedRoom===undefined)
       this.formElement.classList.add('openAddModule');
       this.renderer.setStyle(this.toggleModuleButton, 'rotate', '135deg');
       return;
@@ -263,6 +299,7 @@ export class PlanHouseComponent implements AfterViewInit {
     if (this.formElement.classList.contains('openAddModule')) {
       this.formElement.classList.remove('openAddModule');
       this.renderer.setStyle(this.toggleModuleButton, 'rotate', '0deg');
+      this.currentIdClickedRoom=undefined
       this.roomForm.patchValue({
         width: null,
         height: null,
@@ -271,8 +308,6 @@ export class PlanHouseComponent implements AfterViewInit {
       });
     } else {
       this.formElement.classList.add('openAddModule');
-      console.log('add')
-      console.log(this.formElement)
       this.renderer.setStyle(this.toggleModuleButton, 'rotate', '135deg');
     }
   }
@@ -327,10 +362,12 @@ export class PlanHouseComponent implements AfterViewInit {
   @HostListener('document:keyup.Enter', ['$event'])
   @HostListener('document:mouseup', ['$event'])
   onMouseUp(event: MouseEvent | KeyboardEvent | TouchEvent) {
+    if(this.sceneOpenToggle===true)return
     console.log(new Date().getTime()-this.startClickTime)
     console.log('Dragging', this.isDragging)
     console.log('Click', this.isClick)
     console.log('Double', this.isDoubleClick)
+    console.log(this.currentViewRoom,this.currentIdClickedRoom)
     console.log(this.currentIdClickedRoom)
     if (this.currentViewRoom !== undefined) return
     if (this.isDragging && this.currentIdClickedRoom !== undefined) {
@@ -356,6 +393,7 @@ export class PlanHouseComponent implements AfterViewInit {
         this.toggleOpenRoomModule(this.currentIdClickedRoom)
       }
       console.log('touchEnd')
+      console.log('double: ',this.isDoubleClick)
       this.isClick = false
       this.isDoubleClick = false
       this.isDragging = false
@@ -493,10 +531,10 @@ export class PlanHouseComponent implements AfterViewInit {
     event.preventDefault();
   }
   @HostListener('window:scroll')
-  scrollFunctions(){
-    if(!this.currentIdClickedRoom)return
+  onScroll = throttle(() => {
+    if(this.currentIdClickedRoom===undefined)return
     this.calculateRoomSpanSettings()
-  }
+  },50)
   @HostListener('document:keydown.Escape')
   escapeDragginMod() {
     console.log('escape')

@@ -20,7 +20,7 @@ import { ShopService } from './services/shop.service';
   selector: 'app-root',
   standalone: true,
   imports: [RouterOutlet,SceneComponent,CreateFurnitureComponent,PlanHouseComponent,ViewFurnitureComponent,ErrorHandlerComponent,HttpClientModule],
-  providers:[ErrorHandlerComponent,AccountService,AuthService,UserCookieService,ServerImageControlService,ProjectService,PlanHouseComponent,FurnitureCardControlService,FurnitureModelControlService,ShopService],
+  providers:[ErrorHandlerComponent,AccountService,AuthService,UserCookieService,ServerImageControlService,ProjectService,PlanHouseComponent,SceneComponent,FurnitureCardControlService,FurnitureModelControlService,ShopService],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })

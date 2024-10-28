@@ -36,7 +36,7 @@ ROUTER.post('/jwt/long/create', async (request, result) => {
         }
         const USER_ITEM = await USER.findById(AUTH_USER_ITEM.userId);
         if (!USER_ITEM) return result.status(404).json({ message: 'User not found' });
-        USER_ITEM.jwtTokens.filter(jwt => isTokenNoneExpired(jwt));
+        USER_ITEM.jwtTokens=USER_ITEM.jwtTokens.filter(jwt => {const expired = isTokenNoneExpired(jwt);console.log(expired);return expired});
         console.log(USER_ITEM)
         const payload = { userId: AUTH_USER_ITEM.userId };
         const options = { expiresIn: '1w' };

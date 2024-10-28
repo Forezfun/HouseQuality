@@ -1,4 +1,15 @@
 @import 'base.scss';
+.workArea{
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr;
+    grid-area: 1/1/2/2;
+}
+app-scene{
+    grid-area: 1/1/2/2;
+}
+
+
 .roomSpan {
     grid-area: 1/1/2/2;
     display: grid;
@@ -7,6 +18,7 @@
     grid-template-rows: repeat(10, calc(10% - 10px));
     aspect-ratio: 1;
     justify-content: space-around;
+    z-index:0;
 }
 
 .room {
@@ -28,7 +40,8 @@
 
 .roomView {
     margin-left: 30px;
-    align-self: center;
+    align-self: start;
+    margin-top: 30px;
 }
 
 .addModuleBtn {
@@ -49,7 +62,6 @@
 .submitAddModuleFormBtn:disabled {
     background-color: $darkGreen;
 }
-
 .addModuleSpan {
     grid-area: 1/1/2/2;
     display: grid;
@@ -58,7 +70,7 @@
     width: 35%;
     justify-self: end;
     padding-right: 30px;
-    height: 55%;
+    height: fit-content;
     margin-top: 30px;
     margin-right: 30px;
 
@@ -127,17 +139,19 @@
 }
 
 .deleteItemAddModuleBtn {
-    width: 100%;
+    width: 20%;
     height: 50px;
     display: flex;
     align-items: center;
     justify-content: center;
     border-radius: 15px;
-    background-color: $darkGreen;
+    background-color: $lightGreen;
     border: none;
     cursor: pointer;
 }
-
+.deleteItemAddModuleBtn>img{
+    height: 25px;
+}
 .none {
     display: none;
 }
@@ -147,6 +161,7 @@
     flex-direction: column;
     gap: 5px;
     width: 30%;
+    height: 80vh;
     justify-content: center;
 }
 
@@ -160,6 +175,7 @@
     color: white;
     cursor: pointer;
     border: none;
+    text-decoration: none;
 }
 .furnitureCategory{
     grid-area: 1/1/2/2;
