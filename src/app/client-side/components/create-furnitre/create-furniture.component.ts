@@ -17,11 +17,17 @@ interface shopData {
   cost: number;
   url: string;
 }
+interface furnitureProportions{
+  width:number|null;
+  length:number|null;
+  height:number|null;
+}
 export interface furnitureData {
   name: string;
   description: string;
   shops: shopData[];
-  category?:categoryType
+  category?:categoryType;
+  proportions:furnitureProportions
 }
 interface colorClientData {
   color: string, imagesData: imageSliderData
@@ -57,7 +63,7 @@ export class CreateFurnitureComponent implements AfterViewInit{
     private serverImageControl: ServerImageControlService,
     private router: Router,
     private route: ActivatedRoute,
-    private furntireCardService: FurnitureCardControlService,
+    private furnitureCardService: FurnitureCardControlService,
     private cookieService: UserCookieService
   ) { }
 
@@ -67,6 +73,7 @@ export class CreateFurnitureComponent implements AfterViewInit{
   lastClickedShop: number | undefined = undefined
   lastClickedColor: number | undefined = undefined
   addModuleTemplate!: TemplateRef<any>;
+  furnitureModelInput!:HTMLInputElement
   addColorVisible: boolean = false;
   addModule!: HTMLDivElement;
   currentColorId: number | undefined = undefined
@@ -144,6 +151,7 @@ export class CreateFurnitureComponent implements AfterViewInit{
 
   ngAfterViewInit(): void {
     this.addModule = this.elementRef.nativeElement.querySelector('.addModule');
+    this.furnitureModelInput=this.elementRef.nativeElement.querySelector('.furnitureModelInput')
   }
 
   closeAddModule() {

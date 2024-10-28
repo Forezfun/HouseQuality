@@ -8,6 +8,7 @@ app-navigation-panel {
     display: flex;
     flex-direction: row;
     gap:10px;
+    width:100%;
     transition: all 0.5s ease-in-out;
 }
 .planModule > button{

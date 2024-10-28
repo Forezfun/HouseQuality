@@ -153,4 +153,7 @@ export class AccountPageComponent implements AfterViewInit, OnInit {
     console.log(furnitureCardId,color)
     return this.imageServerControlService.GETmainImage(furnitureCardId,color)
   }
+  openProjectsPage(idPlan:number){
+    this.router.navigateByUrl('/plan/'+idPlan)
+  }
 }

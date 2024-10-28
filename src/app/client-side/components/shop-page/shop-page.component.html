@@ -1,12 +1,15 @@
 <span class="body">
   <app-navigation-panel></app-navigation-panel>
-  <h1 class="сategoryTitle">{{capitalizeFirstLetter(categoryName??'all categories')}}</h1>
+  <h1 *ngIf="!furnitureId" class="сategoryTitle">{{capitalizeFirstLetter(categoryName??'all categories')}}</h1>
   <span *ngIf="furnituresArray" class="shopModule">
     <span *ngIf="furnitureId" class="viewFurnitureSpan">
       <button (click)="closeFurniture()" class="closeFurniture">
         <img src="/assets/images/addIcon.svg" alt="">
       </button>
-      <app-view-furniture [furnitureId]="furnitureId"></app-view-furniture>
+      <span class="furnitureCard">
+        <app-view-furniture [furnitureId]="furnitureId"></app-view-furniture>
+        <button (click)="openAddModule()" class="choseAddProjectBtn">Add</button>
+      </span>
     </span>
     <span *ngIf="!furnitureId" class="mainArea">
       <span class="params">
@@ -29,5 +32,19 @@
         </div>
       </span>
     </span>
+  </span>
+</span>
+<span [ngClass]="{'disabled': !openAddModuleToggle}" class="addModule">
+  <span class="addModuleSpan" >
+      <button (click)="closeAddModule()" class="closeAddModuleBtn" type="button">
+          <img loading="lazy"  src="/assets/images/addIcon.svg" alt="">
+      </button>
+      <span class="addModuleFormContent">
+        <h2 class="addModuleTitle">Projects</h2>
+        <span *ngFor="let projectsData of userProjects;let planId = index" >
+          <h3>{{projectsData.name}}</h3>
+          <a *ngFor="let roomData of projectsData.rooms;let roomId=index" [routerLink]="getPlanUrl(planId,roomId)">{{roomData.name}}</a>
+        </span>
+      </span>
   </span>
 </span>

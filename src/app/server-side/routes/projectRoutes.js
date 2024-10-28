@@ -57,6 +57,7 @@ ROUTER.put('/', async (request, result) => {
     if (!PROJECT_ITEM) return result.status(404).json({ message: 'Project not found' });
     PROJECT_ITEM.name = request.body.nameProject
     PROJECT_ITEM.rooms = JSON.parse(request.body.rooms)
+    PROJECT_ITEM.objects = JSON.parse(request.body.objects)
     await PROJECT_ITEM.save()
     result.status(201).json({ message: 'Project successfully updated' });
   } catch (err) {

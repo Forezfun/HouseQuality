@@ -1,23 +1,18 @@
 <span class="planHouseModule">
 
   <span class="addModuleSpan">
-    <button 
-    (click)="
+    <button (click)="
     currentViewRoom === undefined
     ? toggleOpenRoomModule()
-    : (currentIdFurnitureCategory !== undefined
-      ? closeCategory()
+    : (sceneOpenToggle === true
+      ? closeScene()
       : closeViewRoom())
-    "
-    [style.rotate]="currentViewRoom === undefined ? '0deg' : '225deg'" 
-    class="addModuleBtn"
-    type="button"
-    tabindex="0">
-      <img loading="lazy"  src="/assets/images/addIcon.svg"
-        style="transition: all 0.5s;pointer-events: none;" alt="">
+    " [style.rotate]="currentViewRoom === undefined ? '0deg' : '225deg'" class="addModuleBtn" type="button"
+      tabindex="0">
+      <img loading="lazy" src="/assets/images/addIcon.svg" style="transition: all 0.5s;pointer-events: none;" alt="">
     </button>
-    <form [style.opacity]="currentViewRoom===undefined&&currentIdFurnitureCategory===undefined?1:0" [formGroup]="roomForm"
-      (ngSubmit)="addRoom()" class="addModuleFormContent">
+    <form [style.opacity]="currentViewRoom===undefined?1:0" [formGroup]="roomForm"
+      (ngSubmit)="currentIdClickedRoom===undefined?addRoom():updateRoom()" class="addModuleFormContent">
       <h2 class="addModuleTitle">Room parameters</h2>
       <span class="addModuleInputSpan">
         <label class="inputLabel" for="width">Width</label>
@@ -36,27 +31,32 @@
         <input placeholder="Bedroom" formControlName="name" class="addModuleInput" id="name" type="text">
       </span>
       <span class="functionShopsModuleBtns">
-        <button [disabled]="!roomForm.valid" [ngClass]="{'none': currentIdClickedRoom!==undefined}"
-          class="submitAddModuleFormBtn" type="submit">Continue</button>
+        <button [disabled]="!roomForm.valid" class="submitAddModuleFormBtn" type="submit">Continue</button>
         <button (click)="deleteRoom()" class="deleteItemAddModuleBtn" *ngIf="currentIdClickedRoom !== undefined">
-          <img loading="lazy"  style="height: 60%" src="/assets/images/deleteIcon.svg" alt="">
+          <img loading="lazy" src="/assets/images/deleteIcon.svg" alt="">
         </button>
       </span>
     </form>
   </span>
-  <span class="roomSpan">
-    <ng-container *ngFor="let roomData of planHouse; let index = index">
-      <button class="room" [style.grid-area]="roomData.gridArea"
-        *ngIf="(currentViewRoom!==undefined&&currentViewRoom==index)||currentViewRoom===undefined"
-        [attr.data-index]="index"  (touchstart)="clickRoom($event, index)" (keydown.enter)="clickRoom($event, index)" (mousedown)="clickRoom($event, index)">
-        {{roomData.name}}
-      </button>
-    </ng-container>
-    <span *ngIf="currentViewRoom!==undefined" class="furnitureCategoriesButtonsSpan">
-      <button (click)="openCategory(index)" class="furnitureCategoryButton"
-        *ngFor="let categoryName of furnitureCategoryDataArray; let index = index">
-        {{categoryName}}
-      </button>
+  <span class="workArea">
+    <app-scene #scene (saveObjectsEmitter)="updateRoomObjects($event)"
+      [style.opacity]="sceneOpenToggle&&currentViewRoom!==undefined?1:0"
+      [style.z-index]="sceneOpenToggle&&currentViewRoom!==undefined?1:0"
+      [roomData]="currentViewRoom!==undefined?planHouse[currentViewRoom]:lastPlanHouse"></app-scene>
+    <span class="roomSpan">
+        <button *ngFor="let roomData of planHouse; let index = index" class="room" [style.grid-area]="roomData.gridArea"
+          [style.display]="((currentViewRoom!==undefined&&currentViewRoom==index)||currentViewRoom===undefined)&&!sceneOpenToggle?'block':'none'"
+          [attr.data-index]="index" (touchstart)="currentViewRoom===undefined?clickRoom($event, index):openScene()"
+          (keydown.enter)="currentViewRoom===undefined?clickRoom($event, index):openScene()"
+          (mousedown)="currentViewRoom===undefined?clickRoom($event, index):openScene()">
+          {{roomData.name}}
+        </button>
+      <span *ngIf="!sceneOpenToggle&&currentViewRoom!==undefined" class="furnitureCategoriesButtonsSpan">
+        <a [href]="'/shop/'+categoryName.toLowerCase()" class="furnitureCategoryButton"
+          *ngFor="let categoryName of furnitureCategoryDataArray; let index = index">
+          {{categoryName}}
+        </a>
+      </span>
     </span>
   </span>
 </span>

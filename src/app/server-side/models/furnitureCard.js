@@ -2,14 +2,18 @@ const MONGOOSE = require('mongoose');
 const ADDITIONAL_DATA_SCHEM = new MONGOOSE.Schema({
   category: String
 })
+const PROPORTIONS_DATA_SCHEM = new MONGOOSE.Schema({
+  width:Number,
+  length:Number,
+  height:Number
+})
 const FURNITURE_CARD_SCHEM = new MONGOOSE.Schema({
-  idFurnitureModel: String,
   name: String,
   description: String,
   colors: [{ color: String, idImages: String }],
-  imagesFolderName: String,
   shops: [{ cost: Number, url: String }],
   authorId: String,
+  proportions:PROPORTIONS_DATA_SCHEM,
   additionalData: ADDITIONAL_DATA_SCHEM
 })
 

@@ -13,7 +13,14 @@
     grid-template-columns: 1fr;
     grid-template-rows: 1fr;
 }
-
+.addModuleInput {
+    border-radius: 10px;
+    background-color: transparent;
+    border: #888888 1px solid;
+    padding: 10px;
+    outline: none;
+    color: white;
+}
 .editImagesBtn {
 
     aspect-ratio: 1;
@@ -316,6 +323,7 @@ app-image-slider {
     color:white;
     font-size: medium;
     padding: 10px 0;
+    cursor: pointer;
 }
 .additionalBtn{
     // width:50%
