@@ -97,5 +97,4 @@ ROUTER.get('/', async (request, result) => {
     }
 })
 
-
 module.exports = ROUTER;

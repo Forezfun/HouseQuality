@@ -58,6 +58,11 @@ export class AccountPageComponent implements AfterViewInit, OnInit {
         },
         error: (error) => {
           console.log(error)
+          if(error.status===404){
+            this.userCookieService.deleteJwt()
+            this.userCookieService.deleteUserType()
+            this.router.navigateByUrl('/login')
+          }
         },
         complete: () => {
           this.userData = receiveUserData

@@ -51,13 +51,14 @@ ROUTER.put('/', async (request, result) => {
   try {
     console.log(request.body)
     const JWT_TOKEN = request.body.jwtToken
+    console.log('before user id')
     const USER_ID = await checkUserAccess(JWT_TOKEN)
+    console.log('after user id: ', USER_ID)
     if (!USER_ID) return result.status(404).json({ message: 'User not found' });
     const PROJECT_ITEM = await PROJECT.findOne({ authorId: USER_ID })
     if (!PROJECT_ITEM) return result.status(404).json({ message: 'Project not found' });
     PROJECT_ITEM.name = request.body.nameProject
     PROJECT_ITEM.rooms = JSON.parse(request.body.rooms)
-    PROJECT_ITEM.objects = JSON.parse(request.body.objects)
     await PROJECT_ITEM.save()
     result.status(201).json({ message: 'Project successfully updated' });
   } catch (err) {

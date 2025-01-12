@@ -183,6 +183,7 @@ onWindowScroll() {
           next:(response)=>{
             console.log((response as {jwt:string}).jwt)
             this.userCookieService.setJwt((response as {jwt:string}).jwt,'long')
+            this.router.navigateByUrl('account')
           },
           error:(error)=>{
             console.log(error)

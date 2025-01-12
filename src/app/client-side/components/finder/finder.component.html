@@ -1,0 +1,18 @@
+<span class="finder">
+    <span class="finderSpan">
+        <button class="finderBtn">
+            <img loading="lazy" src="/assets/images/searchIcon.svg" alt="search">
+        </button>
+        <input (input)="inputProcess($event)" type="text" class="finderInput">
+    </span>
+    <span class="variantsSpan">
+        <h3 *ngIf="foundFurniture!==undefined&&foundFurniture.length===0">Ничего не найдено :(</h3>
+        <span class="variantCard" *ngFor="let card of foundFurniture">
+            <div>
+                <h3 class="cardName">{{card.name}}</h3>
+                <a [href]="getUrl(card.id,card.category)" class="cardCost">{{card.cost}} руб</a>
+            </div>
+            <img class="cardImage" [src]="getImage(card.id,card.colorRequest)" alt="">
+        </span>
+    </span>
+</span>
