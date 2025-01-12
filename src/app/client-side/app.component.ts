@@ -16,11 +16,12 @@ import { ProjectService } from './services/project.service';
 import { FurnitureCardControlService } from './services/furniture-card-control.service';
 import { FurnitureModelControlService } from './services/furniture-model-control.service';
 import { ShopService } from './services/shop.service';
+import { FinderService } from './services/finder.service';
 @Component({
   selector: 'app-root',
   standalone: true,
   imports: [RouterOutlet,SceneComponent,CreateFurnitureComponent,PlanHouseComponent,ViewFurnitureComponent,ErrorHandlerComponent,HttpClientModule],
-  providers:[ErrorHandlerComponent,AccountService,AuthService,UserCookieService,ServerImageControlService,ProjectService,PlanHouseComponent,SceneComponent,FurnitureCardControlService,FurnitureModelControlService,ShopService],
+  providers:[ErrorHandlerComponent,AccountService,AuthService,UserCookieService,ServerImageControlService,ProjectService,PlanHouseComponent,SceneComponent,FurnitureCardControlService,FurnitureModelControlService,ShopService,FinderService],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })

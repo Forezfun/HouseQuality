@@ -263,10 +263,13 @@ export class PlanHouseComponent implements AfterViewInit {
   }
 
   deleteRoom() {
+    console.log(this.currentIdClickedRoom,this.currentIdClickedRoom !== undefined)
     if (this.currentIdClickedRoom !== undefined) {
       this.planHouse.splice(this.currentIdClickedRoom, 1);
       this.currentIdClickedRoom = undefined;
       this.toggleOpenRoomModule()
+      console.log(this.planHouse)
+      this.emitPlanHouse()
       this.saveHouse()
     }
   }

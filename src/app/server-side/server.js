@@ -10,6 +10,7 @@ const IMAGE_FURNITURE_ROUTES = require('./routes/imagesFurnitureRoutes')
 const FURNITURE_CARD_ROUTES = require('./routes/furnitureCardRoutes')
 const FURNITURE_MODEL_ROUTES = require('./routes/furnitureModelRoutes')
 const SHOP_ROUTES = require('./routes/shopRoutes')
+const FINDER_ROUTES = require('./routes/finderRoutes')
 
 const APP_PORT = 5000;
 const USER_ROUTE = '/user';
@@ -20,6 +21,7 @@ const IMAGE_FURNITURE_ROUTE = '/furniture/images'
 const FURNITURE_CARD_ROUTE = '/furniture/card'
 const FURNITURE_MODEL_ROUTE = '/furniture/model'
 const SHOP_ROUTE = '/shop'
+const FINDER_ROUTE = '/finder'
 
 const APP = EXPRESS();
 // Подключение к базе данных
@@ -39,6 +41,7 @@ APP.use(IMAGE_FURNITURE_ROUTE, IMAGE_FURNITURE_ROUTES);
 APP.use(FURNITURE_MODEL_ROUTE, FURNITURE_MODEL_ROUTES);
 APP.use(FURNITURE_CARD_ROUTE, FURNITURE_CARD_ROUTES);
 APP.use(SHOP_ROUTE, SHOP_ROUTES);
+APP.use(FINDER_ROUTE, FINDER_ROUTES);
 
 // Запуск сервера
 APP.listen(APP_PORT, () => {
