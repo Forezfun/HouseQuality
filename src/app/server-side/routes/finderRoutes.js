@@ -24,14 +24,25 @@ function calculateZFunction(string, pattern) {
     return z;
 }
 
+function transliterateQuery(query) {
+    const transliterationMap = {
+        'а': 'f', 'б': ',', 'в': 'd', 'г': 'u', 'д': 'l', 'е': 't', 'ё': '`', 'ж': ';', 'з': 'p', 'и': 'b', 'й': 'q',
+        'к': 'r', 'л': 'k', 'м': 'v', 'н': 'y', 'о': 'j', 'п': 'g', 'р': 'h', 'с': 'c', 'т': 'n', 'у': 'e',
+        'ф': 'a', 'х': '[', 'ц': 'w', 'ч': 'x', 'ш': 'i', 'щ': 'o', 'ъ': ']', 'ы': 's', 'ь': 'm', 'э': '\'',
+        'ю': '.', 'я': 'z'
+    };
+
+    return query.split('').map(char => transliterationMap[char] || char).join('');
+}
+
 function searchPublications(publications, query) {
     const results = [];
-    
+
     for (const publication of publications) {
         const { name = '', description = '' } = publication;
         const combinedText = `${name} ${description}`.toLowerCase(); 
         const lowerCaseQuery = query.toLowerCase();
-        
+
         let matchFound = false;
         const z = calculateZFunction(combinedText, lowerCaseQuery);
         if (z.some(value => value >= lowerCaseQuery.length)) {
@@ -52,32 +63,45 @@ function searchPublications(publications, query) {
         }
         if (results.length >= 10) break;
     }
-    
+
     return results;
 }
 
-
-// Маршрут для поиска
 ROUTER.get('/', async (request, result) => {
     try {
         const query = request.query.q;
         if (!query || query.trim() === '') {
             return result.status(400).json({ message: 'Search query cannot be empty' });
         }
+
         const publications = await FURNITURE_CARD.find();
-        const filteredPublications = searchPublications(publications, query);
-        const processedPunlications = filteredPublications.map(furnitureData=>{
-            const cost = furnitureData.shops.sort((a,b)=>a.cost-b.cost)[0].cost
-            const colorRequest = furnitureData.colors[0].color
+        let filteredPublications = searchPublications(publications, query);
+
+        if (filteredPublications.length < 10) {
+            const transliteratedQuery = transliterateQuery(query);
+            const additionalResults = searchPublications(publications, transliteratedQuery);
+            const uniqueResults = new Map();
+
+            [...filteredPublications, ...additionalResults].forEach(pub => {
+                uniqueResults.set(pub._id.toString(), pub);
+            });
+
+            filteredPublications = Array.from(uniqueResults.values()).slice(0, 10);
+        }
+
+        const processedPublications = filteredPublications.map(furnitureData => {
+            const cost = furnitureData.shops.sort((a, b) => a.cost - b.cost)[0].cost;
+            const colorRequest = furnitureData.colors[0].color;
             return {
                 name: furnitureData.name,
                 cost: cost,
-                colorRequest:colorRequest,
-                id:furnitureData._id,
-                category:furnitureData.additionalData.category
-            }
-        })
-        result.json(processedPunlications);
+                colorRequest: colorRequest,
+                id: furnitureData._id,
+                category: furnitureData.additionalData.category
+            };
+        });
+
+        result.json(processedPublications);
     } catch (err) {
         result.status(500).json({ message: err.message });
     }

@@ -1,9 +1,12 @@
 <span class="finder">
     <span class="finderSpan">
-        <button class="finderBtn">
+        <button class="finderBtn btn">
             <img loading="lazy" src="/assets/images/searchIcon.svg" alt="search">
         </button>
-        <input (input)="inputProcess($event)" type="text" class="finderInput">
+        <input (input)="inputProcess()" type="text" class="finderInput">
+        <button class="closeBtn btn" (click)="clearInput()">
+            <img src="/assets/images/cancelIcon.svg" alt="">
+        </button>
     </span>
     <span class="variantsSpan">
         <h3 *ngIf="foundFurniture!==undefined&&foundFurniture.length===0">Ничего не найдено :(</h3>

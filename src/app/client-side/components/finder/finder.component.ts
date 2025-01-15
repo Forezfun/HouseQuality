@@ -18,6 +18,7 @@ interface foundFurniture {
 })
 export class FinderComponent implements AfterViewInit{
   variantsSpan!:HTMLSpanElement
+  input!:HTMLInputElement
   constructor(
     private finderService:FinderService,
     private elementRef:ElementRef,
@@ -28,9 +29,14 @@ export class FinderComponent implements AfterViewInit{
   private debounceTimer: any = null;
   ngAfterViewInit(): void {
     this.variantsSpan=this.elementRef.nativeElement.querySelector('.variantsSpan') as HTMLSpanElement
+    this.input=this.elementRef.nativeElement.querySelector('.finderInput')
   }
-  inputProcess(event: Event) {
-    const value = (event.target as HTMLInputElement).value;
+  clearInput(){
+    this.input.value='';
+    this.closeFoundResultsList()
+  }
+  inputProcess() {
+    const value = this.input.value
     clearTimeout(this.debounceTimer);
     this.debounceTimer = setTimeout(() => {
       if(value.length===0){
@@ -52,11 +58,11 @@ export class FinderComponent implements AfterViewInit{
     console.log(receiveData)
   }
   openFoundResultsList(){
-    if(this.variantsSpan==undefined)return
+    if(this.variantsSpan===undefined)return
     this.renderer.addClass(this.variantsSpan,'variantsSpanOpen')
   }
   closeFoundResultsList(){
-    if(this.variantsSpan==undefined)return
+    if(this.variantsSpan===undefined)return
     this.renderer.removeClass(this.variantsSpan,'variantsSpanOpen')
   }
   getImage(idFurniture:string,color:string){

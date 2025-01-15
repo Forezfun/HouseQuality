@@ -1,7 +1,7 @@
 import { NgClass } from '@angular/common';
 import { AfterViewInit, Component, ElementRef } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
-import { ErrorHandlerService } from '../../../services/error-handler.service';
+import { ErrorHandlerService } from '../../services/error-handler.service';
 @Component({
   selector: 'app-error-handler',
   standalone: true,

@@ -1,9 +1,9 @@
 import { AfterViewInit, Component, Input, Renderer2, ElementRef, HostListener, EventEmitter, Output, ViewChild } from '@angular/core';
-import { modelInterface, SceneComponent } from '../../scene/scene.component';
+import { modelInterface, SceneComponent } from '../scene/scene.component';
 import { NgClass, NgFor, NgIf } from '@angular/common';
 import { FormGroup, FormControl, ReactiveFormsModule, Validators, ValidatorFn, AbstractControl, ValidationErrors } from '@angular/forms';
 import { throttle } from 'lodash';
-import {objectSceneInterface} from '../../scene/scene.component'
+import {objectSceneInterface} from '../scene/scene.component'
 import { Router } from '@angular/router';
 
 export interface roomData {
