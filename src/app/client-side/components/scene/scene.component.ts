@@ -3,7 +3,7 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader.js';
 import { NgxSpinnerModule, NgxSpinnerService } from 'ngx-spinner';
-import { roomData as roomDataPlan } from '../plan-house/plan-house/plan-house.component';
+import { roomData as roomDataPlan } from '../plan-house/plan-house.component';
 import { loadModel } from './loaders';
 import { FurnitureModelControlService } from '../../services/furniture-model-control.service';
 import { UserCookieService } from '../../services/user-cookie.service';

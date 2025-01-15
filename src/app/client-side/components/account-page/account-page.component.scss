@@ -134,11 +134,9 @@ app-navigation-panel {
 .informationTextSpan {
     color: white;
     grid-area: 1/1/2/2;
-}
-
-.informationTextSpan {
     font-size: 1.25vw;
 }
+
 
 .accountName {
     font-size: 1.5em;
@@ -280,4 +278,24 @@ app-navigation-panel {
 }
 .furnitureCardSpan > a > img{
     border-radius: 10px;
+}
+.changeBtns{
+    display: flex;
+    height: max-content;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    gap:5px;
+}
+.logoutBtn{
+    align-self: flex-end;
+    justify-self: end;
+    background: none;
+    border: none;
+    cursor: pointer;
+    opacity: 0.75;
+}
+.logoutBtn>img{
+    width:40px;
+    aspect-ratio: 1;
 }

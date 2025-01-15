@@ -1,6 +1,6 @@
 import { AfterViewChecked, AfterViewInit, Component, ElementRef, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { NavigationPanelComponent } from '../navigation-panel/navigation-panel.component';
-import { PlanHouseComponent, roomData } from '../plan-house/plan-house/plan-house.component';
+import { PlanHouseComponent, roomData } from '../plan-house/plan-house.component';
 import { NgClass, NgFor, NgIf } from '@angular/common';
 import { accountFullInformation, AccountService } from '../../services/account.service';
 import { UserCookieService } from '../../services/user-cookie.service';

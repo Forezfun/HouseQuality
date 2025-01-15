@@ -74,15 +74,13 @@
 <footer>
     <span class="footerColumnsSpan">
         <span class="footerColumn">
-            <button style="color:#DAD7CD" class="footerMenuBtn">Explore</button>
-            <button class="footerMenuBtn">Design</button>
-            <button class="footerMenuBtn">Profile</button>
+            <a (click)="focusOnFinder()" style="color:#DAD7CD" class="footerMenuBtn">Explore</a>
+            <a routerLink="/account" class="footerMenuBtn">Profile</a>
         </span>
         <span class="footerColumn">
-            <button style="color:#DAD7CD" class="footerMenuBtn">Build</button>
-            <button class="footerMenuBtn">Upload</button>
-            <button class="footerMenuBtn">Marketplace</button>
+            <a routerLink="/create/new" style="color:#DAD7CD" class="footerMenuBtn">Design</a>
+            <a routerLink="/plan" class="footerMenuBtn">Plan</a>
         </span>
     </span>
-    <h2 class="projectFooterTitle">HouseQuality 2024.</h2>
+    <h2 class="projectFooterTitle">HouseQuality 2025</h2>
 </footer>

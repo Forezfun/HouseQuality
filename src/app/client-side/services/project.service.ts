@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { roomData } from '../components/plan-house/plan-house/plan-house.component';
+import { roomData } from '../components/plan-house/plan-house.component';
 import { HttpClient, HttpParams } from '@angular/common/http';
 
 export interface projectInformation {

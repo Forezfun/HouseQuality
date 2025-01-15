@@ -161,4 +161,9 @@ export class AccountPageComponent implements AfterViewInit, OnInit {
   openProjectsPage(idPlan:number){
     this.router.navigateByUrl('/plan/'+idPlan)
   }
+  logout(){
+    this.userCookieService.deleteJwt()
+    this.userCookieService.deleteUserType()
+    this.router.navigateByUrl('/')
+  }
 }

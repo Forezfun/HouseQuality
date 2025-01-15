@@ -10,10 +10,6 @@
                     <img src="/assets/images/editIcon.svg" alt="">
                 </div>
             </span>
-            <span class="mainInformationSpan">
-                <button (click)="openAddModule()" class="mainInformationEditBtn">
-                    <img src="/assets/images/editIcon.svg" alt="">
-                </button>
                 <span class="informationTextSpan">
                     <h2 class="accountName">{{userData.nickname}}</h2>
                     <span class="subDescriptionSpan">
@@ -21,8 +17,15 @@
                         <div class="accountInformationBlock">Email:{{userData.email}}</div>
                         <div class="accountInformationBlock" *ngIf="userData.password!==undefined">
                             Password:{{userData.password}}</div>
+                        </span>
                     </span>
-                </span>
+                <span class="changeBtns">
+                    <button (click)="openAddModule()" class="mainInformationEditBtn">
+                        <img src="/assets/images/editIcon.svg" alt="">
+                    </button>
+                    <button (click)="logout()" class="logoutBtn">
+                        <img src="/assets/images/logoutIcon.svg" alt="">
+                    </button>
             </span>
         </span>
         <span *ngIf="userData" class="projectsSpanCard">

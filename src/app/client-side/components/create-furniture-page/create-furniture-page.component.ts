@@ -28,6 +28,7 @@ export class CreateFurniturePageComponent implements OnInit {
     private furnitureModelService:FurnitureModelControlService
   ) { }
   idPage!: string
+  
   ngOnInit(): void {
     this.route.params.subscribe(params => {
       if (this.idPage !== undefined) location.reload()
@@ -115,7 +116,24 @@ export class CreateFurniturePageComponent implements OnInit {
     console.log(imagesBlobArray)
     return imagesBlobArray
   }
+  checkValid(){
+    const {name,colors,shops,category,proportions}=this.furnitureData
+    const FURNITURE_MODEL_BLOB = this.createFurnitureComponent.furnitureModelInput.files![0]
+    if(
+      name.length<3||
+      !category||
+      !FURNITURE_MODEL_BLOB||
+      shops.length<0
+    )return false
+    if(!proportions.height||!proportions.width||!proportions.length)return false
+    colors.forEach(colorData=>{
+      return colorData.imagesData.images.length>0
+    })
+    return true
+  }
   createFurnitureCard() {
+    if(!this.checkValid())return
+
     const currentColorId = this.createFurnitureComponent.currentColorId
     if (currentColorId === undefined) return
     const furnitureData = this.createFurnitureComponent.furnitureData;
@@ -136,9 +154,7 @@ export class CreateFurniturePageComponent implements OnInit {
     }
 
     const jwt = this.cookieService.getJwt()
-
     if (!jwt) return
-
 
     (() => {
       if (ADDITIONAL_DATA !== undefined) {
@@ -150,20 +166,10 @@ export class CreateFurniturePageComponent implements OnInit {
     )()
       .subscribe({
         next: (response) => {
-
-          console.log(response)
-
           const FURNITURE_ID = (response as any).furnitureData._id
 
-          console.log(furnitureData)
-
           furnitureData.colors.forEach(async colorData => {
-            console.log(colorData)
-
             const { color, imagesData } = colorData
-
-            console.log(imagesData.images)
-
             if (imagesData.images.length === 0) return
             let imagesBlobArray: Blob[] = imagesData.images
             if (!(imagesData.images[0] instanceof Blob)) {
@@ -174,7 +180,7 @@ export class CreateFurniturePageComponent implements OnInit {
               .subscribe({
                 next: (response) => {
                   console.log(response)
-                  // window.location.href = window.location.href
+                  this.router.navigateByUrl('/account')
                 },
                 error: (error) => {
                   console.log(error)
@@ -329,7 +335,6 @@ export class CreateFurniturePageComponent implements OnInit {
   }
   deleteColorCalculate() {
     if (!this.createFurnitureComponent || this.createFurnitureComponent.currentColorId === undefined) return
-    console.log('123')
     return this.createFurnitureComponent.colorsClientData[this.createFurnitureComponent.currentColorId].color
   }
   deleteColor() {

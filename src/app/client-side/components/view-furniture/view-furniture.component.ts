@@ -4,7 +4,7 @@ import { ImageSliderComponent } from '../image-slider/image-slider/image-slider.
 import { NgFor, NgIf, NgTemplateOutlet } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ClipboardService } from 'ngx-clipboard';
-import { ErrorHandlerComponent } from '../error-handler/error-handler/error-handler.component';
+import { ErrorHandlerComponent } from '../error-handler/error-handler.component';
 import { furnitureClientData } from '../create-furnitre/create-furniture.component';
 import { FurnitureCardControlService } from '../../services/furniture-card-control.service';
 import { ServerImageControlService } from '../../services/server-image-control.service';
