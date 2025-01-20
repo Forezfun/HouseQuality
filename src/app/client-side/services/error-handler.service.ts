@@ -1,23 +1,20 @@
-import { Injectable } from '@angular/core';
+import { Injectable} from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-
 @Injectable({
   providedIn: 'root'
 })
 export class ErrorHandlerService {
 
   private errorSubject = new BehaviorSubject<string>('');
-  
-  // Observable для получения сообщения об ошибке
+
   error$ = this.errorSubject.asObservable();
 
-  // Метод для установки сообщения об ошибке
-  setError(message: string) {
+  setError(message: string,delay:number) {
     this.errorSubject.next(message);
+    setTimeout(()=>this.clearError(),delay)
   }
 
-  // Метод для очистки ошибки
-  clearError() {
+  private clearError() {
     this.errorSubject.next('');
   }
 }

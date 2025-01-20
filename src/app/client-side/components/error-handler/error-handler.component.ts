@@ -1,7 +1,7 @@
 import { NgClass } from '@angular/common';
-import { AfterViewInit, Component, ElementRef } from '@angular/core';
-import { Observable, Subject } from 'rxjs';
+import { Component } from '@angular/core';
 import { ErrorHandlerService } from '../../services/error-handler.service';
+import { UserCookieService } from '../../services/user-cookie.service';
 @Component({
   selector: 'app-error-handler',
   standalone: true,
@@ -10,9 +10,10 @@ import { ErrorHandlerService } from '../../services/error-handler.service';
   styleUrl: './error-handler.component.scss'
 })
 export class ErrorHandlerComponent{
-  errorMessage:string=''
+  errorMessage!:string
   constructor(
-    private errorService: ErrorHandlerService
+    private errorService: ErrorHandlerService,
+    private cookieService:UserCookieService
   ){}
 
   ngOnInit(): void {
@@ -22,5 +23,10 @@ export class ErrorHandlerComponent{
   }
   reloadPage(){
     window.location.reload()
+  }
+  logout(){
+    this.cookieService.deleteJwt()
+    this.cookieService.deleteUserType()
+    this.reloadPage()
   }
 }

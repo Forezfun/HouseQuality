@@ -5,11 +5,6 @@ import { NgFor, NgIf, NgTemplateOutlet } from '@angular/common';
 import { FormGroup, FormControl, Validators, ReactiveFormsModule, FormsModule, AbstractControl, ValidationErrors } from '@angular/forms';
 import { TemplateRef } from '@angular/core';
 import { ClientImageControlService } from '../../services/client-image-control.service';
-import { ServerImageControlService } from '../../services/server-image-control.service';
-import { UserCookieService } from '../../services/user-cookie.service';
-import { NavigationPanelComponent } from '../navigation-panel/navigation-panel.component';
-import { ActivatedRoute, Router } from '@angular/router';
-import { FurnitureCardControlService } from '../../services/furniture-card-control.service';
 
 export type categoryType = 'chair'|'sofa'|'lamp'|'table'|undefined
 
@@ -51,7 +46,7 @@ export interface furnitureServerData extends furnitureData {
 @Component({
   selector: 'app-create-furniture',
   standalone: true,
-  imports: [ImageSliderComponent, NgFor, NgIf, ReactiveFormsModule, NgTemplateOutlet, FormsModule, NavigationPanelComponent],
+  imports: [ImageSliderComponent, NgFor, NgIf, ReactiveFormsModule, NgTemplateOutlet, FormsModule],
   templateUrl: './create-furniture.component.html',
   styleUrls: ['./create-furniture.component.scss']
 })
@@ -59,12 +54,7 @@ export class CreateFurnitureComponent implements AfterViewInit{
   constructor(
     private elementRef: ElementRef,
     private changeDetectorRef: ChangeDetectorRef,
-    private clientImageControl: ClientImageControlService,
-    private serverImageControl: ServerImageControlService,
-    private router: Router,
-    private route: ActivatedRoute,
-    private furnitureCardService: FurnitureCardControlService,
-    private cookieService: UserCookieService
+    private clientImageControl: ClientImageControlService
   ) { }
 
   @ViewChild('colorModule') private colorModuleTemplate!: TemplateRef<any>;
@@ -97,10 +87,7 @@ export class CreateFurnitureComponent implements AfterViewInit{
       const compressedImage = await this.clientImageControl.compressImage(files[i]);
       if (compressedImage) compressedImages.push(compressedImage);
     }
-
     this.furnitureData.colors[this.currentColorId].imagesData.images = compressedImages;
-
-    // Для отображения изображений
     this.colorsClientData[this.currentColorId].imagesData.images = compressedImages.map(blob => URL.createObjectURL(blob));
   }
 
@@ -109,7 +96,6 @@ export class CreateFurnitureComponent implements AfterViewInit{
     if (this.currentColorId === undefined || !this.furnitureData.colors[this.currentColorId].imagesData.images) return
     this.furnitureData.colors[this.currentColorId].imagesData.images.length = 0
     this.colorsClientData[this.currentColorId].imagesData.images.length=0
-    console.log(this.furnitureData.colors)
   }
   colorForm = new FormGroup({
     color: new FormControl('', [Validators.required])
@@ -160,7 +146,6 @@ export class CreateFurnitureComponent implements AfterViewInit{
 
   openColorModule(event: Event) {
     event.preventDefault()
-    console.log('openColorModule');
     this.addModuleTemplate = this.colorModuleTemplate;
     this.addModule.classList.remove('disabled');
     setTimeout(() => {
@@ -194,12 +179,9 @@ export class CreateFurnitureComponent implements AfterViewInit{
     const DELETE_COLOR_ID = this.currentColorId
     this.currentColorId=0
     this.colorsClientData=this.colorsClientData.filter((colorData,index)=>index!==DELETE_COLOR_ID)
-    console.log(this.colorsClientData)
     this.furnitureData.colors= this.furnitureData.colors.filter((colorData,index)=>index!==DELETE_COLOR_ID)
   }
   openShopsModule(idShop?: number) {
-    console.log('openShopsModule');
-    console.log(idShop)
     if (idShop !== undefined) {
       this.lastClickedShop = idShop
       this.shopForm.patchValue({
@@ -221,13 +203,9 @@ export class CreateFurnitureComponent implements AfterViewInit{
     this.addModule.classList.remove('disabled');
   }
   openFurnitureVariant(idColor: number) {
-    console.log(idColor)
     const colorsElement = this.elementRef.nativeElement.querySelector('.colors') as HTMLSpanElement;
     const colorButtonElement = colorsElement.querySelector(`[data-idColor="${idColor}"]`) as HTMLButtonElement
-    console.log(colorsElement)
-    console.log(colorButtonElement)
     const colorVariants = colorsElement.querySelectorAll('.colorVariant')
-    console.log(colorVariants)
     let beforeColors: HTMLButtonElement[] = [], afterColors: HTMLButtonElement[] = []
     colorVariants.forEach((colorVariant, indexVariant) => {
       if (indexVariant > +idColor) {

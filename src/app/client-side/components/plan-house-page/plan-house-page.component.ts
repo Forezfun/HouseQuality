@@ -7,6 +7,7 @@ import { UserCookieService } from '../../services/user-cookie.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ProjectService, serverProjectInformation } from '../../services/project.service';
+import { ErrorHandlerService } from '../../services/error-handler.service';
 
 @Component({
   selector: 'app-plan-house-page',
@@ -24,7 +25,8 @@ export class PlanHousePageComponent implements AfterViewInit, OnInit, AfterViewC
     private elemenetRef: ElementRef,
     private renderer: Renderer2,
     private projectService: ProjectService,
-    private planHouseComponent: PlanHouseComponent
+    private planHouseComponent: PlanHouseComponent,
+    private errorHandler:ErrorHandlerService
   ) { }
   userData!: accountFullInformation
   currentProjectId: number | undefined = undefined
@@ -54,11 +56,6 @@ export class PlanHousePageComponent implements AfterViewInit, OnInit, AfterViewC
 
   ngAfterViewInit(): void {
     this.addModule = this.elemenetRef.nativeElement.querySelector('.addModule')
-
-  }
-  checkRoomId() {
-    console.log('123')
-
   }
   deleteProject(indexProject: number) {
     const jwt = this.userCookieService.getJwt()
@@ -74,6 +71,7 @@ export class PlanHousePageComponent implements AfterViewInit, OnInit, AfterViewC
         },
         error: (error) => {
           console.log(error)
+          this.errorHandler.setError('Error while deleting project', 5000)
         }
       })
   }
@@ -96,6 +94,7 @@ export class PlanHousePageComponent implements AfterViewInit, OnInit, AfterViewC
         },
         error: (error) => {
           console.log(error)
+          this.errorHandler.setError('Error while receiving user', 5000)
         }
       })
   }
@@ -135,6 +134,7 @@ export class PlanHousePageComponent implements AfterViewInit, OnInit, AfterViewC
         },
         error: (error) => {
           console.log(error)
+          this.errorHandler.setError('Error while updating project', 5000)
         }
       })
   }
@@ -164,6 +164,7 @@ export class PlanHousePageComponent implements AfterViewInit, OnInit, AfterViewC
         },
         error: (error) => {
           console.log(error)
+          this.errorHandler.setError('Error while creating project', 5000)
         }
       })
 

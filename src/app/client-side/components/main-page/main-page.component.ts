@@ -2,7 +2,7 @@ import { Component, ElementRef } from '@angular/core';
 import { CreateFurnitureComponent, furnitureClientData, furnitureServerData } from '../create-furnitre/create-furniture.component';
 import { ViewFurnitureComponent } from '../view-furniture/view-furniture.component';
 import { PlanHouseComponent } from '../plan-house/plan-house.component';
-import { NgClass, ViewportScroller } from '@angular/common';
+import { NgClass } from '@angular/common';
 import { roomData } from '../plan-house/plan-house.component';
 import { NavigationPanelComponent } from '../navigation-panel/navigation-panel.component';
 import { RouterLink } from '@angular/router';

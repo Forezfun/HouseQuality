@@ -25,7 +25,7 @@
             <button (click)="closeProject()">
                 <img src="/assets/images/addIcon.svg" alt="">
             </button>
-            <app-plan-house #planHouse (initialized)=" checkRoomId()" (callSaveEmitter)="saveProject()" (planHouseEmitter)="updatePlanData($event)" [ngClass]="{'disabled': currentProjectId===undefined}" *ngIf="currentProjectId!==undefined" [planHouse]="userData.projects[currentProjectId].rooms"></app-plan-house>
+            <app-plan-house #planHouse (callSaveEmitter)="saveProject()" (planHouseEmitter)="updatePlanData($event)" [ngClass]="{'disabled': currentProjectId===undefined}" *ngIf="currentProjectId!==undefined" [planHouse]="userData.projects[currentProjectId].rooms"></app-plan-house>
         </span>
     </span>
 </span>
