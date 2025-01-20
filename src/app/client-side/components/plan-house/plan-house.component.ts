@@ -1,6 +1,6 @@
 import { AfterViewInit, Component, Input, Renderer2, ElementRef, HostListener, EventEmitter, Output, ViewChild } from '@angular/core';
 import { modelInterface, SceneComponent } from '../scene/scene.component';
-import { NgClass, NgFor, NgIf } from '@angular/common';
+import { NgFor, NgIf } from '@angular/common';
 import { FormGroup, FormControl, ReactiveFormsModule, Validators, ValidatorFn, AbstractControl, ValidationErrors } from '@angular/forms';
 import { throttle } from 'lodash';
 import {objectSceneInterface} from '../scene/scene.component'
@@ -20,16 +20,10 @@ interface roomSpanSettings {
   endY: number;
   gap: number;
 }
-interface furnitureData {
-  name: string;
-  cost: string;
-  previewUrl: string;
-  link: string;
-}
 @Component({
   selector: 'app-plan-house',
   standalone: true,
-  imports: [NgFor, ReactiveFormsModule, NgIf, NgClass,SceneComponent],
+  imports: [NgFor, ReactiveFormsModule, NgIf,SceneComponent],
   templateUrl: './plan-house.component.html',
   styleUrls: ['./plan-house.component.scss']
 })
@@ -109,13 +103,11 @@ export class PlanHouseComponent implements AfterViewInit {
   ) { }
 
   ngAfterViewInit(): void {
-    console.log(this.planHouse)
     this.furnitureListElement = this.elementRef.nativeElement.querySelector('.furnitureCategory') as HTMLSpanElement
     this.roomSpan = this.elementRef.nativeElement.querySelector('.roomSpan') as HTMLSpanElement;
     this.calculateRoomSpanSettings();
     this.formElement = this.elementRef.nativeElement.querySelector('form') as HTMLFormElement;
     this.toggleModuleButton = this.elementRef.nativeElement.querySelector('.addModuleBtn')
-    console.log(this.formElement)
     this.initialized.emit();
   }
   openScene() {
@@ -126,15 +118,12 @@ export class PlanHouseComponent implements AfterViewInit {
     this.sceneOpenToggle=false
   }
   openViewRoom(indexRoom: number) {
-    console.log(this.formElement,this.roomSpan)
     this.formElement.classList.remove('openAddModule');
     this.currentViewRoom = indexRoom
     this.lastPlanHouse=this.planHouse[indexRoom]
     const roomElement = this.roomSpan.querySelector(`[data-index="${indexRoom}"]`) as HTMLDivElement
-    console.log(roomElement)
     const { width: roomWidth, height: roomHeight } = roomElement.getBoundingClientRect()
     const { width: spanWidth, height: spanHeight } = this.roomSpan.getBoundingClientRect()
-    console.log(spanWidth, spanHeight)
     this.oldSizeViewRoom = {
       height: roomHeight,
       width: roomWidth
@@ -143,7 +132,6 @@ export class PlanHouseComponent implements AfterViewInit {
     this.renderer.setStyle(roomElement, 'width', roomWidth + 'px')
     this.renderer.setStyle(roomElement, 'height', roomHeight + 'px')
 
-    console.log('rotate', this.toggleModuleButton)
     setTimeout(() => {
       const coeffProportions = roomWidth > roomHeight ? spanWidth / 2 / roomWidth : spanHeight / 2 / roomHeight
 
@@ -174,7 +162,6 @@ export class PlanHouseComponent implements AfterViewInit {
     }, 750);
   }
   updateRoom(){
-    console.log(this.planHouse)
     if(this.currentIdClickedRoom===undefined||!this.roomForm.value.name)return
     if(this.roomForm.value.name===this.planHouse[this.currentIdClickedRoom].name){
       this.toggleOpenRoomModule()
@@ -208,7 +195,6 @@ export class PlanHouseComponent implements AfterViewInit {
     }
     const gridArea = this.findFreeSpace(newRoom.roomProportions)
     if (!gridArea) {
-      console.log('No place')
       return
     }
     newRoom.gridArea = gridArea
@@ -263,12 +249,10 @@ export class PlanHouseComponent implements AfterViewInit {
   }
 
   deleteRoom() {
-    console.log(this.currentIdClickedRoom,this.currentIdClickedRoom !== undefined)
     if (this.currentIdClickedRoom !== undefined) {
       this.planHouse.splice(this.currentIdClickedRoom, 1);
       this.currentIdClickedRoom = undefined;
       this.toggleOpenRoomModule()
-      console.log(this.planHouse)
       this.emitPlanHouse()
       this.saveHouse()
     }
@@ -327,9 +311,6 @@ export class PlanHouseComponent implements AfterViewInit {
 
   clickRoom(event: Event, indexRoom: number) {
     this.startClickTime=new Date().getTime()
-    console.log('Dragging', this.isDragging)
-    console.log('Click', this.isClick)
-    console.log('Double', this.isDoubleClick)
     if (this.currentViewRoom !== undefined) return;
     this.currentIdClickedRoom = indexRoom;
 
@@ -366,12 +347,6 @@ export class PlanHouseComponent implements AfterViewInit {
   @HostListener('document:mouseup', ['$event'])
   onMouseUp(event: MouseEvent | KeyboardEvent | TouchEvent) {
     if(this.sceneOpenToggle===true)return
-    console.log(new Date().getTime()-this.startClickTime)
-    console.log('Dragging', this.isDragging)
-    console.log('Click', this.isClick)
-    console.log('Double', this.isDoubleClick)
-    console.log(this.currentViewRoom,this.currentIdClickedRoom)
-    console.log(this.currentIdClickedRoom)
     if (this.currentViewRoom !== undefined) return
     if (this.isDragging && this.currentIdClickedRoom !== undefined) {
       this.isDragging = false;
@@ -395,8 +370,6 @@ export class PlanHouseComponent implements AfterViewInit {
         if (this.currentIdClickedRoom == undefined) return
         this.toggleOpenRoomModule(this.currentIdClickedRoom)
       }
-      console.log('touchEnd')
-      console.log('double: ',this.isDoubleClick)
       this.isClick = false
       this.isDoubleClick = false
       this.isDragging = false
@@ -479,7 +452,6 @@ export class PlanHouseComponent implements AfterViewInit {
     const relativeX = objectX - this.roomSpanSettings.startX;
     const relativeY = objectY - this.roomSpanSettings.startY-document.documentElement.scrollTop
     const sideArea = (this.roomSpanSettings.endX - this.roomSpanSettings.startX) / 10 + this.roomSpanSettings.gap;
-    console.log(document.documentElement.scrollTop,this.roomSpanSettings.startY)
     const startColumn = Math.floor(relativeX / sideArea) + 1;
     const startRow = Math.floor(relativeY / sideArea) + 1;
 
@@ -497,12 +469,9 @@ export class PlanHouseComponent implements AfterViewInit {
   @HostListener('document:keydown.ArrowRight', ['$event'])
   @HostListener('document:keydown.ArrowLeft', ['$event'])
   moveRoom(event: KeyboardEvent) {
-    console.log(this.currentIdClickedRoom === undefined || !this.isDragging, this.currentIdClickedRoom === undefined, this.isDragging)
     if (this.currentIdClickedRoom === undefined || !this.isDragging) return
     const moveRoomElement = this.elementRef.nativeElement.querySelector(`[data-index="${this.currentIdClickedRoom}"]`) as HTMLDivElement;
     let [startRow, startColumn, endRow, endColumn] = this.planHouse[this.currentIdClickedRoom].gridArea.split('/').map(Number);
-    console.log(`${startRow} / ${startColumn} / ${endRow} / ${endColumn}`)
-
     switch (event.key) {
       case 'ArrowUp':
         startRow -= 1
@@ -521,10 +490,8 @@ export class PlanHouseComponent implements AfterViewInit {
         endColumn -= 1
         break
     }
-    console.log(`${startRow} / ${startColumn} / ${endRow} / ${endColumn}`)
     if (startRow < 1 || startColumn < 1 || endRow > 11 || endColumn > 11) return
     const newGridArea = `${startRow} / ${startColumn} / ${endRow} / ${endColumn}`
-    console.log(this.isAreaOccupied(newGridArea, this.currentIdClickedRoom))
     if (this.isAreaOccupied(newGridArea, this.currentIdClickedRoom)) return
     this.renderer.setStyle(moveRoomElement, 'grid-area', newGridArea)
     this.planHouse[this.currentIdClickedRoom].gridArea = newGridArea
@@ -540,7 +507,6 @@ export class PlanHouseComponent implements AfterViewInit {
   },50)
   @HostListener('document:keydown.Escape')
   escapeDragginMod() {
-    console.log('escape')
     if (this.currentIdClickedRoom === undefined) return
     this.isDragging = false
     this.currentIdClickedRoom = undefined
@@ -549,6 +515,5 @@ export class PlanHouseComponent implements AfterViewInit {
       this.renderer.removeStyle(draggedElement, 'background-color')
       this.renderer.removeStyle(draggedElement, 'cursor');
     }
-    console.log(this.currentIdClickedRoom)
   }
 }

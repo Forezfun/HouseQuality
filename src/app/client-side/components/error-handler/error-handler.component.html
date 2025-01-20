@@ -3,7 +3,12 @@
         <h2 class="title">Something went wrong</h2>
         <h3 class="errorMessage">{{errorMessage}}</h3>
     </span>
-    <button (click)="reloadPage()" class="reloadPageBtn">
-        <img loading="lazy"  src="/assets/images/reloadIcon.svg" alt="">
-    </button>
+    <span class="btnsSpan">
+        <button  (click)="reloadPage()" class="solutionBtn">
+            <img loading="lazy" src="/assets/images/reloadIcon.svg" alt="">
+        </button>
+        <button  (click)="logout()" class="solutionBtn">
+            <img loading="lazy" src="/assets/images/logoutIcon.svg" alt="">
+        </button>
+    </span>
 </span>

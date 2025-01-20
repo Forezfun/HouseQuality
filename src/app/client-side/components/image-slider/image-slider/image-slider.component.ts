@@ -1,6 +1,5 @@
-import { AfterViewInit, Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
-import { AsyncPipe, NgIf, NgFor, NgClass } from '@angular/common';
-import { Observable } from 'rxjs';
+import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
+import { NgIf, NgFor, NgClass } from '@angular/common';
 
 export interface imageSliderData {
   images: String[];
@@ -10,7 +9,7 @@ export interface imageSliderData {
 @Component({
   selector: 'app-image-slider',
   standalone: true,
-  imports: [NgIf, AsyncPipe, NgFor,NgClass],
+  imports: [NgIf, NgFor,NgClass],
   templateUrl: './image-slider.component.html',
   styleUrl: './image-slider.component.scss'
 })

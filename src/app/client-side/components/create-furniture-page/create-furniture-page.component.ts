@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { NavigationPanelComponent } from '../navigation-panel/navigation-panel.component';
-import { CreateFurnitureComponent, furnitureData, furnitureServerData, colorServerData, additionalData } from '../create-furnitre/create-furniture.component';
+import { CreateFurnitureComponent, furnitureServerData, additionalData } from '../create-furnitre/create-furniture.component';
 import { ActivatedRoute, Router } from '@angular/router';
 import { imageSliderData } from '../image-slider/image-slider/image-slider.component';
 import { UserCookieService } from '../../services/user-cookie.service';
@@ -8,6 +8,7 @@ import { FurnitureCardControlService } from '../../services/furniture-card-contr
 import { ServerImageControlService } from '../../services/server-image-control.service';
 import { NgIf } from '@angular/common';
 import { FurnitureModelControlService } from '../../services/furniture-model-control.service';
+import { ErrorHandlerService } from '../../services/error-handler.service';
 
 @Component({
   selector: 'app-create-furniture-page',
@@ -25,10 +26,11 @@ export class CreateFurniturePageComponent implements OnInit {
     private furnitureCardService: FurnitureCardControlService,
     private serverImageControl: ServerImageControlService,
     private router: Router,
-    private furnitureModelService:FurnitureModelControlService
+    private furnitureModelService: FurnitureModelControlService,
+    private errorHandler: ErrorHandlerService
   ) { }
   idPage!: string
-  
+
   ngOnInit(): void {
     this.route.params.subscribe(params => {
       if (this.idPage !== undefined) location.reload()
@@ -42,13 +44,11 @@ export class CreateFurniturePageComponent implements OnInit {
       this.furnitureCardService.GETfurnitureCard(this.idPage, jwt)
         .subscribe({
           next: async (response) => {
-            console.log(response)
             const RECEIVED_DATA: furnitureServerData = response.furnitureCard
             if (response.authorMatched === false) {
               this.router.navigateByUrl('/create/new')
               return
             }
-            console.log(RECEIVED_DATA)
             this.furnitureData.name = RECEIVED_DATA.name,
               this.furnitureData.description = RECEIVED_DATA.description,
               this.furnitureData.shops = RECEIVED_DATA.shops
@@ -56,7 +56,6 @@ export class CreateFurniturePageComponent implements OnInit {
 
               const IMAGES_DATA = await this.serverImageControl.GETallProjectImages(this.idPage, colorObject.color)
               const IMAGES_URLS: string[] = IMAGES_DATA.imagesURLS
-              console.log(IMAGES_URLS)
               const REQUEST_URLS: string[] = IMAGES_URLS.map(url => this.serverImageControl.GETsimpleImage(url))
               const BLOB_URLS: Blob[] = await Promise.all(
                 REQUEST_URLS.map(async (blobUrl): Promise<Blob> => {
@@ -65,7 +64,6 @@ export class CreateFurniturePageComponent implements OnInit {
                   return blob;
                 })
               );
-              console.log(REQUEST_URLS, BLOB_URLS)
               this.furnitureData.colors.push({
                 color: colorObject.color,
                 imagesData: {
@@ -87,6 +85,7 @@ export class CreateFurniturePageComponent implements OnInit {
           },
           error: (error) => {
             console.log(error)
+            this.errorHandler.setError('Error while loading furniture', 5000)
             this.router.navigateByUrl('/create/new')
           }
         })
@@ -98,10 +97,10 @@ export class CreateFurniturePageComponent implements OnInit {
     colors: [],
     shops: [],
     category: undefined,
-    proportions:{
-      width:null,
-      height:null,
-      length:null
+    proportions: {
+      width: null,
+      height: null,
+      length: null
     }
   }
   colorsClientData: { color: string, imagesData: imageSliderData }[] = []
@@ -113,26 +112,25 @@ export class CreateFurniturePageComponent implements OnInit {
         return blob;
       })
     );
-    console.log(imagesBlobArray)
     return imagesBlobArray
   }
-  checkValid(){
-    const {name,colors,shops,category,proportions}=this.furnitureData
+  checkValid() {
+    const { name, colors, shops, category, proportions } = this.furnitureData
     const FURNITURE_MODEL_BLOB = this.createFurnitureComponent.furnitureModelInput.files![0]
-    if(
-      name.length<3||
-      !category||
-      !FURNITURE_MODEL_BLOB||
-      shops.length<0
-    )return false
-    if(!proportions.height||!proportions.width||!proportions.length)return false
-    colors.forEach(colorData=>{
-      return colorData.imagesData.images.length>0
+    if (
+      name.length < 3 ||
+      !category ||
+      !FURNITURE_MODEL_BLOB ||
+      shops.length < 0
+    ) return false
+    if (!proportions.height || !proportions.width || !proportions.length) return false
+    colors.forEach(colorData => {
+      return colorData.imagesData.images.length > 0
     })
     return true
   }
   createFurnitureCard() {
-    if(!this.checkValid())return
+    if (!this.checkValid()) return
 
     const currentColorId = this.createFurnitureComponent.currentColorId
     if (currentColorId === undefined) return
@@ -142,7 +140,7 @@ export class CreateFurniturePageComponent implements OnInit {
       description: furnitureData.description,
       colors: furnitureData.colors.map(colorObject => colorObject.color),
       shops: furnitureData.shops,
-      proportions:furnitureData.proportions
+      proportions: furnitureData.proportions
     }
     let ADDITIONAL_DATA: additionalData | undefined = undefined
     if (
@@ -175,7 +173,6 @@ export class CreateFurniturePageComponent implements OnInit {
             if (!(imagesData.images[0] instanceof Blob)) {
               imagesBlobArray = await this.transformUrlArrayToBlob(imagesData.images.map(blobUrl => blobUrl.toString()))
             }
-            console.log(imagesBlobArray)
             this.serverImageControl.POSTloadProjectImages(imagesBlobArray, jwt, FURNITURE_ID, color, imagesData.idMainImage)
               .subscribe({
                 next: (response) => {
@@ -184,24 +181,27 @@ export class CreateFurniturePageComponent implements OnInit {
                 },
                 error: (error) => {
                   console.log(error)
+                  this.errorHandler.setError('Error while uploading images', 5000)
                 }
               })
           })
 
           const FURNITURE_MODEL_BLOB = this.createFurnitureComponent.furnitureModelInput.files![0]
           console.log(FURNITURE_MODEL_BLOB)
-          this.furnitureModelService.POSTloadFurnitureModel(FURNITURE_MODEL_BLOB,jwt,FURNITURE_ID)
-          .subscribe({
-            next:(response)=>{
-              console.log(response)
-            },
-            error:(error)=>{
-              console.log(error)
-            }
-          })
+          this.furnitureModelService.POSTloadFurnitureModel(FURNITURE_MODEL_BLOB, jwt, FURNITURE_ID)
+            .subscribe({
+              next: (response) => {
+                console.log(response)
+              },
+              error: (error) => {
+                console.log(error)
+                this.errorHandler.setError('Error while uploading model', 5000)
+              }
+            })
         },
         error: (error) => {
           console.log(error)
+          this.errorHandler.setError('Error while uploading furniture', 5000)
         }
       })
   }
@@ -214,7 +214,7 @@ export class CreateFurniturePageComponent implements OnInit {
       description: furnitureData.description,
       colors: furnitureData.colors.map(colorObject => colorObject.color),
       shops: furnitureData.shops,
-      proportions:furnitureData.proportions
+      proportions: furnitureData.proportions
     }
     let ADDITIONAL_DATA: additionalData | undefined = undefined
     if (
@@ -244,49 +244,49 @@ export class CreateFurniturePageComponent implements OnInit {
               next: (response) => {
                 console.log(response)
                 furnitureData.colors.forEach(async colorData => {
-                  console.log(colorData)
-
                   const { color, imagesData } = colorData
-                  console.log(imagesData.images)
                   let imagesBlobArray: Blob[] = imagesData.images
                   if (imagesData.images.length !== 0) {
                     if (!(imagesData.images[0] instanceof Blob)) {
                       imagesBlobArray = await this.transformUrlArrayToBlob(imagesData.images.map(blobUrl => blobUrl.toString()))
                     }
-                    console.log(imagesBlobArray)
-
                     this.serverImageControl.POSTloadProjectImages(imagesBlobArray, jwt, this.idPage, color, imagesData.idMainImage)
                       .subscribe({
                         next: (response) => {
                           console.log(response)
-                          // window.location.href = window.location.href
+                          window.location.href = window.location.href
                         },
                         error: (error) => {
                           console.log(error)
+                          this.errorHandler.setError('Error while updating images', 5000)
                         }
                       })
                   }
 
                   const FURNITURE_MODEL_BLOB = this.createFurnitureComponent.furnitureModelInput.files![0]
                   console.log(FURNITURE_MODEL_BLOB)
-                  this.furnitureModelService.PUTupdateFurnitureModel(FURNITURE_MODEL_BLOB,jwt,this.idPage)
-                  .subscribe({
-                    next:(response)=>{
-                      console.log(response)
-                    },
-                    error:(error)=>{
-                      console.log(error)
-                    }
-                  })
+                  this.furnitureModelService.PUTupdateFurnitureModel(FURNITURE_MODEL_BLOB, jwt, this.idPage)
+                    .subscribe({
+                      next: (response) => {
+                        console.log(response)
+                      },
+                      error: (error) => {
+                        console.log(error)
+                        this.errorHandler.setError('Error while updating model', 5000)
+
+                      }
+                    })
                 })
               },
               error: (error) => {
                 console.log(error)
+                this.errorHandler.setError('Error while updating images', 5000)
               }
             })
         },
         error: (error) => {
           console.log(error)
+          this.errorHandler.setError('Error while updating model', 5000)
         }
       })
 
@@ -299,19 +299,17 @@ export class CreateFurniturePageComponent implements OnInit {
       colors: [],
       shops: [],
       category: undefined,
-      proportions:{
-        width:0,
-        height:0,
-        length:0
+      proportions: {
+        width: 0,
+        height: 0,
+        length: 0
       }
     }
     this.colorsClientData = []
   }
   deleteFurnitureCard() {
-    console.log('delete')
     const jwt = this.cookieService.getJwt()
     if (!jwt) return
-    console.log('start deleting')
     this.serverImageControl.DELETEproject(jwt, this.idPage)
       .subscribe({
         next: (response) => {
@@ -324,11 +322,13 @@ export class CreateFurniturePageComponent implements OnInit {
               },
               error: (error) => {
                 console.log(error)
+                this.errorHandler.setError('Error while deleting furniture', 5000)
               }
             })
         },
         error: (error) => {
           console.log(error)
+          this.errorHandler.setError('Error while deleting images', 5000)
         }
       })
 

@@ -1,13 +1,13 @@
-import { AfterViewInit, Component, ElementRef, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { NavigationPanelComponent } from '../navigation-panel/navigation-panel.component';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { furnitureServerData } from '../create-furnitre/create-furniture.component';
 import { NgClass, NgFor, NgIf } from '@angular/common';
 import { ShopService } from '../../services/shop.service';
 import { ViewFurnitureComponent } from '../view-furniture/view-furniture.component';
 import { accountFullInformation, AccountService } from '../../services/account.service';
 import { UserCookieService } from '../../services/user-cookie.service';
 import { projectInformation } from '../../services/project.service';
+import { ErrorHandlerService } from '../../services/error-handler.service';
 interface furnitureInShopData {
   name: string,
   cost: number,
@@ -36,7 +36,8 @@ export class ShopPageComponent implements OnInit {
     private shopService: ShopService,
     private router: Router,
     private userService:AccountService,
-    private userCookieService:UserCookieService
+    private userCookieService:UserCookieService,
+    private errorHandler:ErrorHandlerService
   ) { }
   openAddModule(){
     this.openAddModuleToggle=true
@@ -47,8 +48,6 @@ export class ShopPageComponent implements OnInit {
   ngOnInit(): void {
     this.route.params.subscribe(params => {
       this.currentPath = this.route.snapshot.url.join('/');
-      console.log(this.currentPath)
-      console.log(params)
       this.furnitureId = params['furnitureId']
       if(this.furnitureId){
         const jwt =this.userCookieService.getJwt()
@@ -60,6 +59,7 @@ export class ShopPageComponent implements OnInit {
           },
           error:(error)=>{
             console.log(error)
+            this.errorHandler.setError('Error while receiving user', 5000)
           }
         })
       }
@@ -73,6 +73,7 @@ export class ShopPageComponent implements OnInit {
             },
             error: (error) => {
               console.log(error)
+              this.errorHandler.setError('Error while finding items', 5000)
             }
           })
       } else {
@@ -84,6 +85,7 @@ export class ShopPageComponent implements OnInit {
             },
             error: (error) => {
               console.log(error)
+              this.errorHandler.setError('Error while finding items', 5000)
             }
           })
       }
@@ -94,7 +96,6 @@ export class ShopPageComponent implements OnInit {
   }
   private transformToClientDataFurnitures(furnituresArray: furnitureInShopData[]) {
     return furnituresArray.map((furnitureData: furnitureInShopData) => {
-      console.log(this.shopService.GETgetImageByPath(furnitureData.preview))
       return { ...furnitureData, preview: this.shopService.GETgetImageByPath(furnitureData.preview) }
     })
   }

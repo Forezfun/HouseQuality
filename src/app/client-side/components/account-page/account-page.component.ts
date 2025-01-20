@@ -2,13 +2,13 @@ import { AfterViewInit, Component, ElementRef, OnInit } from '@angular/core';
 import { NavigationPanelComponent } from '../navigation-panel/navigation-panel.component';
 import { CommonModule, NgFor, NgIf } from '@angular/common';
 import { accountChangeBaseData, accountChangeSecondaryData, accountFullInformation, AccountService, userType } from '../../services/account.service';
-import { FormGroup, ReactiveFormsModule, FormControl, Validators, FormGroupName } from '@angular/forms';
+import { FormGroup, ReactiveFormsModule, FormControl, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
-import { forkJoin, Observable, of } from 'rxjs';
 import { UserCookieService } from '../../services/user-cookie.service';
 import { ServerImageControlService } from '../../services/server-image-control.service';
 import { ClientImageControlService } from '../../services/client-image-control.service';
 import { AuthService } from '../../services/auth.service';
+import { ErrorHandlerService } from '../../services/error-handler.service';
 @Component({
   selector: 'app-account-page',
   standalone: true,
@@ -26,7 +26,8 @@ export class AccountPageComponent implements AfterViewInit, OnInit {
     private userCookieService: UserCookieService,
     private imageServerControlService: ServerImageControlService,
     private imageClientControlService: ClientImageControlService,
-    private authService: AuthService
+    private authService: AuthService,
+    private errorHandler:ErrorHandlerService
   ) { }
   ngOnInit(): void {
     if (!this.userService.checkJwt()) this.router.navigateByUrl('/login')
@@ -58,11 +59,7 @@ export class AccountPageComponent implements AfterViewInit, OnInit {
         },
         error: (error) => {
           console.log(error)
-          if(error.status===404){
-            this.userCookieService.deleteJwt()
-            this.userCookieService.deleteUserType()
-            this.router.navigateByUrl('/login')
-          }
+          this.errorHandler.setError('Error while user loading',5000)
         },
         complete: () => {
           this.userData = receiveUserData
@@ -96,6 +93,7 @@ export class AccountPageComponent implements AfterViewInit, OnInit {
           this.userData!.avatarUrl = URL.createObjectURL(COMPRESSED_IMAGE);
         },
         error: (error) => {
+          this.errorHandler.setError('Error while loading avatar',5000)
           console.log(error)
         }
       })
@@ -137,6 +135,7 @@ export class AccountPageComponent implements AfterViewInit, OnInit {
         },
         error: (error) => {
           console.log(error)
+          this.errorHandler.setError('Error while updating data',5000)
         }
       })
 
@@ -150,6 +149,7 @@ export class AccountPageComponent implements AfterViewInit, OnInit {
           console.log(response)
         },
         error: (error) => {
+          this.errorHandler.setError('Error while updating data',5000)
           console.log(error)
         }
       })
