@@ -1,4 +1,4 @@
-import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader';
+import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader.js';
 import { Group, LoadingManager, Object3D } from 'three';
 
 export function loadFBXModel(url: string, manager?: LoadingManager): Promise<Object3D> {
@@ -10,8 +10,12 @@ export function loadFBXModel(url: string, manager?: LoadingManager): Promise<Obj
                 resolve(object);
             },
             undefined,
-            (error: Error) => {
-                reject(error);
+            (error: unknown) => {
+                if (error instanceof Error) {
+                    reject(error);
+                } else {
+                    reject(new Error('An unknown error occurred'));
+                }
             }
         );
     });

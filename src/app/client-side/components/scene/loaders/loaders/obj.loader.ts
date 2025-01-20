@@ -1,4 +1,4 @@
-import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader';
+import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader.js';
 import { Group, LoadingManager, Object3D } from 'three';
 
 export async function loadOBJModel(url: string, manager?: LoadingManager): Promise<Object3D> {
@@ -11,8 +11,12 @@ export async function loadOBJModel(url: string, manager?: LoadingManager): Promi
                     resolve(object);
                 },
                 undefined,
-                (event: ErrorEvent) => {  // Обработка ошибки
-                    reject(new Error(event.message));
+                (error: unknown) => {
+                    if (error instanceof Error) {
+                        reject(error);
+                    } else {
+                        reject(new Error('An unknown error occurred'));
+                    }
                 }
             );
         });
