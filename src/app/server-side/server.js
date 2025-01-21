@@ -20,7 +20,7 @@ const DB_NAME = 'db1';
 const DB_HOSTS = ['rc1a-joef29r9lsoq5sqd.mdb.yandexcloud.net:27018'];
 const DB_USER = 'forezfun';
 const DB_PASS = '4691forezfun';
-const CACERT = 'root.crt';
+const CACERT = '/home/kruk-german27/HouseQuality/src/app/server-side/root.crt';
 
 const url = util.format('mongodb://%s:%s@%s/', DB_USER, DB_PASS, DB_HOSTS.join(','));
 
