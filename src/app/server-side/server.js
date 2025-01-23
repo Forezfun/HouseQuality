@@ -3,7 +3,6 @@ const MongoClient = require('mongodb').MongoClient;
 const EXPRESS = require('express');
 const BODYPARSER = require('body-parser');
 const CORS = require('cors');
-const CONNECT_DB = require('./config/db');
 const USERS_ROUTES = require('./routes/userRoutes');
 const AUTH_ROUTES = require('./routes/authRoutes');
 const PROJECT_ROUTES = require('./routes/projectRoutes');
@@ -15,14 +14,21 @@ const SHOP_ROUTES = require('./routes/shopRoutes');
 const FINDER_ROUTES = require('./routes/finderRoutes');
 
 // Конфигурация MongoDB
-const DB_RS = 'housequality';
+const DB_RS = 'rs01';
 const DB_NAME = 'db1';
 const DB_HOSTS = ['rc1a-joef29r9lsoq5sqd.mdb.yandexcloud.net:27018'];
 const DB_USER = 'forezfun';
 const DB_PASS = '4691forezfun';
 const CACERT = '/home/kruk-german27/HouseQuality/src/app/server-side/root.crt';
 
-const url = util.format('mongodb://%s:%s@%s/', DB_USER, DB_PASS, DB_HOSTS.join(','));
+const url = util.format(
+  'mongodb://%s:%s@%s/%s?replicaSet=%s',
+  encodeURIComponent(DB_USER), // Для корректного использования в URL
+  encodeURIComponent(DB_PASS),
+  DB_HOSTS.join(','),
+  DB_NAME,
+  DB_RS
+);
 
 const options = {
   useNewUrlParser: true,
@@ -30,7 +36,6 @@ const options = {
   tls: true,
   tlsCAFile: CACERT,
   replicaSet: DB_RS,
-  authSource: DB_NAME
 };
 
 // Функция для подключения к базе данных
@@ -40,7 +45,7 @@ async function connectToDB() {
     console.log('Connected to MongoDB');
     return client;
   } catch (err) {
-    console.error('Failed to connect to MongoDB', err);
+    console.error('Failed to connect to MongoDB:', err.message);
     throw err;
   }
 }
@@ -60,6 +65,12 @@ async function startServer() {
     APP.use(BODYPARSER.json());
     APP.use(BODYPARSER.urlencoded({ extended: true }));
 
+    // Передаем объект базы данных в маршруты
+    APP.use((req, res, next) => {
+      req.db = db;
+      next();
+    });
+
     // Маршруты
     APP.use('/projects', PROJECT_ROUTES);
     APP.use('/user', USERS_ROUTES);
@@ -74,7 +85,7 @@ async function startServer() {
     // Обработка ошибок
     APP.use((err, req, res, next) => {
       console.error(err.stack);
-      res.status(500).send('Something broke!');
+      res.status(500).json({ message: 'Internal Server Error' });
     });
 
     // Запуск сервера
@@ -82,14 +93,9 @@ async function startServer() {
     APP.listen(APP_PORT, () => {
       console.log(`Server running on port ${APP_PORT}`);
     });
-
-    // Пример маршрута для ошибки
-    APP.get('/error', (req, res) => {
-      throw new Error('This is a forced error.');
-    });
-
   } catch (err) {
-    console.error('Error starting the server', err);
+    console.error('Error starting the server:', err.message);
+    process.exit(1); // Завершаем процесс при критической ошибке
   }
 }
 
