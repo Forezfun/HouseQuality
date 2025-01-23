@@ -1,12 +1,11 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-
+import { baseUrl } from '.';
 @Injectable({
   providedIn: 'root'
 })
 export class FurnitureModelControlService {
-  private baseUrl = 'http://localhost:8010/proxy/';
 
   constructor(private httpModule: HttpClient) { }
 
@@ -20,7 +19,7 @@ export class FurnitureModelControlService {
     const HTTP_PARAMS = new HttpParams()
     .set('jwtToken', jwt)
     .set('furnitureId', furnitureId)
-    return this.httpModule.get(`${this.baseUrl}furniture/model`, { params: HTTP_PARAMS, responseType: 'blob' });
+    return this.httpModule.get(`${baseUrl}furniture/model`, { params: HTTP_PARAMS, responseType: 'blob' });
   }
 
   /**
@@ -37,7 +36,7 @@ export class FurnitureModelControlService {
     .set('jwtToken', jwt)
     .set('furnitureId', furnitureId)
     .set('fileName', (modelFile as any).name);
-    return this.httpModule.post(`${this.baseUrl}furniture/model/upload`, formData, { params: HTTP_PARAMS });
+    return this.httpModule.post(`${baseUrl}furniture/model/upload`, formData, { params: HTTP_PARAMS });
   }
 
   /**
@@ -55,7 +54,7 @@ export class FurnitureModelControlService {
     .set('furnitureId', furnitureId)
     .set('fileName', (modelFile as any).name);
     
-    return this.httpModule.put(`${this.baseUrl}furniture/model/update/${furnitureId}`, formData, { params: HTTP_PARAMS });
+    return this.httpModule.put(`${baseUrl}furniture/model/update/${furnitureId}`, formData, { params: HTTP_PARAMS });
   }
 
   /**
@@ -66,6 +65,6 @@ export class FurnitureModelControlService {
    */
   DELETEfurnitureModel(jwt: string, furnitureId: string): Observable<any> {
     const HTTP_PARAMS = new HttpParams().set('jwtToken', jwt);
-    return this.httpModule.delete(`${this.baseUrl}furniture/model/delete/${furnitureId}`, { params: HTTP_PARAMS });
+    return this.httpModule.delete(`${baseUrl}furniture/model/delete/${furnitureId}`, { params: HTTP_PARAMS });
   }
 }

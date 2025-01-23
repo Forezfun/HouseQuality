@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-
+import { baseUrl } from '.';
 @Injectable({
   providedIn: 'root'
 })
@@ -9,7 +9,6 @@ export class ServerImageControlService {
     private httpModule: HttpClient
   ) { }
 
-  private baseUrl = "http://localhost:8010/proxy/";
 
   /**
    * Получение аватара пользователя
@@ -17,7 +16,7 @@ export class ServerImageControlService {
    * @returns URL для получения аватара пользователя
    */
   GETuserAvatar(jwt: string) {
-    return `${this.baseUrl}avatar?jwtToken=${jwt}`;
+    return `${baseUrl}avatar?jwtToken=${jwt}`;
   }
 
   /**
@@ -30,7 +29,7 @@ export class ServerImageControlService {
     const formData = new FormData();
     formData.append('image', imageFile);
     const HTTP_PARAMS = new HttpParams().set('jwtToken', jwt);
-    return this.httpModule.post(`${this.baseUrl}avatar/upload`, formData, { params: HTTP_PARAMS });
+    return this.httpModule.post(`${baseUrl}avatar/upload`, formData, { params: HTTP_PARAMS });
   }
 
   /**
@@ -54,7 +53,7 @@ export class ServerImageControlService {
     .set('color', color)
     .set('idMainImage',idMainImage)
     // Отправляем запрос с использованием FormData
-    return this.httpModule.post(`${this.baseUrl}furniture/images/upload/images?jwtToken=${jwt}`, formData,{params:HTTP_PARAMS});
+    return this.httpModule.post(`${baseUrl}furniture/images/upload/images?jwtToken=${jwt}`, formData,{params:HTTP_PARAMS});
   }
   
   
@@ -72,7 +71,7 @@ export class ServerImageControlService {
       .set('furnitureCardId', furnitureCardId)
       .set('color', color);
 
-    return this.httpModule.delete(`${this.baseUrl}furniture/images/delete/color`, { params: HTTP_PARAMS });
+    return this.httpModule.delete(`${baseUrl}furniture/images/delete/color`, { params: HTTP_PARAMS });
   }
 
   /**
@@ -86,7 +85,7 @@ export class ServerImageControlService {
       .set('jwtToken', jwt)
       .set('furnitureCardId', furnitureCardId);
 
-    return this.httpModule.delete(`${this.baseUrl}furniture/images/delete/project`, { params: HTTP_PARAMS });
+    return this.httpModule.delete(`${baseUrl}furniture/images/delete/project`, { params: HTTP_PARAMS });
   }
     /**
    * Получение всех изображений проекта по ID карточки мебели и цвету
@@ -100,7 +99,7 @@ export class ServerImageControlService {
         .set('color', color);
     
       try {
-        const response = await this.httpModule.get(`${this.baseUrl}furniture/images/all`, { params: HTTP_PARAMS }).toPromise();
+        const response = await this.httpModule.get(`${baseUrl}furniture/images/all`, { params: HTTP_PARAMS }).toPromise();
         return response;
       } catch (error) {
         console.error('Error fetching project images:', error);
@@ -115,10 +114,10 @@ export class ServerImageControlService {
      * @returns Observable с главным изображением
      */
     GETmainImage(furnitureCardId: string, color: string) {
-        return `${this.baseUrl}furniture/images/main?furnitureCardId=${furnitureCardId}&color=${color}`;
+        return `${baseUrl}furniture/images/main?furnitureCardId=${furnitureCardId}&color=${color}`;
     }
     GETsimpleImage(filePath:string){
-      return `${this.baseUrl}furniture/images/simple?filePath=${filePath}`;
+      return `${baseUrl}furniture/images/simple?filePath=${filePath}`;
     }
     
 }
