@@ -1,11 +1,11 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-
+import { baseUrl } from '.';
 @Injectable({
   providedIn: 'root'
 })
 export class ShopService {
-  private baseUrl='http://localhost:8010/proxy/shop/'
+  private baseUrl= baseUrl+'shop/'
   constructor(
     private httpModule: HttpClient
   ) {}

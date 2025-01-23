@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { accountSignInData, userType, accountChangeBaseData } from './account.service';
-
+import { baseUrl } from '.';
 @Injectable({
   providedIn: 'root'
 })
@@ -9,8 +9,6 @@ export class AuthService {
   constructor(
     private httpModule: HttpClient
   ) { }
-
-  private baseUrl = "http://localhost:8010/proxy/";
 
   /**
    * Создание длинного JWT токена
@@ -23,7 +21,7 @@ export class AuthService {
       .set('userType', userType)
       .set('email', signInData.email)
       .set('password', signInData.password);
-    return this.httpModule.post(this.baseUrl + 'auth/jwt/long/create', HTTP_PARAMS);
+    return this.httpModule.post(baseUrl + 'auth/jwt/long/create', HTTP_PARAMS);
   }
 
   /**
@@ -35,7 +33,7 @@ export class AuthService {
     let HTTP_PARAMS = new HttpParams()
       .set('email', signInData.email)
       .set('password', signInData.password);
-    return this.httpModule.post(this.baseUrl + 'auth/jwt/temporary/create', HTTP_PARAMS);
+    return this.httpModule.post(baseUrl + 'auth/jwt/temporary/create', HTTP_PARAMS);
   }
 
   /**
@@ -56,6 +54,6 @@ export class AuthService {
       HTTP_PARAMS = HTTP_PARAMS.set('password', changeData.password);
     }
 
-    return this.httpModule.put(this.baseUrl + 'auth/user/update', HTTP_PARAMS);
+    return this.httpModule.put(baseUrl + 'auth/user/update', HTTP_PARAMS);
   }
 }

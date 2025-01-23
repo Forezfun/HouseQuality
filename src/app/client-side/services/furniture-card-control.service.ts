@@ -2,12 +2,13 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { additionalData, furnitureData, furnitureServerData } from '../components/create-furnitre/create-furniture.component';
+import { baseUrl } from '.';
 @Injectable({
   providedIn: 'root'
 })
 export class FurnitureCardControlService {
 
-  private baseUrl = 'http://localhost:8010/proxy/furniture/card/';
+  private baseUrl = baseUrl+'furniture/card/';
 
   constructor(private httpModule: HttpClient) { }
 

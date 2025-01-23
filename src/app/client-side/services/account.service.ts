@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { projectInformation } from './project.service';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { UserCookieService } from './user-cookie.service';
-import { furnitureServerData } from '../components/create-furnitre/create-furniture.component';
+import { baseUrl } from '.';
 export interface accountSignInData {
   email: string;
   password: string;
@@ -32,8 +32,6 @@ export class AccountService {
     private userCookieService: UserCookieService
   ) { }
 
-  private baseUrl = "http://localhost:8010/proxy/";
-
   /**
    * Создание нового пользователя
    * @param accountBaseData Основная информация о пользователе (никнейм, email, пароль)
@@ -50,7 +48,7 @@ export class AccountService {
       HTTP_PARAMS = HTTP_PARAMS.set('password', accountBaseData.password!);
     }
 
-    return this.httpModule.post(this.baseUrl + 'user/user/create', HTTP_PARAMS);
+    return this.httpModule.post(baseUrl + 'user/user/create', HTTP_PARAMS);
   }
 
   /**
@@ -61,7 +59,7 @@ export class AccountService {
   DELETEuserJwt(jwt: string) {
     const HTTP_PARAMS = new HttpParams()
       .set('jwtToken', jwt);
-    return this.httpModule.delete(this.baseUrl + 'user/jwt/delete', { params: HTTP_PARAMS });
+    return this.httpModule.delete(baseUrl + 'user/jwt/delete', { params: HTTP_PARAMS });
   }
 
   /**
@@ -72,7 +70,7 @@ export class AccountService {
   DELETEuser(jwt: string) {
     const HTTP_PARAMS = new HttpParams()
       .set('jwtToken', jwt);
-    return this.httpModule.delete(this.baseUrl + 'user/user/delete', { params: HTTP_PARAMS });
+    return this.httpModule.delete(baseUrl + 'user/user/delete', { params: HTTP_PARAMS });
   }
 
   /**
@@ -83,7 +81,7 @@ export class AccountService {
   GETuser(jwt: string) {
     const HTTP_PARAMS = new HttpParams()
       .set('jwtToken', jwt);
-    return this.httpModule.get(this.baseUrl + 'user/user/get', { params: HTTP_PARAMS });
+    return this.httpModule.get(baseUrl + 'user/user/get', { params: HTTP_PARAMS });
   }
 
   /**
@@ -98,7 +96,7 @@ export class AccountService {
       .set('jwtToken', jwt)
       .set('userType', userType)
       .set('nickname', changeData.nickname);
-    return this.httpModule.put(this.baseUrl + 'user/user/put', HTTP_PARAMS);
+    return this.httpModule.put(baseUrl + 'user/user/put', HTTP_PARAMS);
   }
 
   /**

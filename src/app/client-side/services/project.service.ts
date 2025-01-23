@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { roomData } from '../components/plan-house/plan-house.component';
 import { HttpClient, HttpParams } from '@angular/common/http';
-
+import { baseUrl } from '.';
 export interface projectInformation {
   rooms: roomData[];
   name: string;
@@ -18,7 +18,7 @@ export class ProjectService {
     private httpModule: HttpClient
   ) {}
 
-  private baseUrl = "http://localhost:8010/proxy/projects/";
+  private baseUrl = baseUrl+"projects/";
 
   /**
    * Создание нового проекта
