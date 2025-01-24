@@ -64,6 +64,20 @@ async function logCollections(db) {
   }
 }
 
+// Функция для создания коллекций, если они не существуют
+async function createCollections(db) {
+  const collections = ['authusers', 'furniturecards', 'furnituremodels', 'imageavatars','imagesfurniture','projects','users'];
+  for (let collectionName of collections) {
+    const collectionExists = await db.listCollections({ name: collectionName }).hasNext();
+    if (!collectionExists) {
+      await db.createCollection(collectionName);
+      console.log(`Collection ${collectionName} created`);
+    } else {
+      console.log(`Collection ${collectionName} already exists`);
+    }
+  }
+}
+
 // Настройка и запуск сервера Express
 async function startServer() {
   try {
@@ -71,20 +85,12 @@ async function startServer() {
     dbClient = await connectToDB();
     const db = dbClient.db(DB_NAME);
 
-    const collections = ['authusers', 'furniturecards', 'furnituremodels', 'imageavatars','imagesfurniture','projects','users'];
-    for (let collectionName of collections) {
-      const collectionExists = await db.listCollections({ name: collectionName }).hasNext();
-      if (!collectionExists) {
-        await db.createCollection(collectionName);
-        console.log(`Collection ${collectionName} created`);
-      } else {
-        console.log(`Collection ${collectionName} already exists`);
-      }
-    }
+    // Создаем коллекции, если их нет
+    await createCollections(db);
     
     // Создаем Express приложение
     const app = express();
-    
+
     // Мидлвары
     app.use(cors());
     app.use(bodyParser.json());
@@ -95,7 +101,7 @@ async function startServer() {
       req.db = db;
       next();
     });
-    
+
     // Маршруты
     app.use('/projects', PROJECT_ROUTES);
     app.use('/user', USERS_ROUTES);
@@ -118,6 +124,8 @@ async function startServer() {
     app.listen(APP_PORT, () => {
       console.log(`Server running on port ${APP_PORT}`);
     });
+
+    // Логирование коллекций в базе данных
     await logCollections(db);
 
     // Обработка завершения процесса
