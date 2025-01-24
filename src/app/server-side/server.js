@@ -25,6 +25,8 @@ const options = {
   tls: true,
   tlsCAFile: CACERT,
   replicaSet: DB_RS,
+  connectTimeoutMS: 30000, // Увеличение тайм-аута подключения
+  socketTimeoutMS: 45000,
 };
 
 // Настройка и запуск сервера Express
@@ -37,7 +39,9 @@ async function startServer() {
     console.log('Connected to MongoDB');
 
     const db = dbClient.db(DB_NAME);
+    const collections = await db.listCollections().toArray();
     console.log('Connected to database:', db.databaseName);
+    console.log('DB collections:', db.collections);
 
     // Создаем Express приложение
     const app = express();
