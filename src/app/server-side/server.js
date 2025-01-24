@@ -24,7 +24,7 @@ const DB_PASS = '4691forezfun';
 const CACERT = '/home/kruk-german27/HouseQuality/src/app/server-side/root.crt';
 
 const url = util.format(
-  'mongodb://%s:%s@%s/%s?replicaSet=%s',
+  'mongodb://%s:%s@%s/%s',
   encodeURIComponent(DB_USER), // Кодируем параметры
   encodeURIComponent(DB_PASS),
   DB_HOSTS.join(','),
@@ -40,62 +40,22 @@ const options = {
   replicaSet: DB_RS,
 };
 
-let dbClient = null;
 
-// Функция для подключения к базе данных
-async function connectToDB() {
-  try {
-    const client = await MongoClient.connect(url, options);
-    console.log('Connected to MongoDB: ',client);
-    return client;
-  } catch (err) {
-    console.error('Failed to connect to MongoDB:', err.message);
-    throw err;
-  }
-}
 
-// Функция для вывода списка коллекций
-async function logCollections(db) {
-  try {
-    const collections = await db.listCollections().toArray();
-    console.log('Collections in the database:', collections.map((col) => col.name));
-  } catch (err) {
-    console.error('Error fetching collections:', err.message);
-  }
-}
 
-// Функция для создания коллекций, если они не существуют
-async function createCollections(db) {
-  const collections = ['authusers', 'furniturecards', 'furnituremodels', 'imageavatars','imagesfurniture','projects','users'];
-  for (let collectionName of collections) {
-    const collectionExists = await db.listCollections({ name: collectionName }).hasNext();
-    if (!collectionExists) {
-      await db.createCollection(collectionName);
-      console.log(`Collection ${collectionName} created`);
-    } else {
-      console.log(`Collection ${collectionName} already exists`);
-    }
-  }
-}
 
 // Настройка и запуск сервера Express
 async function startServer() {
   try {
-    // Подключаемся к базе данных
-    dbClient = await connectToDB();
-    dbClient.connect()
-    .then(() => {
-        console.log('start');
-    })
-    .catch(err => {
-        console.error('App starting error:', err.stack);
-        process.exit(1)
-    });
-    const db = dbClient.db(DB_NAME);
-
-    // Создаем коллекции, если их нет
-    await createCollections(db);
-    
+    let db
+    MongoClient.connect(url, options, function(err, conn) {
+      if (conn.isConnected()) {
+          db = conn.db(DB_NAME)
+          console.log(db.databaseName)
+      }
+  
+      conn.close()
+  })    
     // Создаем Express приложение
     const app = express();
 
@@ -133,18 +93,6 @@ async function startServer() {
       console.log(`Server running on port ${APP_PORT}`);
     });
 
-    // Логирование коллекций в базе данных
-    await logCollections(db);
-
-    // Обработка завершения процесса
-    process.on('SIGINT', async () => {
-      console.log('Shutting down server...');
-      if (dbClient) {
-        await dbClient.close();
-        console.log('MongoDB connection closed');
-      }
-      process.exit(0);
-    });
   } catch (err) {
     console.error('Error starting the server:', err.message);
     process.exit(1);
