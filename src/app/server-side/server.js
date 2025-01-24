@@ -41,15 +41,16 @@ const options = {
 // Настройка и запуск сервера Express
 async function startServer() {
   try {
-    let db
+
     MongoClient.connect(url, options, function(err, conn) {
+      let db
       if (conn.isConnected()) {
           db = conn.db(DB_NAME)
-          console.log(db.databaseName)
+          console.log('Connected to: ',db.databaseName)
       }
-  
+      console.log('Nonconnected')
       conn.close()
-  })    
+ 
     // Создаем Express приложение
     const app = express();
 
@@ -86,11 +87,12 @@ async function startServer() {
     app.listen(APP_PORT, () => {
       console.log(`Server running on port ${APP_PORT}`);
     });
-
+  })
   } catch (err) {
     console.error('Error starting the server:', err.message);
     process.exit(1);
   }
+
 }
 
 // Запуск приложения
