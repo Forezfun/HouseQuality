@@ -83,6 +83,14 @@ async function startServer() {
   try {
     // Подключаемся к базе данных
     dbClient = await connectToDB();
+    dbClient.connect()
+    .then(() => {
+        console.log('start');
+    })
+    .catch(err => {
+        console.error('App starting error:', err.stack);
+        process.exit(1)
+    });
     const db = dbClient.db(DB_NAME);
 
     // Создаем коллекции, если их нет
