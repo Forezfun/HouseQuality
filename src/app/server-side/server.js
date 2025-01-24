@@ -4,17 +4,6 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 
-// Импорт маршрутов
-const USERS_ROUTES = require('./routes/userRoutes'); 
-const AUTH_ROUTES = require('./routes/authRoutes');
-const PROJECT_ROUTES = require('./routes/projectRoutes');
-const IMAGE_AVATAR_ROUTES = require('./routes/imageAvatarRoutes');
-const IMAGE_FURNITURE_ROUTES = require('./routes/imagesFurnitureRoutes');
-const FURNITURE_CARD_ROUTES = require('./routes/furnitureCardRoutes');
-const FURNITURE_MODEL_ROUTES = require('./routes/furnitureModelRoutes');
-const SHOP_ROUTES = require('./routes/shopRoutes');
-const FINDER_ROUTES = require('./routes/finderRoutes');
-
 // Конфигурация MongoDB
 const DB_RS = 'rs01';
 const DB_NAME = 'db1';
@@ -23,8 +12,12 @@ const DB_USER = 'forezfun';
 const DB_PASS = '4691forezfun';
 const CACERT = '/home/kruk-german27/HouseQuality/src/app/server-side/root.crt';
 
-
-const url = util.format('mongodb://%s:%s@%s/', DB_USER, DB_PASS, DB_HOSTS.join(','))
+const url = util.format(
+  'mongodb://%s:%s@%s/',
+  encodeURIComponent(DB_USER),
+  encodeURIComponent(DB_PASS),
+  DB_HOSTS.join(',')
+);
 
 const options = {
   useNewUrlParser: true,
@@ -34,23 +27,18 @@ const options = {
   replicaSet: DB_RS,
 };
 
-
-
-
-
 // Настройка и запуск сервера Express
 async function startServer() {
-  try {
+  let dbClient = null;
 
-    MongoClient.connect(url, options, function(err, conn) {
-      let db
-      if (conn.isConnected()) {
-          db = conn.db(DB_NAME)
-          console.log('Connected to: ',db.databaseName)
-      }
-      console.log('Nonconnected')
-      conn.close()
- 
+  try {
+    // Подключение к MongoDB
+    dbClient = await MongoClient.connect(url, options);
+    console.log('Connected to MongoDB');
+
+    const db = dbClient.db(DB_NAME);
+    console.log('Connected to database:', db.databaseName);
+
     // Создаем Express приложение
     const app = express();
 
@@ -66,15 +54,15 @@ async function startServer() {
     });
 
     // Маршруты
-    app.use('/projects', PROJECT_ROUTES);
-    app.use('/user', USERS_ROUTES);
-    app.use('/auth', AUTH_ROUTES);
-    app.use('/avatar', IMAGE_AVATAR_ROUTES);
-    app.use('/furniture/images', IMAGE_FURNITURE_ROUTES);
-    app.use('/furniture/card', FURNITURE_CARD_ROUTES);
-    app.use('/furniture/model', FURNITURE_MODEL_ROUTES);
-    app.use('/shop', SHOP_ROUTES);
-    app.use('/finder', FINDER_ROUTES);
+    app.use('/projects', require('./routes/projectRoutes'));
+    app.use('/user', require('./routes/userRoutes'));
+    app.use('/auth', require('./routes/authRoutes'));
+    app.use('/avatar', require('./routes/imageAvatarRoutes'));
+    app.use('/furniture/images', require('./routes/imagesFurnitureRoutes'));
+    app.use('/furniture/card', require('./routes/furnitureCardRoutes'));
+    app.use('/furniture/model', require('./routes/furnitureModelRoutes'));
+    app.use('/shop', require('./routes/shopRoutes'));
+    app.use('/finder', require('./routes/finderRoutes'));
 
     // Обработка ошибок
     app.use((err, req, res, next) => {
@@ -87,12 +75,23 @@ async function startServer() {
     app.listen(APP_PORT, () => {
       console.log(`Server running on port ${APP_PORT}`);
     });
-  })
+
+    // Обработка завершения процесса
+    process.on('SIGINT', async () => {
+      console.log('Shutting down server...');
+      if (dbClient) {
+        await dbClient.close();
+        console.log('MongoDB connection closed');
+      }
+      process.exit(0);
+    });
   } catch (err) {
     console.error('Error starting the server:', err.message);
+    if (dbClient) {
+      await dbClient.close();
+    }
     process.exit(1);
   }
-
 }
 
 // Запуск приложения
