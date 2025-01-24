@@ -41,7 +41,7 @@ async function startServer() {
     const db = dbClient.db(DB_NAME);
     const collections = await db.listCollections().toArray();
     console.log('Connected to database:', db.databaseName);
-    console.log('DB collections:', db.collections);
+    console.log('DB collections:', collections);
 
     // Создаем Express приложение
     const app = express();
