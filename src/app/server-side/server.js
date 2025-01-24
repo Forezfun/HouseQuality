@@ -54,12 +54,25 @@ async function connectToDB() {
   }
 }
 
+// Функция для вывода списка коллекций
+async function logCollections(db) {
+  try {
+    const collections = await db.listCollections().toArray();
+    console.log('Collections in the database:', collections.map((col) => col.name));
+  } catch (err) {
+    console.error('Error fetching collections:', err.message);
+  }
+}
+
 // Настройка и запуск сервера Express
 async function startServer() {
   try {
     // Подключаемся к базе данных
     dbClient = await connectToDB();
     const db = dbClient.db(DB_NAME);
+
+    // Выводим список коллекций
+    await logCollections(db);
 
     // Создаем Express приложение
     const app = express();
@@ -69,7 +82,7 @@ async function startServer() {
     app.use(bodyParser.json());
     app.use(bodyParser.urlencoded({ extended: true }));
 
-    // Передаем объект базы данных в маршруты через middleware
+    // Middleware для передачи объекта базы данных
     app.use((req, res, next) => {
       req.db = db;
       next();
@@ -109,7 +122,7 @@ async function startServer() {
     });
   } catch (err) {
     console.error('Error starting the server:', err.message);
-    process.exit(1); // Завершаем процесс при критической ошибке
+    process.exit(1);
   }
 }
 
