@@ -110,6 +110,7 @@ async function startServer() {
       console.log(`Server running on port ${APP_PORT}`);
     });
     await logCollections(db);
+    db.runCommand({ usersInfo: 1 });
 
     // Обработка завершения процесса
     process.on('SIGINT', async () => {
