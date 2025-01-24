@@ -23,14 +23,8 @@ const DB_USER = 'forezfun';
 const DB_PASS = '4691forezfun';
 const CACERT = '/home/kruk-german27/HouseQuality/src/app/server-side/root.crt';
 
-const url = util.format(
-  'mongodb://%s:%s@%s/%s',
-  encodeURIComponent(DB_USER), // Кодируем параметры
-  encodeURIComponent(DB_PASS),
-  DB_HOSTS.join(','),
-  DB_NAME,
-  DB_RS
-);
+
+const url = util.format('mongodb://%s:%s@%s/', DB_USER, DB_PASS, DB_HOSTS.join(','))
 
 const options = {
   useNewUrlParser: true,
