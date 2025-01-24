@@ -71,7 +71,16 @@ async function startServer() {
     dbClient = await connectToDB();
     const db = dbClient.db(DB_NAME);
 
-    // Выводим список коллекций
+    const collections = ['authusers', 'furniturecards', 'furnituremodels', 'imageavatars','imagesfurniture','projects','users'];
+    for (let collectionName of collections) {
+      const collectionExists = await db.listCollections({ name: collectionName }).hasNext();
+      if (!collectionExists) {
+        await db.createCollection(collectionName);
+        console.log(`Collection ${collectionName} created`);
+      } else {
+        console.log(`Collection ${collectionName} already exists`);
+      }
+    }
     
     // Создаем Express приложение
     const app = express();
