@@ -72,11 +72,10 @@ async function startServer() {
     const db = dbClient.db(DB_NAME);
 
     // Выводим список коллекций
-    await logCollections(db);
-
+    
     // Создаем Express приложение
     const app = express();
-
+    
     // Мидлвары
     app.use(cors());
     app.use(bodyParser.json());
@@ -87,7 +86,7 @@ async function startServer() {
       req.db = db;
       next();
     });
-
+    
     // Маршруты
     app.use('/projects', PROJECT_ROUTES);
     app.use('/user', USERS_ROUTES);
@@ -110,6 +109,7 @@ async function startServer() {
     app.listen(APP_PORT, () => {
       console.log(`Server running on port ${APP_PORT}`);
     });
+    await logCollections(db);
 
     // Обработка завершения процесса
     process.on('SIGINT', async () => {
