@@ -1,8 +1,10 @@
 const util = require('util');
-const MongoClient = require('mongodb').MongoClient;
-const EXPRESS = require('express');
-const BODYPARSER = require('body-parser');
-const CORS = require('cors');
+const { MongoClient } = require('mongodb');
+const express = require('express');
+const bodyParser = require('body-parser');
+const cors = require('cors');
+
+// Импорт маршрутов
 const USERS_ROUTES = require('./routes/userRoutes');
 const AUTH_ROUTES = require('./routes/authRoutes');
 const PROJECT_ROUTES = require('./routes/projectRoutes');
@@ -23,7 +25,7 @@ const CACERT = '/home/kruk-german27/HouseQuality/src/app/server-side/root.crt';
 
 const url = util.format(
   'mongodb://%s:%s@%s/%s?replicaSet=%s',
-  encodeURIComponent(DB_USER), // Для корректного использования в URL
+  encodeURIComponent(DB_USER), // Кодируем параметры
   encodeURIComponent(DB_PASS),
   DB_HOSTS.join(','),
   DB_NAME,
@@ -37,6 +39,8 @@ const options = {
   tlsCAFile: CACERT,
   replicaSet: DB_RS,
 };
+
+let dbClient = null;
 
 // Функция для подключения к базе данных
 async function connectToDB() {
@@ -54,44 +58,54 @@ async function connectToDB() {
 async function startServer() {
   try {
     // Подключаемся к базе данных
-    const dbClient = await connectToDB();
+    dbClient = await connectToDB();
     const db = dbClient.db(DB_NAME);
 
     // Создаем Express приложение
-    const APP = EXPRESS();
+    const app = express();
 
     // Мидлвары
-    APP.use(CORS());
-    APP.use(BODYPARSER.json());
-    APP.use(BODYPARSER.urlencoded({ extended: true }));
+    app.use(cors());
+    app.use(bodyParser.json());
+    app.use(bodyParser.urlencoded({ extended: true }));
 
-    // Передаем объект базы данных в маршруты
-    APP.use((req, res, next) => {
+    // Передаем объект базы данных в маршруты через middleware
+    app.use((req, res, next) => {
       req.db = db;
       next();
     });
 
     // Маршруты
-    APP.use('/projects', PROJECT_ROUTES);
-    APP.use('/user', USERS_ROUTES);
-    APP.use('/auth', AUTH_ROUTES);
-    APP.use('/avatar', IMAGE_AVATAR_ROUTES);
-    APP.use('/furniture/images', IMAGE_FURNITURE_ROUTES);
-    APP.use('/furniture/card', FURNITURE_CARD_ROUTES);
-    APP.use('/furniture/model', FURNITURE_MODEL_ROUTES);
-    APP.use('/shop', SHOP_ROUTES);
-    APP.use('/finder', FINDER_ROUTES);
+    app.use('/projects', PROJECT_ROUTES);
+    app.use('/user', USERS_ROUTES);
+    app.use('/auth', AUTH_ROUTES);
+    app.use('/avatar', IMAGE_AVATAR_ROUTES);
+    app.use('/furniture/images', IMAGE_FURNITURE_ROUTES);
+    app.use('/furniture/card', FURNITURE_CARD_ROUTES);
+    app.use('/furniture/model', FURNITURE_MODEL_ROUTES);
+    app.use('/shop', SHOP_ROUTES);
+    app.use('/finder', FINDER_ROUTES);
 
     // Обработка ошибок
-    APP.use((err, req, res, next) => {
+    app.use((err, req, res, next) => {
       console.error(err.stack);
       res.status(500).json({ message: 'Internal Server Error' });
     });
 
     // Запуск сервера
     const APP_PORT = 5000;
-    APP.listen(APP_PORT, () => {
+    app.listen(APP_PORT, () => {
       console.log(`Server running on port ${APP_PORT}`);
+    });
+
+    // Обработка завершения процесса
+    process.on('SIGINT', async () => {
+      console.log('Shutting down server...');
+      if (dbClient) {
+        await dbClient.close();
+        console.log('MongoDB connection closed');
+      }
+      process.exit(0);
     });
   } catch (err) {
     console.error('Error starting the server:', err.message);
