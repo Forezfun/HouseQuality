@@ -5,7 +5,7 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 
 // Импорт маршрутов
-const USERS_ROUTES = require('./routes/userRoutes');
+const USERS_ROUTES = require('./routes/userRoutes'); 
 const AUTH_ROUTES = require('./routes/authRoutes');
 const PROJECT_ROUTES = require('./routes/projectRoutes');
 const IMAGE_AVATAR_ROUTES = require('./routes/imageAvatarRoutes');
@@ -46,7 +46,7 @@ let dbClient = null;
 async function connectToDB() {
   try {
     const client = await MongoClient.connect(url, options);
-    console.log('Connected to MongoDB');
+    console.log('Connected to MongoDB: ',client);
     return client;
   } catch (err) {
     console.error('Failed to connect to MongoDB:', err.message);
