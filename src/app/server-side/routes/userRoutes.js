@@ -30,6 +30,7 @@ ROUTER.delete('/jwt/delete', async (request, result) => {
 ROUTER.post('/user/create', async (request, result) => {
   try {
     console.log(request.body)
+    console.log(AUTH_USER)
     let USER_ITEM = await AUTH_USER.findOne({
       $or: [
         { 'emailData.email': request.body.email },
