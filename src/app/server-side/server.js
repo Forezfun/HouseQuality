@@ -14,8 +14,8 @@ const CACERT = '/home/kruk-german27/HouseQuality/src/app/server-side/root.crt';
 
 const url = util.format(
   'mongodb://%s:%s@%s/',
-  encodeURIComponent(DB_USER),
-  encodeURIComponent(DB_PASS),
+  DB_USER,
+  DB_PASS,
   DB_HOSTS.join(',')
 );
 
