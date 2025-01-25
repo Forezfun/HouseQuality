@@ -20,6 +20,8 @@ const url = util.format(
 );
 
 const options = {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
   tls: true,
   tlsCAFile: CACERT,
   replicaSet: DB_RS,
