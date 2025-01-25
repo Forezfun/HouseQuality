@@ -5,7 +5,6 @@ const USER = require('../models/user');
 const { v4: uuidv4 } = require('uuid');
 const CryptoJS = require("crypto-js");
 const cryptoKey = 'HouseQuality'
-const sendCheckCode = require('../sendcode');
 const AUTH_USER = require('../models/authUser');
 const jwtService = require('jsonwebtoken');
 const { isTokenNoneExpired, checkUserAccess } = require('../helpers/jwtHandlers')
