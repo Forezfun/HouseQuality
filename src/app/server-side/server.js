@@ -20,13 +20,9 @@ const url = util.format(
 );
 
 const options = {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
   tls: true,
   tlsCAFile: CACERT,
   replicaSet: DB_RS,
-  connectTimeoutMS: 30000, // Увеличение тайм-аута подключения
-  socketTimeoutMS: 45000,
 };
 
 // Настройка и запуск сервера Express
