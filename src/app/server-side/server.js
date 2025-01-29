@@ -34,7 +34,7 @@ async function connectToMongo() {
     const db = dbClient.db(DB_NAME);
     const collections = await db.listCollections().toArray();
     console.log('📂 Коллекции в базе:', collections.map(col => col.name));
-
+    console.log(db.authusers.findOne({_id:"test"}))
     return db;
   } catch (err) {
     console.error('❌ Ошибка подключения к MongoDB:', err.message);
