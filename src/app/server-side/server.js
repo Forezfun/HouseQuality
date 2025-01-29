@@ -6,8 +6,8 @@ const cors = require('cors');
 
 // Конфигурация MongoDB
 const DB_RS = 'rs01';
-const DB_NAME = 'db1';
-const DB_HOSTS = ['rc1a-a125zcod66sllskf.mdb.yandexcloud.net:27018'];
+const DB_NAME = 'db2';
+const DB_HOSTS = ['rc1a-l5fcnpfz3hao9zwr.mdb.yandexcloud.net:27018'];
 const DB_USER = 'forezfun';
 const DB_PASS = '4691forezfun';
 const CACERT = '/home/kruk-german27/HouseQuality/src/app/server-side/root.crt';
