@@ -93,7 +93,6 @@ ROUTER.get('/image/simple', async (req, res) => {
         if (!filePath) return;
         res.sendFile(filePath);
     } catch (err) {
-        console.log(err);
         res.status(500).json({ message: 'Error fetching images: ' + err.message });
     }
 });

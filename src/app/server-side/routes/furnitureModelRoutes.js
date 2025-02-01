@@ -7,10 +7,10 @@ const { checkUserAccess } = require('../helpers/jwtHandlers');
 const dbModule = require('../server');
 const { ObjectId } = require('mongodb');
 
-// Middleware для проверки JWT и добавления FURNITURE_ID в req.body
+
 ROUTER.use(async (req, res, next) => {
     try {
-        console.log('model')
+        
         const JWT_TOKEN = req.query.jwtToken || req.body.jwtToken;
         const USER_ID = await checkUserAccess(JWT_TOKEN);
         if (!USER_ID) return res.status(404).json({ message: 'User not found' })
@@ -23,20 +23,20 @@ ROUTER.use(async (req, res, next) => {
         }
 
         req.query.userId = USER_ID;
-        console.log('model continue')
+        
         next();
     } catch (error) {
         res.status(500).json({ message: 'Error validating user access: ' + error.message });
     }
 });
 
-// Логика для удаления старого файла
+
 function removeOldModelIfExists(furnitureId, uploadDir) {
-    const extensions = ['.obj', '.fbx', '.stl']; // Расширения файлов для 3D моделей
+    const extensions = ['.obj', '.fbx', '.stl']; 
     for (const ext of extensions) {
         const filePath = path.join(uploadDir, `${furnitureId}${ext}`);
         if (fs.existsSync(filePath)) {
-            fs.unlinkSync(filePath); // Удаляем файл
+            fs.unlinkSync(filePath); 
         }
     }
 }
@@ -47,16 +47,16 @@ const storage = multer.diskStorage({
         if (!fs.existsSync(uploadDir)) {
             fs.mkdirSync(uploadDir);
         }
-        // Удаляем старую модель, если она существует
+        
         removeOldModelIfExists(req.query.furnitureId, uploadDir);
         cb(null, uploadDir);
     },
     filename: (req, file, cb) => {
-        let extension = path.extname(file.originalname).toLowerCase(); // Получаем расширение
+        let extension = path.extname(file.originalname).toLowerCase(); 
         if (!extension || !['.obj', '.fbx', '.stl'].includes(extension)) return;
 
         const fileName = req.query.furnitureId + extension;
-        saveModel(fileName, req.query.furnitureId); // Сохраняем информацию о модели в БД
+        saveModel(fileName, req.query.furnitureId); 
         cb(null, fileName);
     }
 });
@@ -66,11 +66,11 @@ async function saveModel(fileName, furnitureId) {
     let FURNITURE_MODEL_ITEM = await db.collection('furnituremodels').findOne({ furnitureId: furnitureId });
     
     if (FURNITURE_MODEL_ITEM) {
-        // Обновляем запись с новым именем файла
+        
         FURNITURE_MODEL_ITEM.filename = fileName;
         await db.collection('furnituremodels').updateOne({ furnitureId: furnitureId }, { $set: FURNITURE_MODEL_ITEM });
     } else {
-        // Создаём новую запись
+        
         const FURNITURE_MODEL_NEW_ITEM = {
             filename: fileName,
             furnitureId: furnitureId
@@ -81,9 +81,9 @@ async function saveModel(fileName, furnitureId) {
 
 const upload = multer({ storage: storage });
 
-// Маршрут для загрузки 3D модели
+
 ROUTER.post('/upload', upload.single('model'), async (req, res) => {
-    console.log(req.query.fileName)
+    
     try {
         const db = await dbModule.getDb();
 
@@ -108,7 +108,7 @@ ROUTER.post('/upload', upload.single('model'), async (req, res) => {
     }
 });
 
-// Маршрут для обновления документа и файла модели
+
 ROUTER.put('/update/:id', upload.single('model'), async (req, res) => {
     try {
         const db = await dbModule.getDb();
@@ -119,16 +119,16 @@ ROUTER.put('/update/:id', upload.single('model'), async (req, res) => {
             return res.status(404).json({ message: 'Model not found' });
         }
 
-        // Обновляем файл
+        
         if (req.file) {
             FURNITURE_MODEL_ITEM.filename = req.file.filename;
             FURNITURE_MODEL_ITEM.originalName = req.query.fileName;
         }
 
-        // Убираем _id перед обновлением
+        
         const { _id, ...updateData } = FURNITURE_MODEL_ITEM;
-        console.log(new ObjectId(req.query.furnitureId))
-        console.log(FURNITURE_MODEL_ITEM)
+        
+        
         await db.collection('furnituremodels').updateOne(
             { _id: new ObjectId(req.query.furnitureId) },
             { $set: FURNITURE_MODEL_ITEM }
@@ -141,7 +141,7 @@ ROUTER.put('/update/:id', upload.single('model'), async (req, res) => {
 });
 
 
-// Маршрут для удаления документа и файла
+
 ROUTER.delete('/delete/', async (req, res) => {
     try {
         const db = await dbModule.getDb();
@@ -161,7 +161,7 @@ ROUTER.delete('/delete/', async (req, res) => {
             return res.status(404).json({ message: 'Model not found' });
         }
 
-        // Удаляем файл
+        
         const directory = path.join(__dirname, '..','uploads', 'models');
         const filePath = path.join(directory, FURNITURE_MODEL_ITEM.filename);
 
@@ -169,7 +169,7 @@ ROUTER.delete('/delete/', async (req, res) => {
             fs.unlinkSync(filePath);
         }
 
-        // Удаляем запись из БД
+        
         await db.collection('furnituremodels').deleteOne({ furnitureId: FURNITURE_CARD_ID });
         res.status(200).json({ message: 'Model deleted successfully!' });
     } catch (err) {
@@ -177,7 +177,7 @@ ROUTER.delete('/delete/', async (req, res) => {
     }
 });
 
-// Маршрут для получения файла модели по furnitureId
+
 ROUTER.get('/', async (req, res) => {
     try {
         const db = await dbModule.getDb();
@@ -194,9 +194,9 @@ ROUTER.get('/', async (req, res) => {
             return res.status(404).json({ message: 'File not found' });
         }
 
-        // Устанавливаем заголовки Content-Type и Content-Disposition
+        
         const extension = path.extname(FURNITURE_MODEL_ITEM.filename).toLowerCase();
-        let mimeType = 'application/octet-stream'; // Default MIME type
+        let mimeType = 'application/octet-stream'; 
 
         switch (extension) {
             case '.obj':
@@ -209,13 +209,13 @@ ROUTER.get('/', async (req, res) => {
                 mimeType = 'model/stl';
                 break;
             default:
-                mimeType = 'application/octet-stream'; // Default MIME type
+                mimeType = 'application/octet-stream'; 
         }
 
         res.setHeader('Content-Type', mimeType);
         res.setHeader('Content-Disposition', `attachment; filename="${FURNITURE_MODEL_ITEM.filename}"`);
 
-        // Отправляем файл
+        
         res.sendFile(filePath);
     } catch (error) {
         res.status(500).json({ message: error.message });

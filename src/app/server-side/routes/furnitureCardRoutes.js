@@ -5,7 +5,7 @@ const dbModule = require('../server');
 const { ObjectId } = require('mongodb');
 ROUTER.post('/', async (request, result) => {
     try {
-        console.log(request.query);
+        
         const JWT_TOKEN = request.query.jwtToken;
         const USER_ID = await checkUserAccess(JWT_TOKEN);
         if (!USER_ID) return result.status(404).json({ message: 'User not found' });
@@ -25,7 +25,7 @@ ROUTER.post('/', async (request, result) => {
         };
 
         request.body.colors.forEach(color => { FURNITURE_CARD_ITEM.colors.push({ color: color, idImages: '' }) });
-        console.log(FURNITURE_CARD_ITEM);
+        
         
         if (request.query.additionalData !== undefined) {
             const ADDITIONAL_DATA = JSON.parse(request.query.additionalData);
@@ -45,8 +45,8 @@ ROUTER.post('/', async (request, result) => {
 
 ROUTER.put('/', async (request, result) => {
     try {
-        console.log(request.body);
-        console.log(request.body.colors);
+        
+        
         const JWT_TOKEN = request.query.jwtToken;
         const USER_ID = await checkUserAccess(JWT_TOKEN);
         if (!USER_ID) return result.status(404).json({ message: 'User not found' });

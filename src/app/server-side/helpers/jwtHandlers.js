@@ -1,10 +1,10 @@
-const jwt = require('jsonwebtoken'); // Предполагаем, что используете библиотеку jsonwebtoken
-const cryptoKey = 'HouseQuality'; // Ваш секретный ключ
-const dbModule = require('../server'); // Импортируем dbModule для доступа к базе данных
+const jwt = require('jsonwebtoken'); 
+const cryptoKey = 'HouseQuality'; 
+const dbModule = require('../server'); 
 const { ObjectId } = require('mongodb');
 
 
-// Экспортируем функции
+
 module.exports.isTokenNoneExpired = function isTokenNoneExpired(jwtToken) {
     try {
         jwt.verify(jwtToken, cryptoKey);
@@ -26,7 +26,6 @@ module.exports.checkUserAccess = async function checkUserAccess(jwtToken) {
     } catch (err) {
         return false;
     }
-    console.log(DECODED_USER_TOKEN.userId)
     if (!DECODED_USER_TOKEN) return false;
 
     const db = await dbModule.getDb();
