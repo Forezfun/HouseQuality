@@ -1,7 +1,9 @@
-// utils.js (имя файла, где находятся функции)
 const jwt = require('jsonwebtoken'); // Предполагаем, что используете библиотеку jsonwebtoken
 const cryptoKey = 'HouseQuality'; // Ваш секретный ключ
-const USER = require('../models/user')
+const dbModule = require('../server'); // Импортируем dbModule для доступа к базе данных
+const { ObjectId } = require('mongodb');
+
+
 // Экспортируем функции
 module.exports.isTokenNoneExpired = function isTokenNoneExpired(jwtToken) {
     try {
@@ -18,14 +20,18 @@ module.exports.isTokenNoneExpired = function isTokenNoneExpired(jwtToken) {
 module.exports.checkUserAccess = async function checkUserAccess(jwtToken) {
     const JWT_TOKEN = jwtToken;
     let DECODED_USER_TOKEN;
+    
     try {
         DECODED_USER_TOKEN = jwt.verify(JWT_TOKEN, cryptoKey);
     } catch (err) {
         return false;
     }
-
+    console.log(DECODED_USER_TOKEN.userId)
     if (!DECODED_USER_TOKEN) return false;
-    const USER_ITEM = await USER.findById(DECODED_USER_TOKEN.userId);
+
+    const db = await dbModule.getDb();
+    const USER_ITEM = await db.collection('users').findOne({ _id: new ObjectId(DECODED_USER_TOKEN.userId) });
     if (!USER_ITEM) return false;
-    return DECODED_USER_TOKEN.userId;
+    
+    return USER_ITEM._id;
 }

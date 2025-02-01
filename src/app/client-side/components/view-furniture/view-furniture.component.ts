@@ -44,6 +44,7 @@ export class ViewFurnitureComponent implements OnChanges {
               images:IMAGES_PATHES.map(imageUrl => this.imagesServerControl.GETsimpleImage(imageUrl))
             }
           })
+
         },
         error: (error) => {
           console.log(error)

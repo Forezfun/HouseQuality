@@ -1,7 +1,7 @@
 const EXPRESS = require('express');
 const ROUTER = EXPRESS.Router();
 const FURNITURE_CARD = require('../models/furnitureCard');
-const FURNITURE_IMAGE = require('../models/imagesFurniture');
+const dbModule = require('../server');
 
 function calculateZFunction(string, pattern) {
     const combined = `${pattern}#${string}`; 
@@ -74,7 +74,9 @@ ROUTER.get('/', async (request, result) => {
             return result.status(400).json({ message: 'Search query cannot be empty' });
         }
 
-        const publications = await FURNITURE_CARD.find();
+        const db = await dbModule.getDb();
+
+        const publications = await db.collection('furniturecards').find().toArray();
         let filteredPublications = searchPublications(publications, query);
 
         if (filteredPublications.length < 10) {

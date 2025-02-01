@@ -1,10 +1,9 @@
 const EXPRESS = require('express');
 const ROUTER = EXPRESS.Router();
-const USER = require('../models/user');
 const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
-const IMAGE_AVATAR = require('../models/imageAvatar');
+const dbModule = require('../server'); // Импортируем модуль для работы с базой данных
 const { isTokenNoneExpired, checkUserAccess } = require('../helpers/jwtHandlers');
 
 // Middleware для проверки JWT и добавления USER_ID в req.body
@@ -55,18 +54,24 @@ const storage = multer.diskStorage({
 });
 
 async function saveAvatar(fileName, userId) {
-    let IMAGE_AVATAR_FIND_ITEM = await IMAGE_AVATAR.findOne({ userId: userId });
+    const db = await dbModule.getDb(); // Получаем доступ к базе данных
+    const IMAGE_AVATAR_COLLECTION = db.collection('imageavatars');
+    
+    let IMAGE_AVATAR_FIND_ITEM = await IMAGE_AVATAR_COLLECTION.findOne({ userId: userId });
     if (IMAGE_AVATAR_FIND_ITEM) {
         // Обновляем запись с новым именем файла
         IMAGE_AVATAR_FIND_ITEM.filename = fileName;
-        await IMAGE_AVATAR_FIND_ITEM.save();
+        await IMAGE_AVATAR_COLLECTION.updateOne(
+            { _id: IMAGE_AVATAR_FIND_ITEM._id },
+            { $set: { filename: fileName } }
+        );
     } else {
         // Создаём новую запись
-        const IMAGE_AVATAR_ITEM = new IMAGE_AVATAR({
+        const IMAGE_AVATAR_ITEM = {
             filename: fileName,
             userId: userId
-        });
-        await IMAGE_AVATAR_ITEM.save();
+        };
+        await IMAGE_AVATAR_COLLECTION.insertOne(IMAGE_AVATAR_ITEM);
     }
 }
 
@@ -74,15 +79,18 @@ const upload = multer({ storage: storage });
 
 ROUTER.post('/upload', upload.single('image'), async (req, res) => {
     try {
-        let IMAGE_AVATAR_ITEM = await IMAGE_AVATAR.findOne({ userId: req.query.userId })
+        const db = await dbModule.getDb();
+        const IMAGE_AVATAR_COLLECTION = db.collection('imageavatars');
+        
+        let IMAGE_AVATAR_ITEM = await IMAGE_AVATAR_COLLECTION.findOne({ userId: req.query.userId });
         if (!IMAGE_AVATAR_ITEM) {
-            IMAGE_AVATAR_ITEM = new IMAGE_AVATAR({
+            IMAGE_AVATAR_ITEM = {
                 filename: req.file.filename,
                 userId: req.query.userId
-            });
+            };
+            await IMAGE_AVATAR_COLLECTION.insertOne(IMAGE_AVATAR_ITEM);
         }
-        const savedImage = await IMAGE_AVATAR_ITEM.save();  // Используем await для сохранения без колбэка
-        res.status(200).json({ message: 'Image uploaded successfully!', image: savedImage });
+        res.status(200).json({ message: 'Image uploaded successfully!', image: IMAGE_AVATAR_ITEM });
     } catch (err) {
         res.status(400).json({ message: err.message });
     }
@@ -91,23 +99,25 @@ ROUTER.post('/upload', upload.single('image'), async (req, res) => {
 // Маршрут для получения аватара по userId
 ROUTER.get('', async (req, res) => {
     try {
-        let filePath
+        const db = await dbModule.getDb();
+        const IMAGE_AVATAR_COLLECTION = db.collection('imageavatars');
+        let filePath;
         const directory = path.join(__dirname, '..', 'uploads','avatars');
-        const IMAGE_AVATAR_ITEM = await IMAGE_AVATAR.findOne({ userId: req.query.userId });
+        const IMAGE_AVATAR_ITEM = await IMAGE_AVATAR_COLLECTION.findOne({ userId: req.query.userId });
         if (!IMAGE_AVATAR_ITEM) {
-            filePath=path.join(directory,'default.png')
+            filePath = path.join(directory, 'default.png');
         }
 
-        if(IMAGE_AVATAR_ITEM){
+        if (IMAGE_AVATAR_ITEM) {
             filePath = path.join(directory, IMAGE_AVATAR_ITEM.filename);
 
             console.log(`Looking for file: ${filePath}`);
 
             if (!fs.existsSync(filePath)) {
-            filePath=path.join(directory,'default.png')
+                filePath = path.join(directory, 'default.png');
             }
         }
-        console.log(filePath)
+        console.log(filePath);
         res.sendFile(filePath);
     } catch (error) {
         res.status(500).json({ message: error.message });
