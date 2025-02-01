@@ -9,7 +9,6 @@ ROUTER.delete('/', async (request, result) => {
     const db = await dbModule.getDb();
     const JWT_TOKEN = request.query.jwtToken;
     const USER_ID = await checkUserAccess(JWT_TOKEN);
-    console.log()
     if (!USER_ID) return result.status(404).json({ message: 'User not found' });
     const project = await db.collection('projects').findOne({ _id: new ObjectId(request.query.projectId) });
 

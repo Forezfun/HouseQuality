@@ -3,7 +3,7 @@ const ROUTER = EXPRESS.Router();
 const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
-const dbModule = require('../server'); // Импортируем dbModule для работы с базой данных
+const dbModule = require('../server'); 
 const {checkUserAccess} = require('../helpers/jwtHandlers')
 const { ObjectId } = require('mongodb');
 
@@ -24,7 +24,7 @@ ROUTER.use(async (req, res, next) => {
     }
 });
 
-// Функция для создания папок проекта и цвета, если их нет
+
 function ensureProjectAndColorDirectories(furnitureCardId, color) {
     if (!furnitureCardId || !color) {
         throw new Error('furnitureCardId or color is missing');
@@ -44,7 +44,7 @@ function ensureProjectAndColorDirectories(furnitureCardId, color) {
     return colorDir;
 }
 
-// Конфигурация multer для загрузки файлов
+
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
         const { furnitureCardId, color } = req.query;
@@ -63,7 +63,7 @@ const storage = multer.diskStorage({
     }
 });
 
-// Настройка для приема файлов
+
 const upload = multer({ storage: storage }).array('images', 10);
 
 ROUTER.get('/main', async (req, res) => {
@@ -99,7 +99,7 @@ ROUTER.get('/main', async (req, res) => {
         }
         res.sendFile(filePath);
     } catch (err) {
-        console.log(err)
+        
         res.status(500).json({ message: 'Error fetching images: ' + err.message });
     }
 });
@@ -110,7 +110,7 @@ ROUTER.get('/simple', async (req, res) => {
         if (filePath === undefined) return;
         res.sendFile(filePath);
     } catch (err) {
-        console.log(err)
+        
         res.status(500).json({ message: 'Error fetching images: ' + err.message });
     }
 });
@@ -147,12 +147,12 @@ ROUTER.get('/all', async (req, res) => {
 
         res.status(200).json({ imagesURLS: FURNITURE_IMAGES_PATH_ARRAY, idMainImage: IMAGES_FURNITURE_ITEM.idMainImage });
     } catch (err) {
-        console.log(err)
+        
         res.status(500).json({ message: 'Error fetching main image: ' + err.message });
     }
 });
 
-// Маршрут для загрузки изображений
+
 ROUTER.post('/upload/images', (req, res) => {
     upload(req, res, async (err) => {
         if (err) {
@@ -197,7 +197,7 @@ ROUTER.post('/upload/images', (req, res) => {
     });
 });
 
-// Удаление цвета
+
 ROUTER.delete('/delete/color', async (req, res) => {
     try {
         const { furnitureCardId, color } = req.body;
@@ -217,7 +217,7 @@ ROUTER.delete('/delete/color', async (req, res) => {
     }
 });
 
-// Удаление проекта
+
 ROUTER.delete('/delete/project', async (req, res) => {
     try {
         const { furnitureCardId, jwtToken } = req.query;
