@@ -44,9 +44,10 @@ export class CreateFurniturePageComponent implements OnInit {
       this.furnitureCardService.GETfurnitureCard(this.idPage, jwt)
         .subscribe({
           next: async (response) => {
+            console.log(response)
             const RECEIVED_DATA: furnitureServerData = response.furnitureCard
             if (response.authorMatched === false) {
-              this.router.navigateByUrl('/create/new')
+              // this.router.navigateByUrl('/create/new')
               return
             }
             this.furnitureData.name = RECEIVED_DATA.name,
@@ -86,7 +87,6 @@ export class CreateFurniturePageComponent implements OnInit {
           error: (error) => {
             console.log(error)
             this.errorHandler.setError('Error while loading furniture', 5000)
-            this.router.navigateByUrl('/create/new')
           }
         })
     });
@@ -177,7 +177,7 @@ export class CreateFurniturePageComponent implements OnInit {
               .subscribe({
                 next: (response) => {
                   console.log(response)
-                  this.router.navigateByUrl('/account')
+                  // this.router.navigateByUrl('/account')
                 },
                 error: (error) => {
                   console.log(error)
@@ -254,7 +254,7 @@ export class CreateFurniturePageComponent implements OnInit {
                       .subscribe({
                         next: (response) => {
                           console.log(response)
-                          window.location.href = window.location.href
+                          // window.location.href = window.location.href
                         },
                         error: (error) => {
                           console.log(error)

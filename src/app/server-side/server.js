@@ -3,15 +3,15 @@ const { MongoClient } = require('mongodb');
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
-
+let db
 // Конфигурация MongoDB
 const DB_RS = 'rs01';
 const DB_NAME = 'db1';
 const DB_HOSTS = ['rc1a-a125zcod66sllskf.mdb.yandexcloud.net:27018'];
 const DB_USER = 'forezfun';
 const DB_PASS = '4691forezfun';
-const CACERT = '/home/kruk-german27/HouseQuality/src/app/server-side/root.crt';
-
+const CACERT = 'root.crt';
+// /home/kruk-german27/HouseQuality/src/app/server-side/
 const MONGO_URI = util.format(
   'mongodb://%s:%s@%s/%s?replicaSet=%s&tls=true&tlsCAFile=%s',
   DB_USER,
@@ -31,10 +31,10 @@ async function connectToMongo() {
     await dbClient.connect();
     console.log('✅ Подключено к MongoDB');
 
-    const db = dbClient.db(DB_NAME);
+    db = dbClient.db(DB_NAME);
+    console.log(db)
     const collections = await db.listCollections().toArray();
     console.log('📂 Коллекции в базе:', collections.map(col => col.name));
-    console.log(db.authusers.findOne({_id:"test"}))
     return db;
   } catch (err) {
     console.error('❌ Ошибка подключения к MongoDB:', err.message);
@@ -59,15 +59,15 @@ async function startServer() {
   });
 
   // Подключение маршрутов
-  app.use('/projects', require('./routes/projectRoutes')(db));
-  app.use('/user', require('./routes/userRoutes')(db));
-  app.use('/auth', require('./routes/authRoutes')(db));
-  app.use('/avatar', require('./routes/imageAvatarRoutes')(db));
-  app.use('/furniture/images', require('./routes/imagesFurnitureRoutes')(db));
-  app.use('/furniture/card', require('./routes/furnitureCardRoutes')(db));
-  app.use('/furniture/model', require('./routes/furnitureModelRoutes')(db));
-  app.use('/shop', require('./routes/shopRoutes')(db));
-  app.use('/finder', require('./routes/finderRoutes')(db));
+  app.use('/projects', require('./routes/projectRoutes'));
+  app.use('/user', require('./routes/userRoutes'));
+  app.use('/auth', require('./routes/authRoutes'));
+  app.use('/avatar', require('./routes/imageAvatarRoutes'));
+  app.use('/furniture/images', require('./routes/imagesFurnitureRoutes'));
+  app.use('/furniture/card', require('./routes/furnitureCardRoutes'));
+  app.use('/furniture/model', require('./routes/furnitureModelRoutes'));
+  app.use('/shop', require('./routes/shopRoutes'));
+  app.use('/finder', require('./routes/finderRoutes'));
 
   // Обработка ошибок
   app.use((err, req, res, next) => {
@@ -91,6 +91,13 @@ async function startServer() {
     process.exit(0);
   });
 }
-
+async function getDb(){
+  if (!db) {
+    await startServer()
+    return db
+  }
+  return db
+}
 // Запуск приложения
 startServer();
+module.exports = { getDb }

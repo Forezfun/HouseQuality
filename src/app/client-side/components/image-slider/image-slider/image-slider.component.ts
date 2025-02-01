@@ -22,7 +22,7 @@ export class ImageSliderComponent implements OnChanges {
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['imagesArray'] && this.imagesArray) {
-      this.changeVisibleId(this.imagesArray.idMainImage);
+      this.changeVisibleId(+this.imagesArray.idMainImage);
     }
   }
 
