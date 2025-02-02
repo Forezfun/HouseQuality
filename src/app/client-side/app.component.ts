@@ -23,5 +23,4 @@ import { FinderService } from './services/finder.service';
 })
 export class AppComponent {
   title = 'HouseQuality';
- 
 }

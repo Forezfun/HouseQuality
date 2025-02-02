@@ -27,7 +27,6 @@ export class ImageSliderComponent implements OnChanges {
   }
 
   changeImage(event: Event) {
-    console.log(this.visibleId)
     const newIdMainImage = +(event.target! as HTMLElement).getAttribute('data-id')!;
     this.changeVisibleId(newIdMainImage);
     this.idMainImageEmitter.emit(this.visibleId[0])

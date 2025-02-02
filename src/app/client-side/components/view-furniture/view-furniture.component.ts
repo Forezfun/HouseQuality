@@ -1,5 +1,5 @@
 import { Component, ElementRef, Input, OnChanges, SimpleChanges} from '@angular/core';
-import { ImageSliderComponent } from '../image-slider/image-slider/image-slider.component';
+import { ImageSliderComponent } from '../image-slider/image-slider.component';
 import { NgFor, NgIf } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ClipboardService } from 'ngx-clipboard';
@@ -32,7 +32,6 @@ export class ViewFurnitureComponent implements OnChanges {
     this.furnitureCardService.GETfurnitureCard(this.furnitureId, '')
       .subscribe({
         next: (response) => {
-          console.log(response)
           this.furnitureData = (response as any).furnitureCard;
           (response as any).furnitureCard.colors.forEach(async (colorData: any, index: number) => {
             if (!this.furnitureData) return

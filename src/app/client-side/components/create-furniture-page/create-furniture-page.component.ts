@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { NavigationPanelComponent } from '../navigation-panel/navigation-panel.component';
 import { CreateFurnitureComponent, furnitureServerData, additionalData } from '../create-furnitre/create-furniture.component';
 import { ActivatedRoute, Router } from '@angular/router';
-import { imageSliderData } from '../image-slider/image-slider/image-slider.component';
+import { imageSliderData } from '../image-slider/image-slider.component';
 import { UserCookieService } from '../../services/user-cookie.service';
 import { FurnitureCardControlService } from '../../services/furniture-card-control.service';
 import { ServerImageControlService } from '../../services/server-image-control.service';
@@ -44,10 +44,9 @@ export class CreateFurniturePageComponent implements OnInit {
       this.furnitureCardService.GETfurnitureCard(this.idPage, jwt)
         .subscribe({
           next: async (response) => {
-            console.log(response)
             const RECEIVED_DATA: furnitureServerData = response.furnitureCard
             if (response.authorMatched === false) {
-              // this.router.navigateByUrl('/create/new')
+              this.router.navigateByUrl('/create/new')
               return
             }
             this.furnitureData.name = RECEIVED_DATA.name,
@@ -176,8 +175,7 @@ export class CreateFurniturePageComponent implements OnInit {
             this.serverImageControl.POSTloadProjectImages(imagesBlobArray, jwt, FURNITURE_ID, color, imagesData.idMainImage)
               .subscribe({
                 next: (response) => {
-                  console.log(response)
-                  // this.router.navigateByUrl('/account')
+                  this.router.navigateByUrl('/account')
                 },
                 error: (error) => {
                   console.log(error)
@@ -187,11 +185,9 @@ export class CreateFurniturePageComponent implements OnInit {
           })
 
           const FURNITURE_MODEL_BLOB = this.createFurnitureComponent.furnitureModelInput.files![0]
-          console.log(FURNITURE_MODEL_BLOB)
           this.furnitureModelService.POSTloadFurnitureModel(FURNITURE_MODEL_BLOB, jwt, FURNITURE_ID)
             .subscribe({
               next: (response) => {
-                console.log(response)
               },
               error: (error) => {
                 console.log(error)
@@ -238,11 +234,9 @@ export class CreateFurniturePageComponent implements OnInit {
     )()
       .subscribe({
         next: (response) => {
-          console.log(response)
           this.serverImageControl.DELETEproject(jwt, this.idPage)
             .subscribe({
               next: (response) => {
-                console.log(response)
                 furnitureData.colors.forEach(async colorData => {
                   const { color, imagesData } = colorData
                   let imagesBlobArray: Blob[] = imagesData.images
@@ -253,8 +247,7 @@ export class CreateFurniturePageComponent implements OnInit {
                     this.serverImageControl.POSTloadProjectImages(imagesBlobArray, jwt, this.idPage, color, imagesData.idMainImage)
                       .subscribe({
                         next: (response) => {
-                          console.log(response)
-                          // window.location.href = window.location.href
+                          window.location.href = window.location.href
                         },
                         error: (error) => {
                           console.log(error)
@@ -264,11 +257,9 @@ export class CreateFurniturePageComponent implements OnInit {
                   }
 
                   const FURNITURE_MODEL_BLOB = this.createFurnitureComponent.furnitureModelInput.files![0]
-                  console.log(FURNITURE_MODEL_BLOB)
                   this.furnitureModelService.PUTupdateFurnitureModel(FURNITURE_MODEL_BLOB, jwt, this.idPage)
                     .subscribe({
                       next: (response) => {
-                        console.log(response)
                       },
                       error: (error) => {
                         console.log(error)
@@ -313,11 +304,9 @@ export class CreateFurniturePageComponent implements OnInit {
     this.serverImageControl.DELETEproject(jwt, this.idPage)
       .subscribe({
         next: (response) => {
-          console.log(response)
           this.furnitureCardService.DELETEfurnitureCard(jwt, this.idPage)
             .subscribe({
               next: (response) => {
-                console.log(response)
                 this.router.navigateByUrl('/account')
               },
               error: (error) => {

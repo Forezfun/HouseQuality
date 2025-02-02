@@ -64,10 +64,7 @@ export class PlanHousePageComponent implements AfterViewInit, OnInit, AfterViewC
     this.projectService.DELETEdeleteProject(jwt, CURRENT_PROJECT_ID)
       .subscribe({
         next: (response) => {
-          console.log(response)
-          console.log(this.userData.projects)
           this.userData.projects.splice(indexProject, 1);
-          console.log(this.userData.projects)
         },
         error: (error) => {
           console.log(error)
@@ -87,10 +84,7 @@ export class PlanHousePageComponent implements AfterViewInit, OnInit, AfterViewC
             if (typeof (planId) === 'number' && this.userData.projects.length >= planId && planId >= 0) {
               this.currentProjectId = +planId
             }
-            console.log(this.planHouseComponent.formElement)
-
           })
-          console.log(this.userData)
         },
         error: (error) => {
           console.log(error)
@@ -99,7 +93,6 @@ export class PlanHousePageComponent implements AfterViewInit, OnInit, AfterViewC
       })
   }
   updatePlanData(planHouse: roomData[]) {
-    console.log(planHouse)
     this.currentPlanHouse = planHouse
     this.userData.projects[this.currentProjectId!].rooms = planHouse
   }
@@ -112,16 +105,13 @@ export class PlanHousePageComponent implements AfterViewInit, OnInit, AfterViewC
     this.renderer.removeClass(this.addModule, 'disabled')
   }
   saveProject() {
-    console.log(this.currentProjectId)
     if (this.currentProjectId === undefined) return
     const CURRENT_PROJECT_ID = (this.userData.projects[this.currentProjectId] as serverProjectInformation)._id
 
     const ROOM_DATA = this.currentPlanHouse
-    console.log(ROOM_DATA)
     if (ROOM_DATA === undefined) {
       return
     }
-    console.log(ROOM_DATA)
     const jwt = this.userCookieService.getJwt()
     const PROJECT_DATA = {
       rooms: ROOM_DATA,
@@ -130,7 +120,6 @@ export class PlanHousePageComponent implements AfterViewInit, OnInit, AfterViewC
     this.projectService.PUTupdateProject(jwt, CURRENT_PROJECT_ID, PROJECT_DATA)
       .subscribe({
         next: (response) => {
-          console.log(response)
         },
         error: (error) => {
           console.log(error)
@@ -153,7 +142,6 @@ export class PlanHousePageComponent implements AfterViewInit, OnInit, AfterViewC
     this.projectService.POSTcreateProject(jwt, this.projectNameForm.value.name)
       .subscribe({
         next: (response) => {
-          console.log(response)
           this.userData.projects = [...this.userData.projects, {
             name: this.projectNameForm.value.name!,
             rooms: []

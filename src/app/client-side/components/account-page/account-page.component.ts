@@ -37,7 +37,6 @@ export class AccountPageComponent implements AfterViewInit, OnInit {
     this.userService.GETuser(jwt)
       .subscribe({
         next: (response) => {
-          console.log(response)
           const receiveData = (response as any).userData as any
           receiveUserData = {
             email: receiveData.email,
@@ -53,7 +52,6 @@ export class AccountPageComponent implements AfterViewInit, OnInit {
               previewUrl:this.imageServerControlService.GETmainImage(furnitureData._id,furnitureData.colors[0].color)
             }
           })
-          console.log(receiveUserData)
           if (receiveData.password === undefined) return
           receiveUserData.password = receiveData.password
         },
@@ -89,7 +87,6 @@ export class AccountPageComponent implements AfterViewInit, OnInit {
     this.imageServerControlService.POSTloadUserAvatar(COMPRESSED_IMAGE, jwt)
       .subscribe({
         next: (resolve) => {
-          console.log(resolve)
           this.userData!.avatarUrl = URL.createObjectURL(COMPRESSED_IMAGE);
         },
         error: (error) => {
@@ -130,7 +127,6 @@ export class AccountPageComponent implements AfterViewInit, OnInit {
     this.userService.PUTupdateSecondaryInformation(jwt, CHANGES_SECONDARY_DATA, userType)
       .subscribe({
         next: (response) => {
-          console.log(response)
           this.userData!.nickname=CHANGES_SECONDARY_DATA.nickname
         },
         error: (error) => {
@@ -146,7 +142,6 @@ export class AccountPageComponent implements AfterViewInit, OnInit {
       .subscribe({
         next: (response) => {
         this.userData!.password=CHANGES_BASE_DATA.password
-          console.log(response)
         },
         error: (error) => {
           this.errorHandler.setError('Error while updating data',5000)
@@ -155,7 +150,6 @@ export class AccountPageComponent implements AfterViewInit, OnInit {
       })
   }
   getFurnitureImageUrl(furnitureCardId:string,color:string){
-    console.log(furnitureCardId,color)
     return this.imageServerControlService.GETmainImage(furnitureCardId,color)
   }
   openProjectsPage(idPlan:number){

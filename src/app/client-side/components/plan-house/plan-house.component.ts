@@ -216,12 +216,12 @@ export class PlanHouseComponent implements AfterViewInit {
       }
     });
 
-    // Найдите свободное место для новой комнаты
+    
     for (let startRow = 0; startRow <= gridSize - roomProportions.length; startRow++) {
       for (let startColumn = 0; startColumn <= gridSize - roomProportions.width; startColumn++) {
         let canFit = true;
 
-        // Проверьте, помещается ли комната в указанное место
+        
         for (let row = startRow; row < startRow + roomProportions.length; row++) {
           for (let column = startColumn; column < startColumn + roomProportions.width; column++) {
             if (gridOccupied[row][column]) {
@@ -233,7 +233,7 @@ export class PlanHouseComponent implements AfterViewInit {
         }
 
         if (canFit) {
-          // Обновите сетку с учетом новой комнаты
+          
           for (let row = startRow; row < startRow + roomProportions.length; row++) {
             for (let column = startColumn; column < startColumn + roomProportions.width; column++) {
               gridOccupied[row][column] = true;
