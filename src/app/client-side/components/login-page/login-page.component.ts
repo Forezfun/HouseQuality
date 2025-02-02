@@ -157,7 +157,6 @@ export class LoginPageComponent implements AfterViewInit, OnInit {
     this.authService.POSTcreateLongJWT(signInValue, 'email')
       .subscribe({
         next: (response) => {
-          console.log(response)
           this.userCookieService.setJwt((response as { jwt: string }).jwt, 'long')
           this.userCookieService.setUserType('email')
           this.router.navigateByUrl('/account')
@@ -173,7 +172,6 @@ export class LoginPageComponent implements AfterViewInit, OnInit {
     this.userService.POSTcreateUser(signUpValue, 'email')
       .subscribe({
         next: (response) => {
-          console.log(response)
           this.authService.POSTcreateLongJWT({
             email: signUpValue.email,
             password: signUpValue.password!

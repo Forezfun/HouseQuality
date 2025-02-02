@@ -54,7 +54,6 @@ export class ShopPageComponent implements OnInit {
         this.userService.GETuser(jwt)
         .subscribe({
           next:(response)=>{
-            console.log(response)
             this.userProjects=(((response as any).userData) as accountFullInformation).projects
           },
           error:(error)=>{
@@ -68,7 +67,6 @@ export class ShopPageComponent implements OnInit {
         this.shopService.GETgetCategoryData(this.categoryName, this.furnituresArray.length)
           .subscribe({
             next: (response) => {
-              console.log(response)
               this.furnituresArray = this.transformToClientDataFurnitures((response as any).resultsArray)
             },
             error: (error) => {

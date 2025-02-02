@@ -55,7 +55,6 @@ export class FinderComponent implements AfterViewInit{
     }else{
       this.foundFurniture!==undefined?this.foundFurniture.length=0:this.foundFurniture=[]
     }
-    console.log(receiveData)
   }
   openFoundResultsList(){
     if(this.variantsSpan===undefined)return

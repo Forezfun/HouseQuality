@@ -1,6 +1,6 @@
 import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
-import { ImageSliderComponent } from '../image-slider/image-slider/image-slider.component';
-import { imageSliderData } from '../image-slider/image-slider/image-slider.component';
+import { ImageSliderComponent } from '../image-slider/image-slider.component';
+import { imageSliderData } from '../image-slider/image-slider.component';
 import { NgFor, NgIf, NgTemplateOutlet } from '@angular/common';
 import { FormGroup, FormControl, Validators, ReactiveFormsModule, FormsModule, AbstractControl, ValidationErrors } from '@angular/forms';
 import { TemplateRef } from '@angular/core';
@@ -229,6 +229,5 @@ export class CreateFurnitureComponent implements AfterViewInit{
   changeIdMainImage(idMainImage: number) {
     if (this.currentColorId === undefined || this.furnitureData.colors[this.currentColorId].imagesData.idMainImage === undefined) return
     this.furnitureData.colors[this.currentColorId].imagesData.idMainImage = idMainImage
-    console.log(this.furnitureData.colors[this.currentColorId].imagesData.idMainImage)
   }
 }

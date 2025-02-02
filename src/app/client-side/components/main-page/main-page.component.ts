@@ -6,7 +6,7 @@ import { NgClass } from '@angular/common';
 import { roomData } from '../plan-house/plan-house.component';
 import { NavigationPanelComponent } from '../navigation-panel/navigation-panel.component';
 import { RouterLink } from '@angular/router';
-import { imageSliderData } from '../image-slider/image-slider/image-slider.component';
+import { imageSliderData } from '../image-slider/image-slider.component';
 @Component({
   selector: 'app-main-page',
   standalone: true,
