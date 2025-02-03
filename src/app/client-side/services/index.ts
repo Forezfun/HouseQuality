@@ -1,1 +1,1 @@
-export const baseUrl = 'http://89.169.135.141:5000/'
+export const baseUrl = 'https://89.169.135.141:5000/api/'
