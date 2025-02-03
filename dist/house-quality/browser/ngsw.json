@@ -1,0 +1,101 @@
+{
+  "configVersion": 1,
+  "timestamp": 1738553587027,
+  "index": "/index.html",
+  "assetGroups": [
+    {
+      "name": "app",
+      "installMode": "prefetch",
+      "updateMode": "prefetch",
+      "cacheQueryOptions": {
+        "ignoreVary": true
+      },
+      "urls": [
+        "/favicon.ico",
+        "/index.html",
+        "/main-UVYTJTMU.js",
+        "/polyfills-SCHOHYNV.js",
+        "/styles-5C7VO32Q.css"
+      ],
+      "patterns": []
+    },
+    {
+      "name": "assets",
+      "installMode": "lazy",
+      "updateMode": "prefetch",
+      "cacheQueryOptions": {
+        "ignoreVary": true
+      },
+      "urls": [
+        "/assets/images/Account.png",
+        "/assets/images/accountIcon.svg",
+        "/assets/images/addIcon.svg",
+        "/assets/images/cancelIcon.svg",
+        "/assets/images/deleteIcon.svg",
+        "/assets/images/editIcon.svg",
+        "/assets/images/furnitureIcon.svg",
+        "/assets/images/houseBackground.png",
+        "/assets/images/houseFront.png",
+        "/assets/images/linkIcon.svg",
+        "/assets/images/logoutIcon.svg",
+        "/assets/images/paletteIcon.svg",
+        "/assets/images/paralaxBasement.webp",
+        "/assets/images/reloadIcon.svg",
+        "/assets/images/searchIcon.svg",
+        "/assets/images/sofaSliderPhotos/1.png",
+        "/assets/images/sofaSliderPhotos/2.png",
+        "/assets/images/sofaSliderPhotos/3.png",
+        "/assets/images/sofaSliderPhotos/4.png",
+        "/assets/images/uploadIcon.png"
+      ],
+      "patterns": []
+    }
+  ],
+  "dataGroups": [],
+  "hashTable": {
+    "/assets/images/Account.png": "49b10602621fb037a70cd738daa465109b8a560b",
+    "/assets/images/accountIcon.svg": "56cb55b7e3fbb4fee90dbc6e142ccc04bbb6b3cd",
+    "/assets/images/addIcon.svg": "26968b7f10c038ed0bd90ca90088e394ea243091",
+    "/assets/images/cancelIcon.svg": "c6188b601ede9fd78338714465e77eb165c219df",
+    "/assets/images/deleteIcon.svg": "75e87e3a9a87409f5a92e3b47858076c520b8925",
+    "/assets/images/editIcon.svg": "efde83c6cc0810e111ff9a3b2dce4c1bbadfddd7",
+    "/assets/images/furnitureIcon.svg": "27d492430ea3336700adf4d80fc9dea2c2ed0433",
+    "/assets/images/houseBackground.png": "92ab68b5940598bffc70245e1edd342241d39f44",
+    "/assets/images/houseFront.png": "77de718b8245c7020c65c13f03d2b281ffa5eedd",
+    "/assets/images/linkIcon.svg": "499eb13e120a0cf65c71107fe68cd337c4b210cd",
+    "/assets/images/logoutIcon.svg": "7bf809d442996d15807b8351921e0bb7e2e1d726",
+    "/assets/images/paletteIcon.svg": "164a5e31e0e4ccb00d076d13ef510cd151c28d5b",
+    "/assets/images/paralaxBasement.webp": "f6bb3e589387bae50cf9d4739a4af5d8eac1e7e6",
+    "/assets/images/reloadIcon.svg": "637aa6eb1c556ff84eaa318968df2eefd6e21898",
+    "/assets/images/searchIcon.svg": "82f4e80a0e0da77c326ae703336d4962eff37301",
+    "/assets/images/sofaSliderPhotos/1.png": "40c0e26b60eae1f64a8e27f3c38ec8365f16f55a",
+    "/assets/images/sofaSliderPhotos/2.png": "200521f1436e401c900951ea2ee15dbe2b5a2b8f",
+    "/assets/images/sofaSliderPhotos/3.png": "4b727025d88d2a3c2e712707bd14b28ee73c4b52",
+    "/assets/images/sofaSliderPhotos/4.png": "83c1e7cbf9043832e4c7132afd873b752e9b91d5",
+    "/assets/images/uploadIcon.png": "16f95668d7aebc20ac0708784f73abb9ec367429",
+    "/favicon.ico": "4904916cbf7707240e7b117ee0ca0dfb8d793b4f",
+    "/index.html": "1d3d59c709836a7100c1da9da48b8df4f285c189",
+    "/main-UVYTJTMU.js": "ab2d7e002d05b38392928782e4d19815b32e4571",
+    "/polyfills-SCHOHYNV.js": "d45c76c5960bab3ace7fd6d211b9579456241f8a",
+    "/styles-5C7VO32Q.css": "478f8545668e37365108003936bcafc9efd0c619"
+  },
+  "navigationUrls": [
+    {
+      "positive": true,
+      "regex": "^\\/.*$"
+    },
+    {
+      "positive": false,
+      "regex": "^\\/(?:.+\\/)?[^/]*\\.[^/]*$"
+    },
+    {
+      "positive": false,
+      "regex": "^\\/(?:.+\\/)?[^/]*__[^/]*$"
+    },
+    {
+      "positive": false,
+      "regex": "^\\/(?:.+\\/)?[^/]*__[^/]*\\/.*$"
+    }
+  ],
+  "navigationRequestStrategy": "performance"
+}
