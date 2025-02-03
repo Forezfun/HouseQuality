@@ -1,6 +1,6 @@
 {
   "configVersion": 1,
-  "timestamp": 1738553587027,
+  "timestamp": 1738566054161,
   "index": "/index.html",
   "assetGroups": [
     {
@@ -13,7 +13,7 @@
       "urls": [
         "/favicon.ico",
         "/index.html",
-        "/main-UVYTJTMU.js",
+        "/main-EFOMXXLO.js",
         "/polyfills-SCHOHYNV.js",
         "/styles-5C7VO32Q.css"
       ],
@@ -74,8 +74,8 @@
     "/assets/images/sofaSliderPhotos/4.png": "83c1e7cbf9043832e4c7132afd873b752e9b91d5",
     "/assets/images/uploadIcon.png": "16f95668d7aebc20ac0708784f73abb9ec367429",
     "/favicon.ico": "4904916cbf7707240e7b117ee0ca0dfb8d793b4f",
-    "/index.html": "1d3d59c709836a7100c1da9da48b8df4f285c189",
-    "/main-UVYTJTMU.js": "ab2d7e002d05b38392928782e4d19815b32e4571",
+    "/index.html": "55589989d603b3edb6b06af41475ea68ef672955",
+    "/main-EFOMXXLO.js": "cc7a425a579ba0c857ef4757d234018113389280",
     "/polyfills-SCHOHYNV.js": "d45c76c5960bab3ace7fd6d211b9579456241f8a",
     "/styles-5C7VO32Q.css": "478f8545668e37365108003936bcafc9efd0c619"
   },
