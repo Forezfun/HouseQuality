@@ -50,7 +50,8 @@ async function startServer() {
   // Мидлвары
   app.use(cors());
   app.use(bodyParser.json());
-  app.use(bodyParser.urlencoded({ extended: true }));
+  app.use(express.json({ limit: '1gb' }));
+  app.use(express.urlencoded({ limit: '1gb', extended: true }));
 
   // Передача объекта БД в роуты (лучше передавать в нужные)
   app.use((req, res, next) => {
