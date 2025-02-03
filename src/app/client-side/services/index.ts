@@ -1,1 +1,1 @@
-export const baseUrl = 'http://housequality.site/api/'
+export const baseUrl = 'https://housequality.site/api/'
