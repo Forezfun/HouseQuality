@@ -196,29 +196,26 @@ ROUTER.get('/', async (req, res) => {
 
         
         const extension = path.extname(FURNITURE_MODEL_ITEM.filename).toLowerCase();
-
         let mimeType = 'application/octet-stream'; 
+
         switch (extension) {
             case '.obj':
-                mimeType = 'text/plain';  // Альтернатива: 'model/obj'
+                mimeType = 'model/obj';
                 break;
             case '.fbx':
-                mimeType = 'application/octet-stream';  // FBX нет в стандартных MIME-типаx
+                mimeType = 'model/fbx';
                 break;
             case '.stl':
-                mimeType = 'model/stl';  
+                mimeType = 'model/stl';
                 break;
             default:
-                mimeType = 'application/octet-stream';
+                mimeType = 'application/octet-stream'; 
         }
-        
+
         res.setHeader('Content-Type', mimeType);
         res.setHeader('Content-Disposition', `attachment; filename="${FURNITURE_MODEL_ITEM.filename}"`);
-        res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
-        res.setHeader('Pragma', 'no-cache');
-        res.setHeader('Expires', '0');
-        
 
+        
         res.sendFile(filePath);
     } catch (error) {
         res.status(500).json({ message: error.message });
