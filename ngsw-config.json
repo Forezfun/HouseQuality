@@ -3,6 +3,7 @@
   "index": "/index.html",
   "assetGroups": [
     {
+      "urls": ["/api/furniture/model"],
       "name": "app",
       "installMode": "prefetch",
       "resources": {
@@ -14,7 +15,8 @@
           "/*.css",
           "/*.js"
         ]
-      }
+      },
+      "maxSize": 1073741824
     },
     {
       "name": "assets",
@@ -24,19 +26,8 @@
         "files": [
           "/**/*.(svg|cur|jpg|jpeg|png|apng|webp|avif|gif|otf|ttf|woff|woff2)"
         ]
-      }
-    }
-  ],
-  "dataGroups": [
-    {
-      "name": "api-furniture-model",
-      "urls": ["/api/furniture/model"],
-      "cacheConfig": {
-        "strategy": "performance",
-        "maxSize": 0,
-        "maxAge": "0s",
-        "timeout": "0s"
-      }
+      },
+      "maxSize": 1073741824
     }
   ]
 }
