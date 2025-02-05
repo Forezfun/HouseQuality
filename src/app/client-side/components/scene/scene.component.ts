@@ -97,7 +97,7 @@ export class SceneComponent implements AfterViewInit {
       const modelBlobUrl = this.furnitureModelService.GETfurnitureModel(jwt, furnitureId)
       const blob: Blob = await firstValueFrom(modelBlobUrl);
       
-          this.loadFurnitureModel(blob, proportions, furnitureId,saveRoom,moveData)
+      this.loadFurnitureModel(blob, proportions, furnitureId,saveRoom,moveData)
         },
         error: (error) => {
           console.log(error)

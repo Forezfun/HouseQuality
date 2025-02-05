@@ -26,5 +26,17 @@
         ]
       }
     }
+  ],
+  "dataGroups": [
+    {
+      "name": "api-furniture-model",
+      "urls": ["/api/furniture/model"],
+      "cacheConfig": {
+        "strategy": "performance",
+        "maxSize": 0,
+        "maxAge": "0s",
+        "timeout": "0s"
+      }
+    }
   ]
 }

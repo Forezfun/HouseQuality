@@ -1,6 +1,6 @@
 {
   "configVersion": 1,
-  "timestamp": 1738595044847,
+  "timestamp": 1738744138072,
   "index": "/index.html",
   "assetGroups": [
     {
@@ -51,7 +51,22 @@
       "patterns": []
     }
   ],
-  "dataGroups": [],
+  "dataGroups": [
+    {
+      "name": "api-furniture-model",
+      "patterns": [
+        "\\/api\\/furniture\\/model"
+      ],
+      "strategy": "performance",
+      "maxSize": 0,
+      "maxAge": 0,
+      "timeoutMs": 0,
+      "cacheQueryOptions": {
+        "ignoreVary": true
+      },
+      "version": 1
+    }
+  ],
   "hashTable": {
     "/assets/images/Account.png": "49b10602621fb037a70cd738daa465109b8a560b",
     "/assets/images/accountIcon.svg": "56cb55b7e3fbb4fee90dbc6e142ccc04bbb6b3cd",
