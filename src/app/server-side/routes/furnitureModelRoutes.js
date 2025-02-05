@@ -16,7 +16,7 @@ ROUTER.use(async (req, res, next) => {
         if (!USER_ID) return res.status(404).json({ message: 'User not found' })
         
         const db = await dbModule.getDb();
-        const FURNITURE_CARD_ITEM = await db.collection('furniturecards').findOne({ authorId: new ObjectId(USER_ID) });
+        const FURNITURE_CARD_ITEM = await db.collection('furniturecards').findOne({ authorId: new ObjectId(USER_ID),_id:new ObjectId(req.query.furnitureId) });
         
         if (!FURNITURE_CARD_ITEM) {
             return res.status(409).json({ message: "User hasn't access" });
@@ -196,26 +196,29 @@ ROUTER.get('/', async (req, res) => {
 
         
         const extension = path.extname(FURNITURE_MODEL_ITEM.filename).toLowerCase();
-        let mimeType = 'application/octet-stream'; 
 
+        let mimeType = 'application/octet-stream'; 
         switch (extension) {
             case '.obj':
-                mimeType = 'model/obj';
+                mimeType = 'text/plain';  // Альтернатива: 'model/obj'
                 break;
             case '.fbx':
-                mimeType = 'model/fbx';
+                mimeType = 'application/octet-stream';  // FBX нет в стандартных MIME-типаx
                 break;
             case '.stl':
-                mimeType = 'model/stl';
+                mimeType = 'model/stl';  
                 break;
             default:
-                mimeType = 'application/octet-stream'; 
+                mimeType = 'application/octet-stream';
         }
-
+        
         res.setHeader('Content-Type', mimeType);
         res.setHeader('Content-Disposition', `attachment; filename="${FURNITURE_MODEL_ITEM.filename}"`);
-
+        res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+        res.setHeader('Pragma', 'no-cache');
+        res.setHeader('Expires', '0');
         
+
         res.sendFile(filePath);
     } catch (error) {
         res.status(500).json({ message: error.message });
