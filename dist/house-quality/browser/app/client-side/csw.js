@@ -2,7 +2,8 @@ const CACHE_NAME = 'house-quality-cache-v2'; // Измени версию при
 const DB_NAME = 'large-files-cache';
 const STORE_NAME = 'files';
 
-self.importScripts('https://cdnjs.cloudflare.com/ajax/libs/idb/7.1.1/idb.min.js');
+self.importScripts('https://cdn.jsdelivr.net/npm/idb@7.1.1/build/umd.js');
+
 
 // Функция сохранения больших файлов в IndexedDB
 async function saveToIndexedDB(request, response) {

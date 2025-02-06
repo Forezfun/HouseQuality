@@ -20,6 +20,7 @@
     "@angular/router": "^18.1.0",
     "@angular/service-worker": "^18.1.0",
     "compressorjs": "^1.2.1",
+    "idb": "^8.0.2",
     "lodash": "^4.17.21",
     "ngx-clipboard": "^16.0.0",
     "ngx-cookie-service": "^18.0.0",
