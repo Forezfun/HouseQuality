@@ -1,10 +1,10 @@
-const CACHE_NAME = 'house-quality-cache-v2'; 
+const CACHE_NAME = 'house-quality-cache-v2'; // Измени версию при обновлении кэша
 const DB_NAME = 'large-files-cache';
 const STORE_NAME = 'files';
 
-self.importScripts('https:
+self.importScripts('https://cdnjs.cloudflare.com/ajax/libs/idb/7.1.1/idb.min.js');
 
-
+// Функция сохранения больших файлов в IndexedDB
 async function saveToIndexedDB(request, response) {
   const db = await idb.openDB(DB_NAME, 1, {
     upgrade(db) {
@@ -20,30 +20,30 @@ async function saveToIndexedDB(request, response) {
   await tx.done;
 }
 
-
+// Функция получения файлов из IndexedDB
 async function getFromIndexedDB(request) {
   const db = await idb.openDB(DB_NAME);
   return db.get(STORE_NAME, request.url);
 }
 
-
+// Обработчик запросов
 self.addEventListener('fetch', (event) => {
   const url = event.request.url;
 
-  
+  // Исключение: не кэшируем POST, PUT, DELETE
   if (event.request.method !== 'GET') {
     return;
   }
 
-  
+  // Кеширование больших файлов (например, 3D-моделей)
   if (url.includes('/api/furniture/model')) {
     event.respondWith(
       getFromIndexedDB(event.request).then((cachedResponse) => {
         return cachedResponse
-          ? new Response(cachedResponse) 
+          ? new Response(cachedResponse) // Если есть в IndexedDB — возвращаем
           : fetch(event.request).then(async (response) => {
               if (!response.ok) {
-                return response; 
+                return response; // Если сервер вернул ошибку, не кэшируем
               }
               await saveToIndexedDB(event.request, response.clone());
               return response;
@@ -53,10 +53,10 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  
+  // Обычное кэширование статических файлов
   event.respondWith(
     caches.match(event.request).then((response) => {
-      if (response) return response; 
+      if (response) return response; // Если есть в кэше — возвращаем
 
       return fetch(event.request).then((networkResponse) => {
         if (!networkResponse || networkResponse.status !== 200) {
@@ -72,7 +72,7 @@ self.addEventListener('fetch', (event) => {
   );
 });
 
-
+// Удаление старых кэшей и IndexedDB при обновлении Service Worker
 self.addEventListener('activate', (event) => {
   event.waitUntil(
     (async () => {
@@ -85,7 +85,7 @@ self.addEventListener('activate', (event) => {
         })
       );
 
-      
+      // Удаляем старые записи из IndexedDB (чтобы не накапливался мусор)
       const db = await idb.openDB(DB_NAME, 1);
       const tx = db.transaction(STORE_NAME, 'readwrite');
       await tx.store.clear();
