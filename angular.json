@@ -28,7 +28,8 @@
             "assets": [
               "src/assets",
               "src/favicon.ico",
-              "src/app/client-side/manifest.webmanifest"
+              "src/app/client-side/manifest.webmanifest",
+              "src/app/client-side/сsw.js"
             ],
             "styles": [
               "src/assets/styles/base.scss"
@@ -92,7 +93,8 @@
             "assets": [
               "src/assets",
               "src/favicon.ico",
-              "src/app/client-side/manifest.webmanifest"
+              "src/app/client-side/manifest.webmanifest",
+              "src/app/client-side/csw.js"
             ],
             "styles": [
               "src/assets/styles/base.scss"
