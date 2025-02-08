@@ -2,7 +2,7 @@ const CACHE_NAME = 'house-quality-cache-v2';
 const DB_NAME = 'large-files-cache';
 const STORE_NAME = 'files';
 
-self.importScripts('https://cdn.jsdelivr.net/npm/idb@7.1.1/build/umd.js');
+importScripts('https://cdn.jsdelivr.net/npm/idb@7.1.1/build/umd.js');
 
 async function hashString(str) {
     const encoder = new TextEncoder();
