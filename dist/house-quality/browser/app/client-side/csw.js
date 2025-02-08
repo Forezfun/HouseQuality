@@ -47,8 +47,8 @@ async function getFromIndexedDB(request) {
 
 self.addEventListener('fetch', (event) => {
     if (event.request.method !== 'GET') return;
-
     const url = event.request.url;
+    console.log(url)
     if (url.includes('/api/furniture/model')) {
         event.respondWith(
             getFromIndexedDB(event.request).then((cachedResponse) => {
