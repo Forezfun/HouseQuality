@@ -1,4 +1,4 @@
-import { Component, AfterViewInit, ElementRef, HostListener, Input,SimpleChanges, Output, EventEmitter} from '@angular/core';
+import { Component, AfterViewInit, ElementRef, HostListener, Input, SimpleChanges, Output, EventEmitter } from '@angular/core';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { NgxSpinnerModule, NgxSpinnerService } from 'ngx-spinner';
@@ -38,6 +38,23 @@ interface roomData extends modelInterface {
   styleUrls: ['./scene.component.scss']
 })
 export class SceneComponent implements AfterViewInit {
+  constructor(
+    private elementRef: ElementRef,
+    private spinner: NgxSpinnerService,
+    private furnitureModelService: FurnitureModelControlService,
+    private furnitureCardService: FurnitureCardControlService,
+    private userCookieService: UserCookieService,
+    private route: ActivatedRoute,
+    private errorHandler: ErrorHandlerService
+  ) { }
+
+  @Input()
+  roomData!: roomDataPlan | undefined
+  @Input()
+  furnitureId?: string
+  @Output()
+  saveObjectsEmitter = new EventEmitter<objectSceneInterface[]>()
+
   private renderer!: THREE.WebGLRenderer;
   private camera!: THREE.PerspectiveCamera;
   private scene!: THREE.Scene;
@@ -49,28 +66,14 @@ export class SceneComponent implements AfterViewInit {
   private mouse = new THREE.Vector2();
   private targetobject: THREE.Object3D | undefined = undefined;
   private rectangleMesh!: THREE.Mesh;
-  @Input()
-  roomData!: roomDataPlan | undefined
-  @Input()
-  furnitureId?: string
-  @Output()
-  saveObjectsEmitter = new EventEmitter<objectSceneInterface[]>()
-  constructor(
-    private elementRef: ElementRef,
-    private spinner: NgxSpinnerService,
-    private furnitureModelService: FurnitureModelControlService,
-    private furnitureCardService: FurnitureCardControlService,
-    private userCookieService: UserCookieService,
-    private route: ActivatedRoute,
-    private errorHandler:ErrorHandlerService
-  ) { }
+
   ngAfterViewInit(): void {
     this.initThreeJs();
   }
   ngOnChanges(changes: SimpleChanges): void {
     this.roomData = changes['roomData'].currentValue as roomDataPlan
     if (!this.roomData || this.scene === undefined || this.roomData === changes['roomData'].previousValue) return
-    if(changes['roomData'].previousValue!==undefined){this.clearRoom()}
+    if (changes['roomData'].previousValue !== undefined) { this.clearRoom() }
     this.camera.position.set(0, 5, 0)
     this.camera.rotation.set(THREE.MathUtils.degToRad(-90), 0, 0)
     this.roomProportions = this.roomData.roomProportions
@@ -83,25 +86,26 @@ export class SceneComponent implements AfterViewInit {
     if (this.getObjectSize(this.rectangleMesh).width === 0) return
     this.loadRoom(LOAD_OBJECT)
     const furnitureId = this.route.snapshot.params['furnitureId']
-    if (!furnitureId||changes['roomData'].previousValue) return
+    if (!furnitureId || changes['roomData'].previousValue) return
     this.spinner.show()
-    this.addModel(furnitureId,true)
+    this.addModel(furnitureId, true)
   }
-  addModel(furnitureId: string, saveRoom:boolean,moveData?: objectLoadInterface) {
+
+  private addModel(furnitureId: string, saveRoom: boolean, moveData?: objectLoadInterface) {
     const jwt = this.userCookieService.getJwt()
     if (!jwt) return
     this.furnitureCardService.GETfurnitureCard(furnitureId)
-    .subscribe({
-    next: async (response) => {
-      const proportions = (response as any).furnitureCard.proportions
-      const modelBlobUrl = this.furnitureModelService.GETfurnitureModel(jwt, furnitureId)
-      const blob: Blob = await firstValueFrom(modelBlobUrl);
-      
-      this.loadFurnitureModel(blob, proportions, furnitureId,saveRoom,moveData)
+      .subscribe({
+        next: async (response) => {
+          const proportions = (response as any).furnitureCard.proportions
+          const modelBlobUrl = this.furnitureModelService.GETfurnitureModel(jwt, furnitureId)
+          const blob: Blob = await firstValueFrom(modelBlobUrl);
+
+          this.loadFurnitureModel(blob, proportions, furnitureId, saveRoom, moveData)
         },
         error: (error) => {
           console.log(error)
-          this.errorHandler.setError('Error while loading model',5000)
+          this.errorHandler.setError('Error while loading model', 5000)
         }
       })
 
@@ -131,7 +135,7 @@ export class SceneComponent implements AfterViewInit {
     shape.lineTo(width / 2 - radius, -height / 2);
     shape.quadraticCurveTo(width / 2, -height / 2, width / 2, -height / 2 + radius);
     shape.lineTo(width / 2, height / 2 - radius);
-    shape.quadraticCurveTo(width / 2, height / 2, width / 2 - radius, height / 2); 
+    shape.quadraticCurveTo(width / 2, height / 2, width / 2 - radius, height / 2);
     shape.lineTo(-width / 2 + radius, height / 2);
     shape.quadraticCurveTo(-width / 2, height / 2, -width / 2, height / 2 - radius);
     shape.lineTo(-width / 2, -height / 2 + radius);
@@ -143,7 +147,7 @@ export class SceneComponent implements AfterViewInit {
   }
 
 
-  createRoom(): void {
+  private createRoom(): void {
     if (!this.roomData) return
     const roomProportions = this.roomData.roomProportions
     const radius = 0.1
@@ -160,7 +164,7 @@ export class SceneComponent implements AfterViewInit {
     this.rectangleMesh
   }
 
-  calculateObjectSaveData(object: THREE.Object3D) {
+  private calculateObjectSaveData(object: THREE.Object3D) {
     const floorSize = this.getObjectSize(this.rectangleMesh)
     const objectPosition = object.position
     const objectSaveData: objectSceneInterface = {
@@ -171,7 +175,7 @@ export class SceneComponent implements AfterViewInit {
     }
     return objectSaveData
   }
-  calculateMoveObjectData(objectSaveData: objectSceneInterface): objectLoadInterface {
+  private calculateMoveObjectData(objectSaveData: objectSceneInterface): objectLoadInterface {
     const floorSize = this.getObjectSize(this.rectangleMesh)
     return {
       xDistance: objectSaveData.xMetersDistance * floorSize.width / this.roomProportions.width,
@@ -179,8 +183,119 @@ export class SceneComponent implements AfterViewInit {
       yRotate: objectSaveData.yRotate
     }
   }
+  private createRoomShape(widthRatio: number, heightRatio: number, radius: number): void {
+    const cameraFrustumBounds = this.calculateFrustumBounds();
+    const shapeRatio = widthRatio / heightRatio;
+    let width: number, height: number;
+
+    if (shapeRatio <= 1) {
+      width = cameraFrustumBounds.height * shapeRatio;
+      height = cameraFrustumBounds.height;
+    } else {
+      width = cameraFrustumBounds.width;
+      height = cameraFrustumBounds.width / shapeRatio;
+    }
+    const segments = 10;
+    const geometry = this.createRoundedRectangleGeometry(width * 0.9, height * 0.9, radius, segments);
+    const material = new THREE.MeshBasicMaterial({ color: 3427905 });
+
+    this.rectangleMesh = new THREE.Mesh(geometry, material);
+    this.scene.add(this.rectangleMesh)
+    this.renderer.render(this.scene, this.camera);
+    this.rectangleMesh.updateMatrixWorld(true);
+  }
+  private calculateFrustumBounds(): { width: number; height: number } {
+    const cameraY = this.camera.position.y;
+    const fovRad = THREE.MathUtils.degToRad(this.camera.fov);
+    const frustumHeight = 2 * Math.tan(fovRad / 2) * Math.abs(cameraY);
+    const frustumWidth = frustumHeight * this.camera.aspect;
+
+    return { width: frustumWidth, height: frustumHeight };
+  }
+  private addObjectToScene(object: THREE.Object3D, objectProportions: modelInterface, furnitureId: string, moveData?: objectLoadInterface) {
+    object.userData = { id: furnitureId }
+    this.scaleImportModel(object, objectProportions);
+    this.scene.add(object)
+    this.renderer.render(this.scene, this.camera);
+    if (!moveData) return
+    object.position.set(moveData.xDistance, 0, moveData.zDistance)
+    object.rotation.y = moveData.yRotate
+    
+  }
+  async loadFurnitureModel(fileModel: Blob, furnitureSize: modelInterface, furnitureId: string, saveRoom: boolean, moveData?: objectLoadInterface) {
+    this.spinner.show()
+    try {
+      const LOAD_OBJECT = await loadModel(fileModel)
+      
+      if (moveData) { this.addObjectToScene(LOAD_OBJECT, furnitureSize, furnitureId, moveData) } else { this.addObjectToScene(LOAD_OBJECT, furnitureSize, furnitureId) }
+      this.spinner.hide()
+      if (saveRoom) this.saveRoom()
+    } catch (error) {
+      this.spinner.hide()
+    }
+  }
+  private getObjectSize(object: THREE.Object3D): { width: number; height: number; length: number } {
+    const boundingBox = new THREE.Box3().setFromObject(object);
+    const size = boundingBox.getSize(new THREE.Vector3());
+    return {
+      width: size.x,
+      length: size.z,
+      height: size.y
+    };
+  }
+  private scaleImportModel(object: THREE.Object3D, objectProportions: modelInterface) {
+    const uploadObjectSize = this.getObjectSize(object);
+    const rectangleSize = this.getObjectSize(this.rectangleMesh);
+    const sceneProportionsСoefficient = uploadObjectSize.width > uploadObjectSize.length ? rectangleSize.width / uploadObjectSize.width : rectangleSize.length / uploadObjectSize.length;
+    const realProportionsСoefficient = uploadObjectSize.width > uploadObjectSize.length ? objectProportions.width / this.roomProportions.width : objectProportions.length / this.roomProportions.length;
+    const generalСoefficient = realProportionsСoefficient * sceneProportionsСoefficient;
+    object.scale.set(generalСoefficient, generalСoefficient, generalСoefficient);
+  }
+  private loadRoom(roomData: roomData) {
+    const jwt = this.userCookieService.getJwt()
+    if (!jwt) return
+    roomData.objects.forEach(object => {
+      this.addModel(object.objectId, false, this.calculateMoveObjectData(object))
+    })
+  }
+  private clearRoom() {
+    for (let i = this.scene.children.length - 1; i >= 0; i--) {
+      const object = this.scene.children[i];
+      if (object.type !== 'Scene' && object.type !== 'HemisphereLight') {
+        this.scene.remove(object);
+      }
+    }
+  }
+
+  saveRoom() {
+    if (!this.roomData) return
+    const objectsSceneArray = this.scene.children.filter(object => {
+      if (
+        object.name !== 'roomFloorBase' &&
+        object.type !== 'Scene' &&
+        object.type !== 'HemisphereLight'
+      ) {
+        return true;
+      }
+      return false;
+    })
+      .map(object => {
+        return this.calculateObjectSaveData(object)
+      })
+    const roomDataObjects = objectsSceneArray
+    this.roomData.objects = objectsSceneArray
+    this.saveObjectsEmitter.emit(roomDataObjects)
+  }
+
+  @HostListener('window:resize', ['$event'])
+  private onResize(event: Event): void {
+    this.renderer.setSize(window.innerWidth / this.canvasRatioOfWindow, window.innerHeight / this.canvasRatioOfWindow);
+    this.camera.aspect = window.innerWidth / window.innerHeight;
+    this.camera.updateProjectionMatrix();
+    this.renderer.render(this.scene, this.camera);
+  }
   @HostListener('click', ['$event'])
-  onMouseClick(event: MouseEvent): void {
+  private onMouseClick(event: MouseEvent): void {
     if (this.targetobject) { this.targetobject = undefined; return; }
     const rect = (event.target as HTMLCanvasElement).getBoundingClientRect();
     const x = (event.clientX - rect.left) / rect.width * 2 - 1;
@@ -199,7 +314,7 @@ export class SceneComponent implements AfterViewInit {
     this.targetobject = foundIntersetc.parent ? foundIntersetc.parent : foundIntersetc
   }
   @HostListener('window:keydown', ['$event'])
-  rotateTargetObject(event: KeyboardEvent) {
+  private rotateTargetObject(event: KeyboardEvent) {
     if (!this.targetobject) return
     let rotateAngle = -0.05
 
@@ -214,7 +329,7 @@ export class SceneComponent implements AfterViewInit {
     }
   }
   @HostListener('mousemove', ['$event'])
-  onMousemove(event: MouseEvent): void {
+  private onMousemove(event: MouseEvent): void {
     if (!this.targetobject) return;
 
     const rect = (event.target as HTMLCanvasElement).getBoundingClientRect();
@@ -254,122 +369,5 @@ export class SceneComponent implements AfterViewInit {
     }
 
     this.targetobject.position.set(newXObjectPosition, 0, newZObjectPosition);
-  }
-
-
-
-  private createRoomShape(widthRatio: number, heightRatio: number, radius: number): void {
-    const cameraFrustumBounds = this.calculateFrustumBounds();
-    const shapeRatio = widthRatio / heightRatio;
-    let width: number, height: number;
-
-    if (shapeRatio <= 1) {
-      width = cameraFrustumBounds.height * shapeRatio;
-      height = cameraFrustumBounds.height;
-    } else {
-      width = cameraFrustumBounds.width;
-      height = cameraFrustumBounds.width / shapeRatio;
-    }
-    const segments = 10;
-    const geometry = this.createRoundedRectangleGeometry(width * 0.9, height * 0.9, radius, segments);
-    const material = new THREE.MeshBasicMaterial({ color: 3427905 });
-
-    this.rectangleMesh = new THREE.Mesh(geometry, material);
-    this.scene.add(this.rectangleMesh)
-    this.renderer.render(this.scene, this.camera);
-    this.rectangleMesh.updateMatrixWorld(true);
-  }
-
-  private calculateFrustumBounds(): { width: number; height: number } {
-    const cameraY = this.camera.position.y;
-    const fovRad = THREE.MathUtils.degToRad(this.camera.fov);
-    const frustumHeight = 2 * Math.tan(fovRad / 2) * Math.abs(cameraY);
-    const frustumWidth = frustumHeight * this.camera.aspect;
-
-    return { width: frustumWidth, height: frustumHeight };
-  }
-
-
-  @HostListener('window:resize', ['$event'])
-  onResize(event: Event): void {
-    this.renderer.setSize(window.innerWidth / this.canvasRatioOfWindow, window.innerHeight / this.canvasRatioOfWindow);
-    this.camera.aspect = window.innerWidth / window.innerHeight;
-    this.camera.updateProjectionMatrix();
-    this.renderer.render(this.scene, this.camera);
-  }
-  addObjectToScene(object: THREE.Object3D, objectProportions: modelInterface, furnitureId: string, moveData?: objectLoadInterface) {
-    object.userData = { id: furnitureId }
-    this.scaleImportModel(object, objectProportions);
-    this.scene.add(object)
-    this.renderer.render(this.scene, this.camera);
-    if (!moveData) return
-    object.position.set(moveData.xDistance, 0, moveData.zDistance)
-    object.rotation.y = moveData.yRotate
-
-  }
-  async loadFurnitureModel(fileModel: Blob, furnitureSize: modelInterface, furnitureId: string,saveRoom:boolean,moveData?: objectLoadInterface) {
-    this.spinner.show()
-    try{
-      const LOAD_OBJECT = await loadModel(fileModel)
-      
-    if (moveData) { this.addObjectToScene(LOAD_OBJECT, furnitureSize, furnitureId, moveData) } else { this.addObjectToScene(LOAD_OBJECT, furnitureSize, furnitureId) }
-    this.spinner.hide()
-    if(saveRoom)this.saveRoom()
-    }catch(error){
-      this.spinner.hide()
-    }
-}
-
-  private getObjectSize(object: THREE.Object3D): { width: number; height: number; length: number } {
-    const boundingBox = new THREE.Box3().setFromObject(object);
-    const size = boundingBox.getSize(new THREE.Vector3());
-    return {
-      width: size.x,
-      length: size.z,
-      height: size.y
-    };
-  }
-
-  private scaleImportModel(object: THREE.Object3D, objectProportions: modelInterface) {
-    const uploadObjectSize = this.getObjectSize(object);
-    const rectangleSize = this.getObjectSize(this.rectangleMesh);
-    const sceneProportionsСoefficient = uploadObjectSize.width > uploadObjectSize.length ? rectangleSize.width / uploadObjectSize.width : rectangleSize.length / uploadObjectSize.length;
-    const realProportionsСoefficient = uploadObjectSize.width > uploadObjectSize.length ? objectProportions.width / this.roomProportions.width : objectProportions.length / this.roomProportions.length;
-    const generalСoefficient = realProportionsСoefficient * sceneProportionsСoefficient;
-    object.scale.set(generalСoefficient, generalСoefficient, generalСoefficient);
-  }
-  saveRoom() {
-    if (!this.roomData) return
-    const objectsSceneArray = this.scene.children.filter(object => {
-      if (
-        object.name !== 'roomFloorBase' &&
-        object.type !== 'Scene' &&
-        object.type !== 'HemisphereLight'
-      ) {
-        return true;
-      }
-      return false;
-    })
-      .map(object => {
-        return this.calculateObjectSaveData(object)
-      })
-    const roomDataObjects = objectsSceneArray
-    this.roomData.objects = objectsSceneArray
-    this.saveObjectsEmitter.emit(roomDataObjects)
-  }
-  loadRoom(roomData: roomData) {
-    const jwt = this.userCookieService.getJwt()
-    if (!jwt) return
-    roomData.objects.forEach(object => {
-      this.addModel(object.objectId,false, this.calculateMoveObjectData(object))
-    })
-  }
-  clearRoom() {
-    for (let i = this.scene.children.length - 1; i >= 0; i--) {
-      const object = this.scene.children[i];
-      if (object.type !== 'Scene' && object.type !== 'HemisphereLight') {
-        this.scene.remove(object);
-      }
-    }
   }
 }

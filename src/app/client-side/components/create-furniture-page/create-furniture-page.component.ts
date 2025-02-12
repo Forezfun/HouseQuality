@@ -18,8 +18,6 @@ import { ErrorHandlerService } from '../../services/error-handler.service';
   styleUrl: './create-furniture-page.component.scss'
 })
 export class CreateFurniturePageComponent implements OnInit {
-  @ViewChild(CreateFurnitureComponent)
-  private createFurnitureComponent!: CreateFurnitureComponent;
   constructor(
     private route: ActivatedRoute,
     private cookieService: UserCookieService,
@@ -29,7 +27,23 @@ export class CreateFurniturePageComponent implements OnInit {
     private furnitureModelService: FurnitureModelControlService,
     private errorHandler: ErrorHandlerService
   ) { }
+
   idPage!: string
+  @ViewChild(CreateFurnitureComponent)
+  private createFurnitureComponent!: CreateFurnitureComponent;
+  colorsClientData: { color: string, imagesData: imageSliderData }[] = []
+  furnitureData: furnitureServerData = {
+    name: '',
+    description: '',
+    colors: [],
+    shops: [],
+    category: undefined,
+    proportions: {
+      width: null,
+      height: null,
+      length: null
+    }
+  }
 
   ngOnInit(): void {
     this.route.params.subscribe(params => {
@@ -90,19 +104,7 @@ export class CreateFurniturePageComponent implements OnInit {
         })
     });
   }
-  furnitureData: furnitureServerData = {
-    name: '',
-    description: '',
-    colors: [],
-    shops: [],
-    category: undefined,
-    proportions: {
-      width: null,
-      height: null,
-      length: null
-    }
-  }
-  colorsClientData: { color: string, imagesData: imageSliderData }[] = []
+  
   async transformUrlArrayToBlob(imagesArray: string[]) {
     const imagesBlobArray: Blob[] = await Promise.all(
       imagesArray.map(async (blobUrl): Promise<Blob> => {

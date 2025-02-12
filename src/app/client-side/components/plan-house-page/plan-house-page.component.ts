@@ -25,22 +25,21 @@ export class PlanHousePageComponent implements AfterViewInit, OnInit, AfterViewC
     private elemenetRef: ElementRef,
     private renderer: Renderer2,
     private projectService: ProjectService,
-    private planHouseComponent: PlanHouseComponent,
     private errorHandler:ErrorHandlerService
   ) { }
+
   userData!: accountFullInformation
   currentProjectId: number | undefined = undefined
   addModule!: HTMLSpanElement
-  @ViewChild('planHouse') planHouse!: PlanHouseComponent;
   currentPlanHouse: roomData[] | undefined
   projectNameForm = new FormGroup({
     name: new FormControl<string>('', [Validators.required])
   })
-  private hasRoomIdBeenProcessed = false;
 
+  @ViewChild('planHouse') planHouse!: PlanHouseComponent;
+  private hasRoomIdBeenProcessed = false;
   ngAfterViewChecked(): void {
     if (this.hasRoomIdBeenProcessed || !this.planHouse || !this.route.snapshot.params['roomId']) return;
-
     const roomId = parseInt(this.route.snapshot.params['roomId']!) as number;
     setTimeout(() => {
       if (typeof roomId === 'number') {
@@ -53,24 +52,8 @@ export class PlanHousePageComponent implements AfterViewInit, OnInit, AfterViewC
       }
     }, 0)
   }
-
   ngAfterViewInit(): void {
     this.addModule = this.elemenetRef.nativeElement.querySelector('.addModule')
-  }
-  deleteProject(indexProject: number) {
-    const jwt = this.userCookieService.getJwt()
-    const CURRENT_PROJECT_ID = (this.userData.projects[indexProject] as serverProjectInformation)._id
-    if (!jwt || !CURRENT_PROJECT_ID) return
-    this.projectService.DELETEdeleteProject(jwt, CURRENT_PROJECT_ID)
-      .subscribe({
-        next: (response) => {
-          this.userData.projects.splice(indexProject, 1);
-        },
-        error: (error) => {
-          console.log(error)
-          this.errorHandler.setError('Error while deleting project', 5000)
-        }
-      })
   }
   ngOnInit(): void {
     if (!this.userService.checkJwt()) this.router.navigateByUrl('/login')
@@ -89,6 +72,22 @@ export class PlanHousePageComponent implements AfterViewInit, OnInit, AfterViewC
         error: (error) => {
           console.log(error)
           this.errorHandler.setError('Error while receiving user', 5000)
+        }
+      })
+  }
+
+  deleteProject(indexProject: number) {
+    const jwt = this.userCookieService.getJwt()
+    const CURRENT_PROJECT_ID = (this.userData.projects[indexProject] as serverProjectInformation)._id
+    if (!jwt || !CURRENT_PROJECT_ID) return
+    this.projectService.DELETEdeleteProject(jwt, CURRENT_PROJECT_ID)
+      .subscribe({
+        next: (response) => {
+          this.userData.projects.splice(indexProject, 1);
+        },
+        error: (error) => {
+          console.log(error)
+          this.errorHandler.setError('Error while deleting project', 5000)
         }
       })
   }
@@ -155,6 +154,5 @@ export class PlanHousePageComponent implements AfterViewInit, OnInit, AfterViewC
           this.errorHandler.setError('Error while creating project', 5000)
         }
       })
-
   }
 }

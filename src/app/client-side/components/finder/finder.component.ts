@@ -17,20 +17,42 @@ interface foundFurniture {
   styleUrl: './finder.component.scss'
 })
 export class FinderComponent implements AfterViewInit{
-  variantsSpan!:HTMLSpanElement
-  input!:HTMLInputElement
   constructor(
     private finderService:FinderService,
     private elementRef:ElementRef,
     private renderer:Renderer2,
     private imageService:ServerImageControlService
   ){}
+
+  variantsSpan!:HTMLSpanElement
+  input!:HTMLInputElement
   foundFurniture?: foundFurniture[]
   private debounceTimer: any = null;
+
   ngAfterViewInit(): void {
     this.variantsSpan=this.elementRef.nativeElement.querySelector('.variantsSpan') as HTMLSpanElement
     this.input=this.elementRef.nativeElement.querySelector('.finderInput')
   }
+
+  private async findFurnitures(findString:string){
+    const receiveData = await this.finderService.GETfindFurnitures(findString) as foundFurniture[]
+    this.openFoundResultsList()
+    if(receiveData.length>0){
+      this.closeFoundResultsList()
+      setTimeout(()=>{this.foundFurniture=receiveData;this.openFoundResultsList()},550)
+    }else{
+      this.foundFurniture!==undefined?this.foundFurniture.length=0:this.foundFurniture=[]
+    }
+  }
+  private openFoundResultsList(){
+    if(this.variantsSpan===undefined)return
+    this.renderer.addClass(this.variantsSpan,'variantsSpanOpen')
+  }
+  private closeFoundResultsList(){
+    if(this.variantsSpan===undefined)return
+    this.renderer.removeClass(this.variantsSpan,'variantsSpanOpen')
+  }
+
   clearInput(){
     this.input.value='';
     this.closeFoundResultsList()
@@ -45,24 +67,6 @@ export class FinderComponent implements AfterViewInit{
       }
       this.findFurnitures(value)
     }, 300);
-  }
-  async findFurnitures(findString:string){
-    const receiveData = await this.finderService.GETfindFurnitures(findString) as foundFurniture[]
-    this.openFoundResultsList()
-    if(receiveData.length>0){
-      this.closeFoundResultsList()
-      setTimeout(()=>{this.foundFurniture=receiveData;this.openFoundResultsList()},550)
-    }else{
-      this.foundFurniture!==undefined?this.foundFurniture.length=0:this.foundFurniture=[]
-    }
-  }
-  openFoundResultsList(){
-    if(this.variantsSpan===undefined)return
-    this.renderer.addClass(this.variantsSpan,'variantsSpanOpen')
-  }
-  closeFoundResultsList(){
-    if(this.variantsSpan===undefined)return
-    this.renderer.removeClass(this.variantsSpan,'variantsSpanOpen')
   }
   getImage(idFurniture:string,color:string){
     return this.imageService.GETmainImage(idFurniture,color)
