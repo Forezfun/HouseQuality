@@ -15,14 +15,6 @@ import { ErrorHandlerService } from '../../services/error-handler.service';
   styleUrl: './login-page.component.scss'
 })
 export class LoginPageComponent implements AfterViewInit, OnInit {
-  @ViewChild('signup', { read: TemplateRef }) private signupTemplate!: TemplateRef<any>
-  @ViewChild('signin', { read: TemplateRef }) private signinTemplate!: TemplateRef<any>
-  @ViewChild('code', { read: TemplateRef }) codeTemplate!: TemplateRef<any>
-  @ViewChild('changePassword', { read: TemplateRef }) changePasswordTemplate!: TemplateRef<any>
-  currentFormTemplate!: TemplateRef<any>
-  loginModuleElement!: HTMLSpanElement
-  scrollBtn!: HTMLButtonElement
-  inputValues: string[] = new Array(4).fill('');
   constructor(
     private elementRef: ElementRef,
     private renderer: Renderer2,
@@ -33,9 +25,42 @@ export class LoginPageComponent implements AfterViewInit, OnInit {
     private router: Router,
     private errorHandler: ErrorHandlerService
   ) { }
+
+  @ViewChild('signup', { read: TemplateRef }) private signupTemplate!: TemplateRef<any>
+  @ViewChild('signin', { read: TemplateRef }) private signinTemplate!: TemplateRef<any>
+  @ViewChild('code', { read: TemplateRef }) codeTemplate!: TemplateRef<any>
+  @ViewChild('changePassword', { read: TemplateRef }) changePasswordTemplate!: TemplateRef<any>
+  currentFormTemplate!: TemplateRef<any>
+  loginModuleElement!: HTMLSpanElement
+  scrollBtn!: HTMLButtonElement
+  backgroundHouseElement!: HTMLImageElement
+  scrollTimeout: any = null;
+  inputValues: string[] = new Array(4).fill('');
+  signupForm = new FormGroup({
+    email: new FormControl<string>('', [Validators.required, Validators.email]),
+    nickname: new FormControl<string>('', [Validators.required]),
+    password: new FormControl<string>('', [Validators.required]),
+  });
+  codeForm = new FormGroup({
+    code: new FormControl<string>('', [Validators.required, Validators.minLength(4)])
+  });
+  changePasswordForm = new FormGroup({
+    newPassword: new FormControl<string>('', [Validators.required]),
+    repeatPassword: new FormControl<string>('', [Validators.required]),
+  });
+
   ngOnInit(): void {
     if (this.userService.checkJwt()) this.router.navigateByUrl('/account')
   }
+  ngAfterViewInit(): void {
+    this.scrollBtn = this.elementRef.nativeElement.querySelector('.scrollBtn')
+    this.loginModuleElement = this.elementRef.nativeElement.querySelector('.loginModule')
+    this.currentFormTemplate = this.signinTemplate;
+    this.backgroundHouseElement = this.elementRef.nativeElement.querySelector('.houseBackground')
+    this.changeDetectorRef.detectChanges()
+  }
+
+
   onInput(currentInput: HTMLInputElement, nextInput: HTMLInputElement | null) {
     this.codeForm.patchValue({
       code: this.inputValues.join('')
@@ -66,7 +91,6 @@ export class LoginPageComponent implements AfterViewInit, OnInit {
 
     }, 500)
   }
-
   onBackspace(currentInput: HTMLInputElement, previousInput: HTMLInputElement | null) {
     if (!currentInput.value && previousInput) {
       previousInput.focus();
@@ -75,18 +99,6 @@ export class LoginPageComponent implements AfterViewInit, OnInit {
       code: this.inputValues.join('')
     });
   }
-  signupForm = new FormGroup({
-    email: new FormControl<string>('', [Validators.required, Validators.email]),
-    nickname: new FormControl<string>('', [Validators.required]),
-    password: new FormControl<string>('', [Validators.required]),
-  });
-  codeForm = new FormGroup({
-    code: new FormControl<string>('', [Validators.required, Validators.minLength(4)])
-  });
-  changePasswordForm = new FormGroup({
-    newPassword: new FormControl<string>('', [Validators.required]),
-    repeatPassword: new FormControl<string>('', [Validators.required]),
-  });
   checkLoginModuleStatus() {
     if (!this.loginModuleElement) return false
     return this.loginModuleElement.classList.contains('disabledOpacity') ? false : true
@@ -95,45 +107,6 @@ export class LoginPageComponent implements AfterViewInit, OnInit {
     email: new FormControl<string>('', [Validators.required, Validators.email]),
     password: new FormControl<string>('', [Validators.required]),
   });
-  backgroundHouseElement!: HTMLImageElement
-
-  ngAfterViewInit(): void {
-    this.scrollBtn = this.elementRef.nativeElement.querySelector('.scrollBtn')
-    this.loginModuleElement = this.elementRef.nativeElement.querySelector('.loginModule')
-    this.currentFormTemplate = this.signinTemplate;
-    this.backgroundHouseElement = this.elementRef.nativeElement.querySelector('.houseBackground')
-    this.changeDetectorRef.detectChanges()
-  }
-  scrollTimeout: any = null;
-
-  @HostListener('document:scroll', ['$event'])
-  onWindowScroll() {
-    if (this.scrollTimeout) return
-    this.scrollTimeout = setTimeout(() => {
-      const scrollPosition = document.documentElement.scrollTop;
-      const windowHeight = window.innerHeight;
-      this.renderer.setStyle(this.backgroundHouseElement, 'opacity', Math.max(Math.abs(scrollPosition * 2 / windowHeight - 1), 0.35));
-
-      if (scrollPosition >= (document.documentElement.scrollHeight - window.innerHeight) / 2) {
-        this.renderer.removeClass(this.loginModuleElement, 'disabledOpacity');
-        this.scrollTimeout = null;
-        return;
-      }
-
-      if (scrollPosition <= 50) {
-        this.renderer.setStyle(this.scrollBtn, 'z-index', 4);
-      } else {
-        this.renderer.setStyle(this.scrollBtn, 'z-index', 3);
-      }
-
-      if (!this.loginModuleElement.classList.contains('disabledOpacity')) {
-        this.renderer.addClass(this.loginModuleElement, 'disabledOpacity');
-      }
-
-      this.scrollTimeout = null;
-    }, 100);
-  }
-
   toggleScroll() {
     this.checkLoginModuleStatus() ? this.scrollToUpPage() : this.scrollToDownPage()
   }
@@ -148,9 +121,6 @@ export class LoginPageComponent implements AfterViewInit, OnInit {
       top: 0,
       behavior: 'smooth'
     });
-  }
-  closeLoginModule() {
-
   }
   signinUser() {
     const signInValue = this.signinForm.value as accountSignInData
@@ -192,5 +162,33 @@ export class LoginPageComponent implements AfterViewInit, OnInit {
           this.errorHandler.setError('Error while signing up', 5000)
         }
       })
+  }
+
+  @HostListener('document:scroll', ['$event'])
+  onWindowScroll() {
+    if (this.scrollTimeout) return
+    this.scrollTimeout = setTimeout(() => {
+      const scrollPosition = document.documentElement.scrollTop;
+      const windowHeight = window.innerHeight;
+      this.renderer.setStyle(this.backgroundHouseElement, 'opacity', Math.max(Math.abs(scrollPosition * 2 / windowHeight - 1), 0.35));
+
+      if (scrollPosition >= (document.documentElement.scrollHeight - window.innerHeight) / 2) {
+        this.renderer.removeClass(this.loginModuleElement, 'disabledOpacity');
+        this.scrollTimeout = null;
+        return;
+      }
+
+      if (scrollPosition <= 50) {
+        this.renderer.setStyle(this.scrollBtn, 'z-index', 4);
+      } else {
+        this.renderer.setStyle(this.scrollBtn, 'z-index', 3);
+      }
+
+      if (!this.loginModuleElement.classList.contains('disabledOpacity')) {
+        this.renderer.addClass(this.loginModuleElement, 'disabledOpacity');
+      }
+
+      this.scrollTimeout = null;
+    }, 100);
   }
 }

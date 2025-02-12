@@ -31,7 +31,6 @@ export class ImageSliderComponent implements OnChanges {
     this.changeVisibleId(newIdMainImage);
     this.idMainImageEmitter.emit(this.visibleId[0])
   }
-
   changeVisibleId(idMainImage: number) {
     this.visibleId = [idMainImage];
     this.visibleId.push(

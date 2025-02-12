@@ -10,11 +10,12 @@ import { UserCookieService } from '../../services/user-cookie.service';
   styleUrl: './error-handler.component.scss'
 })
 export class ErrorHandlerComponent{
-  errorMessage!:string
   constructor(
     private errorService: ErrorHandlerService,
     private cookieService:UserCookieService
   ){}
+  
+  errorMessage!:string
 
   ngOnInit(): void {
     this.errorService.error$.subscribe(message => {

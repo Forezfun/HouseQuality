@@ -18,26 +18,11 @@ export class MainPageComponent {
   constructor(
     private elementRef: ElementRef
   ) { }
-  focusOnFinder() {
-    const finder = this.elementRef.nativeElement.querySelector('.finderInput')
-    if (!finder) return
-    finder.focus()
-  }
-  furnitureTemplate: 'view' | 'create' = 'create'
-  openViewFurniture() {
-    this.furnitureTemplate = 'view'
-  }
-  openCreateFurniture() {
-    this.furnitureTemplate = 'create'
-  }
-  focusFinder() {
-    const FINDER_ELEMENT = document.querySelector('app-navigation-panel') as HTMLSpanElement
-    FINDER_ELEMENT.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  }
   imagesData: imageSliderData = {
     images: ['/assets/images/sofaSliderPhotos/1.png', '/assets/images/sofaSliderPhotos/2.png', '/assets/images/sofaSliderPhotos/3.png', '/assets/images/sofaSliderPhotos/4.png'],
     idMainImage: 0
   }
+  furnitureTemplate: 'view' | 'create' = 'create'
   furnitureExamplesData: furnitureServerData = {
     name: 'Onte Bucle White',
     colors: [],
@@ -113,5 +98,20 @@ export class MainPageComponent {
       }
     }
   ]
-
+  
+  focusOnFinder() {
+    const finder = this.elementRef.nativeElement.querySelector('.finderInput')
+    if (!finder) return
+    finder.focus()
+  }
+  openViewFurniture() {
+    this.furnitureTemplate = 'view'
+  }
+  openCreateFurniture() {
+    this.furnitureTemplate = 'create'
+  }
+  focusFinder() {
+    const FINDER_ELEMENT = document.querySelector('app-navigation-panel') as HTMLSpanElement
+    FINDER_ELEMENT.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
 }

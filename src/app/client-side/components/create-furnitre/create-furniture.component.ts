@@ -77,6 +77,12 @@ export class CreateFurnitureComponent implements AfterViewInit{
     'lamp',
     'table'
   ]
+
+  ngAfterViewInit(): void {
+    this.addModule = this.elementRef.nativeElement.querySelector('.addModule');
+    this.furnitureModelInput=this.elementRef.nativeElement.querySelector('.furnitureModelInput')
+  }
+
   async onInputImages(event: Event) {
     const inputElement = event.target as HTMLInputElement;
     const files = inputElement.files;
@@ -90,8 +96,6 @@ export class CreateFurnitureComponent implements AfterViewInit{
     this.furnitureData.colors[this.currentColorId].imagesData.images = compressedImages;
     this.colorsClientData[this.currentColorId].imagesData.images = compressedImages.map(blob => URL.createObjectURL(blob));
   }
-
-
   removeImages() {
     if (this.currentColorId === undefined || !this.furnitureData.colors[this.currentColorId].imagesData.images) return
     this.furnitureData.colors[this.currentColorId].imagesData.images.length = 0
@@ -111,7 +115,6 @@ export class CreateFurnitureComponent implements AfterViewInit{
     }
     return null;
   }
-
   addColor() {
     const pushColor = this.colorForm.value.color
     if (!pushColor) return
@@ -134,16 +137,9 @@ export class CreateFurnitureComponent implements AfterViewInit{
       this.openFurnitureVariant(this.currentColorId!)
     }, 0)
   }
-
-  ngAfterViewInit(): void {
-    this.addModule = this.elementRef.nativeElement.querySelector('.addModule');
-    this.furnitureModelInput=this.elementRef.nativeElement.querySelector('.furnitureModelInput')
-  }
-
   closeAddModule() {
     this.addModule.classList.add('disabled');
   }
-
   openColorModule(event: Event) {
     event.preventDefault()
     this.addModuleTemplate = this.colorModuleTemplate;
