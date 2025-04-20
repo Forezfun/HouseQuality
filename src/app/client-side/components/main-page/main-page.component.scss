@@ -3,16 +3,19 @@
 
 .circleDecoration {
     grid-area: 1/1/2/2;
-    height: calc(100vh - 250px);
+    height: 95vh;
+    aspect-ratio: 1;
     overflow: hidden;
     justify-content: center;
-    display: flex;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr;
 }
 
 .circleDecorationSpan {
     display: grid;
     padding:3vw;
-    width: 84vw;
+    height: 200%;
     aspect-ratio: 1;
     place-items: center;
     content-visibility: auto 
@@ -60,7 +63,7 @@
     display: grid;
     grid-template-columns: 1fr;
     grid-template-rows: 1fr;
-    padding-top: 250px;
+    padding-top: 5vh;
     overflow: hidden;
     background: rgb(163, 177, 138);
     background: linear-gradient(0deg, rgba(163, 177, 138, 1) 0%, rgba(218, 215, 205, 1) 100%);

@@ -1,43 +1,39 @@
 const EXPRESS = require('express');
 const ROUTER = EXPRESS.Router();
-const { checkUserAccess } = require('../helpers/jwtHandlers');
-const dbModule = require('../server');
-const { ObjectId } = require('mongodb');
+const { checkUserAccess } = require('../helpers/jwtHandlers')
+const FURNITURE_CARD = require('../models/furnitureCard')
+
+
 ROUTER.post('/', async (request, result) => {
     try {
-        
+        console.log(request.query)
         const JWT_TOKEN = request.query.jwtToken;
         const USER_ID = await checkUserAccess(JWT_TOKEN);
-        if (!USER_ID) return result.status(404).json({ message: 'User not found' });
-        
-        const db = await dbModule.getDb();
-        let FURNITURE_CARD_ITEM = {
+        if (!USER_ID) return res.status(404).json({ message: 'User not found' });
+        let FURNITURE_CARD_ITEM = new FURNITURE_CARD({
             name: request.body.name,
             description: request.body.description,
+            imagesFolderName: request.body.imagesFolderName,
             shops: request.body.shops,
             authorId: USER_ID,
-            proportions: request.body.proportions,
+            proportions:request.body.proportions,
             idFurnitureModel: request.body.idFurnitureModel,
-            additionalData: {
-                category:'' 
-            },
-            colors:[]
-        };
-
-        request.body.colors.forEach(color => { FURNITURE_CARD_ITEM.colors.push({ color: color, idImages: '' }) });
-        
-        
+            additionalData:{}
+        })
+        request.body.colors.forEach(color=>{FURNITURE_CARD_ITEM.colors.push({color:color,idImages:''})})
+        console.log(FURNITURE_CARD_ITEM)
         if (request.query.additionalData !== undefined) {
             const ADDITIONAL_DATA = JSON.parse(request.query.additionalData);
             
             Object.keys(ADDITIONAL_DATA).forEach(propertyKey => {
-                if (FURNITURE_CARD_ITEM.additionalData.hasOwnProperty(propertyKey)) {
+                // Проверка на существование ключа в additionalData
+                if (propertyKey in FURNITURE_CARD.schema.paths.additionalData.schema.paths) {
                     FURNITURE_CARD_ITEM.additionalData[propertyKey] = ADDITIONAL_DATA[propertyKey];
                 }
             });
         }
-        await db.collection('furniturecards').insertOne(FURNITURE_CARD_ITEM);
-        result.status(201).json({ furnitureData: FURNITURE_CARD_ITEM });
+        await FURNITURE_CARD_ITEM.save()
+        result.status(201).json({ furnitureData: FURNITURE_CARD_ITEM })
     } catch (err) {
         result.status(400).json({ message: err.message });
     }
@@ -45,79 +41,60 @@ ROUTER.post('/', async (request, result) => {
 
 ROUTER.put('/', async (request, result) => {
     try {
-        
-        
+        console.log(request.body)
+        console.log(request.body.colors)
         const JWT_TOKEN = request.query.jwtToken;
         const USER_ID = await checkUserAccess(JWT_TOKEN);
         if (!USER_ID) return result.status(404).json({ message: 'User not found' });
-        
-        const db = await dbModule.getDb();
-        let FURNITURE_CARD_ITEM = await db.collection('furniturecards').findOne({ authorId: new ObjectId(USER_ID) });
-
+        let FURNITURE_CARD_ITEM = await FURNITURE_CARD.findOne({ authorId: USER_ID })
         if (!FURNITURE_CARD_ITEM) return result.status(404).json({ message: 'Furniture card not found' });
-
         FURNITURE_CARD_ITEM.name = request.body.name;
         FURNITURE_CARD_ITEM.description = request.body.description;
-        FURNITURE_CARD_ITEM.proportions = 
-        request.body.proportions && Object.values(request.body.proportions).every(value => value !== null) 
-        ? request.body.proportions 
-        : FURNITURE_CARD_ITEM.proportions;
-
-        FURNITURE_CARD_ITEM.colors = request.body.colors.map(color => { return ({ color: color, idImages: '' }) });
+        FURNITURE_CARD_ITEM.proportions=request.body.proportions,
+        FURNITURE_CARD_ITEM.colors = request.body.colors.map(color=>{return({color:color,idImages:''})})
         FURNITURE_CARD_ITEM.shops = request.body.shops;
-
         if (request.query.additionalData !== undefined) {
             const ADDITIONAL_DATA = JSON.parse(request.query.additionalData);
             
             Object.keys(ADDITIONAL_DATA).forEach(propertyKey => {
-                if (FURNITURE_CARD_ITEM.additionalData.hasOwnProperty(propertyKey)) {
+                // Проверка на существование ключа в additionalData
+                if (propertyKey in FURNITURE_CARD.schema.paths.additionalData.schema.paths) {
                     FURNITURE_CARD_ITEM.additionalData[propertyKey] = ADDITIONAL_DATA[propertyKey];
                 }
             });
         }
-
-        await db.collection('furniturecards').updateOne({ _id: FURNITURE_CARD_ITEM._id }, { $set: FURNITURE_CARD_ITEM });
-        result.status(201).json({ message: 'Furniture card successfully updated' });
+        await FURNITURE_CARD_ITEM.save()
+        result.status(201).json({ message: 'Furniture card successfully updated' })
     } catch (err) {
         result.status(400).json({ message: err.message });
     }
 });
-
 ROUTER.delete('/', async (request, result) => {
     try {
         const JWT_TOKEN = request.query.jwtToken;
-        const FURNITURE_CARD_ID = request.query.furnitureCardId;
+        const FURNITURE_CARD_ID = request.query.furnitureCardId
         const USER_ID = await checkUserAccess(JWT_TOKEN);
-        if (!USER_ID) return result.status(404).json({ message: 'User not found' });
-
-        const db = await dbModule.getDb();
-        let FURNITURE_CARD_ITEM = await db.collection('furniturecards').findOne({ _id: new ObjectId(FURNITURE_CARD_ID) });
-
-        if (!FURNITURE_CARD_ITEM) return result.status(404).json({ message: 'Furniture card not found' });
-        if (FURNITURE_CARD_ITEM.authorId.toString() !== USER_ID.toString()) return result.status(409).json({ message: "User hasn't access" });
-
-        await db.collection('furniturecards').deleteOne({ _id: new ObjectId(FURNITURE_CARD_ID) });
-        result.status(201).json({ message: 'Furniture card successfully deleted' });
+        if (!USER_ID) return res.status(404).json({ message: 'User not found' });
+        let FURNITURE_CARD_ITEM = await FURNITURE_CARD.findById(FURNITURE_CARD_ID)
+        if (!FURNITURE_CARD_ITEM) return res.status(404).json({ message: 'Furniture card not found' });
+        if(FURNITURE_CARD_ITEM.authorId!==USER_ID)return res.status(409).json({ message: "User hasn't access" });
+        await FURNITURE_CARD.deleteOne({ _id: FURNITURE_CARD_ID });
+        result.status(201).json({ message: 'Furniture card successfully deleted' })
     } catch (err) {
         result.status(400).json({ message: err.message });
     }
 });
-
 ROUTER.get('/', async (request, result) => {
     try {
-        const db = await dbModule.getDb();
-        let FURNITURE_CARD_ITEM = await db.collection('furniturecards').findOne({ _id: new ObjectId(request.query.furnitureCardId) });
-
-        if (!FURNITURE_CARD_ITEM) return result.status(404).json({ message: 'Furniture card not found' });
-
+        let FURNITURE_CARD_ITEM = await FURNITURE_CARD.findById(request.query.furnitureCardId)
+        if (!FURNITURE_CARD_ITEM) return res.status(404).json({ message: 'Furniture card not found' });
         const JWT_TOKEN = request.query.jwtToken;
         const USER_ID = await checkUserAccess(JWT_TOKEN);
-        const AUTHOR_MATCHED = USER_ID.toString() === FURNITURE_CARD_ITEM.authorId.toString() ? true : false;
-        
-        result.status(201).json({ furnitureCard: FURNITURE_CARD_ITEM, authorMatched: AUTHOR_MATCHED });
+        const AUTHOR_MATCHED = USER_ID===FURNITURE_CARD_ITEM.authorId?true:false
+        result.status(201).json({furnitureCard:FURNITURE_CARD_ITEM,authorMatched:AUTHOR_MATCHED});
     } catch (err) {
         result.status(400).json({ message: err.message });
     }
-});
+})
 
 module.exports = ROUTER;

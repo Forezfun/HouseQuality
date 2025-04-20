@@ -1,24 +1,21 @@
 const EXPRESS = require('express');
 const ROUTER = EXPRESS.Router();
+const { checkUserAccess } = require('../helpers/jwtHandlers')
+const FURNITURE_CARD = require('../models/furnitureCard')
 const path = require('path');
-const dbModule = require('../server');
-const { ObjectId } = require('mongodb');
-
+const IMAGES_FURNITURE = require('../models/imagesFurniture')
 ROUTER.get('/all', async (request, result) => {
     try {
-        const db = await dbModule.getDb();
-        const START_RANGE = +request.query.startRange;
-        if (isNaN(START_RANGE)) throw new Error("startRange must be a number.");
+        const START_RANGE = +request.query.startRange
+        console.log(START_RANGE,typeof(START_RANGE))
+        if(typeof(START_RANGE)!=='number')throw new Error("startRange must be a number.");
 
-        const FURNITURE_CARDS_ARRAY = await db.collection('furniturecards')
-            .find()
-            .skip(START_RANGE)
-            .limit(10)
-            .toArray();
-
+        const FURNITURE_CARDS_ARRAY = await FURNITURE_CARD.find()
+        .skip(START_RANGE)
+        .limit(10);
         const RESULTS_ARRAY = await Promise.all(
             FURNITURE_CARDS_ARRAY.map(async (furnitureData) => {
-                const IMAGES_FURNITURE_ITEM = await db.collection('furnitureimages').findOne({ furnitureId: furnitureData._id.toString() });
+                const IMAGES_FURNITURE_ITEM = await IMAGES_FURNITURE.findOne({ furnitureId: furnitureData._id });
                 const previewPath = path.join(
                     __dirname,
                     '..',
@@ -30,6 +27,7 @@ ROUTER.get('/all', async (request, result) => {
                 );
                 const maxCost = furnitureData.shops.sort((a, b) => a.cost - b.cost)[0].cost;
     
+        
                 return {
                     name: furnitureData.name,
                     cost: maxCost,
@@ -39,28 +37,27 @@ ROUTER.get('/all', async (request, result) => {
             })
         );
         
-        result.status(200).json({ resultsArray: RESULTS_ARRAY });
+        result.status(200).json({resultsArray:RESULTS_ARRAY})
     } catch (err) {
         result.status(400).json({ message: err.message });
     }
-});
-
+})
 ROUTER.get('/category', async (request, result) => {
     try {
-        const db = await dbModule.getDb();
-        const START_RANGE = +request.query.startRange;
-        const CATEGORY_NAME = request.query.category;
-        if (isNaN(START_RANGE)) throw new Error("startRange must be a number.");
+        const START_RANGE = +request.query.startRange
+        const CATEGORY_NAME = request.query.category
+        console.log(START_RANGE,typeof(START_RANGE))
+        if(typeof(START_RANGE)!=='number')throw new Error("startRange must be a number.");
 
-        const FURNITURE_CARDS_ARRAY = await db.collection('furniturecards')
-            .find({ 'additionalData.category': CATEGORY_NAME })
-            .skip(START_RANGE)
-            .limit(10)
-            .toArray();
-
+        const FURNITURE_CARDS_ARRAY = await FURNITURE_CARD.find({
+            'additionalData.category': CATEGORY_NAME
+        })
+        .skip(START_RANGE)
+        .limit(10);
+        console.log(FURNITURE_CARDS_ARRAY)
         const RESULTS_ARRAY = await Promise.all(
             FURNITURE_CARDS_ARRAY.map(async (furnitureData) => {
-                const IMAGES_FURNITURE_ITEM = await db.collection('furnitureimages').findOne({ furnitureId: furnitureData._id.toString() });
+                const IMAGES_FURNITURE_ITEM = await IMAGES_FURNITURE.findOne({ furnitureId: furnitureData._id });
                 const previewPath = path.join(
                     __dirname,
                     '..',
@@ -72,6 +69,7 @@ ROUTER.get('/category', async (request, result) => {
                 );
                 const maxCost = furnitureData.shops.sort((a, b) => a.cost - b.cost)[0].cost;
     
+        
                 return {
                     name: furnitureData.name,
                     cost: maxCost,
@@ -80,21 +78,21 @@ ROUTER.get('/category', async (request, result) => {
                 };
             })
         );
-        
-        result.status(200).json({ resultsArray: RESULTS_ARRAY });
+        console.log(RESULTS_ARRAY)
+        result.status(200).json({resultsArray:RESULTS_ARRAY})
     } catch (err) {
         result.status(400).json({ message: err.message });
     }
-});
-
+})
 ROUTER.get('/image/simple', async (req, res) => {
     try {
+        
         const { filePath } = req.query;
-        if (!filePath) return;
+        if(filePath===undefined)return
         res.sendFile(filePath);
     } catch (err) {
+        console.log(err)
         res.status(500).json({ message: 'Error fetching images: ' + err.message });
     }
 });
-
 module.exports = ROUTER;
