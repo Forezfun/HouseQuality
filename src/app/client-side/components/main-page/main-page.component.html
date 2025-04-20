@@ -60,7 +60,7 @@
 
         <span class="furnitureModule">
             <app-create-furniture tabindex="-1" [furnitureData]="furnitureExamplesData" [colorsClientData]="exampleClientColors" [ngClass]="{'opacityDisable': furnitureTemplate==='view'}" class="furnitureModuleVariant"></app-create-furniture>
-            <app-view-furniture tabindex="-1" [furnitureData]="viewExampleData" [ngClass]="{'opacityDisable': furnitureTemplate==='create'}" class="furnitureModuleVariant"></app-view-furniture>
+            <app-view-furniture [furnitureData]="viewExampleData" [ngClass]="{'opacityDisable': furnitureTemplate==='create'}" class="furnitureModuleVariant"></app-view-furniture>
         </span>
 
         <span class="someSpan">

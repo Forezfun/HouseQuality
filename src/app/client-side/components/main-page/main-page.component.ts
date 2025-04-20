@@ -1,4 +1,4 @@
-import { Component, ElementRef } from '@angular/core';
+import { AfterViewInit, Component, ElementRef } from '@angular/core';
 import { CreateFurnitureComponent, furnitureClientData, furnitureServerData } from '../create-furnitre/create-furniture.component';
 import { ViewFurnitureComponent } from '../view-furniture/view-furniture.component';
 import { PlanHouseComponent } from '../plan-house/plan-house.component';
@@ -14,10 +14,19 @@ import { imageSliderData } from '../image-slider/image-slider.component';
   templateUrl: './main-page.component.html',
   styleUrl: './main-page.component.scss'
 })
-export class MainPageComponent {
+export class MainPageComponent implements AfterViewInit{
   constructor(
     private elementRef: ElementRef
   ) { }
+  ngAfterViewInit(): void {
+    (this.elementRef.nativeElement.querySelectorAll('app-create-furniture,app-plan-house') as NodeListOf<HTMLElement>).forEach(elem => {
+      elem.querySelectorAll<HTMLElement>('*').forEach(child => {
+        console.log(child)
+        child.setAttribute('tabindex', "-1");
+        child.style.pointerEvents = 'none';
+      });
+    });
+  }
   imagesData: imageSliderData = {
     images: ['/assets/images/sofaSliderPhotos/1.png', '/assets/images/sofaSliderPhotos/2.png', '/assets/images/sofaSliderPhotos/3.png', '/assets/images/sofaSliderPhotos/4.png'],
     idMainImage: 0
