@@ -1,104 +1,58 @@
-const util = require('util');
-const { MongoClient } = require('mongodb');
-const express = require('express');
-const bodyParser = require('body-parser');
-const cors = require('cors');
-let db
-// Конфигурация MongoDB
-const DB_RS = 'rs01';
-const DB_NAME = 'db1';
-const DB_HOSTS = ['rc1a-a125zcod66sllskf.mdb.yandexcloud.net:27018'];
-const DB_USER = 'forezfun';
-const DB_PASS = '4691forezfun';
-const CACERT = 'root.crt';
-// /home/kruk-german27/HouseQuality/src/app/server-side/
-const MONGO_URI = util.format(
-  'mongodb://%s:%s@%s/%s?replicaSet=%s&tls=true&tlsCAFile=%s',
-  DB_USER,
-  DB_PASS,
-  DB_HOSTS.join(','),
-  DB_NAME,
-  DB_RS,
-  CACERT
-);
+const EXPRESS = require('express');
+const BODYPARSER = require('body-parser');
+const CORS = require('cors');
+const CONNECT_DB = require('./config/db');
+const USERS_ROUTES = require('./routes/userRoutes');
+const AUTH_ROUTES = require('./routes/authRoutes');
+const PROJECT_ROUTES = require('./routes/projectRoutes');
+const IMAGE_AVATAR_ROUTES = require('./routes/imageAvatarRoutes')
+const IMAGE_FURNITURE_ROUTES = require('./routes/imagesFurnitureRoutes')
+const FURNITURE_CARD_ROUTES = require('./routes/furnitureCardRoutes')
+const FURNITURE_MODEL_ROUTES = require('./routes/furnitureModelRoutes')
+const SHOP_ROUTES = require('./routes/shopRoutes')
+const FINDER_ROUTES = require('./routes/finderRoutes')
 
-// Глобальная переменная для подключения
-let dbClient;
+const APP_PORT = 5000;
+const USER_ROUTE = '/user';
+const PROJECT_ROUTE = '/projects';
+const AUTH_ROUTE = '/auth'
+const IMAGE_AVATAR_ROUTE = '/avatar'
+const IMAGE_FURNITURE_ROUTE = '/furniture/images'
+const FURNITURE_CARD_ROUTE = '/furniture/card'
+const FURNITURE_MODEL_ROUTE = '/furniture/model'
+const SHOP_ROUTE = '/shop'
+const FINDER_ROUTE = '/finder'
 
-async function connectToMongo() {
-  try {
-    dbClient = new MongoClient(MONGO_URI);
-    await dbClient.connect();
-    console.log('✅ Подключено к MongoDB');
+const APP = EXPRESS();
+// Подключение к базе данных
+CONNECT_DB(); 
 
-    db = dbClient.db(DB_NAME);
-    console.log(db)
-    const collections = await db.listCollections().toArray();
-    console.log('📂 Коллекции в базе:', collections.map(col => col.name));
-    return db;
-  } catch (err) {
-    console.error('❌ Ошибка подключения к MongoDB:', err.message);
-    process.exit(1);
-  }
-}
+// Мидлвары
+APP.use(CORS());
+APP.use(BODYPARSER.json());
+APP.use(BODYPARSER.urlencoded({ extended: true }));
+
+// Маршруты
+APP.use(PROJECT_ROUTE, PROJECT_ROUTES);
+APP.use(USER_ROUTE, USERS_ROUTES);
+APP.use(AUTH_ROUTE, AUTH_ROUTES);
+APP.use(IMAGE_AVATAR_ROUTE, IMAGE_AVATAR_ROUTES);
+APP.use(IMAGE_FURNITURE_ROUTE, IMAGE_FURNITURE_ROUTES);
+APP.use(FURNITURE_MODEL_ROUTE, FURNITURE_MODEL_ROUTES);
+APP.use(FURNITURE_CARD_ROUTE, FURNITURE_CARD_ROUTES);
+APP.use(SHOP_ROUTE, SHOP_ROUTES);
+APP.use(FINDER_ROUTE, FINDER_ROUTES);
 
 // Запуск сервера
-async function startServer() {
-  const db = await connectToMongo();
-  const app = express();
+APP.listen(APP_PORT, () => {
+  console.log(`Server running on port ${APP_PORT}`);
+});
+APP.get('/error', (req, res) => {
+  throw new Error('This is a forced error.');
+});
 
-  // Мидлвары
-  app.use(cors());
-  app.use(bodyParser.json());
-  app.use(express.json({ limit: '1gb' }));
-  app.use(express.urlencoded({ limit: '1gb', extended: true }));
-
-  // Передача объекта БД в роуты (лучше передавать в нужные)
-  app.use((req, res, next) => {
-    req.db = db;
-    next();
-  });
-
-  // Подключение маршрутов
-  app.use('/projects', require('./routes/projectRoutes'));
-  app.use('/user', require('./routes/userRoutes'));
-  app.use('/auth', require('./routes/authRoutes'));
-  app.use('/avatar', require('./routes/imageAvatarRoutes'));
-  app.use('/furniture/images', require('./routes/imagesFurnitureRoutes'));
-  app.use('/furniture/card', require('./routes/furnitureCardRoutes'));
-  app.use('/furniture/model', require('./routes/furnitureModelRoutes'));
-  app.use('/shop', require('./routes/shopRoutes'));
-  app.use('/finder', require('./routes/finderRoutes'));
-
-  // Обработка ошибок
-  app.use((err, req, res, next) => {
-    console.error('❌ Ошибка сервера:', err.stack);
-    res.status(500).json({ message: 'Internal Server Error' });
-  });
-
-  // Запуск сервера
-  const APP_PORT = 5000;
-  app.listen(APP_PORT, () => {
-    console.log(`🚀 Сервер запущен на порту ${APP_PORT}`);
-  });
-
-  // Закрытие соединения при завершении процесса
-  process.on('SIGINT', async () => {
-    console.log('\n🛑 Завершение работы сервера...');
-    if (dbClient) {
-      await dbClient.close();
-      console.log('✅ Соединение с MongoDB закрыто');
-    }
-    process.exit(0);
-  });
-}
-async function getDb(){
-  if (!db) {
-    await startServer()
-    return db
-  }
-  return db
-}
-// Запуск приложения
-startServer();
-module.exports = { getDb }
+// Middleware для обработки ошибок
+APP.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).send('Something broke!');
+});

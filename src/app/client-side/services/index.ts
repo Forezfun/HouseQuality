@@ -1,1 +1,1 @@
-export const baseUrl = 'https://housequality.site/api/'
+export const baseUrl = 'http://localhost:5000/'
