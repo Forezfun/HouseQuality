@@ -1,6 +1,6 @@
 <span class="body" (click)="currentColorId ?? openColorModule($event)">
-    <input class="furnitureTitle" [(ngModel)]="furnitureData.name" placeholder="Name">
-    <span class="imageSlideSpan">
+    <input class="furnitureTitle" [(ngModel)]="furnitureData.name" placeholder="Название" title="Введите название мебели">
+    <!-- <span class="imageSlideSpan">
         <button *ngIf="currentColorId!==undefined&&colorsClientData[currentColorId].imagesData.images.length>0"
             (click)="removeImages()" class="editImagesBtn">
             <img loading="lazy" alt="editImages" src="/assets/images/editIcon.svg" alt=""></button>
@@ -8,49 +8,49 @@
             *ngIf="currentColorId!==undefined&&colorsClientData[currentColorId].imagesData.images.length>0"
             [imagesArray]="colorsClientData[currentColorId].imagesData"
             (idMainImageEmitter)="changeIdMainImage($event)"></app-image-slider>
-    </span>
+    </span> -->
     <div class="uploadImagesDiv"
         *ngIf="currentColorId===undefined||(currentColorId!==undefined&&colorsClientData[currentColorId].imagesData.images.length<=0)">
-        <input (input)="onInputImages($event)" class="uploadImagesInput" multiple type="file" accept=".png,.jpeg,.jpg">
-        <img loading="lazy" class="uploadImagesIcon" src="/assets/images/uploadIcon.png" alt="">
+        <input (input)="onInputImages($event)" class="uploadImagesInput" multiple type="file" accept=".png,.jpeg,.jpg" title="Загрузите изображения">
+        <img loading="lazy" class="uploadImagesIcon" src="/assets/images/uploadIcon.png" alt="Загрузить">
     </div>
     <span class="footer">
         <span class="leftPiece">
             <span class="colorSlider">
-                <button (click)="openColorModule($event)" class="addColorBtn">
-                    <img loading="lazy" src="/assets/images/addIcon.svg" alt="add">
+                <button (click)="openColorModule($event)" class="addColorBtn" title="Добавить новый цвет">
+                    <img loading="lazy" src="/assets/images/addIcon.svg" alt="Добавить">
                 </button>
                 <span class="colors" [style.--total-items]="furnitureData.colors.length.toString()">
                     <button (click)="openFurnitureVariant(index)"
                         *ngFor="let colorVariant of furnitureData.colors;let index=index" [attr.data-idColor]="index"
-                        [style.background-color]="colorVariant.color" class="colorVariant"></button>
+                        [style.background-color]="colorVariant.color" class="colorVariant" title="Выбрать цвет"></button>
                 </span>
             </span>
-            <input type="file" accept=".obj" id="furnitureModel" class="furnitureModelInput">
+            <input type="file" accept=".obj" id="furnitureModel" class="furnitureModelInput" title="Загрузить 3D модель">
         </span>
         <span class="informationSpan">
             <span class="descriptionSpan">
-                <div class="descriptionTitle ">Description</div>
-                <textarea placeholder="Some description" [(ngModel)]="furnitureData.description"
-                    class="descriptionInformation"></textarea>
+                <div class="descriptionTitle">Описание</div>
+                <textarea placeholder="Введите описание..." [(ngModel)]="furnitureData.description"
+                    class="descriptionInformation" title="Введите описание мебели"></textarea>
             </span>
             <span class="rightFunctionalSection">
-                <div class="shopsTitle">Shops</div>
+                <div class="shopsTitle">Магазины</div>
                 <span class="shopsSpan">
                     <span class="shopsListSpan">
                         <button (click)="openShopsModule(index)" class="shopFunctions"
-                            *ngFor="let shopData of furnitureData.shops; let index=index">
+                            *ngFor="let shopData of furnitureData.shops; let index=index" title="Редактировать магазин">
                             <div class="furnitureCost">{{shopData.cost}}</div>
                             <div class="linkShop">
-                                <img loading="lazy" src="/assets/images/linkIcon.svg" alt="">
+                                <img loading="lazy" src="/assets/images/linkIcon.svg" alt="Ссылка">
                             </div>
                         </button>
                     </span>
-                    <button (click)="openShopsModule()" class="addShopButton"><img loading="lazy"
-                            src="/assets/images/addIcon.svg" alt="open"></button>
+                    <button (click)="openShopsModule()" class="addShopButton" title="Добавить магазин"><img loading="lazy"
+                            src="/assets/images/addIcon.svg" alt="Добавить"></button>
                 </span>
-                <button (click)="openAdditional()" class="additionalFunctions">
-                    Additional
+                <button (click)="openAdditional()" class="additionalFunctions" title="Дополнительная информация">
+                    Информация
                 </button>
             </span>
         </span>
@@ -63,37 +63,37 @@
 <ng-template #colorModule>
     <form class="addModuleSpan" [formGroup]="colorForm" (ngSubmit)="addColor()">
         <button (click)="closeAddModule()" class="closeAddModuleBtn" type="button">
-            <img loading="lazy" src="/assets/images/addIcon.svg" alt="">
+            <img loading="lazy" src="/assets/images/addIcon.svg" alt="Закрыть">
         </button>
         <span class="addModuleFormContent">
-            <h2 class="addModuleTitle">Furniture variant</h2>
+            <h2 class="addModuleTitle">Вариант мебели</h2>
             <span class="addModuleInputSpan">
-                <label class="inputLabel" for="colorVariant">Color</label>
-                <input formControlName="color" class="addModuleInput" id="colorVariant" type="text">
+                <label class="inputLabel" for="colorVariant">Цвет</label>
+                <input formControlName="color" placeholder="На английском или #hex" class="addModuleInput" id="colorVariant" type="text" title="Введите цвет в формате #hex или на английском">
             </span>
-            <button [disabled]="!colorForm.valid" class="submitAddModuleFormBtn" type="submit">Continue</button>
+            <button [disabled]="!colorForm.valid" class="submitAddModuleFormBtn" type="submit" title="Сохранить цвет">Продолжить</button>
         </span>
     </form>
 </ng-template>
 <ng-template #shopsModule>
     <form class="addModuleSpan" [formGroup]="shopForm" (ngSubmit)="addShop()">
         <button (click)="closeAddModule()" class="closeAddModuleBtn" type="button">
-            <img loading="lazy" src="/assets/images/addIcon.svg" alt="">
+            <img loading="lazy" src="/assets/images/addIcon.svg" alt="Закрыть">
         </button>
         <span class="addModuleFormContent">
-            <h2 class="addModuleTitle">Shop variant</h2>
+            <h2 class="addModuleTitle">Вариант магазина</h2>
             <span class="addModuleInputSpan">
-                <label class="inputLabel" for="cost">Cost</label>
-                <input formControlName="cost" class="addModuleInput" id="cost" type="text">
+                <label class="inputLabel" for="cost">Цена</label>
+                <input formControlName="cost" class="addModuleInput" id="cost" type="text" title="Введите цену">
             </span>
             <span class="addModuleInputSpan">
-                <label class="inputLabel" for="url">Link</label>
-                <input formControlName="url" class="addModuleInput" id="url" type="text">
+                <label class="inputLabel" for="url">Ссылка</label>
+                <input formControlName="url" class="addModuleInput" id="url" type="text" title="Введите ссылку на магазин">
             </span>
             <span class="functionShopsModuleBtns">
-                <button [disabled]="!shopForm.valid" class="submitAddModuleFormBtn" type="submit">Continue</button>
-                <button (click)="deleteShop()" class="deleteItemAddModuleBtn" *ngIf="lastClickedShop!==undefined"><img
-                        loading="lazy" src="/assets/images/deleteIcon.svg" alt=""></button>
+                <button [disabled]="!shopForm.valid" class="submitAddModuleFormBtn" type="submit" title="Сохранить магазин">Продолжить</button>
+                <button (click)="deleteShop()" class="deleteItemAddModuleBtn" *ngIf="lastClickedShop!==undefined" title="Удалить магазин"><img
+                        loading="lazy" src="/assets/images/deleteIcon.svg" alt="Удалить"></button>
             </span>
         </span>
     </form>
@@ -101,24 +101,24 @@
 <ng-template #additionalModule>
     <span class="addModuleSpan" (ngSubmit)="addShop()">
         <button (click)="closeAddModule()" class="closeAddModuleBtn" type="button">
-            <img loading="lazy" src="/assets/images/addIcon.svg" alt="">
+            <img loading="lazy" src="/assets/images/addIcon.svg" alt="Закрыть">
         </button>
         <span class="addModuleFormContent">
-            <h2 class="addModuleTitle">Additional</h2>
+            <h2 class="addModuleTitle">Информация</h2>
             <span *ngIf="categoriesArray!==undefined" class="addModuleInputSpan">
-                <label class="inputLabel" for="category">Category</label>
-                <select aria-placeholder="Sofa" [(ngModel)]="furnitureData.category" class="categorySelect"
-                    name="category" id="category">
+                <label class="inputLabel" for="category">Категория</label>
+                <select aria-placeholder="Диван" [(ngModel)]="furnitureData.category" class="categorySelect"
+                    name="category" id="category" title="Выберите категорию">
                     <option [value]="category" *ngFor="let category of categoriesArray">{{category}}</option>
                 </select>
-                <label class="inputLabel" for="width">Width</label>
-                <input [(ngModel)]="furnitureData.proportions.width" class="addModuleInput" id="width" type="text">
-                <label class="inputLabel" for="length">Length</label>
-                <input [(ngModel)]="furnitureData.proportions.length" class="addModuleInput" id="length" type="text">
-                <label class="inputLabel" for="height">Height</label>
-                <input [(ngModel)]="furnitureData.proportions.height" class="addModuleInput" id="height" type="text">
+                <label class="inputLabel" for="width">Ширина</label>
+                <input [(ngModel)]="furnitureData.proportions.width" class="addModuleInput" placeholder="1.7" id="width" type="text" title="Введите ширину">
+                <label class="inputLabel" for="length">Длина</label>
+                <input [(ngModel)]="furnitureData.proportions.length" class="addModuleInput" placeholder="1.5" id="length" type="text" title="Введите длину">
+                <label class="inputLabel" for="height">Высота</label>
+                <input [(ngModel)]="furnitureData.proportions.height" class="addModuleInput" placeholder="1" id="height" type="text" title="Введите высоту">
             </span>
-            <button (click)="closeAddModule()" class="submitAddModuleFormBtn additionalBtn">Save</button>
+            <button (click)="closeAddModule()" class="submitAddModuleFormBtn additionalBtn" title="Сохранить информацию">Сохранить</button>
         </span>
     </span>
 </ng-template>
