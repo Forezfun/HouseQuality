@@ -1,7 +1,7 @@
-import { AfterViewChecked, AfterViewInit, Component, ElementRef, OnInit, Renderer2, ViewChild } from '@angular/core';
+import { AfterViewChecked, AfterViewInit, Component, ElementRef, OnInit, Renderer2, TemplateRef, ViewChild } from '@angular/core';
 import { NavigationPanelComponent } from '../navigation-panel/navigation-panel.component';
 import { PlanHouseComponent, roomData } from '../plan-house/plan-house.component';
-import { NgClass, NgFor, NgIf } from '@angular/common';
+import { NgClass, NgFor, NgIf, NgTemplateOutlet } from '@angular/common';
 import { accountFullInformation, AccountService } from '../../services/account.service';
 import { UserCookieService } from '../../services/user-cookie.service';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -12,7 +12,7 @@ import { ErrorHandlerService } from '../../services/error-handler.service';
 @Component({
   selector: 'app-plan-house-page',
   standalone: true,
-  imports: [NavigationPanelComponent, PlanHouseComponent, NgFor, NgIf, ReactiveFormsModule, NgIf, NgClass],
+  imports: [NgTemplateOutlet,NavigationPanelComponent, PlanHouseComponent, NgFor, NgIf, ReactiveFormsModule, NgIf, NgClass],
   templateUrl: './plan-house-page.component.html',
   styleUrl: './plan-house-page.component.scss'
 })
@@ -25,7 +25,7 @@ export class PlanHousePageComponent implements AfterViewInit, OnInit, AfterViewC
     private elemenetRef: ElementRef,
     private renderer: Renderer2,
     private projectService: ProjectService,
-    private errorHandler:ErrorHandlerService
+    private errorHandler: ErrorHandlerService
   ) { }
 
   userData!: accountFullInformation
@@ -35,8 +35,22 @@ export class PlanHousePageComponent implements AfterViewInit, OnInit, AfterViewC
   projectNameForm = new FormGroup({
     name: new FormControl<string>('', [Validators.required])
   })
-
+  @ViewChild('roomsGuideTemplate', { static: true }) 
+  roomsGuideTemplate!: TemplateRef<any>;
+  guideTemplate:TemplateRef<any>=this.roomsGuideTemplate
   @ViewChild('planHouse') planHouse!: PlanHouseComponent;
+  isGuideVisible: boolean = true;
+
+  closeGuide() {
+    this.isGuideVisible = false;
+    // Можно добавить сохранение в localStorage, чтобы не показывать снова
+    // localStorage.setItem('guideClosed', 'true');
+  }
+
+  // Если нужно показывать снова при каких-то условиях
+  showGuide() {
+    this.isGuideVisible = true;
+  }
   private hasRoomIdBeenProcessed = false;
   ngAfterViewChecked(): void {
     if (this.hasRoomIdBeenProcessed || !this.planHouse || !this.route.snapshot.params['roomId']) return;
@@ -45,7 +59,7 @@ export class PlanHousePageComponent implements AfterViewInit, OnInit, AfterViewC
       if (typeof roomId === 'number') {
         this.planHouse.currentViewRoom = roomId;
         this.planHouse.currentIdClickedRoom = roomId;
-  
+
         this.planHouse.openViewRoom(roomId);
         this.planHouse.sceneOpenToggle = true;
         this.hasRoomIdBeenProcessed = true;
@@ -55,9 +69,20 @@ export class PlanHousePageComponent implements AfterViewInit, OnInit, AfterViewC
   ngAfterViewInit(): void {
     this.addModule = this.elemenetRef.nativeElement.querySelector('.addModule')
   }
+  getCurrentViewRoom(){
+    if(this.planHouse===undefined)return undefined
+    return this.planHouse.currentViewRoom
+  }
   ngOnInit(): void {
-    if (!this.userService.checkJwt()) this.router.navigateByUrl('/login')
-    this.userService.GETuser(this.userCookieService.getJwt())
+    const jwt = this.userCookieService.getJwt()
+    if (!jwt) {
+      this.router.navigateByUrl('/login')
+      return
+    }
+    this.pageInit(jwt)
+  }
+  pageInit(jwt: string) {
+    this.userService.GETuser(jwt)
       .subscribe({
         next: (response) => {
           this.userData = (response as any).userData as accountFullInformation
@@ -75,7 +100,6 @@ export class PlanHousePageComponent implements AfterViewInit, OnInit, AfterViewC
         }
       })
   }
-
   deleteProject(indexProject: number) {
     const jwt = this.userCookieService.getJwt()
     const CURRENT_PROJECT_ID = (this.userData.projects[indexProject] as serverProjectInformation)._id
@@ -126,12 +150,12 @@ export class PlanHousePageComponent implements AfterViewInit, OnInit, AfterViewC
         }
       })
   }
-  closeProject(){
+  closeProject() {
     this.saveProject()
     this.currentProjectId = undefined
   }
   openProject(indexProject: number) {
-    this.router.navigateByUrl(this.router.url+'/'+indexProject)
+    this.router.navigateByUrl(this.router.url + '/' + indexProject)
     this.currentProjectId = indexProject
   }
   createProject() {

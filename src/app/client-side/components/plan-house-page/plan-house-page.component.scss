@@ -3,26 +3,30 @@
 app-navigation-panel {
     margin-top: 30px;
 }
-.planModule{
+
+.planModule {
     grid-area: 1/1/2/2;
     display: flex;
     flex-direction: row;
-    gap:10px;
-    width:100%;
+    gap: 10px;
+    width: 100%;
     transition: all 0.5s ease-in-out;
 }
-.planModule > button{
+
+.planModule>button {
     width: 35px;
     height: 35px;
     background: none;
     border: none;
     cursor: pointer;
 }
-.planModule > button > img{
+
+.planModule>button>img {
     rotate: 45deg;
 }
+
 app-plan-house {
-    width:90%;
+    width: 90%;
 }
 
 .body {
@@ -60,7 +64,7 @@ app-plan-house {
     border-radius: 10px;
     border: none;
     box-shadow: 0 0 10px 0 white;
-
+    background-color: #000;
     cursor: pointer;
     overflow: hidden;
 }
@@ -74,13 +78,15 @@ app-plan-house {
     aspect-ratio: 1;
     cursor: pointer;
 }
-.mainProjectInformation{
+
+.mainProjectInformation {
     display: flex;
     height: 90%;
-    width:100%;
+    width: 100%;
     flex-direction: column;
     align-items: center;
 }
+
 .addProjectCard {
     justify-content: center;
     background-color: $darkGreen;
@@ -108,8 +114,8 @@ app-plan-house {
     height: 80%;
     aspect-ratio: 1;
     gap: 7px;
-    grid-template-columns: repeat(10,1fr);
-    grid-template-rows: repeat(10,1fr);
+    grid-template-columns: repeat(10, 1fr);
+    grid-template-rows: repeat(10, 1fr);
 }
 
 .room {
@@ -128,7 +134,7 @@ app-plan-house {
     grid-template-rows: 1fr;
     align-items: flex-start;
     justify-items: center;
-    width:90vw;
+    width: 90vw;
 }
 
 .addModule {
@@ -219,3 +225,242 @@ app-plan-house {
 .closeAddModuleBtn>img {
     transform: rotate(45deg)
 }
+
+
+.guideContainer {
+    background-color: black;
+    border-radius: 12px;
+    padding: 1.5rem;
+    color: #DAD7CD;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
+.guideSection {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    flex: 1;
+}
+
+.guideText {
+    font-size: clamp(1rem, 2vw, 1.3rem);
+    margin: 0;
+    color: #A3B18A;
+    text-align: center;
+    line-height: 1.4;
+}
+
+.animationContainer {
+    position: relative;
+    width: 140px;
+    aspect-ratio: 1;
+    margin: 0.5rem 0;
+}
+
+.movingMouse {
+    position: absolute;
+    width: 40px;
+    animation: crossAnimation 3s infinite ease-in-out;
+    will-change: transform;
+}
+
+.keyboardHint {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    width: 100%;
+    max-width: 300px;
+    justify-content: center;
+}
+
+.enterKey {
+    width: 100px;
+    aspect-ratio: 2;
+}
+
+.middleArrows {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.arrowsWrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap:10px;
+}
+
+.arrowKey {
+    width: 40px;
+    aspect-ratio: 1;
+    opacity: 0.5;
+    transition: opacity 0.3s;
+
+    &.top {
+        grid-area: top;
+        animation: pulseArrow 2s infinite 0s;
+    }
+
+    &.right {
+        grid-area: right;
+        animation: pulseArrow 2s infinite 0.5s;
+    }
+
+    &.bottom {
+        grid-area: bottom;
+        animation: pulseArrow 2s infinite 1s;
+    }
+
+    &.left {
+        grid-area: left;
+        animation: pulseArrow 2s infinite 1.5s;
+    }
+}
+
+/* Анимации */
+@keyframes crossAnimation {
+
+    0%,
+    100% {
+        transform: translate(0, 50%);
+    }
+
+    25% {
+        transform: translate(100px, 50%);
+    }
+
+    50% {
+        transform: translate(50px, 0);
+    }
+
+    75% {
+        transform: translate(50px, 100%);
+    }
+
+
+}
+
+@keyframes pulseArrow {
+
+    0%,
+    100% {
+        opacity: 0.5;
+        transform: scale(1);
+    }
+
+    50% {
+        opacity: 1;
+        transform: scale(1.2);
+    }
+}
+
+/* Медиа-запросы для мобильных устройств */
+@media (max-width: 768px) {
+    .guideContainer {
+        padding: 1rem;
+        gap: 1rem;
+    }
+
+    .animationContainer {
+        max-width: 150px;
+    }
+
+    .keyboardHint {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .arrowsWrapper {
+        width: 60%;
+    }
+}
+
+@media (max-width: 480px) {
+    .guideText {
+        font-size: 0.9rem;
+    }
+
+    .animationContainer {
+        max-width: 120px;
+    }
+}
+
+.guideOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.7);
+    z-index: 10;
+}
+
+.guideOverlay p {
+    font-family: 'Courier New', Courier, monospace;
+}
+
+.guideSpan {
+    position: relative;
+    background-color: black;
+    border-radius: 12px;
+    padding: 2rem;
+    max-width: 90%;
+    width: 50%;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 0 20px rgba(#A3B18A, 0.3);
+
+    @media (max-width: 768px) {
+        padding: 1.5rem;
+    }
+}
+
+.closeIcon {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    width: 1.5rem;
+    height: 1.5rem;
+    cursor: pointer;
+    rotate: 45deg;
+    transition: transform 0.2s;
+
+    &:hover {
+        transform: scale(1.1);
+    }
+}
+
+.guideContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    color: #DAD7CD;
+
+    @media (max-width: 768px) {
+        gap: 1.5rem;
+    }
+}
+
+.guideSection {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+}
+
+.guideText {
+    font-size: clamp(1rem, 2vw, 1.3rem);
+    margin: 0;
+    color: #A3B18A;
+    text-align: center;
+}
+

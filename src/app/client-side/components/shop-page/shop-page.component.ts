@@ -89,6 +89,9 @@ export class ShopPageComponent implements OnInit {
       }
     })
   }
+  pageInit() {
+    
+  }
   getUrlForBlobImage(blob: Blob) {
     return URL.createObjectURL(blob)
   }

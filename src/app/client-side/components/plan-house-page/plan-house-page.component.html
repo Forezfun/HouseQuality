@@ -3,8 +3,9 @@
     <span class="functionalModule">
         <span [ngClass]="{'disabled': currentProjectId!==undefined}" *ngIf="userData!==undefined"
             class="chooseProjectSpan">
-            <span *ngFor="let projectData of userData.projects;let index=index" class="projectCard">
-                <span class="mainProjectInformation" (click)="openProject(index)">
+            <button (click)="openProject(index)" *ngFor="let projectData of userData.projects;let index=index"
+                class="projectCard">
+                <span class="mainProjectInformation">
                     <h3 class="projectTitle">{{projectData.name}}</h3>
                     <div class="projectSchem">
                         <div [style.grid-area]="roomData.gridArea" *ngFor="let roomData of projectData.rooms"
@@ -15,17 +16,19 @@
                 <button class="deleteProjectBtn" (click)="deleteProject(index)">
                     <img src="/assets/images/deleteIcon.svg" alt="">
                 </button>
-            </span>
+            </button>
             <button (click)="openAddModule()" class="addProjectCard projectCard">
                 <h3>Create</h3>
                 <img src="/assets/images/addIcon.svg" alt="">
             </button>
         </span>
         <span [ngClass]="{'disabled': currentProjectId===undefined}" class="planModule">
-            <button (click)="closeProject()">
+            <button *ngIf="getCurrentViewRoom()==undefined" (click)="closeProject()">
                 <img src="/assets/images/addIcon.svg" alt="">
             </button>
-            <app-plan-house #planHouse (callSaveEmitter)="saveProject()" (planHouseEmitter)="updatePlanData($event)" [ngClass]="{'disabled': currentProjectId===undefined}" *ngIf="currentProjectId!==undefined" [planHouse]="userData.projects[currentProjectId].rooms"></app-plan-house>
+            <app-plan-house #planHouse (callSaveEmitter)="saveProject()" (planHouseEmitter)="updatePlanData($event)"
+                [ngClass]="{'disabled': currentProjectId===undefined}" *ngIf="currentProjectId!==undefined"
+                [planHouse]="userData.projects[currentProjectId].rooms"></app-plan-house>
         </span>
     </span>
 </span>
@@ -44,3 +47,34 @@
         </span>
     </form>
 </span>
+
+<div class="guideOverlay" *ngIf="isGuideVisible">
+    <div class="guideSpan">
+      <span [ngTemplateOutlet]="roomsGuideTemplate" class="guideWindow"></span>
+      <img src="assets/images/addIcon.svg" alt="Close" class="closeIcon" (click)="closeGuide()">
+    </div>
+  </div>
+  <ng-template #roomsGuideTemplate>
+    <div class="guideContainer">
+      <div class="guideSection">
+        <p class="guideText">Зажмите ЛКМ на комнате и перетаскивайте</p>
+        <div class="animationContainer">
+          <img src="assets/images/mouse.svg" alt="Mouse" class="movingMouse">
+        </div>
+      </div>
+      <div class="guideSection">
+        <p class="guideText">С зажатым Enter нажимайте стрелочки</p>
+        <div class="keyboardHint">
+          <img src="assets/images/enter.svg" alt="Enter" class="enterKey">
+          <div class="arrowsWrapper">
+            <img src="assets/images/arrowLeft.svg" style="rotate:90deg;" alt="Up" class="arrowKey top">
+            <div class="middleArrows">
+              <img src="assets/images/arrowLeft.svg" alt="Left" class="arrowKey left">
+              <img src="assets/images/arrowLeft.svg" style="rotate:270deg;" alt="Down" class="arrowKey bottom">
+              <img src="assets/images/arrowLeft.svg" style="rotate:180deg;" alt="Right" class="arrowKey right">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-template>

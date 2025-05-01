@@ -1,20 +1,46 @@
+<!-- navigation.component.html -->
 <span class="navigationSpan">
     <a routerLink="/" class="homeBtn navigationBtn">HQ</a>
-    <app-finder></app-finder>
-    <span class="mainBtns">
-        <a routerLink="/account" class="accountBtn navigationBtn">
+    
+    <!-- Гамбургер-меню (только на мобильных) -->
+    <button class="hamburger-menu" (click)="toggleMenu()" *ngIf="isMobileView">
+        <img loading="lazy" src="/assets/images/hamburgerMenuIcon.svg" alt="menu">
+    </button>
+    
+    <!-- Основной контент (скрывается на мобильных) -->
+    <div class="desktop-content" *ngIf="!isMobileView">
+        <app-finder></app-finder>
+        <span class="mainBtns">
+            <a routerLink="/account" class="accountBtn navigationBtn">
+                <img loading="lazy" src="/assets/images/accountIcon.svg" alt="account">
+            </a>
+            <a routerLink="/plan" class="createBtn navigationBtn">
+                <svg viewBox="0 0 32 32">
+                    <path d="M28,14H18V4c0-1.104-0.896-2-2-2s-2,0.896-2,2v10H4c-1.104,0-2,0.896-2,2s0.896,2,2,2h10v10c0,1.104,0.896,2,2,2 s2-0.896,2-2V18h10c1.104,0,2-0.896,2-2S29.104,14,28,14z" fill="#DAD7CD"/>
+                </svg>
+            </a>
+            <a routerLink="/create/new" class="navigationBtn">
+                <img loading="lazy" src="/assets/images/furnitureIcon.svg" alt="furniture">
+            </a>
+        </span>
+    </div>
+    
+    <!-- Мобильное меню (выпадающий список) -->
+    <div class="mobile-menu" *ngIf="isMobileView && menuOpen">
+        <app-finder></app-finder>
+        <a routerLink="/account" class="mobile-menu-item">
             <img loading="lazy" src="/assets/images/accountIcon.svg" alt="account">
+            <span>Аккаунт</span>
         </a>
-        <a routerLink="/plan" class="createBtn navigationBtn">
-            <svg id="Layer_1" version="1.1" viewBox="0 0 32 32" xml:space="preserve" xmlns="http://www.w3.org/2000/svg"
-                xmlns:xlink="http://www.w3.org/1999/xlink">
-                <path
-                    d="M28,14H18V4c0-1.104-0.896-2-2-2s-2,0.896-2,2v10H4c-1.104,0-2,0.896-2,2s0.896,2,2,2h10v10c0,1.104,0.896,2,2,2 s2-0.896,2-2V18h10c1.104,0,2-0.896,2-2S29.104,14,28,14z"
-                    fill="#DAD7CD" />
+        <a routerLink="/plan" class="mobile-menu-item">
+            <svg viewBox="0 0 32 32">
+                <path d="M28,14H18V4c0-1.104-0.896-2-2-2s-2,0.896-2,2v10H4c-1.104,0-2,0.896-2,2s0.896,2,2,2h10v10c0,1.104,0.896,2,2,2 s2-0.896,2-2V18h10c1.104,0,2-0.896,2-2S29.104,14,28,14z" fill="#DAD7CD"/>
             </svg>
+            <span>План</span>
         </a>
-        <a routerLink="/create/new" class="navigationBtn">
+        <a routerLink="/create/new" class="mobile-menu-item">
             <img loading="lazy" src="/assets/images/furnitureIcon.svg" alt="furniture">
+            <span>Создать</span>
         </a>
-    </span>
+    </div>
 </span>

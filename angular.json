@@ -31,7 +31,7 @@
               "src/app/client-side/manifest.webmanifest"
             ],
             "styles": [
-              "src/assets/styles/base.scss"
+              "src/assets/styles/fix-padding.scss"
             ],
             "stylePreprocessorOptions": {
               "includePaths": [
@@ -95,7 +95,7 @@
               "src/app/client-side/manifest.webmanifest"
             ],
             "styles": [
-              "src/assets/styles/base.scss"
+              "src/assets/styles/fix-padding.scss"
             ],
             "scripts": []
           }

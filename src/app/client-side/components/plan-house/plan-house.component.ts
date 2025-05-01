@@ -108,6 +108,7 @@ export class PlanHouseComponent implements AfterViewInit {
       return isNumber ? null : { notANumber: { value: control.value } };
     };
   }
+
   openScene() {
     this.sceneOpenToggle = true
   }
@@ -412,6 +413,7 @@ export class PlanHouseComponent implements AfterViewInit {
       const draggedElement = this.elementRef.nativeElement.querySelector('[style*="cursor: grabbing"]');
       if (draggedElement) {
         this.renderer.removeStyle(draggedElement, 'cursor');
+        this.renderer.removeStyle(draggedElement, 'background-color')
       }
       this.currentIdClickedRoom = undefined
       this.emitPlanHouse()
@@ -491,15 +493,16 @@ export class PlanHouseComponent implements AfterViewInit {
     if (this.currentIdClickedRoom === undefined) return
     this.calculateRoomSpanSettings()
   }, 50)
-  @HostListener('document:keydown.Escape')
-  escapeDragginMod() {
-    if (this.currentIdClickedRoom === undefined) return
-    this.isDragging = false
-    this.currentIdClickedRoom = undefined
-    const draggedElement = this.elementRef.nativeElement.querySelector('[style*="cursor: grabbing"]');
-    if (draggedElement) {
-      this.renderer.removeStyle(draggedElement, 'background-color')
-      this.renderer.removeStyle(draggedElement, 'cursor');
-    }
-  }
+  // @HostListener('document:keydown.Escape')
+  // escapeDragginMod() {
+  //   console.log('keyup',this.currentIdClickedRoom)
+  //   this.isDragging = false
+  //   this.currentIdClickedRoom = undefined
+  //   const draggedElement = this.elementRef.nativeElement.querySelector('[style*="cursor: grabbing"]');
+  //   console.log(draggedElement)
+  //   if (draggedElement) {
+  //     this.renderer.removeStyle(draggedElement, 'background-color')
+  //     this.renderer.removeStyle(draggedElement, 'cursor');
+  //   }
+  // }
 }
