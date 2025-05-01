@@ -1,5 +1,6 @@
 @import 'base.scss';
-.body{
+
+.body {
     min-height: 100vh;
     background-color: black;
     width: 100vw;
@@ -7,43 +8,51 @@
     flex-direction: column;
     align-items: center;
 }
-app-navigation-panel{
+
+app-navigation-panel {
     margin-top: 30px;
 }
-app-navigation-panel,app-create-furniture{
-    width:80%;
+
+app-navigation-panel,
+app-create-furniture {
+    width: 80%;
 }
-.confirmBtn{
+
+.confirmBtn {
     width: 75%;
     color: white;
     padding: 15px;
 }
-.functionalBtns{
+
+.functionalBtns {
     margin-top: 20px;
-    width:clamp(300px,30vw,400px);
+    width: clamp(300px, 30vw, 400px);
     display: flex;
     height: 50px;
-    gap:10px;
-    justify-content: end;
+    gap: 10px;
+    justify-content: center;
     margin-bottom: 30px;
 }
-.functionalBtn{
+
+.functionalBtn {
     height: 100%;
     border-radius: 10px;
     background-color: $darkGreen;
     border: none;
     cursor: pointer;
 }
-.deleteBtn{
+
+.deleteBtn {
     aspect-ratio: 1;
     padding: 1em;
     display: flex;
     align-items: center;
     justify-content: center;
 }
-.colorCircle{
+
+.colorCircle {
     border-radius: 100%;
-    height:100%;
+    height: 100%;
     aspect-ratio: 1;
     display: flex;
     align-items: center;
@@ -52,35 +61,53 @@ app-navigation-panel,app-create-furniture{
     box-shadow: 0 0 5px 0 white;
     transition: background-color 0.3s ease-in-out;
 }
-.deleteColorBtn{
+
+.deleteColorBtn {
     padding: 5px;
-    background-color:transparent;
+    background-color: transparent;
 }
-/* Добавляем в конец файла */
+
+@media (max-width: 1440px) {
+    app-create-furniture {
+        width: 90%;
+    }
+}
+
+@media (max-width: 1440px) {
+    app-create-furniture {
+        width: 90%;
+    }
+}
+
 @media (max-width: 600px) {
     .body {
-      width: 100vw;
-      padding: 0 10px;
-      box-sizing: border-box;
+        width: calc(100vw - 20px);
+        padding: 0 10px;
+        box-sizing: border-box;
     }
-  
-    app-navigation-panel, app-create-furniture {
-      width: 100%;
+
+    app-navigation-panel,
+    app-create-furniture {
+        width: 100%;
     }
-  
+
     .functionalBtns {
-      width: 100%;
-      max-width: 400px;
-      margin: 20px auto;
-      gap: 5px;
+        width: 100%;
+        max-width: 400px;
+        margin: 20px auto;
+        gap: 5px;
     }
-  
+
     .confirmBtn {
-      width: 65%;
-      padding: 10px;
+        width: 65%;
+        padding: 10px;
     }
-  
-    .deleteBtn {
-      padding: 0.5em;
+}
+
+button {
+    &:hover {
+        transform: scale(1.1);
     }
-  }
+
+    transition: all 0.3s ease-in-out;
+}

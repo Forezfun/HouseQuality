@@ -164,31 +164,31 @@ export class LoginPageComponent implements AfterViewInit, OnInit {
       })
   }
 
-  @HostListener('document:scroll', ['$event'])
-  onWindowScroll() {
-    if (this.scrollTimeout) return
-    this.scrollTimeout = setTimeout(() => {
-      const scrollPosition = document.documentElement.scrollTop;
-      const windowHeight = window.innerHeight;
-      this.renderer.setStyle(this.backgroundHouseElement, 'opacity', Math.max(Math.abs(scrollPosition * 2 / windowHeight - 1), 0.35));
+  // @HostListener('document:scroll', ['$event'])
+  // onWindowScroll() {
+  //   if (this.scrollTimeout) return
+  //   this.scrollTimeout = setTimeout(() => {
+  //     const scrollPosition = document.documentElement.scrollTop;
+  //     const windowHeight = window.innerHeight;
+  //     this.renderer.setStyle(this.backgroundHouseElement, 'opacity', Math.max(Math.abs(scrollPosition * 2 / windowHeight - 1), 0.35));
 
-      if (scrollPosition >= (document.documentElement.scrollHeight - window.innerHeight) / 2) {
-        this.renderer.removeClass(this.loginModuleElement, 'disabledOpacity');
-        this.scrollTimeout = null;
-        return;
-      }
+  //     if (scrollPosition >= (document.documentElement.scrollHeight - window.innerHeight) / 2) {
+  //       this.renderer.removeClass(this.loginModuleElement, 'disabledOpacity');
+  //       this.scrollTimeout = null;
+  //       return;
+  //     }
 
-      if (scrollPosition <= 50) {
-        this.renderer.setStyle(this.scrollBtn, 'z-index', 4);
-      } else {
-        this.renderer.setStyle(this.scrollBtn, 'z-index', 3);
-      }
+    //   if (scrollPosition <= 50) {
+    //     this.renderer.setStyle(this.scrollBtn, 'z-index', 4);
+    //   } else {
+    //     this.renderer.setStyle(this.scrollBtn, 'z-index', 3);
+    //   }
 
-      if (!this.loginModuleElement.classList.contains('disabledOpacity')) {
-        this.renderer.addClass(this.loginModuleElement, 'disabledOpacity');
-      }
+    //   if (!this.loginModuleElement.classList.contains('disabledOpacity')) {
+    //     this.renderer.addClass(this.loginModuleElement, 'disabledOpacity');
+    //   }
 
-      this.scrollTimeout = null;
-    }, 100);
-  }
+    //   this.scrollTimeout = null;
+    // }, 100);
+  // }
 }

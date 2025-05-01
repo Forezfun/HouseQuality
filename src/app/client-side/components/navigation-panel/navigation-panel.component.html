@@ -2,12 +2,10 @@
 <span class="navigationSpan">
     <a routerLink="/" class="homeBtn navigationBtn">HQ</a>
     
-    <!-- Гамбургер-меню (только на мобильных) -->
     <button class="hamburger-menu" (click)="toggleMenu()" *ngIf="isMobileView">
         <img loading="lazy" src="/assets/images/hamburgerMenuIcon.svg" alt="menu">
     </button>
     
-    <!-- Основной контент (скрывается на мобильных) -->
     <div class="desktop-content" *ngIf="!isMobileView">
         <app-finder></app-finder>
         <span class="mainBtns">
@@ -25,7 +23,6 @@
         </span>
     </div>
     
-    <!-- Мобильное меню (выпадающий список) -->
     <div class="mobile-menu" *ngIf="isMobileView && menuOpen">
         <app-finder></app-finder>
         <a routerLink="/account" class="mobile-menu-item">

@@ -1,6 +1,6 @@
 <span class="body">
     <app-navigation-panel></app-navigation-panel>
-    <span class="paralaxImageSpan">
+    <!-- <span class="paralaxImageSpan">
         <button class="scrollBtn" (click)="toggleScroll()">{{checkLoginModuleStatus()?'BACK':'LOGIN'}}</button>
         <img loading="lazy"  draggable="false" src="/assets/images/houseFront.png" alt=""
             class="houseFront">
@@ -9,12 +9,12 @@
     <div class="floorDecration"></div>
     <span class="paralaxSecondImageSpan">
         <img loading="lazy"  draggable="false" src="/assets/images/paralaxBasement.webp" alt="">
-    </span>
-    <span class="loginModule disabledOpacity">
+    </span> -->
+    <span class="loginModule">
         <span class="formModule">
-            <button (click)="toggleScroll()" class="closeAddModuleBtn" type="button">
+            <!-- <button (click)="toggleScroll()" class="closeAddModuleBtn" type="button">
                 <img loading="lazy"  src="/assets/images/addIcon.svg" alt="">
-            </button>
+            </button> -->
             <ng-container *ngTemplateOutlet="currentFormTemplate"></ng-container>
         </span>
     </span>

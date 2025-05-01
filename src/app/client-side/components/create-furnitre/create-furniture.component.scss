@@ -1,11 +1,20 @@
 @import 'base.scss';
-
+button,.furnitureModelInput{
+    &:hover{
+        transform: scale(1.1);
+    }
+    transition: all 0.3s ease-in-out;
+}
+.furnitureModelInput:hover{
+    transform: scale(1.1);
+}
 .body {
-    margin-top: 60px;
     background-color: black;
     display: flex;
     flex-direction: column;
     gap: 30px;
+    margin: 0 auto;
+    margin-top: 60px;
 }
 
 .imageSlideSpan {
@@ -13,6 +22,7 @@
     grid-template-columns: 1fr;
     grid-template-rows: 1fr;
 }
+
 .addModuleInput {
     border-radius: 10px;
     background-color: transparent;
@@ -21,6 +31,7 @@
     outline: none;
     color: white;
 }
+
 .editImagesBtn {
     aspect-ratio: 1;
     border: none;
@@ -41,7 +52,11 @@ app-image-slider {
     display: block;
     grid-area: 1/1/2/2;
 }
-
+.leftPiece{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
 .furnitureTitle {
     color: white;
     text-align: center;
@@ -211,7 +226,8 @@ app-image-slider {
 .inputLabel {
     color: $light
 }
-.categorySelect{
+
+.categorySelect {
     background: none;
     border: 1px solid #888888;
     border-radius: 10px;
@@ -219,6 +235,7 @@ app-image-slider {
     background-color: black;
     color: white;
 }
+
 .addModuleInput {
     border-radius: 10px;
     background-color: transparent;
@@ -319,14 +336,13 @@ app-image-slider {
     background-color: $lightGreen;
     border-radius: 10px;
     border: none;
-    color:white;
-    font-size: medium;
-    padding: 10px 0;
+    color: white;
+    font-size: 115%;
+    line-height: 50px;
+    height: 50px;
     cursor: pointer;
 }
-.additionalBtn{
-    // width:50%
-}
+
 .shopsSpan {
     width: 100%;
     height: calc(100% - 60px);
@@ -450,57 +466,80 @@ app-image-slider {
 .furnitureModelLabel {
     color: white
 }
-/* Добавляем в конец файла */
-@media (max-width: 600px) {
-    .body {
-      margin-top: 30px;
-      gap: 15px;
-    }
-  
+@media (max-width: 1200px) {
     .furnitureTitle {
-      font-size: 1.5rem;
-      width: 90%;
+        font-size: 2vw;
     }
-  
+}
+@media (max-width: 1000px) {
+    app-create-furniture {
+        width: calc(100% - 10px);
+    }
+    .colorSlider{
+        height:200px;
+    }
+    .furnitureModelInput{
+        height: 25px;
+    }
+    .furnitureTitle {
+        font-size: 2.5vw;
+    }
+}
+@media (max-width: 600px) {
+    .rightFunctionalSection {
+        gap: 10px;
+    }
+    .furnitureTitle {
+        font-size: 3vw;
+    }
+    .shopsTitle,
+    .descriptionTitle {
+        border-radius: 10px;
+    }
+
+    .body {
+        max-width: 400px;
+        margin-top: 30px;
+        gap: 15px;
+    }
+
+    .furnitureTitle {
+        font-size: 1.5rem;
+        width: 90%;
+    }
+
     .footer {
-      flex-direction: column;
-      gap: 20px;
+        flex-direction: column;
+        gap: 20px;
     }
-  
+
     .colorSlider {
-      width: 100%;
-      height: 200px;
-      margin-bottom: 20px;
+        width: 100%;
+        height: 200px;
+        margin-bottom: 20px;
     }
-  
+
     .informationSpan {
-      width: 100%;
-      flex-direction: column;
+        width: 100%;
+        flex-direction: column;
     }
-  
-    .descriptionSpan, .rightFunctionalSection {
-      width: 100%;
+
+    .descriptionSpan,
+    .rightFunctionalSection {
+        width: 100%;
     }
-  
+
     .addModuleFormContent {
-      width: 85vw;
-      padding: 20px;
+        width: calc(85vw - 40px);
+        padding: 20px;
     }
-  
-    .uploadImagesDiv {
-      margin: 30px auto;
-    }
-  
+
     .shopsSpan {
-      height: auto;
+        height: auto;
     }
-  
-    .shopFunctions, .addShopButton {
-      height: 40px;
-    }
-  
+
     .furnitureModelInput {
-      width: 100%;
-      margin-top: 10px;
+        width: calc(100% - 20px);
+        margin-top: 10px;
     }
-  }
+}
