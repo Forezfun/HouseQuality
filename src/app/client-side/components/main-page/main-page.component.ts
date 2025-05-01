@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, ViewEncapsulation } from '@angular/core';
 import { CreateFurnitureComponent, furnitureClientData, furnitureServerData } from '../create-furnitre/create-furniture.component';
 import { ViewFurnitureComponent } from '../view-furniture/view-furniture.component';
 import { PlanHouseComponent } from '../plan-house/plan-house.component';
@@ -21,7 +21,6 @@ export class MainPageComponent implements AfterViewInit{
   ngAfterViewInit(): void {
     (this.elementRef.nativeElement.querySelectorAll('app-create-furniture,app-plan-house') as NodeListOf<HTMLElement>).forEach(elem => {
       elem.querySelectorAll<HTMLElement>('*').forEach(child => {
-        console.log(child)
         child.setAttribute('tabindex', "-1");
         child.style.pointerEvents = 'none';
       });

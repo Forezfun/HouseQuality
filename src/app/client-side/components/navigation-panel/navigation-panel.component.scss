@@ -1,41 +1,134 @@
+/* navigation.component.scss */
 @import 'base.scss';
-.navigationBtn > img,svg{
-    height:100%;
+
+.desktop-content{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 75%;
+    height: 100%;
 }
-app-finder{
+.navigationBtn > img, svg {
+    height: 100%;
+}
+
+app-finder {
     height: 80%;
-    width:50%;
+    width: 50%;
 }
-.homeBtn{
-    color:$light;
+
+.homeBtn {
+    color: $light;
     font-family: Gloock;
     font-size: 27.5px;
     text-decoration: none;
     align-content: center;
 }
 
-.navigationSpan{
+.navigationSpan {
     display: flex;
     background-color: black;
     border-radius: 10px;
-    gap:5px;
+    gap: 5px;
     justify-content: space-around;
     min-width: 350px;
-    width:75vw;
+    width: 75vw;
     margin: 0 auto;
     height: 60px;
     align-items: center;
     box-shadow: 0 0 10px 0px white;
+    position: relative;
+    
+    @media (max-width: 600px) {
+        justify-content: space-between;
+        padding: 0 15px;
+        width: 90vw;
+        min-width: auto;
+    }
 }
-.navigationBtn{
+
+.navigationBtn {
     height: 80%;
-    background:none;
+    background: none;
     border: none;
     cursor: pointer;
 }
-.mainBtns{
+
+.mainBtns {
     height: 75%;
     display: flex;
-    gap:15px;
+    gap: 15px;
     align-items: center;
+}
+
+/* Стили для гамбургер-меню */
+.hamburger-menu {
+    display: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    height: 30px;
+    width: 30px;
+    transition: all 0.5s ease-in-out;
+    
+    img {
+        width: 100%;
+        height: 100%;
+    }
+    
+    @media (max-width: 600px) {
+        display: block;
+    }
+}
+
+/* Стили для мобильного меню */
+.mobile-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background-color: black;
+    border-radius: 0 0 10px 10px;
+    padding: 15px;
+    flex-direction: column;
+    gap: 15px;
+    z-index: 100;
+    box-shadow: 0 5px 10px rgba(0,0,0,0.2);
+    
+    app-finder {
+        width: 100%;
+        margin-bottom: 10px;
+        height: 40px;
+    }
+}
+
+.mobile-menu-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: $light;
+    text-decoration: none;
+    padding: 8px;
+    
+    img, svg {
+        width: 24px;
+        height: 24px;
+    }
+    
+    span {
+        font-size: 16px;
+    }
+}
+
+/* Адаптивные стили */
+@media (max-width: 600px) {
+    .desktop-content {
+        display: none;
+    }
+    
+    .mobile-menu {
+        display: flex;
+    }
 }

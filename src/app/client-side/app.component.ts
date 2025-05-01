@@ -18,8 +18,7 @@ import { FinderService } from './services/finder.service';
   standalone: true,
   imports: [RouterOutlet,ErrorHandlerComponent,HttpClientModule],
   providers:[ErrorHandlerComponent,AccountService,AuthService,UserCookieService,ServerImageControlService,ProjectService,PlanHouseComponent,SceneComponent,FurnitureCardControlService,FurnitureModelControlService,ShopService,FinderService],
-  templateUrl: './app.component.html',
-  styleUrl: './app.component.scss'
+  templateUrl: './app.component.html'
 })
 export class AppComponent {
   title = 'HouseQuality';

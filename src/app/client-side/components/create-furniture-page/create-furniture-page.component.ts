@@ -46,65 +46,76 @@ export class CreateFurniturePageComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.route.params.subscribe(params => {
-      if (this.idPage !== undefined) location.reload()
-      this.idPage = params['id'];
-      if (this.idPage === 'new') return
-      const jwt = this.cookieService.getJwt()
-      if (!jwt) {
-        this.router.navigateByUrl('/login')
-        return
-      }
-      this.furnitureCardService.GETfurnitureCard(this.idPage, jwt)
-        .subscribe({
-          next: async (response) => {
-            const RECEIVED_DATA: furnitureServerData = response.furnitureCard
-            if (response.authorMatched === false) {
-              this.router.navigateByUrl('/create/new')
-              return
-            }
-            this.furnitureData.name = RECEIVED_DATA.name,
-              this.furnitureData.description = RECEIVED_DATA.description,
-              this.furnitureData.shops = RECEIVED_DATA.shops
-            const COLORS_PROMISES = RECEIVED_DATA.colors.map(async (colorObject: any) => {
-
-              const IMAGES_DATA = await this.serverImageControl.GETallProjectImages(this.idPage, colorObject.color)
-              const IMAGES_URLS: string[] = IMAGES_DATA.imagesURLS
-              const REQUEST_URLS: string[] = IMAGES_URLS.map(url => this.serverImageControl.GETsimpleImage(url))
-              const BLOB_URLS: Blob[] = await Promise.all(
-                REQUEST_URLS.map(async (blobUrl): Promise<Blob> => {
-                  const response = await fetch(blobUrl.toString());
-                  const blob = await response.blob();
-                  return blob;
-                })
-              );
-              this.furnitureData.colors.push({
-                color: colorObject.color,
-                imagesData: {
-                  images: BLOB_URLS,
-                  idMainImage: IMAGES_DATA.idMainImage
-                }
-              })
-              this.colorsClientData.push({
-                color: colorObject.color,
-                imagesData: {
-                  images: REQUEST_URLS,
-                  idMainImage: IMAGES_DATA.idMainImage
-                }
-              })
-
-            })
-            await Promise.all(COLORS_PROMISES);
-            this.createFurnitureComponent.currentColorId = 0
-          },
-          error: (error) => {
-            console.log(error)
-            this.errorHandler.setError('Error while loading furniture', 5000)
-          }
-        })
-    });
+    const jwt = this.cookieService.getJwt()
+    if (!jwt) {
+      this.router.navigateByUrl('/login')
+      return
+    }
+    this.idPage = this.route.snapshot.paramMap.get('id')!;
+    if (this.idPage === 'new') return
+    this.pageInit(jwt)
   }
-  
+  pageInit(jwt: string) {
+    this.furnitureCardService.GETfurnitureCard(this.idPage, jwt)
+      .subscribe({
+        next: async (response) => {
+          const RECEIVED_DATA: furnitureServerData = response.furnitureCard;
+          if (response.authorMatched === false) {
+            this.router.navigateByUrl('/create/new');
+            return;
+          }
+          this.populateFurnitureData(RECEIVED_DATA);
+          await this.processColors(RECEIVED_DATA.colors);
+          this.createFurnitureComponent.currentColorId = 0;
+        },
+        error: (error) => {
+          console.log(error);
+          this.errorHandler.setError('Error while loading furniture', 5000);
+        }
+      });
+  }
+
+  private populateFurnitureData(RECEIVED_DATA: furnitureServerData) {
+    this.furnitureData.name = RECEIVED_DATA.name;
+    this.furnitureData.description = RECEIVED_DATA.description;
+    this.furnitureData.shops = RECEIVED_DATA.shops;
+  }
+
+  private async processColors(colors: any[]) {
+    const COLORS_PROMISES = colors.map(async (colorObject: any) => {
+      const IMAGES_DATA = await this.serverImageControl.GETallProjectImages(this.idPage, colorObject.color);
+      const IMAGES_URLS: string[] = IMAGES_DATA.imagesURLS;
+      const REQUEST_URLS: string[] = IMAGES_URLS.map(url => this.serverImageControl.GETsimpleImage(url));
+      const BLOB_URLS: Blob[] = await this.fetchBlobUrls(REQUEST_URLS);
+
+      this.furnitureData.colors.push({
+        color: colorObject.color,
+        imagesData: {
+          images: BLOB_URLS,
+          idMainImage: IMAGES_DATA.idMainImage
+        }
+      });
+      this.colorsClientData.push({
+        color: colorObject.color,
+        imagesData: {
+          images: REQUEST_URLS,
+          idMainImage: IMAGES_DATA.idMainImage
+        }
+      });
+    });
+    await Promise.all(COLORS_PROMISES);
+  }
+
+  private async fetchBlobUrls(requestUrls: string[]): Promise<Blob[]> {
+    return await Promise.all(
+      requestUrls.map(async (blobUrl): Promise<Blob> => {
+        const response = await fetch(blobUrl.toString());
+        const blob = await response.blob();
+        return blob;
+      })
+    );
+  }
+
   async transformUrlArrayToBlob(imagesArray: string[]) {
     const imagesBlobArray: Blob[] = await Promise.all(
       imagesArray.map(async (blobUrl): Promise<Blob> => {

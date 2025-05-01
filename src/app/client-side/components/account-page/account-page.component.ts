@@ -30,10 +30,15 @@ export class AccountPageComponent implements AfterViewInit, OnInit {
     private errorHandler:ErrorHandlerService
   ) { }
   ngOnInit(): void {
-    if (!this.userService.checkJwt()) this.router.navigateByUrl('/login')
-    let receiveUserData: accountFullInformation&{furnitureCards:any}
-
     const jwt = this.userCookieService.getJwt()
+    if (!jwt) {
+      this.router.navigateByUrl('/login')
+      return
+    }
+    this.pageInit(jwt)
+  }
+  pageInit(jwt:string){
+    let receiveUserData: accountFullInformation&{furnitureCards:any}
     this.userService.GETuser(jwt)
       .subscribe({
         next: (response) => {
@@ -63,7 +68,6 @@ export class AccountPageComponent implements AfterViewInit, OnInit {
           this.userData = receiveUserData
         }
       })
-
   }
   informationForm!: FormGroup
   ngAfterViewInit(): void {
