@@ -7,8 +7,12 @@
 
 # Node
 /node_modules
+src/app/server-side/node_modules
 npm-debug.log
 yarn-error.log
+
+# CRTs
+*.crt
 
 # IDEs and editors
 .idea/

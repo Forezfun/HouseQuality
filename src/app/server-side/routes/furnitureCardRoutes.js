@@ -26,7 +26,6 @@ ROUTER.post('/', async (request, result) => {
             const ADDITIONAL_DATA = JSON.parse(request.query.additionalData);
             
             Object.keys(ADDITIONAL_DATA).forEach(propertyKey => {
-                // Проверка на существование ключа в additionalData
                 if (propertyKey in FURNITURE_CARD.schema.paths.additionalData.schema.paths) {
                     FURNITURE_CARD_ITEM.additionalData[propertyKey] = ADDITIONAL_DATA[propertyKey];
                 }
@@ -57,7 +56,6 @@ ROUTER.put('/', async (request, result) => {
             const ADDITIONAL_DATA = JSON.parse(request.query.additionalData);
             
             Object.keys(ADDITIONAL_DATA).forEach(propertyKey => {
-                // Проверка на существование ключа в additionalData
                 if (propertyKey in FURNITURE_CARD.schema.paths.additionalData.schema.paths) {
                     FURNITURE_CARD_ITEM.additionalData[propertyKey] = ADDITIONAL_DATA[propertyKey];
                 }

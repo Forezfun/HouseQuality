@@ -1,4 +1,6 @@
 const nodemailer = require('nodemailer');
+require('dotenv').config();
+const CODE_PASSWORD = process.env.CODE_AUTH_PASSWORD
 
 function sendCheckCode(userEmail){
 let transporter = nodemailer.createTransport({
@@ -7,7 +9,7 @@ let transporter = nodemailer.createTransport({
     secure: true,
     auth: {
       user: 'housequalityteam@gmail.com',
-      pass: 'ihsn gzlp trqr bspm'
+      pass: CODE_PASSWORD
     }
   });
   const resetCode = Math.floor(1000 + Math.random() * 9000);

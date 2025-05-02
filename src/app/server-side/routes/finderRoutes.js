@@ -1,7 +1,6 @@
 const EXPRESS = require('express');
 const ROUTER = EXPRESS.Router();
 const FURNITURE_CARD = require('../models/furnitureCard');
-const FURNITURE_IMAGE = require('../models/imagesFurniture');
 
 function calculateZFunction(string, pattern) {
     const combined = `${pattern}#${string}`; 
