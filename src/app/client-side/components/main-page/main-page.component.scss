@@ -258,7 +258,6 @@
 }
 
 .furnitureModule {
-    cursor: pointer;
     display: grid;
     grid-template-columns: 1fr;
     grid-template-rows: 1fr;
@@ -269,12 +268,14 @@
     display: block;
     grid-area: 1/1/2/2;
     transition: all 0.5s ease-in-out;
-    width: 100%
+    width: 100%;
+    z-index:1;
 }
 
 
 .opacityDisable {
     opacity: 0;
+    z-index:-1;
 }
 
 app-plan-house {
@@ -333,20 +334,5 @@ app-view-furniture,
 app-create-furniture,
 app-plan-house {
     width: 80vw;
-}
-
-app-create-furniture,
-app-plan-house {
-    pointer-events: none;
-}
-
-app-create-furniture * {
-    pointer-events: none;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-}
-app-create-furniture button {
-    display: none;
+    cursor: pointer;
 }

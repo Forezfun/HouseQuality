@@ -6,14 +6,14 @@ let transporter = nodemailer.createTransport({
     port: 465,
     secure: true,
     auth: {
-      user: 'germasik1511@gmail.com',
-      pass: 'ghhj ssyk uyxs kmpq'
+      user: 'housequalityteam@gmail.com',
+      pass: 'ihsn gzlp trqr bspm'
     }
   });
   const resetCode = Math.floor(1000 + Math.random() * 9000);
 
   let mailOptions = {
-    from: 'germasik1511@gmail.com',
+    from: 'housequalityteam@gmail.com',
     to: userEmail,
     subject: 'HouseQuality',
     html: `<!DOCTYPE html>
@@ -80,14 +80,14 @@ let transporter = nodemailer.createTransport({
         </div>
         <div class="content">
             <p>Здравствуйте,</p>
-            <p>Мы получили запрос на сброс пароля для вашего аккаунта в компании HouseQuality. Если вы не отправляли этот запрос, просто проигнорируйте это письмо.</p>
+            <p>Мы получили запрос на сброс пароля для вашего аккаунта на сайте HouseQuality. Если вы не отправляли этот запрос, просто проигнорируйте это письмо.</p>
             <p>Для сброса пароля используйте следующий код:</p>
             <div class="code-box">${resetCode}</div>
             <p>Введите этот код на сайте, чтобы продолжить процесс сброса пароля.</p>
             <p>С уважением,<br>Команда HouseQuality</p>
         </div>
         <div class="footer">
-            <p>2024 HouseQuality.</p>
+            <p>2025 HouseQuality</p>
         </div>
     </div>
 </body>

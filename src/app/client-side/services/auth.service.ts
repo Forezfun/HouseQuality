@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { accountSignInData, userType, accountChangeBaseData } from './account.service';
 import { baseUrl } from '.';
+import { Observable } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
@@ -21,7 +22,7 @@ export class AuthService {
       .set('userType', userType)
       .set('email', signInData.email)
       .set('password', signInData.password);
-    return this.httpModule.post(baseUrl + 'auth/jwt/long/create', HTTP_PARAMS);
+    return this.httpModule.post(baseUrl + 'auth/jwt/long/create', HTTP_PARAMS) as Observable<{jwt:string}>
   }
 
   /**
@@ -29,11 +30,10 @@ export class AuthService {
    * @param signInData Данные для входа (email и пароль)
    * @returns Observable с результатом создания временного токена
    */
-  POSTcreateShortJWT(signInData: accountSignInData) {
+  POSTcreateShortJWT(email:string) {
     let HTTP_PARAMS = new HttpParams()
-      .set('email', signInData.email)
-      .set('password', signInData.password);
-    return this.httpModule.post(baseUrl + 'auth/jwt/temporary/create', HTTP_PARAMS);
+      .set('email', email)
+    return this.httpModule.post(baseUrl + 'auth/jwt/temporary/create', HTTP_PARAMS) as Observable<{jwtToken:string}>
   }
 
   /**
@@ -55,5 +55,10 @@ export class AuthService {
     }
 
     return this.httpModule.put(baseUrl + 'auth/user/update', HTTP_PARAMS);
+  }
+  GETrequestPasswordCode(email: string) {
+    let HTTP_PARAMS = new HttpParams()
+      .set('email', email);
+    return this.httpModule.get(baseUrl + 'auth/user/code', { params: HTTP_PARAMS }) as Observable<{resetCode:number}>
   }
 }

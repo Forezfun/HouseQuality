@@ -463,4 +463,21 @@ app-plan-house {
     color: #A3B18A;
     text-align: center;
 }
-
+.dividerWithText {
+    display: flex;
+    align-items: center;
+    margin: 20px 0;
+  }
+  
+  .dividerLine {
+    flex: 1;
+    height: 2px;
+    background-color: #1f1f1f; /* Цвет линии */
+  }
+  
+  .dividerText {
+    padding: 0 10px;
+    color: #666; /* Цвет текста */
+    font-size: 14px;
+    text-transform: uppercase; /* Опционально - делает текст заглавными буквами */
+  }

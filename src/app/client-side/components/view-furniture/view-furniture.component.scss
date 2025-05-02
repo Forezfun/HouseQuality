@@ -5,8 +5,7 @@
     display: flex;
     flex-direction: column;
     gap: 30px;
-    padding: 50px;
-    padding-bottom: 15px;
+    margin-bottom: 15px;
     position: relative;
 }
 
@@ -46,7 +45,7 @@
     grid-template-rows: 1fr;
     place-items: center;
     width: 30%;
-    height: 300px;
+    height: 200px;
     aspect-ratio: 1;
     position: relative;
     --radius: 60px;
@@ -82,14 +81,13 @@
     transition: all 0.5s ease-in-out;
 }
 
-.colors > .colorVariant:nth-child(1) { --index: 1; }
-.colors > .colorVariant:nth-child(2) { --index: 2; }
-.colors > .colorVariant:nth-child(3) { --index: 3; }
-.colors > .colorVariant:nth-child(4) { --index: 4; }
-.colors > .colorVariant:nth-child(5) { --index: 5; }
-.colors > .colorVariant:nth-child(6) { --index: 6; }
-.colors > .colorVariant:nth-child(7) { --index: 7; }
-.colors > .colorVariant:nth-child(8) { --index: 8; }
+.colors > .colorVariant {
+    @for $i from 1 through 8 {
+      &:nth-child(#{$i}) {
+        --index: #{$i};
+      }
+    }
+  }
 
 .addColorBtn {
     border-radius: 50%;
@@ -198,4 +196,65 @@
 }
 .linkShop > img {
     width: 40px;
+}
+
+@media (max-width: 1200px) {
+    .furnitureTitle {
+        font-size: 2vw;
+    }
+}
+
+@media (max-width: 1000px) {
+    app-view-furniture {
+        width: calc(100% - 10px);
+    }
+    .colorSlider {
+        height: 200px;
+    }
+    .furnitureTitle {
+        font-size: 2.5vw;
+    }
+}
+
+@media (max-width: 600px) {
+    .body {
+        max-width: 400px;
+        margin: 30px auto;
+        gap: 15px;
+    }
+
+    .furnitureTitle {
+        font-size: 1.5rem;
+        width: 90%;
+    }
+
+    .footer {
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .colorSlider {
+        width: 100%;
+        height: 200px;
+        margin-bottom: 20px;
+    }
+
+    .informationSpan {
+        width: 100%;
+        flex-direction: column;
+    }
+
+    .descriptionSpan,
+    .shopsSpan {
+        width: 100%;
+    }
+
+    .descriptionTitle,
+    .shopsTitle {
+        border-radius: 10px;
+    }
+
+    .descriptionInformation {
+        padding: 0 10px;
+    }
 }

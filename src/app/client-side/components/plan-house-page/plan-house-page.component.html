@@ -1,80 +1,83 @@
 <span class="body">
-    <app-navigation-panel></app-navigation-panel>
-    <span class="functionalModule">
-        <span [ngClass]="{'disabled': currentProjectId!==undefined}" *ngIf="userData!==undefined"
-            class="chooseProjectSpan">
-            <button (click)="openProject(index)" *ngFor="let projectData of userData.projects;let index=index"
-                class="projectCard">
-                <span class="mainProjectInformation">
-                    <h3 class="projectTitle">{{projectData.name}}</h3>
-                    <div class="projectSchem">
-                        <div [style.grid-area]="roomData.gridArea" *ngFor="let roomData of projectData.rooms"
-                            class="room">
-                        </div>
-                    </div>
-                </span>
-                <button class="deleteProjectBtn" (click)="deleteProject(index)">
-                    <img src="/assets/images/deleteIcon.svg" alt="">
-                </button>
-            </button>
-            <button (click)="openAddModule()" class="addProjectCard projectCard">
-                <h3>Create</h3>
-                <img src="/assets/images/addIcon.svg" alt="">
-            </button>
+  <app-navigation-panel></app-navigation-panel>
+  <span class="functionalModule">
+    <span [ngClass]="{'disabled': currentProjectId!==undefined}" *ngIf="userData!==undefined" class="chooseProjectSpan">
+      <button (click)="openProject(index)" *ngFor="let projectData of userData.projects;let index=index"
+        class="projectCard">
+        <span class="mainProjectInformation">
+          <h3 class="projectTitle">{{projectData.name}}</h3>
+          <div class="projectSchem">
+            <div [style.grid-area]="roomData.gridArea" *ngFor="let roomData of projectData.rooms" class="room">
+            </div>
+          </div>
         </span>
-        <span [ngClass]="{'disabled': currentProjectId===undefined}" class="planModule">
-            <button *ngIf="getCurrentViewRoom()==undefined" (click)="closeProject()">
-                <img src="/assets/images/addIcon.svg" alt="">
-            </button>
-            <app-plan-house #planHouse (callSaveEmitter)="saveProject()" (planHouseEmitter)="updatePlanData($event)"
-                [ngClass]="{'disabled': currentProjectId===undefined}" *ngIf="currentProjectId!==undefined"
-                [planHouse]="userData.projects[currentProjectId].rooms"></app-plan-house>
-        </span>
+        <button class="deleteProjectBtn" (click)="deleteProject(index)">
+          <img src="/assets/images/deleteIcon.svg" alt="">
+        </button>
+      </button>
+      <button (click)="openAddModule()" class="addProjectCard projectCard">
+        <h3>Create</h3>
+        <img src="/assets/images/addIcon.svg" alt="">
+      </button>
     </span>
+    <span [ngClass]="{'disabled': currentProjectId===undefined}" class="planModule">
+      <button *ngIf="getCurrentViewRoom()==undefined" (click)="closeProject()">
+        <img src="/assets/images/addIcon.svg" alt="">
+      </button>
+      <app-plan-house #planHouse (callSaveEmitter)="saveProject()" (planHouseEmitter)="updatePlanData($event)"
+        [ngClass]="{'disabled': currentProjectId===undefined}" *ngIf="currentProjectId!==undefined"
+        [planHouse]="userData.projects[currentProjectId].rooms"></app-plan-house>
+    </span>
+  </span>
 </span>
 <span class="addModule disabled">
-    <form *ngIf="userData" class="addModuleSpan" [formGroup]="projectNameForm" (ngSubmit)="createProject()">
-        <button (click)="closeAddModule()" class="closeAddModuleBtn" type="button">
-            <img loading="lazy" src="/assets/images/addIcon.svg" alt="">
-        </button>
-        <span class="addModuleFormContent">
-            <h2 class="addModuleTitle">Project name</h2>
-            <span class="addModuleInputSpan">
-                <label class="inputLabel" for="name">Name</label>
-                <input formControlName="name" class="addModuleInput" id="name" type="text">
-            </span>
-            <button [disabled]="!projectNameForm.valid" class="submitAddModuleFormBtn" type="submit">Continue</button>
-        </span>
-    </form>
+  <form *ngIf="userData" class="addModuleSpan" [formGroup]="projectNameForm" (ngSubmit)="createProject()">
+    <button (click)="closeAddModule()" class="closeAddModuleBtn" type="button">
+      <img loading="lazy" src="/assets/images/addIcon.svg" alt="">
+    </button>
+    <span class="addModuleFormContent">
+      <h2 class="addModuleTitle">Project name</h2>
+      <span class="addModuleInputSpan">
+        <label class="inputLabel" for="name">Name</label>
+        <input formControlName="name" class="addModuleInput" id="name" type="text">
+      </span>
+      <button [disabled]="!projectNameForm.valid" class="submitAddModuleFormBtn" type="submit">Continue</button>
+    </span>
+  </form>
 </span>
 
 <div class="guideOverlay" *ngIf="isGuideVisible">
-    <div class="guideSpan">
-      <span [ngTemplateOutlet]="roomsGuideTemplate" class="guideWindow"></span>
-      <img src="assets/images/addIcon.svg" alt="Close" class="closeIcon" (click)="closeGuide()">
-    </div>
+  <div class="guideSpan">
+    <span [ngTemplateOutlet]="roomsGuideTemplate" class="guideWindow"></span>
+    <img src="assets/images/addIcon.svg" alt="Close" class="closeIcon" (click)="closeGuide()">
   </div>
-  <ng-template #roomsGuideTemplate>
-    <div class="guideContainer">
-      <div class="guideSection">
-        <p class="guideText">Зажмите ЛКМ на комнате и перетаскивайте</p>
-        <div class="animationContainer">
-          <img src="assets/images/mouse.svg" alt="Mouse" class="movingMouse">
-        </div>
+</div>
+<ng-template #roomsGuideTemplate>
+  <div class="guideContainer">
+    <div class="guideSection">
+      <p class="guideText">Зажмите ЛКМ на комнате и перетаскивайте</p>
+      <div class="animationContainer">
+        <img src="assets/images/mouse.svg" alt="Mouse" class="movingMouse">
       </div>
-      <div class="guideSection">
-        <p class="guideText">С зажатым Enter нажимайте стрелочки</p>
-        <div class="keyboardHint">
-          <img src="assets/images/enter.svg" alt="Enter" class="enterKey">
-          <div class="arrowsWrapper">
-            <img src="assets/images/arrowLeft.svg" style="rotate:90deg;" alt="Up" class="arrowKey top">
-            <div class="middleArrows">
-              <img src="assets/images/arrowLeft.svg" alt="Left" class="arrowKey left">
-              <img src="assets/images/arrowLeft.svg" style="rotate:270deg;" alt="Down" class="arrowKey bottom">
-              <img src="assets/images/arrowLeft.svg" style="rotate:180deg;" alt="Right" class="arrowKey right">
-            </div>
+    </div>
+    <div class="dividerWithText">
+      <div class="dividerLine"></div>
+      <span class="dividerText">ИЛИ</span>
+      <div class="dividerLine"></div>
+    </div>
+    <div class="guideSection">
+      <p class="guideText">Наведитесь на TAB и с зажатым ENTER нажимайте стрелочки</p>
+      <div class="keyboardHint">
+        <img src="assets/images/enter.svg" alt="Enter" class="enterKey">
+        <div class="arrowsWrapper">
+          <img src="assets/images/arrowLeft.svg" style="rotate:90deg;" alt="<--" class="arrowKey top">
+          <div class="middleArrows">
+            <img src="assets/images/arrowLeft.svg" alt="<--" class="arrowKey left">
+            <img src="assets/images/arrowLeft.svg" style="rotate:270deg;" alt="<--" class="arrowKey bottom">
+            <img src="assets/images/arrowLeft.svg" style="rotate:180deg;" alt="<--" class="arrowKey right">
           </div>
         </div>
       </div>
     </div>
-  </ng-template>
+  </div>
+</ng-template>
