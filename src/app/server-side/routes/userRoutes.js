@@ -1,14 +1,10 @@
 const EXPRESS = require('express');
 const ROUTER = EXPRESS.Router();
 const USER = require('../models/user');
-// const PUBLICATION = require('../models/publication');
 const AUTH_USER = require('../models/authUser');
-const { v4: uuidv4 } = require('uuid');
-const CryptoJS = require("crypto-js");
-const cryptoKey = 'HouseQuality'
 const PROJECT = require('../models/project')
 const FURNITURE_CARD =  require('../models/furnitureCard')
-const { isTokenNoneExpired, checkUserAccess } = require('../helpers/jwtHandlers')
+const { checkUserAccess } = require('../helpers/jwtHandlers')
 ROUTER.delete('/jwt/delete', async (request, result) => {
   try {
     const JWT_TOKEN = request.params.jwtToken

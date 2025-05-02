@@ -1,6 +1,6 @@
-// utils.js (имя файла, где находятся функции)
-const jwt = require('jsonwebtoken'); // Предполагаем, что используете библиотеку jsonwebtoken
-const cryptoKey = 'HouseQuality'; // Ваш секретный ключ
+const jwt = require('jsonwebtoken');
+require('dotenv').config();
+const cryptoKey = process.env.CRYPTO_KEY
 const USER = require('../models/user')
 // Экспортируем функции
 module.exports.isTokenNoneExpired = function isTokenNoneExpired(jwtToken) {

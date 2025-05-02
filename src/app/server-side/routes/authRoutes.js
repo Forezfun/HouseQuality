@@ -1,10 +1,10 @@
+require('dotenv').config();
 const EXPRESS = require('express');
 const ROUTER = EXPRESS.Router();
 const USER = require('../models/user');
-// const PUBLICATION = require('../models/publication');
 const { v4: uuidv4 } = require('uuid');
 const CryptoJS = require("crypto-js");
-const cryptoKey = 'HouseQuality'
+const cryptoKey = process.env.CRYPTO_KEY
 const sendCheckCode = require('../sendcode');
 const AUTH_USER = require('../models/authUser');
 const jwtService = require('jsonwebtoken');
