@@ -135,37 +135,13 @@ app-image-slider {
 }
 
 
-.colors>.colorVariant:nth-child(1) {
-    --index: 1;
-}
-
-.colors>.colorVariant:nth-child(2) {
-    --index: 2;
-}
-
-.colors>.colorVariant:nth-child(3) {
-    --index: 3;
-}
-
-.colors>.colorVariant:nth-child(4) {
-    --index: 4;
-}
-
-.colors>.colorVariant:nth-child(5) {
-    --index: 5;
-}
-
-.colors>.colorVariant:nth-child(6) {
-    --index: 6;
-}
-
-.colors>.colorVariant:nth-child(7) {
-    --index: 7;
-}
-
-.colors>.colorVariant:nth-child(8) {
-    --index: 8;
-}
+.colors > .colorVariant {
+    @for $i from 1 through 8 {
+      &:nth-child(#{$i}) {
+        --index: #{$i};
+      }
+    }
+  }
 
 .addColorBtn {
     border-radius: 50%;
@@ -475,8 +451,11 @@ app-image-slider {
     app-create-furniture {
         width: calc(100% - 10px);
     }
+    .leftPiece{
+        gap:30px;
+    }
     .colorSlider{
-        height:200px;
+        height:150px;
     }
     .furnitureModelInput{
         height: 25px;
@@ -491,6 +470,9 @@ app-image-slider {
     }
     .furnitureTitle {
         font-size: 3vw;
+    }
+    .leftPiece{
+        gap:0;
     }
     .shopsTitle,
     .descriptionTitle {

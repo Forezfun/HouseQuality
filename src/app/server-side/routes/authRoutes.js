@@ -10,7 +10,7 @@ const AUTH_USER = require('../models/authUser');
 const jwtService = require('jsonwebtoken');
 const { isTokenNoneExpired, checkUserAccess } = require('../helpers/jwtHandlers')
 
-const ACCOUNT_TYPES = ['google','email']
+const ACCOUNT_TYPES = ['google', 'email']
 
 ROUTER.post('/jwt/long/create', async (request, result) => {
     try {
@@ -36,7 +36,7 @@ ROUTER.post('/jwt/long/create', async (request, result) => {
         }
         const USER_ITEM = await USER.findById(AUTH_USER_ITEM.userId);
         if (!USER_ITEM) return result.status(404).json({ message: 'User not found' });
-        USER_ITEM.jwtTokens=USER_ITEM.jwtTokens.filter(jwt => {const expired = isTokenNoneExpired(jwt);console.log(expired);return expired});
+        USER_ITEM.jwtTokens = USER_ITEM.jwtTokens.filter(jwt => { const expired = isTokenNoneExpired(jwt); console.log(expired); return expired });
         console.log(USER_ITEM)
         const payload = { userId: AUTH_USER_ITEM.userId };
         const options = { expiresIn: '1w' };
@@ -52,14 +52,14 @@ ROUTER.post('/jwt/long/create', async (request, result) => {
 
 ROUTER.post('/jwt/temporary/create', async (request, result) => {
     try {
-        const AUTH_USER_SERVER_DATA = await AUTH_USER.findOne({
+        const AUTH_USER_ITEM = await AUTH_USER.findOne({
             $or: [
                 { 'emailData.email': request.body.email },
                 { 'googleData.email': request.body.email }
             ]
         });
-        if (!AUTH_USER_SERVER_DATA) return result.status(404).json({ message: 'User not found' });
-        const payload = { userId: AUTH_USER_SERVER_DATA.userId }
+        if (!AUTH_USER_ITEM) return result.status(404).json({ message: 'User not found' });
+        const payload = { userId: AUTH_USER_ITEM.userId }
         const options = {
             expiresIn: '10min'
         };
@@ -86,9 +86,6 @@ ROUTER.put('/user/update', async (request, result) => {
         if (request.body.userType === 'email') {
             AUTH_USER_ITEM.emailData.password = request.body.password
         }
-        if (request.body.typeJwt === 'long') {
-            
-        }
         await AUTH_USER_ITEM.save();
         result.status(201).json({ message: 'User successfully updated' });
     } catch (err) {
@@ -97,26 +94,41 @@ ROUTER.put('/user/update', async (request, result) => {
 });
 ROUTER.get('/user/get', async (request, result) => {
     try {
-      const JWT_TOKEN = request.query.jwtToken
-      const USER_ID = await checkUserAccess(JWT_TOKEN)
-      if (!USER_ID) return result.status(404).json({ message: 'User not found' });
-      const USER_ITEM = await USER.findById(USER_ID);
-      const AUTH_USER_ITEM = await AUTH_USER.findOne({ userId: USER_ID });
-      if (!USER_ITEM || !AUTH_USER_ITEM) {
-        return result.status(404).json({ message: 'User not found' });
-      }
-      let RESULT_DATA_ITEM = {
-        email: AUTH_USER_ITEM.email,
-        nickname: USER_ITEM.nickname
-      }
-      if (AUTH_USER_ITEM.emailData.password !== undefined) {
-        RESULT_DATA_ITEM.password = AUTH_USER_ITEM.emailData.password
-      }
-      result.status(201).json({ userData: RESULT_DATA_ITEM });
+        const JWT_TOKEN = request.query.jwtToken
+        const USER_ID = await checkUserAccess(JWT_TOKEN)
+        if (!USER_ID) return result.status(404).json({ message: 'User not found' });
+        const USER_ITEM = await USER.findById(USER_ID);
+        const AUTH_USER_ITEM = await AUTH_USER.findOne({ userId: USER_ID });
+        if (!USER_ITEM || !AUTH_USER_ITEM) {
+            return result.status(404).json({ message: 'User not found' });
+        }
+        let RESULT_DATA_ITEM = {
+            email: AUTH_USER_ITEM.email,
+            nickname: USER_ITEM.nickname
+        }
+        if (AUTH_USER_ITEM.emailData.password !== undefined) {
+            RESULT_DATA_ITEM.password = AUTH_USER_ITEM.emailData.password
+        }
+        result.status(201).json({ userData: RESULT_DATA_ITEM });
     } catch (err) {
-      result.status(400).json({ message: err.message });
+        result.status(400).json({ message: err.message });
     }
-  })
+})
+ROUTER.get('/user/code', async (request, result) => {
+    try {
+        const USER_EMAIL = request.query.email
+        const FOUND_USER = await AUTH_USER.findOne({
+            'emailData.email': USER_EMAIL
+        });
+        if (!FOUND_USER) return result.status(404).json({ message: 'User not found' });
+        const SENT_CODE_OBJECT = sendCheckCode(USER_EMAIL)
+        console.log(SENT_CODE_OBJECT)
+        result.status(201).json(SENT_CODE_OBJECT);
+    } catch (err) {
+        result.status(400).json({ message: err.message });
+    }
+})
+
 
 
 module.exports = ROUTER;

@@ -1,51 +1,49 @@
 <span class="body">
   <app-navigation-panel></app-navigation-panel>
-  <h1 *ngIf="!furnitureId" class="сategoryTitle">{{capitalizeFirstLetter(categoryName??'all categories')}}</h1>
+  <h1 *ngIf="!furnitureId" class="сategoryTitle" title="Категория">{{capitalizeFirstLetter(categoryName ?? 'все категории')}}</h1>
   <span *ngIf="furnituresArray" class="shopModule">
     <span *ngIf="furnitureId" class="viewFurnitureSpan">
-      <button (click)="closeFurniture()" class="closeFurniture">
-        <img src="/assets/images/addIcon.svg" alt="">
+      <button (click)="closeFurniture()" class="closeFurniture" title="Закрыть">
+        <img src="/assets/images/addIcon.svg" alt="Закрыть">
       </button>
       <span class="furnitureCard">
         <app-view-furniture [furnitureId]="furnitureId"></app-view-furniture>
-        <button (click)="openAddModule()" class="choseAddProjectBtn">Add</button>
+        <button (click)="openAddModule()" class="chooseAddProjectBtn" title="Добавить мебель">Добавить</button>
       </span>
     </span>
     <span *ngIf="!furnitureId" class="mainArea">
       <span class="params">
         <span class="furnitureCategoriesButtonsSpan">
-          <button (click)="changeCategory(index)" class="furnitureCategoryButton"
-            *ngFor="let categoryName of furnitureCategoryDataArray; let index = index">
+          <button (click)="changeCategory(index)" class="furnitureCategoryButton" *ngFor="let categoryName of furnitureCategoryDataArray; let index = index" title="Выбрать категорию">
             {{categoryName}}
           </button>
-          <button (click)="changeCategory(null)" class="furnitureCategoryButton">
-            All
+          <button (click)="changeCategory(null)" class="furnitureCategoryButton" title="Все категории">
+            Все
           </button>
         </span>
       </span>
       <span class="сategory">
         <div *ngFor="let furnitureData of furnituresArray" class="furnitureItem">
-          <h2 class="furnitureTitle">{{furnitureData.name}}</h2>
-          <img loading="lazy" class="furniturePreview" [src]="furnitureData.preview" alt="">
-          <a class="furnitureLink"
-            [routerLink]="'/shop/'+(categoryName??'all')+'/'+furnitureData.id">{{furnitureData.cost}}</a>
+          <h2 class="furnitureTitle" title="Название мебели">{{furnitureData.name}}</h2>
+          <img loading="lazy" class="furniturePreview" [src]="furnitureData.preview" alt="Превью мебели" title="Превью мебели">
+          <a class="furnitureLink" [routerLink]="'/shop/'+(categoryName ?? 'все')+'/'+furnitureData.id" title="Цена мебели">{{furnitureData.cost}}</a>
         </div>
       </span>
     </span>
   </span>
 </span>
 <span [ngClass]="{'disabled': !openAddModuleToggle}" class="addModule">
-  <span class="addModuleSpan" >
-      <button (click)="closeAddModule()" class="closeAddModuleBtn" type="button">
-          <img loading="lazy"  src="/assets/images/addIcon.svg" alt="">
+  <span class="addModuleSpan">
+      <button (click)="closeAddModule()" class="closeAddModuleBtn" type="button" title="Закрыть">
+          <img loading="lazy" src="/assets/images/addIcon.svg" alt="Закрыть">
       </button>
       <span *ngIf="userProjects" class="addModuleFormContent">
-        <h2 class="addModuleTitle">Projects</h2>
-        <span *ngFor="let projectsData of userProjects;let planId = index" >
-          <h3>{{projectsData.name}}</h3>
-          <a *ngFor="let roomData of projectsData.rooms;let roomId=index" [routerLink]="getPlanUrl(planId,roomId)">{{roomData.name}}</a>
+        <h2 class="addModuleTitle" title="Проекты">Проекты</h2>
+        <span *ngFor="let projectsData of userProjects; let planId = index">
+          <h3 title="Название проекта">{{projectsData.name}}</h3>
+          <a *ngFor="let roomData of projectsData.rooms; let roomId = index" [routerLink]="getPlanUrl(planId, roomId)" title="Название комнаты">{{roomData.name}}</a>
         </span>
-          <a routerLink="/plan" *ngIf="userProjects!.length==0" class="noProjectsBtn">Create a plan</a>
+        <a routerLink="/plan" *ngIf="userProjects!.length == 0" class="noProjectsBtn" title="Создать план">Создать план</a>
       </span>
   </span>
 </span>

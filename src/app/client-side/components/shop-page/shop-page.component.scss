@@ -120,13 +120,16 @@ app-navigation-panel {
     aspect-ratio: 1;
     align-self: flex-start;
     cursor: pointer;
+    grid-area: 1/1/2/2;
 }
 .closeFurniture>img{
     rotate: 45deg;
 }
 .viewFurnitureSpan{
     width: 100%;
-    display: flex;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr;
     gap:10px;
     grid-area: 1/1/2/2;
 }
@@ -135,16 +138,17 @@ app-navigation-panel {
     display: flex;
 }
 app-view-furniture{
-    width:90%;
+    width:95%;
 }
 .furnitureCard{
+    grid-area: 1/1/2/2;
     width:100%;
     display: flex;
     flex-direction: column;
     align-items: center;
     z-index:1;
 }
-.choseAddProjectBtn{
+.chooseAddProjectBtn{
     width:clamp(170px,35%,320px);
     padding: 15px;
     background-color:$lightGreen;
