@@ -5,7 +5,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    width: 75%;
+    width: 80%;
     height: 100%;
 }
 .navigationBtn > img, svg {
@@ -31,15 +31,15 @@ app-finder {
     border-radius: 10px;
     gap: 5px;
     justify-content: space-around;
-    min-width: 350px;
-    width: 75vw;
+    width: calc(90vw - 30px);
+    min-width: 550px;
     margin: 0 auto;
     height: 60px;
     align-items: center;
-    box-shadow: 0 0 10px 0px white;
+    border: 1px solid rgba($lightGreen, 0.3);
     position: relative;
     
-    @media (max-width: 600px) {
+    @media (max-width: 750px) {
         justify-content: space-between;
         padding: 0 15px;
         width: calc(90vw - 30px);
@@ -61,7 +61,6 @@ app-finder {
     align-items: center;
 }
 
-/* Стили для гамбургер-меню */
 .hamburger-menu {
     display: none;
     background: none;
@@ -76,29 +75,32 @@ app-finder {
         width: 100%;
         height: 100%;
     }
+    &.active img {
+        filter: brightness(0) saturate(100%) invert(64%) sepia(11%) saturate(1233%) hue-rotate(71deg) brightness(92%) contrast(86%);
+    }
     
-    @media (max-width: 600px) {
+    @media (max-width: 750px) {
         display: block;
     }
 }
 
-/* Стили для мобильного меню */
 .mobile-menu {
     display: none;
     position: absolute;
     top: 100%;
+    margin-top: 10px;
     left: 0;
     right: 0;
     background-color: black;
-    border-radius: 0 0 10px 10px;
+    border-radius: 10px;
     padding: 15px;
     flex-direction: column;
     gap: 15px;
     z-index: 100;
-    box-shadow: 0 5px 10px rgba(0,0,0,0.2);
+    border: 1px solid rgba($lightGreen, 0.3);
     
     app-finder {
-        width: 100%;
+        width: calc(100% - 20px);
         margin-bottom: 10px;
         height: 40px;
     }
@@ -123,7 +125,7 @@ app-finder {
 }
 
 /* Адаптивные стили */
-@media (max-width: 600px) {
+@media (max-width: 750px) {
     .desktop-content {
         display: none;
     }

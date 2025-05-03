@@ -1,4 +1,4 @@
-<span class="startScreenSpan">
+<span *ngIf="!isMobileView" class="startScreenSpan">
     <div class="circleDecoration">
         <span class="circleDecorationSpan">
             <div></div>
@@ -23,7 +23,6 @@
         </span>
     </span>
 </span>
-
 <span class="mainInformation">
     <app-navigation-panel></app-navigation-panel>
     <span class="projectPreviewSpan">
@@ -66,7 +65,7 @@
 
         <span class="someSpan">
             <h2 class="chapterTitle">Создайте свой дом</h2>
-            <h3 class="descriptionText">Добавьте ваши комнаты и передвиьньте их</h3>
+            <h3 class="descriptionText">Добавьте комнаты и передвиньте их</h3>
         </span>
         <app-plan-house (click)="navigateToPage('/plan')" [planHouse]="planHouseExampleData"></app-plan-house>
     </span>

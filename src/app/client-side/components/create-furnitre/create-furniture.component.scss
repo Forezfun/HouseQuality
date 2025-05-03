@@ -1,13 +1,12 @@
 @import 'base.scss';
-button,.furnitureModelInput{
-    &:hover{
-        transform: scale(1.1);
-    }
+button,
+.furnitureModelInput {
     transition: all 0.3s ease-in-out;
+    &:hover {
+        transform: translateY(-3px);
+    }
 }
-.furnitureModelInput:hover{
-    transform: scale(1.1);
-}
+
 .body {
     background-color: black;
     display: flex;
@@ -52,11 +51,13 @@ app-image-slider {
     display: block;
     grid-area: 1/1/2/2;
 }
-.leftPiece{
+
+.leftPiece {
     display: flex;
     flex-direction: column;
     align-items: center;
 }
+
 .furnitureTitle {
     color: white;
     text-align: center;
@@ -135,13 +136,13 @@ app-image-slider {
 }
 
 
-.colors > .colorVariant {
+.colors>.colorVariant {
     @for $i from 1 through 8 {
-      &:nth-child(#{$i}) {
-        --index: #{$i};
-      }
+        &:nth-child(#{$i}) {
+            --index: #{$i};
+        }
     }
-  }
+}
 
 .addColorBtn {
     border-radius: 50%;
@@ -442,38 +443,48 @@ app-image-slider {
 .furnitureModelLabel {
     color: white
 }
+
 @media (max-width: 1200px) {
     .furnitureTitle {
         font-size: 2vw;
     }
 }
+
 @media (max-width: 1000px) {
     app-create-furniture {
         width: calc(100% - 10px);
     }
-    .leftPiece{
-        gap:30px;
+
+    .leftPiece {
+        gap: 30px;
     }
-    .colorSlider{
-        height:150px;
+
+    .colorSlider {
+        height: 150px;
     }
-    .furnitureModelInput{
+
+    .furnitureModelInput {
         height: 25px;
     }
+
     .furnitureTitle {
         font-size: 2.5vw;
     }
 }
+
 @media (max-width: 600px) {
     .rightFunctionalSection {
         gap: 10px;
     }
+
     .furnitureTitle {
         font-size: 3vw;
     }
-    .leftPiece{
-        gap:0;
+
+    .leftPiece {
+        gap: 0;
     }
+
     .shopsTitle,
     .descriptionTitle {
         border-radius: 10px;

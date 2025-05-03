@@ -5,8 +5,7 @@ import { NgFor, NgIf, NgTemplateOutlet } from '@angular/common';
 import { FormGroup, FormControl, Validators, ReactiveFormsModule, FormsModule, AbstractControl, ValidationErrors } from '@angular/forms';
 import { TemplateRef } from '@angular/core';
 import { ClientImageControlService } from '../../services/client-image-control.service';
-
-export type categoryType = 'chair'|'sofa'|'lamp'|'table'|undefined
+import { category, CategoryService } from '../../services/category.service';
 
 interface shopData {
   cost: number;
@@ -21,7 +20,7 @@ export interface furnitureData {
   name: string;
   description: string;
   shops: shopData[];
-  category?:categoryType;
+  category?:string;
   proportions:furnitureProportions
 }
 interface colorClientData {
@@ -35,7 +34,7 @@ export interface colorServerData {
   }
 }
 export interface additionalData{
-  category:categoryType
+  category:string
 }
 export interface furnitureClientData extends furnitureData {
   colors: colorClientData[]
@@ -50,11 +49,12 @@ export interface furnitureServerData extends furnitureData {
   templateUrl: './create-furniture.component.html',
   styleUrls: ['./create-furniture.component.scss']
 })
-export class CreateFurnitureComponent implements AfterViewInit{
+export class CreateFurnitureComponent implements OnInit,AfterViewInit{
   constructor(
     private elementRef: ElementRef,
     private changeDetectorRef: ChangeDetectorRef,
-    private clientImageControl: ClientImageControlService
+    private clientImageControl: ClientImageControlService,
+    private categoryService:CategoryService
   ) { }
 
   @ViewChild('colorModule') private colorModuleTemplate!: TemplateRef<any>;
@@ -71,13 +71,22 @@ export class CreateFurnitureComponent implements AfterViewInit{
   colorsClientData: { color: string, imagesData: imageSliderData }[] = []
   @Input()
   furnitureData!: furnitureServerData
-  categoriesArray:categoryType[]=[
-    'sofa',
-    'chair',
-    'lamp',
-    'table'
-  ]
-
+  categoriesArray:category[]=[]
+  ngOnInit(): void {
+    this.initCategories()
+  }
+  initCategories(){
+    this.categoryService.GETgetAllCategories()
+    .subscribe({
+      next:(value)=>{
+        console.log(value)
+        this.categoriesArray=value.categoryArray
+      },
+      error:(error)=>{
+        console.log(error)
+      }
+    })
+  }
   ngAfterViewInit(): void {
     this.addModule = this.elementRef.nativeElement.querySelector('.addModule');
     this.furnitureModelInput=this.elementRef.nativeElement.querySelector('.furnitureModelInput')

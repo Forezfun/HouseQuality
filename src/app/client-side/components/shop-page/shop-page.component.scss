@@ -2,7 +2,7 @@
 
 app-navigation-panel {
     margin-top: 30px;
-    z-index:10;
+    z-index: 10;
 }
 
 .body {
@@ -11,7 +11,7 @@ app-navigation-panel {
     display: flex;
     align-items: center;
     flex-direction: column;
-    gap:30px;
+    gap: 30px;
     padding-bottom: 30px;
 }
 
@@ -33,39 +33,47 @@ app-navigation-panel {
     color: white;
     cursor: pointer;
     border: none;
+    &.active{
+        background-color: $lightGreen;
+        color:black;
+    }
 }
-.shopModule{
-    width:90%;
+
+.shopModule {
+    width: 90%;
     margin: 0 auto;
     display: grid;
     grid-template-columns: 1fr;
     grid-template-rows: 1fr;
-    z-index:1
+    z-index: 1
 }
-.сategory {
-    width:75%;
+
+.category {
+    width: 75%;
+    height: 60vh;
     display: flex;
     transition: all 0.5s ease-in-out;
     overflow-y: scroll;
     display: flex;
     flex-wrap: wrap;
     justify-content: space-around;
-    z-index:1;
+    z-index: 1;
 }
 
-.сategoryTitle {
+
+.categoryTitle {
     text-align: center;
     color: white;
 }
-.params{
-    width:20%;
+
+.params {
+    width: 20%;
     display: flex;
-    gap:10px;
+    gap: 10px;
 }
 
 .furnitureItem {
     flex: 1 1 calc(40% - 10px);
-    max-width:50%;
     display: flex;
     gap: 10px;
     flex-direction: column;
@@ -94,6 +102,7 @@ app-navigation-panel {
     height: 50px;
     align-content: center;
 }
+
 .furnitureCategoriesButtonsSpan {
     display: flex;
     flex-direction: column;
@@ -113,46 +122,54 @@ app-navigation-panel {
     cursor: pointer;
     border: none;
 }
-.closeFurniture{
+
+.closeFurniture {
     background: none;
     border: none;
-    width:35px;
+    width: 35px;
     aspect-ratio: 1;
     align-self: flex-start;
     cursor: pointer;
     grid-area: 1/1/2/2;
+    z-index: 2;
 }
-.closeFurniture>img{
+
+.closeFurniture>img {
     rotate: 45deg;
 }
-.viewFurnitureSpan{
+
+.viewFurnitureSpan {
     width: 100%;
     display: grid;
     grid-template-columns: 1fr;
     grid-template-rows: 1fr;
-    gap:10px;
+    gap: 10px;
     grid-area: 1/1/2/2;
 }
-.mainArea{
+
+.mainArea {
     grid-area: 1/1/2/2;
     display: flex;
 }
-app-view-furniture{
-    width:95%;
+
+app-view-furniture {
+    width: 95%;
 }
-.furnitureCard{
+
+.furnitureCard {
     grid-area: 1/1/2/2;
-    width:100%;
+    width: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
-    z-index:1;
+    z-index: 1;
 }
-.chooseAddProjectBtn{
-    width:clamp(170px,35%,320px);
+
+.chooseAddProjectBtn {
+    width: clamp(170px, 35%, 320px);
     padding: 15px;
-    background-color:$lightGreen;
-    color:$light;
+    background-color: $lightGreen;
+    color: $light;
     border-radius: 10px;
     border: none;
     cursor: pointer;
@@ -192,10 +209,12 @@ app-view-furniture{
     gap: 15px;
     box-shadow: 0 0 10px 0px white;
 }
+
 .addModuleTitle {
     color: $lightGreen;
     text-align: center
 }
+
 .closeAddModuleBtn {
     grid-area: 1/1/2/2;
     background: none;
@@ -212,40 +231,47 @@ app-view-furniture{
 .closeAddModuleBtn>img {
     transform: rotate(45deg)
 }
-.disabled{
+
+.disabled {
     opacity: 0;
     z-index: 0;
 }
-.addModuleFormContent{
+
+.addModuleFormContent {
     padding-top: 20px;
-    
+
 }
-.addModuleFormContent > span > *{
-    padding:10px;
-    color:$light;
+
+.addModuleFormContent>span>* {
+    padding: 10px;
+    color: $light;
     border-radius: 10px;
     text-decoration: none;
-    text-align: center; 
+    text-align: center;
 }
-.addModuleFormContent > span > h3{
+
+.addModuleFormContent>span>h3 {
     background-color: $lightGreen;
-    width:calc(100% - 20px);
+    width: calc(100% - 20px);
     margin-bottom: 0;
     cursor: default;
 }
-.addModuleFormContent > span > a{
+
+.addModuleFormContent>span>a {
     background-color: $darkGreen;
-    width:calc(80% - 20px);
+    width: calc(80% - 20px);
     align-self: end;
     margin-top: 5px;
 }
-.addModuleFormContent > span{
-    width:100%;
+
+.addModuleFormContent>span {
+    width: 100%;
     display: flex;
     flex-direction: column;
 }
-.noProjectsBtn{
-    color:$light;
+
+.noProjectsBtn {
+    color: $light;
     text-align: center;
     width: 50%;
     padding: 15px 10px;
@@ -254,6 +280,38 @@ app-view-furniture{
     text-decoration: none;
     transition: background-color 0.3s ease-in-out;
 }
-.noProjectsBtn:hover{
+
+.noProjectsBtn:hover {
     background-color: $lightGreen;
+}
+@media (max-width:768px) {
+    .category {
+        width: 100%;
+    }
+    .params,.furnitureCategoriesButtonsSpan{
+        width:100%;
+    }
+    .furnitureCategoriesButtonsSpan{
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+    .furnitureCategoryButton{
+        width:calc(20% - 5px);
+    }
+    .mainArea{
+        flex-direction: column;
+    }
+}
+@media (max-width: 600px) {
+    .category{
+        max-height: 50vh;
+        margin-top: 15px;
+    }
+    .furnitureCategoryButton{
+        width:calc(25% - 5px);
+    }
+    .furnitureItem{
+        flex:auto;
+        width:100%;
+    }
 }

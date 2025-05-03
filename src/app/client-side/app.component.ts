@@ -17,7 +17,7 @@ import {AutosizeModule} from 'ngx-autosize';
   selector: 'app-root',
   standalone: true,
   imports: [RouterOutlet,ErrorHandlerComponent,AutosizeModule],
-  providers:[ErrorHandlerComponent,AccountService,AuthService,UserCookieService,ServerImageControlService,ProjectService,PlanHouseComponent,SceneComponent,FurnitureCardControlService,FurnitureModelControlService,ShopService,FinderService],
+  providers:[ErrorHandlerComponent,AccountService,AuthService,UserCookieService,ServerImageControlService,ProjectService,PlanHouseComponent,SceneComponent,FurnitureCardControlService,FurnitureModelControlService,ShopService,FinderService,Location],
   templateUrl: './app.component.html'
 })
 export class AppComponent {

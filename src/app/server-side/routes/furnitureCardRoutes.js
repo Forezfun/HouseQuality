@@ -40,24 +40,23 @@ ROUTER.post('/', async (request, result) => {
 
 ROUTER.put('/', async (request, result) => {
     try {
-        console.log(request.body)
-        console.log(request.body.colors)
+        console.log('query: ',request.query)
         const JWT_TOKEN = request.query.jwtToken;
         const USER_ID = await checkUserAccess(JWT_TOKEN);
         if (!USER_ID) return result.status(404).json({ message: 'User not found' });
         let FURNITURE_CARD_ITEM = await FURNITURE_CARD.findOne({ authorId: USER_ID })
         if (!FURNITURE_CARD_ITEM) return result.status(404).json({ message: 'Furniture card not found' });
-        FURNITURE_CARD_ITEM.name = request.body.name;
-        FURNITURE_CARD_ITEM.description = request.body.description;
-        FURNITURE_CARD_ITEM.proportions=request.body.proportions,
+        FURNITURE_CARD_ITEM.name = request.body.name || FURNITURE_CARD_ITEM.name;
+        FURNITURE_CARD_ITEM.description = request.body.description || FURNITURE_CARD_ITEM.description;
+        FURNITURE_CARD_ITEM.proportions=request.body.proportions || FURNITURE_CARD_ITEM.proportions,
         FURNITURE_CARD_ITEM.colors = request.body.colors.map(color=>{return({color:color,idImages:''})})
-        FURNITURE_CARD_ITEM.shops = request.body.shops;
+        FURNITURE_CARD_ITEM.shops = request.body.shops || FURNITURE_CARD_ITEM.shops;
         if (request.query.additionalData !== undefined) {
             const ADDITIONAL_DATA = JSON.parse(request.query.additionalData);
             
             Object.keys(ADDITIONAL_DATA).forEach(propertyKey => {
                 if (propertyKey in FURNITURE_CARD.schema.paths.additionalData.schema.paths) {
-                    FURNITURE_CARD_ITEM.additionalData[propertyKey] = ADDITIONAL_DATA[propertyKey];
+                    FURNITURE_CARD_ITEM.additionalData[propertyKey] = ADDITIONAL_DATA[propertyKey]||FURNITURE_CARD_ITEM.additionalData[propertyKey]
                 }
             });
         }

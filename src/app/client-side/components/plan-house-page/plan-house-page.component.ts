@@ -88,9 +88,9 @@ export class PlanHousePageComponent implements AfterViewInit, OnInit, AfterViewC
           this.userData = (response as any).userData as accountFullInformation
           this.route.paramMap.subscribe(params => {
             if (params.get('planId') === null) return
-            const planId = parseInt(params.get('planId')!) as number
-            if (typeof (planId) === 'number' && this.userData.projects.length >= planId && planId >= 0) {
-              this.currentProjectId = +planId
+            const planId = parseInt(params.get('planId')!)
+            if (this.userData.projects.length >= planId && planId >= 0) {
+              this.currentProjectId = planId
             }
           })
         },

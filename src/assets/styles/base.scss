@@ -1,12 +1,15 @@
-@import url('https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap');
 @font-face {
     font-family: 'Calypso';
     src: url('/assets/fonts/Calypso.ttf') format('truetype');
     font-weight: 400;
-    font-style: Regular;
+  }
+@font-face {
+    font-family: 'Courier New';
+    src: url('/assets/fonts/Courier New.ttf') format('truetype');
+    font-weight: 400;
   }
 * {
-    font-family: 'Courier New', Courier, monospace;
+    font-family: 'Courier New', Courier;
 }
 html {
     scroll-behavior: smooth;

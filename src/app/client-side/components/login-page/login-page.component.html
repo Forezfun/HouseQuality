@@ -100,7 +100,7 @@
             <input formControlName="newPassword" class="addModuleInput" id="newPassword" type="password"
                    [class.invalid]="changePasswordForm.get('newPassword')?.invalid && changePasswordForm.get('newPassword')?.touched">
             <div class="error-message" *ngIf="changePasswordForm.get('newPassword')?.invalid && changePasswordForm.get('newPassword')?.touched">
-                Введите новый пароль
+                Пароль должен содержать минимум 6 символов
             </div>
         </span>
         <span class="addModuleInputSpan">
@@ -145,7 +145,7 @@
             <input formControlName="password" class="addModuleInput" id="password" type="password"
                    [class.invalid]="signupForm.get('password')?.invalid && signupForm.get('password')?.touched">
             <div class="error-message" *ngIf="signupForm.get('password')?.invalid && signupForm.get('password')?.touched">
-                Введите пароль
+                Пароль должен содержать минимум 6 символов
             </div>
         </span>
         <span class="additionalFuntions">

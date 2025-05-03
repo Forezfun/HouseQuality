@@ -39,7 +39,7 @@ export class FinderComponent implements AfterViewInit{
     this.openFoundResultsList()
     if(receiveData.length>0){
       this.closeFoundResultsList()
-      setTimeout(()=>{this.foundFurniture=receiveData;this.openFoundResultsList()},550)
+      setTimeout(()=>{this.foundFurniture=receiveData;this.openFoundResultsList()},400)
     }else{
       this.foundFurniture!==undefined?this.foundFurniture.length=0:this.foundFurniture=[]
     }

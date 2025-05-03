@@ -1,65 +1,106 @@
-<span class="body">
+<div class="account-page">
     <app-navigation-panel></app-navigation-panel>
-    <span *ngIf="userData" class="accountSpan">
-        <span class="mainInformationCard">
-            <span class="accountAvatarSpan">
-                <img   [src]="userData.avatarUrl" alt="avatar" class="accountAvatarImage">
-                <div class="avatarEditBtn">
-                    <label class="avatarLabel" for="chooseAvatar"></label>
-                    <input id="chooseAvatar" (input)="uploadAvatar($event)" accept=".png,.jpeg,.jpg" class="editAvatarInput" type="file">
-                    <img src="/assets/images/editIcon.svg" alt="">
-                </div>
-            </span>
-                <span class="informationTextSpan">
-                    <h2 class="accountName">{{userData.nickname}}</h2>
-                    <span class="subDescriptionSpan">
-                        <div class="accountInformationBlock">Projects:{{userData.projects.length}}</div>
-                        <div class="accountInformationBlock">Furnitures:{{userData.furnitureCards.length}}</div>
-                        <div class="accountInformationBlock">Email:{{userData.email}}</div>
-                        </span>
-                    </span>
-                <span class="changeBtns">
-                    <button (click)="openAddModule()" class="mainInformationEditBtn">
-                        <img src="/assets/images/editIcon.svg" alt="">
-                    </button>
-                    <button (click)="logout()" class="logoutBtn">
-                        <img src="/assets/images/logoutIcon.svg" alt="">
-                    </button>
-            </span>
-        </span>
-        <span *ngIf="userData" class="projectsSpanCard">
-            <span (click)="openProjectsPage(index)" *ngFor="let projectData of userData.projects;let index=index" class="projectCard">
-                <h3 class="projectTitle">{{projectData.name}}</h3>
-                <div class="projectSchem">
-                    <div [style.grid-area]="roomData.gridArea" *ngFor="let roomData of projectData.rooms" class="room">
+    
+    <div *ngIf="userData" class="account-container">
+        <div class="profile-card">
+            <div class="avatar-container">
+                <img [src]="userData.avatarUrl" alt="Аватар" class="avatar-image">
+                <label class="avatar-edit-btn">
+                    <input type="file" id="avatarInput" (change)="uploadAvatar($event)" accept=".png,.jpeg,.jpg">
+                    <img src="/assets/images/editIcon.svg" alt="Изменить аватар">
+                </label>
+            </div>
+            
+            <div class="profile-info">
+                <h2 class="profile-name">{{userData.nickname}}</h2>
+                <div class="profile-stats">
+                    <div class="stat-item">
+                        <span class="stat-label">Проекты:</span>
+                        <span class="stat-value">{{userData.projects.length}}</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Мебель:</span>
+                        <span class="stat-value">{{userData.furnitureCards.length}}</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Email:</span>
+                        <span class="stat-value">{{userData.email}}</span>
                     </div>
                 </div>
-            </span>
-        </span>
-        <span *ngIf="userData" class="projectsSpanCard furnitureCardSpan">
-            <a [routerLink]="'/create/'+furnitureData.furnitureCardId"   *ngFor="let furnitureData of userData.furnitureCards;let index=index" class="projectCard">
-                <h3 class="projectTitle">{{furnitureData.name}}</h3>
-                <img loading="lazy" [src]="furnitureData.previewUrl" alt="" class="furnitureImage">
-            </a>
-        </span>
-    </span>
-</span>
-<span class="addModule disabled">
-    <form *ngIf="userData" class="addModuleSpan" [formGroup]="informationForm" (ngSubmit)="submitChanges()">
-        <button (click)="closeAddModule()" class="closeAddModuleBtn" type="button">
-            <img loading="lazy"  src="/assets/images/addIcon.svg" alt="">
-        </button>
-        <span class="addModuleFormContent">
-            <h2 class="addModuleTitle">Account information</h2>
-            <span class="addModuleInputSpan">
-                <label class="inputLabel" for="nickname">Nickname</label>
-                <input formControlName="nickname" class="addModuleInput" id="nickname" type="text">
-            </span>
-            <span  *ngIf="userData.password!==undefined" class="addModuleInputSpan">
-                <label class="inputLabel" for="password">Password</label>
-                <input formControlName="password" class="addModuleInput" type="text" id="password">
-            </span>
-            <button [disabled]="!informationForm.valid" class="submitAddModuleFormBtn" type="submit">Continue</button>
-        </span>
-    </form>
-</span>
+            </div>
+            
+            <div class="profile-actions">
+                <button (click)="openEditForm()" style="width:27px" class="edit-btn" title="Редактировать профиль">
+                    <img src="/assets/images/editIcon.svg" alt="Редактировать">
+                </button>
+                <button (click)="logout()" style="width:35px;" class="logout-btn" title="Выйти">
+                    <img src="/assets/images/logoutIcon.svg" alt="Выйти">
+                </button>
+            </div>
+        </div>
+        
+        <div class="projects-section">
+            <h3 class="section-title">Мои проекты</h3>
+            <div class="projects-grid">
+                <div *ngFor="let project of userData.projects; let i = index" 
+                     (click)="openProject(i)" 
+                     class="project-card">
+                    <h4 class="project-name">{{project.name}}</h4>
+                    <div class="project-scheme">
+                        <div *ngFor="let room of project.rooms" 
+                             [style.grid-area]="room.gridArea" 
+                             class="room"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="furniture-section">
+            <h3 class="section-title">Моя мебель</h3>
+            <div class="furniture-grid">
+                <a *ngFor="let item of userData.furnitureCards" 
+                   [routerLink]="'/create/' + item.furnitureCardId" 
+                   class="furniture-card">
+                    <h4 class="furniture-name">{{item.name}}</h4>
+                    <img [src]="item.previewUrl" alt="Превью мебели" class="furniture-image">
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <div class="edit-modal" [class.active]="isEditFormOpen">
+        <div class="modal-content">
+            <button (click)="closeEditForm()" class="close-btn">
+                <img src="/assets/images/addIcon.svg" alt="Закрыть">
+            </button>
+            
+            <form [formGroup]="editForm" (ngSubmit)="saveChanges()" class="edit-form">
+                <h3 class="form-title">Редактирование профиля</h3>
+                
+                <div class="form-group">
+                    <label for="nickname">Имя пользователя</label>
+                    <input id="nickname" formControlName="nickname" 
+                           [class.invalid]="editForm.get('nickname')?.invalid && editForm.get('nickname')?.touched">
+                    <div *ngIf="editForm.get('nickname')?.invalid && editForm.get('nickname')?.touched" 
+                         class="error-message">
+                        Введите имя пользователя
+                    </div>
+                </div>
+                
+                <div *ngIf="editForm.get('password')" class="form-group">
+                    <label for="password">Новый пароль</label>
+                    <input id="password" type="password" formControlName="password"
+                           [class.invalid]="editForm.get('password')?.invalid && editForm.get('password')?.touched">
+                    <div *ngIf="editForm.get('password')?.invalid && editForm.get('password')?.touched" 
+                         class="error-message">
+                        Пароль должен содержать минимум 6 символов
+                    </div>
+                </div>
+                
+                <button type="submit" [disabled]="!editForm.valid" class="save-btn">
+                    Сохранить изменения
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
