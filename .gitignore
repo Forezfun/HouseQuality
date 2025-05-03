@@ -11,8 +11,13 @@
 npm-debug.log
 yarn-error.log
 
+# Uploads
+/src/app/servser-side/uploads
+
 # CRTs
 *.crt
+# ENVs
+*.env
 
 # IDEs and editors
 .idea/
