@@ -7,12 +7,12 @@
 
 # Node
 /node_modules
-**/node_modules
+src/app/server-side/node_modules
 npm-debug.log
 yarn-error.log
 
 # Uploads
-**/uploads
+src/app/server-side/uploads
 
 # CRTs
 *.crt
