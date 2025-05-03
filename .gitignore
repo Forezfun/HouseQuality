@@ -12,7 +12,7 @@ npm-debug.log
 yarn-error.log
 
 # Uploads
-/src/app/servser-side/uploads
+**/uploads
 
 # CRTs
 *.crt
