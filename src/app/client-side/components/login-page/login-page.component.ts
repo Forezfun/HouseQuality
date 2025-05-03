@@ -25,11 +25,10 @@ export class LoginPageComponent implements AfterViewInit {
   currentFormTemplate!: TemplateRef<any>;
   inputValues: string[] = new Array(4).fill('');
 
-  // Формы
   signupForm = new FormGroup({
     email: new FormControl('', [Validators.required, Validators.email]),
     nickname: new FormControl('', [Validators.required]),
-    password: new FormControl('', [Validators.required])
+    password: new FormControl('', [Validators.required,Validators.minLength(6)])
   });
 
   codeForm = new FormGroup({
@@ -42,8 +41,8 @@ export class LoginPageComponent implements AfterViewInit {
       ? null : { mismatch: true };
   };
   changePasswordForm = new FormGroup({
-    newPassword: new FormControl('', [Validators.required]),
-    repeatPassword: new FormControl('', [Validators.required])
+    newPassword: new FormControl('', [Validators.required,Validators.minLength(6)]),
+    repeatPassword: new FormControl('', [Validators.required,Validators.minLength(6)])
   }, { validators: this.passwordMatchValidator } as AbstractControlOptions);
 
   signinForm = new FormGroup({
@@ -116,7 +115,7 @@ export class LoginPageComponent implements AfterViewInit {
       .subscribe({
         next: (value) => {
           this.userCookieService.setJwt(value.jwt, 'long')
-          this.userCookieService.setUserType('google')
+          this.userCookieService.setUserType('email')
           this.router.navigateByUrl('/account')
         },
         error: (err) => this.errorHandler.setError('Ошибка входа', 5000)
@@ -139,7 +138,7 @@ export class LoginPageComponent implements AfterViewInit {
               .subscribe({
                 next: (value) => {
                   this.userCookieService.setJwt(value.jwt, 'long')
-                  this.userCookieService.setUserType('google')
+                  this.userCookieService.setUserType('email')
                   this.router.navigateByUrl('/account')
                 },
                 error: (error) => {

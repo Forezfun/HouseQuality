@@ -1,5 +1,10 @@
 @import 'base.scss';
-
+button{
+    transition: all 0.3s ease-in-out;
+    &:hover {
+        transform: translateY(-3px);
+    }
+}
 .body {
     min-height: 100vh;
     background-color: black;
@@ -81,7 +86,7 @@ app-create-furniture {
 
 @media (max-width: 600px) {
     .body {
-        width: calc(100vw - 20px);
+        width: 100vw;
         padding: 0 10px;
         box-sizing: border-box;
     }
@@ -102,12 +107,4 @@ app-create-furniture {
         width: 65%;
         padding: 10px;
     }
-}
-
-button {
-    &:hover {
-        transform: scale(1.1);
-    }
-
-    transition: all 0.3s ease-in-out;
 }

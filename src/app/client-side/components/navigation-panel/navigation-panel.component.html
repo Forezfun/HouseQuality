@@ -2,8 +2,8 @@
 <span class="navigationSpan">
     <a routerLink="/" class="homeBtn navigationBtn">HQ</a>
     
-    <button class="hamburger-menu" (click)="toggleMenu()" *ngIf="isMobileView">
-        <img loading="lazy" src="/assets/images/hamburgerMenuIcon.svg" alt="menu">
+    <button [class.active]="menuOpen" class="hamburger-menu" (click)="toggleMenu()" *ngIf="isMobileView">
+        <img ng loading="lazy" src="/assets/images/hamburgerMenuIcon.svg" alt="menu">
     </button>
     
     <div class="desktop-content" *ngIf="!isMobileView">
@@ -37,7 +37,7 @@
         </a>
         <a routerLink="/create/new" class="mobile-menu-item">
             <img loading="lazy" src="/assets/images/furnitureIcon.svg" alt="furniture">
-            <span>Создать</span>
+            <span>Мебель</span>
         </a>
     </div>
 </span>

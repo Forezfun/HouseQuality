@@ -1,6 +1,7 @@
 // @import 'reset.scss';
 @import 'base.scss';
 @import url('https://fonts.googleapis.com/css2?family=Gloock&display=swap');
+
 .startScreenSpan {
     width: 100vw;
     display: grid;
@@ -10,6 +11,10 @@
     overflow: hidden;
     background: rgb(163, 177, 138);
     background: linear-gradient(0deg, rgba(163, 177, 138, 1) 0%, rgba(218, 215, 205, 1) 100%);
+
+    @media (max-width: 600px) {
+        padding-top: 3vh;
+    }
 }
 
 .circleDecoration {
@@ -22,7 +27,8 @@
     display: grid;
     aspect-ratio: 1;
     place-items: center;
-    content-visibility: auto
+    content-visibility: auto;
+
 }
 
 .circleDecorationSpan>div {
@@ -78,6 +84,12 @@
     grid-area: 1/1/2/2;
     z-index: 1;
     justify-content: center;
+
+    @media (max-width: 600px) {
+        width: 280px;
+        gap: 15px;
+        height: 35px;
+    }
 }
 
 .parallelogram {
@@ -93,7 +105,6 @@
     aspect-ratio: 1;
     border-radius: 10px;
     border-top-left-radius: 100%;
-
     background-color: $darkGreen;
     height: 100%;
 }
@@ -145,17 +156,30 @@
     grid-area: 1/1/2/2;
     z-index: 1;
     margin-top: 10px;
+
+    @media (max-width: 600px) {
+        gap: 15px;
+        margin-top: 5px;
+    }
 }
 
 .projectTitle {
     font-family: Gloock;
     font-size: 8vw;
     font-weight: 400;
+
+    @media (max-width: 600px) {
+        font-size: 12vw;
+    }
 }
 
 .navigationStartMenu {
     display: flex;
     gap: 10px;
+
+    @media (max-width:768px) {
+        display: none;
+    }
 }
 
 .startNavigationBtn {
@@ -165,7 +189,7 @@
     font-size: 1.75vw;
     cursor: pointer;
     text-decoration: none;
-    color: black
+    color: black;
 }
 
 .mainInformation {
@@ -175,7 +199,13 @@
     align-items: center;
     gap: 50px;
     padding: 50px;
-    width: calc(100vw - 100px)
+    width: calc(100vw - 100px);
+
+    @media (max-width: 600px) {
+        padding: 30px 15px;
+        width: calc(100vw - 30px);
+        gap: 30px;
+    }
 }
 
 .someSpan {
@@ -183,6 +213,12 @@
     flex-direction: column;
     gap: 15px;
     justify-content: start;
+
+    @media (max-width: 600px) {
+        width: 100%;
+        align-items: center;
+        text-align: center;
+    }
 }
 
 .chapterTitle {
@@ -191,52 +227,106 @@
     font-size: 3.5vw;
     color: $light;
     width: 60%;
+
+    @media (max-width:1024px) {
+        font-size: 5vw;
+    }
+
+    @media (max-width:768px) {
+        font-size: 6vw;
+    }
+
+    @media (max-width: 600px) {
+        font-size: 7vw;
+        width: 90%;
+    }
 }
 
 .descriptionText {
     color: $lightGreen;
     width: 50%;
+    @media(max-width:768px){
+        width:65%;
+    }
+    @media (max-width: 600px) {
+        width: 90%;
+        font-size: 4vw;
+    }
 }
 
 .exampleFunctions {
-    height: 150px;
     display: flex;
+    flex-wrap: wrap;
     flex-direction: row;
-    gap: 50px
+    gap: 50px;
+
+    @media (max-width: 768px) {
+        width: 350px;
+    }
+
+    @media (max-width: 600px) {
+        height: auto;
+        flex-wrap: wrap;
+        gap: 20px;
+        justify-content: center;
+    }
 }
 
 .figureFunction {
     display: flex;
+    height: 150px;
     flex-direction: column;
     justify-content: center;
     gap: 5px;
     background-color: rgba(52, 78, 65, 0.7);
+
+    * {
+        text-align: left;
+        margin-left: -10px;
+    }
+
+    @media (max-width: 600px) {
+        width: 40%;
+        height: 120px;
+    }
 }
 
 .exampleFunctionTitle {
     font-family: Calypso;
     font-weight: 700;
-    font-size: 2vw;
+    font-size: 25px;
     color: $light;
     margin: 0;
     margin-left: -10px;
     cursor: default;
+
+    @media (max-width: 600px) {
+        font-size: 5vw;
+    }
 }
 
 .exampleFunctionDescription {
     color: $lightGreen;
-    width: 125%;
-    margin-left: -10px;
+
+    @media (max-width: 600px) {
+        font-size: 3.5vw;
+    }
 }
 
 .chapterChangeBtnsSpan {
     display: flex;
     gap: 30px;
-    width: 30vw;
+    width: 450px;
+    
+    @media (max-width: 600px) {
+        justify-content: center;
+        width: 100%;
+        gap: 15px;
+    }
 }
 
 .changeChapterBtn {
-    padding: 10px;
+    line-height: 50px;
     cursor: pointer;
     background-color: $darkGreen;
     color: white;
@@ -246,10 +336,25 @@
     aspect-ratio: 4;
     font-size: 1.15rem;
     transition: all 0.5s ease-in-out;
+
+    @media (max-width: 600px) {
+        font-size:15px;
+        padding: 10px;
+        width:calc(50% - 20px);
+        height: 50px;
+        line-height: normal;
+    }
 }
 
 .projectPreviewSpan {
     width: 70%;
+    min-width: 550px;
+    @media (max-width: 1100px) {
+        width: 100%;
+    }
+    @media (max-width:600px){
+        min-width: auto;
+    }
 }
 
 .activeChapterBtn {
@@ -269,17 +374,21 @@
     grid-area: 1/1/2/2;
     transition: all 0.5s ease-in-out;
     width: 100%;
-    z-index:1;
+    z-index: 1;
 }
 
 
 .opacityDisable {
     opacity: 0;
-    z-index:-1;
+    z-index: -1;
 }
 
 app-plan-house {
     width: calc(100vw - 100px);
+
+    @media (max-width: 600px) {
+        width: 100%;
+    }
 }
 
 footer {
@@ -289,6 +398,12 @@ footer {
     display: flex;
     flex-direction: column;
     gap: 50px;
+
+    @media (max-width: 600px) {
+        width: calc(100vw - 40px);
+        padding: 50px 20px;
+        gap: 30px;
+    }
 }
 
 .footerColumnsSpan {
@@ -296,24 +411,39 @@ footer {
     flex-direction: row;
     justify-content: space-around;
     width: 100%;
+
+    @media (max-width: 600px) {
+        flex-direction: column;
+        gap: 30px;
+    }
 }
 
 .footerColumn {
     display: flex;
     flex-direction: column;
-    gap: 15px
+    gap: 15px;
+
+    @media (max-width: 600px) {
+        align-items: center;
+    }
 }
-.footerColumn > a{
+
+.footerColumn>a {
     text-decoration: none;
 }
 
 .footerMenuBtn {
     background: none;
     color: $lightGreen;
-    font-size: 1.15vw;
+    font-size: 18px;
     border: none;
     text-align: start;
-    cursor: pointer
+    cursor: pointer;
+
+    @media (max-width: 600px) {
+        font-size: 4.5vw;
+        text-align: center;
+    }
 }
 
 .projectFooterTitle {
@@ -322,12 +452,22 @@ footer {
     font-weight: 400;
     text-align: center;
     cursor: default;
+
+    @media (max-width: 600px) {
+        font-size: 4.5vw;
+    }
 }
 
 app-navigation-panel {
+    margin-left: calc(-50vw + 50%);
     position: sticky;
     top: 30px;
     z-index: 6;
+    width:100%;
+
+    @media (max-width: 600px) {
+        top: 15px;
+    }
 }
 
 app-view-furniture,
@@ -335,4 +475,8 @@ app-create-furniture,
 app-plan-house {
     width: 80vw;
     cursor: pointer;
+
+    @media (max-width: 600px) {
+        width: 100%;
+    }
 }

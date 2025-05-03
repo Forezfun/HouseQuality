@@ -109,7 +109,7 @@
                 <label class="inputLabel" for="category">Категория</label>
                 <select aria-placeholder="Диван" [(ngModel)]="furnitureData.category" class="categorySelect"
                     name="category" id="category" title="Выберите категорию">
-                    <option [value]="category" *ngFor="let category of categoriesArray">{{category}}</option>
+                    <option [value]="category.name" *ngFor="let category of categoriesArray">{{category.translateOne}}</option>
                 </select>
                 <label class="inputLabel" for="width">Ширина</label>
                 <input [(ngModel)]="furnitureData.proportions.width" class="addModuleInput" placeholder="1.7" id="width" type="text" title="Введите ширину">

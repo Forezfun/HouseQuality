@@ -18,7 +18,7 @@ export class NavigationPanelComponent implements OnInit {
   }
   @HostListener('window:resize', ['$event'])
   checkViewport() {
-    this.isMobileView = window.innerWidth <= 600;
+    this.isMobileView = window.innerWidth <= 750;
     if (!this.isMobileView) {
       this.menuOpen = false;
     }

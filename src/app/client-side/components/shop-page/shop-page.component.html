@@ -1,6 +1,6 @@
 <span class="body">
   <app-navigation-panel></app-navigation-panel>
-  <h1 *ngIf="!furnitureId" class="сategoryTitle" title="Категория">{{capitalizeFirstLetter(categoryName ?? 'все категории')}}</h1>
+  <h1 *ngIf="!furnitureId" class="categoryTitle" title="Категория">{{currentCategoryId!==undefined?categoryArray[currentCategoryId].translateMany:'Все'}}</h1>
   <span *ngIf="furnituresArray" class="shopModule">
     <span *ngIf="furnitureId" class="viewFurnitureSpan">
       <button (click)="closeFurniture()" class="closeFurniture" title="Закрыть">
@@ -14,19 +14,19 @@
     <span *ngIf="!furnitureId" class="mainArea">
       <span class="params">
         <span class="furnitureCategoriesButtonsSpan">
-          <button (click)="changeCategory(index)" class="furnitureCategoryButton" *ngFor="let categoryName of furnitureCategoryDataArray; let index = index" title="Выбрать категорию">
-            {{categoryName}}
+          <button [class.active]="currentCategoryId===index" (click)="changeCategory(index)" class="furnitureCategoryButton" *ngFor="let categoryData of categoryArray; let index = index" title="Выбрать категорию">
+            {{categoryData.translateOne}}
           </button>
-          <button (click)="changeCategory(null)" class="furnitureCategoryButton" title="Все категории">
+          <button [class.active]="currentCategoryId==undefined" (click)="changeCategory(undefined)" class="furnitureCategoryButton" title="Все категории">
             Все
           </button>
         </span>
       </span>
-      <span class="сategory">
+      <span class="category">
         <div *ngFor="let furnitureData of furnituresArray" class="furnitureItem">
           <h2 class="furnitureTitle" title="Название мебели">{{furnitureData.name}}</h2>
           <img loading="lazy" class="furniturePreview" [src]="furnitureData.preview" alt="Превью мебели" title="Превью мебели">
-          <a class="furnitureLink" [routerLink]="'/shop/'+(categoryName ?? 'все')+'/'+furnitureData.id" title="Цена мебели">{{furnitureData.cost}}</a>
+          <a class="furnitureLink" [routerLink]="'/shop/'+(categoryName ?? 'all')+'/'+furnitureData.id" title="Цена мебели">{{furnitureData.cost}}</a>
         </div>
       </span>
     </span>

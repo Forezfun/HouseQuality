@@ -1,8 +1,8 @@
-import { AfterViewInit, Component, ElementRef, ViewEncapsulation } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, HostListener, ViewEncapsulation } from '@angular/core';
 import { CreateFurnitureComponent, furnitureClientData, furnitureServerData } from '../create-furnitre/create-furniture.component';
 import { ViewFurnitureComponent } from '../view-furniture/view-furniture.component';
 import { PlanHouseComponent } from '../plan-house/plan-house.component';
-import { NgClass } from '@angular/common';
+import { NgClass, NgIf } from '@angular/common';
 import { roomData } from '../plan-house/plan-house.component';
 import { NavigationPanelComponent } from '../navigation-panel/navigation-panel.component';
 import { Router, RouterLink } from '@angular/router';
@@ -10,14 +10,14 @@ import { imageSliderData } from '../image-slider/image-slider.component';
 @Component({
   selector: 'app-main-page',
   standalone: true,
-  imports: [CreateFurnitureComponent, ViewFurnitureComponent, PlanHouseComponent, NgClass, NavigationPanelComponent, RouterLink],
+  imports: [CreateFurnitureComponent, ViewFurnitureComponent, PlanHouseComponent, NgClass, NavigationPanelComponent, RouterLink,NgIf],
   templateUrl: './main-page.component.html',
   styleUrl: './main-page.component.scss'
 })
-export class MainPageComponent implements AfterViewInit{
+export class MainPageComponent implements AfterViewInit {
   constructor(
     private elementRef: ElementRef,
-    private router:Router
+    private router: Router
   ) { }
   ngAfterViewInit(): void {
     (this.elementRef.nativeElement.querySelectorAll('app-create-furniture,app-plan-house') as NodeListOf<HTMLElement>).forEach(elem => {
@@ -107,7 +107,7 @@ export class MainPageComponent implements AfterViewInit{
       }
     }
   ]
-  
+
   focusOnFinder() {
     const finder = this.elementRef.nativeElement.querySelector('.finderInput')
     if (!finder) return
@@ -123,7 +123,16 @@ export class MainPageComponent implements AfterViewInit{
     const FINDER_ELEMENT = document.querySelector('app-navigation-panel') as HTMLSpanElement
     FINDER_ELEMENT.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
-  navigateToPage(link:string){
+  navigateToPage(link: string) {
     this.router.navigateByUrl(link)
+  }
+  isMobileView = false;
+
+  ngOnInit() {
+    this.checkViewport();
+  }
+  @HostListener('window:resize', ['$event'])
+  checkViewport() {
+    this.isMobileView = window.innerWidth <= 600;
   }
 }

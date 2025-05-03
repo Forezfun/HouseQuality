@@ -1,10 +1,10 @@
 <span class="finder">
     <span class="finderSpan">
-        <button class="finderBtn btn">
+        <button title="Поиск" class="finderBtn btn" style="cursor: default">
             <img loading="lazy" src="/assets/images/searchIcon.svg" alt="search">
         </button>
-        <input (input)="inputProcess()" type="text" class="finderInput">
-        <button class="closeBtn btn" (click)="clearInput()">
+        <input placeholder="Введите название мебели" (input)="inputProcess()" type="text" class="finderInput">
+        <button class="closeBtn btn" title="Очистить поле" (click)="clearInput()">
             <img src="/assets/images/cancelIcon.svg" alt="">
         </button>
     </span>

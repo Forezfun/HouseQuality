@@ -161,6 +161,7 @@ export class CreateFurniturePageComponent implements OnInit {
       ADDITIONAL_DATA = {
         category: furnitureData.category
       }
+      console.log(ADDITIONAL_DATA)
     }
 
     const jwt = this.cookieService.getJwt()
@@ -231,8 +232,11 @@ export class CreateFurniturePageComponent implements OnInit {
     ) {
       ADDITIONAL_DATA = {
         category: furnitureData.category
+
       }
+      
     }
+    console.log(ADDITIONAL_DATA,ADDITIONAL_DATA !== undefined)
     const jwt = this.cookieService.getJwt()
 
     if (!jwt) return
@@ -260,7 +264,7 @@ export class CreateFurniturePageComponent implements OnInit {
                     this.serverImageControl.POSTloadProjectImages(imagesBlobArray, jwt, this.idPage, color, imagesData.idMainImage)
                       .subscribe({
                         next: (response) => {
-                          window.location.href = window.location.href
+                          // window.location.href = window.location.href
                         },
                         error: (error) => {
                           console.log(error)
@@ -268,9 +272,9 @@ export class CreateFurniturePageComponent implements OnInit {
                         }
                       })
                   }
-
-                  const FURNITURE_MODEL_BLOB = this.createFurnitureComponent.furnitureModelInput.files![0]
-                  this.furnitureModelService.PUTupdateFurnitureModel(FURNITURE_MODEL_BLOB, jwt, this.idPage)
+                  const FURNITURE_FILES = this.createFurnitureComponent.furnitureModelInput.files!
+                  if(FURNITURE_FILES.length==0)return
+                  this.furnitureModelService.PUTupdateFurnitureModel(FURNITURE_FILES[0], jwt, this.idPage)
                     .subscribe({
                       next: (response) => {
                       },
