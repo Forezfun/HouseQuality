@@ -1,7 +1,7 @@
 import { AfterViewChecked, AfterViewInit, Component, ElementRef, OnInit, Renderer2, TemplateRef, ViewChild } from '@angular/core';
 import { NavigationPanelComponent } from '../navigation-panel/navigation-panel.component';
 import { PlanHouseComponent, roomData } from '../plan-house/plan-house.component';
-import { NgClass, NgFor, NgIf, NgTemplateOutlet } from '@angular/common';
+import { Location, NgClass, NgFor, NgIf } from '@angular/common';
 import { accountFullInformation, AccountService } from '../../services/account.service';
 import { UserCookieService } from '../../services/user-cookie.service';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -12,7 +12,7 @@ import { ErrorHandlerService } from '../../services/error-handler.service';
 @Component({
   selector: 'app-plan-house-page',
   standalone: true,
-  imports: [NgTemplateOutlet,NavigationPanelComponent, PlanHouseComponent, NgFor, NgIf, ReactiveFormsModule, NgIf, NgClass],
+  imports: [NavigationPanelComponent, PlanHouseComponent, NgFor, NgIf, ReactiveFormsModule, NgIf, NgClass],
   templateUrl: './plan-house-page.component.html',
   styleUrl: './plan-house-page.component.scss'
 })
@@ -25,7 +25,8 @@ export class PlanHousePageComponent implements AfterViewInit, OnInit, AfterViewC
     private elemenetRef: ElementRef,
     private renderer: Renderer2,
     private projectService: ProjectService,
-    private errorHandler: ErrorHandlerService
+    private errorHandler: ErrorHandlerService,
+    private location:Location
   ) { }
 
   userData!: accountFullInformation
@@ -35,22 +36,10 @@ export class PlanHousePageComponent implements AfterViewInit, OnInit, AfterViewC
   projectNameForm = new FormGroup({
     name: new FormControl<string>('', [Validators.required])
   })
-  @ViewChild('roomsGuideTemplate', { static: true }) 
-  roomsGuideTemplate!: TemplateRef<any>;
-  guideTemplate:TemplateRef<any>=this.roomsGuideTemplate
+  checkDesktop(){
+    return /windows nt|macintosh|x11|linux/.test(navigator.userAgent.toLowerCase())
+  }
   @ViewChild('planHouse') planHouse!: PlanHouseComponent;
-  isGuideVisible: boolean = true;
-
-  closeGuide() {
-    this.isGuideVisible = false;
-    // Можно добавить сохранение в localStorage, чтобы не показывать снова
-    // localStorage.setItem('guideClosed', 'true');
-  }
-
-  // Если нужно показывать снова при каких-то условиях
-  showGuide() {
-    this.isGuideVisible = true;
-  }
   private hasRoomIdBeenProcessed = false;
   ngAfterViewChecked(): void {
     if (this.hasRoomIdBeenProcessed || !this.planHouse || !this.route.snapshot.params['roomId']) return;
@@ -62,12 +51,14 @@ export class PlanHousePageComponent implements AfterViewInit, OnInit, AfterViewC
 
         this.planHouse.openViewRoom(roomId);
         this.planHouse.sceneOpenToggle = true;
+        this.planHouse.guideTemplate=this.planHouse.roomGuideTemplate
         this.hasRoomIdBeenProcessed = true;
       }
     }, 0)
   }
   ngAfterViewInit(): void {
     this.addModule = this.elemenetRef.nativeElement.querySelector('.addModule')
+
   }
   getCurrentViewRoom(){
     if(this.planHouse===undefined)return undefined
@@ -153,9 +144,12 @@ export class PlanHousePageComponent implements AfterViewInit, OnInit, AfterViewC
   closeProject() {
     this.saveProject()
     this.currentProjectId = undefined
+    const newUrl = this.location.path().split('/').slice(0,-1).join('/')
+    this.location.replaceState(newUrl)
   }
   openProject(indexProject: number) {
-    this.router.navigateByUrl(this.router.url + '/' + indexProject)
+    const newUrl = this.location.path()+'/'+indexProject
+    this.location.replaceState(newUrl)
     this.currentProjectId = indexProject
   }
   createProject() {

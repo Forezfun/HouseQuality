@@ -74,12 +74,12 @@
 <footer>
     <span class="footerColumnsSpan">
         <span class="footerColumn">
-            <a (click)="focusOnFinder()" style="color:#DAD7CD" class="footerMenuBtn">Найти</a>
+            <a (click)="focusOnFinder()" style="color:#DAD7CD" class="footerMenuBtn">Найти мебель</a>
             <a routerLink="/account" class="footerMenuBtn">Аккаунт</a>
         </span>
         <span class="footerColumn">
-            <a routerLink="/create/new" style="color:#DAD7CD" class="footerMenuBtn">Мебель</a>
-            <a routerLink="/plan" class="footerMenuBtn">Планировка</a>
+            <a routerLink="/create/new" style="color:#DAD7CD" class="footerMenuBtn">Добавить мебель</a>
+            <a routerLink="/plan" *ngIf="!isMobileView" class="footerMenuBtn">Планировка</a>
         </span>
     </span>
     <h2 class="projectFooterTitle">HouseQuality 2025</h2>

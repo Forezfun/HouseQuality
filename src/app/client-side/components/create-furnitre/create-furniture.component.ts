@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, HostListener, Input, OnInit, ViewChild } from '@angular/core';
 import { ImageSliderComponent } from '../image-slider/image-slider.component';
 import { imageSliderData } from '../image-slider/image-slider.component';
 import { NgFor, NgIf, NgTemplateOutlet } from '@angular/common';
@@ -6,22 +6,24 @@ import { FormGroup, FormControl, Validators, ReactiveFormsModule, FormsModule, A
 import { TemplateRef } from '@angular/core';
 import { ClientImageControlService } from '../../services/client-image-control.service';
 import { category, CategoryService } from '../../services/category.service';
+import { throttle } from 'lodash';
+import { AutoHeightDirective } from '../../directives/auto-height.directive';
 
 interface shopData {
   cost: number;
   url: string;
 }
-interface furnitureProportions{
-  width:number|null;
-  length:number|null;
-  height:number|null;
+interface furnitureProportions {
+  width: number | null;
+  length: number | null;
+  height: number | null;
 }
 export interface furnitureData {
   name: string;
   description: string;
   shops: shopData[];
-  category?:string;
-  proportions:furnitureProportions
+  category?: string;
+  proportions: furnitureProportions
 }
 interface colorClientData {
   color: string, imagesData: imageSliderData
@@ -33,8 +35,8 @@ export interface colorServerData {
     idMainImage: number
   }
 }
-export interface additionalData{
-  category:string
+export interface additionalData {
+  category: string
 }
 export interface furnitureClientData extends furnitureData {
   colors: colorClientData[]
@@ -45,25 +47,25 @@ export interface furnitureServerData extends furnitureData {
 @Component({
   selector: 'app-create-furniture',
   standalone: true,
-  imports: [ImageSliderComponent, NgFor, NgIf, ReactiveFormsModule, NgTemplateOutlet, FormsModule],
+  imports: [AutoHeightDirective, ImageSliderComponent, NgFor, NgIf, ReactiveFormsModule, NgTemplateOutlet, FormsModule],
   templateUrl: './create-furniture.component.html',
   styleUrls: ['./create-furniture.component.scss']
 })
-export class CreateFurnitureComponent implements OnInit,AfterViewInit{
+export class CreateFurnitureComponent implements OnInit, AfterViewInit {
   constructor(
     private elementRef: ElementRef,
     private changeDetectorRef: ChangeDetectorRef,
     private clientImageControl: ClientImageControlService,
-    private categoryService:CategoryService
+    private categoryService: CategoryService
   ) { }
-
+  isMobileView = false;
   @ViewChild('colorModule') private colorModuleTemplate!: TemplateRef<any>;
   @ViewChild('shopsModule') private shopsModuleTemplate!: TemplateRef<any>;
   @ViewChild('additionalModule') private additionalModuleTemplate!: TemplateRef<any>;
   lastClickedShop: number | undefined = undefined
   lastClickedColor: number | undefined = undefined
   addModuleTemplate!: TemplateRef<any>;
-  furnitureModelInput!:HTMLInputElement
+  furnitureModelInput!: HTMLInputElement
   addColorVisible: boolean = false;
   addModule!: HTMLDivElement;
   currentColorId: number | undefined = undefined
@@ -71,25 +73,30 @@ export class CreateFurnitureComponent implements OnInit,AfterViewInit{
   colorsClientData: { color: string, imagesData: imageSliderData }[] = []
   @Input()
   furnitureData!: furnitureServerData
-  categoriesArray:category[]=[]
+  categoriesArray: category[] = []
   ngOnInit(): void {
     this.initCategories()
+    this.checkViewport();
   }
-  initCategories(){
+  @HostListener('window:resize', ['$event'])
+  checkViewport() {
+    this.isMobileView = window.innerWidth <= 600;
+  }
+  initCategories() {
     this.categoryService.GETgetAllCategories()
-    .subscribe({
-      next:(value)=>{
-        console.log(value)
-        this.categoriesArray=value.categoryArray
-      },
-      error:(error)=>{
-        console.log(error)
-      }
-    })
+      .subscribe({
+        next: (value) => {
+          console.log(value)
+          this.categoriesArray = value.categoryArray
+        },
+        error: (error) => {
+          console.log(error)
+        }
+      })
   }
   ngAfterViewInit(): void {
     this.addModule = this.elementRef.nativeElement.querySelector('.addModule');
-    this.furnitureModelInput=this.elementRef.nativeElement.querySelector('.furnitureModelInput')
+    this.furnitureModelInput = this.elementRef.nativeElement.querySelector('.furnitureModelInput')
   }
 
   async onInputImages(event: Event) {
@@ -108,7 +115,7 @@ export class CreateFurnitureComponent implements OnInit,AfterViewInit{
   removeImages() {
     if (this.currentColorId === undefined || !this.furnitureData.colors[this.currentColorId].imagesData.images) return
     this.furnitureData.colors[this.currentColorId].imagesData.images.length = 0
-    this.colorsClientData[this.currentColorId].imagesData.images.length=0
+    this.colorsClientData[this.currentColorId].imagesData.images.length = 0
   }
   colorForm = new FormGroup({
     color: new FormControl('', [Validators.required])
@@ -180,11 +187,21 @@ export class CreateFurnitureComponent implements OnInit,AfterViewInit{
       this.lastClickedShop = undefined;
     }
   }
+  autoHeightInput(event: Event) {
+    const input = event.target as HTMLInputElement
+    console.log(input)
+    throttle(() => {
+      console.log('123')
+      console.log((input.scrollHeight) + 'px')
+      input.style.height = 'auto';
+      input.style.height = (input.scrollHeight) + 'px';
+    }, 250)()
+  }
   deleteColor() {
     const DELETE_COLOR_ID = this.currentColorId
-    this.currentColorId=0
-    this.colorsClientData=this.colorsClientData.filter((colorData,index)=>index!==DELETE_COLOR_ID)
-    this.furnitureData.colors= this.furnitureData.colors.filter((colorData,index)=>index!==DELETE_COLOR_ID)
+    this.currentColorId = 0
+    this.colorsClientData = this.colorsClientData.filter((colorData, index) => index !== DELETE_COLOR_ID)
+    this.furnitureData.colors = this.furnitureData.colors.filter((colorData, index) => index !== DELETE_COLOR_ID)
   }
   openShopsModule(idShop?: number) {
     if (idShop !== undefined) {
@@ -203,7 +220,7 @@ export class CreateFurnitureComponent implements OnInit,AfterViewInit{
     this.addModuleTemplate = this.shopsModuleTemplate;
     this.addModule.classList.remove('disabled');
   }
-  openAdditional(){
+  openAdditional() {
     this.addModuleTemplate = this.additionalModuleTemplate;
     this.addModule.classList.remove('disabled');
   }

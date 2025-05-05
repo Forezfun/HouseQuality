@@ -87,7 +87,7 @@ export class AccountPageComponent implements AfterViewInit, OnInit {
 
   private initEditForm(): void {
     this.editForm = new FormGroup({
-      nickname: new FormControl('', [
+      nickname: new FormControl(this.userData?.nickname, [
         Validators.required,
         Validators.minLength(3),
         Validators.maxLength(30)
@@ -96,7 +96,7 @@ export class AccountPageComponent implements AfterViewInit, OnInit {
     
     console.log(this.userCookieService.getUserType())
     if (this.userCookieService.getUserType() === 'email') {
-      this.editForm.addControl('password', new FormControl('', [
+      this.editForm.addControl('password', new FormControl(this.userData?.password, [
         Validators.required,
         Validators.minLength(6)
       ]));
@@ -134,11 +134,6 @@ export class AccountPageComponent implements AfterViewInit, OnInit {
 
   openEditForm(): void {
     if (!this.userData) return;
-    
-    this.editForm.patchValue({
-      nickname: this.userData.nickname,
-      ...(this.userData.password !== undefined && { password: '' })
-    });
     
     this.isEditFormOpen = true;
   }

@@ -1,4 +1,4 @@
-import { NgFor, NgIf } from '@angular/common';
+import { NgClass, NgFor, NgIf } from '@angular/common';
 import { AfterViewInit, Component, ElementRef, Renderer2 } from '@angular/core';
 import { FinderService } from '../../services/finder.service';
 import { ServerImageControlService } from '../../services/server-image-control.service';
@@ -12,7 +12,7 @@ interface foundFurniture {
 @Component({
   selector: 'app-finder',
   standalone: true,
-  imports: [NgFor,NgIf],
+  imports: [NgClass,NgFor,NgIf],
   templateUrl: './finder.component.html',
   styleUrl: './finder.component.scss'
 })
@@ -28,7 +28,9 @@ export class FinderComponent implements AfterViewInit{
   input!:HTMLInputElement
   foundFurniture?: foundFurniture[]
   private debounceTimer: any = null;
-
+  checkDesktop(){
+    return /windows nt|macintosh|x11|linux/.test(navigator.userAgent.toLowerCase())
+  }
   ngAfterViewInit(): void {
     this.variantsSpan=this.elementRef.nativeElement.querySelector('.variantsSpan') as HTMLSpanElement
     this.input=this.elementRef.nativeElement.querySelector('.finderInput')
