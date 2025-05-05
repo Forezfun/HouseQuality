@@ -1,6 +1,7 @@
 <span class="body">
   <app-navigation-panel></app-navigation-panel>
-  <span class="functionalModule">
+  <p *ngIf="!checkDesktop()" class="mobileAlert">Просмотр этой страницы с мобильных устройств невозможен. Пожалуйста, используйте компьютер.</p>
+  <span *ngIf="checkDesktop()" class="functionalModule">
     <span [ngClass]="{'disabled': currentProjectId!==undefined}" *ngIf="userData!==undefined" class="chooseProjectSpan">
       <button (click)="openProject(index)" *ngFor="let projectData of userData.projects;let index=index"
         class="projectCard">
@@ -46,38 +47,3 @@
   </form>
 </span>
 
-<div class="guideOverlay" *ngIf="isGuideVisible">
-  <div class="guideSpan">
-    <span [ngTemplateOutlet]="roomsGuideTemplate" class="guideWindow"></span>
-    <img src="assets/images/addIcon.svg" alt="Close" class="closeIcon" (click)="closeGuide()">
-  </div>
-</div>
-<ng-template #roomsGuideTemplate>
-  <div class="guideContainer">
-    <div class="guideSection">
-      <p class="guideText">Зажмите ЛКМ на комнате и перетаскивайте</p>
-      <div class="animationContainer">
-        <img src="assets/images/mouse.svg" alt="Mouse" class="movingMouse">
-      </div>
-    </div>
-    <div class="dividerWithText">
-      <div class="dividerLine"></div>
-      <span class="dividerText">ИЛИ</span>
-      <div class="dividerLine"></div>
-    </div>
-    <div class="guideSection">
-      <p class="guideText">Наведитесь на TAB и с зажатым ENTER нажимайте стрелочки</p>
-      <div class="keyboardHint">
-        <img src="assets/images/enter.svg" alt="Enter" class="enterKey">
-        <div class="arrowsWrapper">
-          <img src="assets/images/arrowLeft.svg" style="rotate:90deg;" alt="<--" class="arrowKey top">
-          <div class="middleArrows">
-            <img src="assets/images/arrowLeft.svg" alt="<--" class="arrowKey left">
-            <img src="assets/images/arrowLeft.svg" style="rotate:270deg;" alt="<--" class="arrowKey bottom">
-            <img src="assets/images/arrowLeft.svg" style="rotate:180deg;" alt="<--" class="arrowKey right">
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</ng-template>

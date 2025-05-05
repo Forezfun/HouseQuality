@@ -1,4 +1,4 @@
-import { Component, AfterViewInit, ElementRef, HostListener, Input, SimpleChanges, Output, EventEmitter } from '@angular/core';
+import { Component, AfterViewInit, ElementRef, HostListener, Input, SimpleChanges, Output, EventEmitter, OnChanges } from '@angular/core';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { NgxSpinnerModule, NgxSpinnerService } from 'ngx-spinner';
@@ -10,6 +10,7 @@ import { FurnitureCardControlService } from '../../services/furniture-card-contr
 import { firstValueFrom } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
 import { ErrorHandlerService } from '../../services/error-handler.service';
+import { Location } from '@angular/common';
 
 export interface modelInterface {
   width: number;
@@ -37,7 +38,7 @@ interface roomData extends modelInterface {
   templateUrl: './scene.component.html',
   styleUrls: ['./scene.component.scss']
 })
-export class SceneComponent implements AfterViewInit {
+export class SceneComponent implements AfterViewInit,OnChanges {
   constructor(
     private elementRef: ElementRef,
     private spinner: NgxSpinnerService,
@@ -45,13 +46,12 @@ export class SceneComponent implements AfterViewInit {
     private furnitureCardService: FurnitureCardControlService,
     private userCookieService: UserCookieService,
     private route: ActivatedRoute,
-    private errorHandler: ErrorHandlerService
+    private errorHandler: ErrorHandlerService,
+    private location:Location
   ) { }
 
   @Input()
   roomData!: roomDataPlan | undefined
-  @Input()
-  furnitureId?: string
   @Output()
   saveObjectsEmitter = new EventEmitter<objectSceneInterface[]>()
 
@@ -66,6 +66,7 @@ export class SceneComponent implements AfterViewInit {
   private mouse = new THREE.Vector2();
   private targetobject: THREE.Object3D | undefined = undefined;
   private rectangleMesh!: THREE.Mesh;
+  
 
   ngAfterViewInit(): void {
     this.initThreeJs();
@@ -87,8 +88,13 @@ export class SceneComponent implements AfterViewInit {
     this.loadRoom(LOAD_OBJECT)
     const furnitureId = this.route.snapshot.params['furnitureId']
     if (!furnitureId || changes['roomData'].previousValue) return
+    this.fixPath()
     this.spinner.show()
     this.addModel(furnitureId, true)
+  }
+  fixPath(){
+    const newUrl = this.location.path().split('/').slice(0,-1).join('/')
+    this.location.replaceState(newUrl)
   }
 
   private addModel(furnitureId: string, saveRoom: boolean, moveData?: objectLoadInterface) {

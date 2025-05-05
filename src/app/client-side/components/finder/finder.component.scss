@@ -106,7 +106,7 @@
     text-decoration: none;
 }
 
-.variantCard:hover {
+.variantCardDesktop:hover {
     height: 90%;
 
     .cardCost {
@@ -123,7 +123,27 @@
         height: 65%;
     }
 }
+.variantCardMobile{
+    height: 90%;
 
+    .cardCost {
+        margin-top: 10px;
+        display: block;
+        padding: 0 45px;
+        height: 50px;
+        line-height: 50px;
+        color: black;
+        background-color: white;
+    }
+
+    .cardName {
+        margin-bottom: 50px;
+    }
+
+    .cardImage {
+        height: 65%;
+    }
+}
 .cardImage {
     height: 60%;
     width: fit-content;

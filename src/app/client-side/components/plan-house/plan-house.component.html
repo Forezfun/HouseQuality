@@ -28,7 +28,7 @@
       </span>
       <span class="addModuleInputSpan">
         <label class="inputLabel" for="name">Name</label>
-        <input placeholder="Bedroom" formControlName="name" class="addModuleInput" id="name" type="text">
+        <input placeholder="Bedroom" formCsceneOpenToggleontrolName="name" class="addModuleInput" id="name" type="text">
       </span>
       <span class="functionShopsModuleBtns">
         <button [disabled]="!roomForm.valid" class="submitAddModuleFormBtn" type="submit">Continue</button>
@@ -39,24 +39,105 @@
     </form>
   </span>
   <span class="workArea">
+    <button (click)="turnoffGuides(isGuideIncluded?true:false)" [title]="isGuideIncluded?'Выключить':'Включить'" class="guideSwitcher">
+        Подсказки по управлению {{isGuideIncluded?'включены':'выключены'}}
+    </button>
     <app-scene #scene (saveObjectsEmitter)="updateRoomObjects($event)"
       [style.opacity]="sceneOpenToggle&&currentViewRoom!==undefined?1:0"
       [style.z-index]="sceneOpenToggle&&currentViewRoom!==undefined?1:0"
       [roomData]="currentViewRoom!==undefined?planHouse[currentViewRoom]:lastPlanHouse"></app-scene>
-    <span class="roomSpan">
-        <button *ngFor="let roomData of planHouse; let index = index" class="room" [style.grid-area]="roomData.gridArea"
-          [style.display]="((currentViewRoom!==undefined&&currentViewRoom==index)||currentViewRoom===undefined)&&!sceneOpenToggle?'block':'none'"
-          [attr.data-index]="index" (touchstart)="currentViewRoom===undefined?clickRoom($event, index):openScene()"
-          (keydown.enter)="currentViewRoom===undefined?clickRoom($event, index):openScene()"
-          (mousedown)="currentViewRoom===undefined?clickRoom($event, index):openScene()">
-          {{roomData.name}}
-        </button>
+    <span [class.viewRoomSmallScreen]="currentViewRoom!==undefined" class="roomSpan">
+      <button *ngFor="let roomData of planHouse; let index = index" class="room" [style.grid-area]="roomData.gridArea"
+        [style.display]="(currentViewRoom===index||currentViewRoom===undefined)&&!sceneOpenToggle?'block':'none'"
+        [attr.data-index]="index" (touchstart)="currentViewRoom===undefined?clickRoom($event, index):openScene()"
+        (keydown.enter)="currentViewRoom===undefined?clickRoom($event, index):openScene()"
+        (mousedown)="currentViewRoom===undefined?clickRoom($event, index):openScene()">
+        {{roomData.name}}
+      </button>
       <span *ngIf="!sceneOpenToggle&&currentViewRoom!==undefined" class="furnitureCategoriesButtonsSpan">
-        <a [href]="'/shop/'+categoryName.toLowerCase()" class="furnitureCategoryButton"
-          *ngFor="let categoryName of furnitureCategoryDataArray; let index = index">
-          {{categoryName}}
+        <a [href]="'/shop/'+category.name" class="furnitureCategoryButton"
+          *ngFor="let category of categoryArray; let index = index">
+          {{category.translateMany}}
         </a>
       </span>
     </span>
   </span>
 </span>
+<div class="guideOverlay" *ngIf="isGuideVisible && isGuideIncluded">
+  <div class="guideSpan">
+    <span [ngTemplateOutlet]="guideTemplate" class="guideWindow"></span>
+    <img src="assets/images/addIcon.svg" alt="Close" class="closeIcon" (click)="closeGuide()">
+  </div>
+</div>
+<ng-template #roomsGuideTemplate1>
+  <div class="guideContainer">
+    <div class="guideSection">
+      <p class="guideText">Нажмите один раз ЛКМ на комнатe для смены названия</p>
+      <div class="animationContainer" style="display:flex;justify-content: center;">
+        <img src="assets/images/mouse.svg" alt="Mouse" class="mouse pressMouse">
+      </div>
+    </div>
+    <div class="dividerWithText">
+      <div class="dividerLine"></div>
+    </div>
+    <div class="guideSection">
+      <p class="guideText">Нажмите два раза ЛКМ на комнатe для редактирования мебели</p>
+      <div class="animationContainer" style="display:flex;justify-content: center;">
+        <img src="assets/images/mouse.svg" alt="Mouse" class="mouse pressMousetwice">
+      </div>
+    </div>
+  </div>
+</ng-template>
+<ng-template #roomsGuideTemplate2>
+  <div class="guideContainer">
+    <div class="guideSection">
+      <p class="guideText">Зажмите ЛКМ на комнате и перетаскивайте</p>
+      <div class="animationContainer">
+        <img src="assets/images/mouse.svg" alt="Mouse" class="mouse xMouse">
+      </div>
+    </div>
+    <div class="dividerWithText">
+      <div class="dividerLine"></div>
+      <span class="dividerText">ИЛИ</span>
+      <div class="dividerLine"></div>
+    </div>
+    <div class="guideSection">
+      <p class="guideText">Наведитесь на TAB и с зажатым ENTER нажимайте стрелочки</p>
+      <div class="keyboardHint">
+        <img src="assets/images/enter.svg" alt="Enter" class="enterKey">
+        <div class="arrowsWrapper">
+          <img src="assets/images/arrowLeft.svg" style="rotate:90deg;" alt="<--" class="arrowKey top">
+          <div class="middleArrows">
+            <img src="assets/images/arrowLeft.svg" alt="<--" class="arrowKey left">
+            <img src="assets/images/arrowLeft.svg" style="rotate:270deg;" alt="<--" class="arrowKey bottom">
+            <img src="assets/images/arrowLeft.svg" style="rotate:180deg;" alt="<--" class="arrowKey right">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+<ng-template #roomGuideTemplate>
+  <div class="guideContainer">
+    <div class="guideSection">
+      <p class="guideText">Нажмите ЛКМ на мебели для перетаскивания и нажмите еще раз для сохранения</p>
+      <div class="animationContainer" style="display:flex;justify-content: center;">
+        <img src="assets/images/mouse.svg" alt="Mouse" class="mouse pressMouse">
+      </div>
+    </div>
+    <div class="dividerWithText">
+      <div class="dividerLine"></div>
+    </div>
+    <div class="guideSection">
+      <p class="guideText">В режиме перетаскивания нажимайте Q и E для поворота мебели</p>
+      <div class="keyboardHint">
+        <div class="arrowsWrapper">
+          <div class="middleArrows">
+            <img src="assets/images/qButton.svg" style="width:50px;" alt="q" class="arrowKey left">
+            <img src="assets/images/eButton.svg" style="width:50px;" alt="e" class="arrowKey right">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>

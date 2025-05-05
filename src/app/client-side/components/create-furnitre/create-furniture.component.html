@@ -31,7 +31,7 @@
         <span class="informationSpan">
             <span class="descriptionSpan">
                 <div class="descriptionTitle">Описание</div>
-                <textarea placeholder="Введите описание..." [(ngModel)]="furnitureData.description"
+                <textarea appAutoHeight [mobileView]="isMobileView" placeholder="Введите описание..." [(ngModel)]="furnitureData.description"
                     class="descriptionInformation" title="Введите описание мебели"></textarea>
             </span>
             <span class="rightFunctionalSection">

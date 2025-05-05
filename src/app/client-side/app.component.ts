@@ -12,12 +12,13 @@ import { FurnitureCardControlService } from './services/furniture-card-control.s
 import { FurnitureModelControlService } from './services/furniture-model-control.service';
 import { ShopService } from './services/shop.service';
 import { FinderService } from './services/finder.service';
-import {AutosizeModule} from 'ngx-autosize';
+import { AutoHeightDirective } from './directives/auto-height.directive';
+
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet,ErrorHandlerComponent,AutosizeModule],
-  providers:[ErrorHandlerComponent,AccountService,AuthService,UserCookieService,ServerImageControlService,ProjectService,PlanHouseComponent,SceneComponent,FurnitureCardControlService,FurnitureModelControlService,ShopService,FinderService,Location],
+  imports: [RouterOutlet,ErrorHandlerComponent],
+  providers:[AutoHeightDirective,ErrorHandlerComponent,AccountService,AuthService,UserCookieService,ServerImageControlService,ProjectService,PlanHouseComponent,SceneComponent,FurnitureCardControlService,FurnitureModelControlService,ShopService,FinderService,Location],
   templateUrl: './app.component.html'
 })
 export class AppComponent {

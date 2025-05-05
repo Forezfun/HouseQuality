@@ -10,7 +10,7 @@ import { imageSliderData } from '../image-slider/image-slider.component';
 @Component({
   selector: 'app-main-page',
   standalone: true,
-  imports: [CreateFurnitureComponent, ViewFurnitureComponent, PlanHouseComponent, NgClass, NavigationPanelComponent, RouterLink,NgIf],
+  imports: [CreateFurnitureComponent, ViewFurnitureComponent, PlanHouseComponent, NgClass, NavigationPanelComponent, RouterLink, NgIf],
   templateUrl: './main-page.component.html',
   styleUrl: './main-page.component.scss'
 })
@@ -35,7 +35,10 @@ export class MainPageComponent implements AfterViewInit {
   furnitureExamplesData: furnitureServerData = {
     name: 'Onte Bucle White',
     colors: [],
-    description: 'Width: 170 cm  Length: 240 cm  Height: 83 cmRecommended-place: corner of the roomTransformation mechanism: pantographSupport material: spliced ​​solidClearance from floor: 12 cmExistence of a drawer for linen: yesArmrest color: main fabric colorRemovable cover: noDecorative pillows: without pillowsMaximum load per seat: 100 kg',
+    description: `Механизм: пантограф
+      Высота от пола: 12 см
+      Ящик для белья: да
+      Макс. нагрузка: 100 кг`,
     shops: [{ cost: 125990, url: 'https://www.divan.ru/blagoveshchensk/product/divan-uglovoj-onte-bucle-white' }, { cost: 84990, url: 'https://avtorm.ru/catalog/product-divan-uglovoy-onte-bucle-white' }],
     category: 'sofa',
     proportions: {
@@ -47,9 +50,7 @@ export class MainPageComponent implements AfterViewInit {
   exampleClientColors = [{ color: '#FFC2CC', imagesData: this.imagesData }]
   viewExampleData: furnitureClientData = {
     name: this.furnitureExamplesData.name,
-    colors: [
-      { color: '#FFC2CC', imagesData: this.imagesData }
-    ],
+    colors: this.exampleClientColors,
     description: this.furnitureExamplesData.description,
     shops: this.furnitureExamplesData.shops,
     category: this.furnitureExamplesData.category,

@@ -10,7 +10,7 @@
     </span>
     <span class="variantsSpan">
         <h3 *ngIf="foundFurniture!==undefined&&foundFurniture.length===0">Ничего не найдено :(</h3>
-        <span class="variantCard" *ngFor="let card of foundFurniture">
+        <span [ngClass]="{'variantCardDesktop': checkDesktop(),'variantCardMobile':!checkDesktop()}" class="variantCard" *ngFor="let card of foundFurniture">
             <div>
                 <h3 class="cardName">{{card.name}}</h3>
                 <a [href]="getUrl(card.id,card.category)" class="cardCost">{{card.cost}} руб</a>

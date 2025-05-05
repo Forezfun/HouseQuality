@@ -185,6 +185,7 @@ app-image-slider {
 .addModuleFormContent {
     grid-area: 1/1/2/2;
     width: 25vw;
+    min-width: 350px;
     border-radius: 10px;
     background-color: #000;
     padding: 30px 45px;
@@ -298,6 +299,7 @@ app-image-slider {
     background: none;
     border: none;
     outline: none;
+    resize: vertical;
 }
 
 .rightFunctionalSection {
@@ -524,6 +526,7 @@ app-image-slider {
 
     .addModuleFormContent {
         width: calc(85vw - 40px);
+        min-width: none;
         padding: 20px;
     }
 

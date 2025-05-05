@@ -31,7 +31,15 @@ export class UserCookieService {
   deleteJwt() {
     this.cookieService.delete('jwt', '/');
   }
-
+  setGuideRule(){
+    this.cookieService.set('guideInclude','false',{expires:new Date().getDate() + 7,path:'/',sameSite:'Strict'})
+  }
+  getGuideRule(){
+    return this.cookieService.get('guideInclude')
+  }
+  deleteGuideRule(){
+    this.cookieService.delete('guideInclude','/')
+  }
   /**
    * Получение JWT токена из куки
    * @returns JWT токен, если он существует

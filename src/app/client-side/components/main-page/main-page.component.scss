@@ -245,9 +245,11 @@
 .descriptionText {
     color: $lightGreen;
     width: 50%;
-    @media(max-width:768px){
-        width:65%;
+
+    @media(max-width:768px) {
+        width: 65%;
     }
+
     @media (max-width: 600px) {
         width: 90%;
         font-size: 4vw;
@@ -317,7 +319,7 @@
     display: flex;
     gap: 30px;
     width: 450px;
-    
+
     @media (max-width: 600px) {
         justify-content: center;
         width: 100%;
@@ -338,21 +340,23 @@
     transition: all 0.5s ease-in-out;
 
     @media (max-width: 600px) {
-        font-size:15px;
+        font-size: 15px;
         padding: 10px;
-        width:calc(50% - 20px);
+        width: calc(50% - 20px);
         height: 50px;
         line-height: normal;
     }
 }
 
 .projectPreviewSpan {
-    width: 70%;
+    width: 80%;
     min-width: 550px;
+
     @media (max-width: 1100px) {
         width: 100%;
     }
-    @media (max-width:600px){
+
+    @media (max-width:600px) {
         min-width: auto;
     }
 }
@@ -384,6 +388,7 @@
 }
 
 app-plan-house {
+    margin-top: 50px;
     width: calc(100vw - 100px);
 
     @media (max-width: 600px) {
@@ -463,7 +468,7 @@ app-navigation-panel {
     position: sticky;
     top: 30px;
     z-index: 6;
-    width:100%;
+    width: 100%;
 
     @media (max-width: 600px) {
         top: 15px;
@@ -473,10 +478,7 @@ app-navigation-panel {
 app-view-furniture,
 app-create-furniture,
 app-plan-house {
-    width: 80vw;
+    display: block;
     cursor: pointer;
-
-    @media (max-width: 600px) {
-        width: 100%;
-    }
+    width: 100%;
 }

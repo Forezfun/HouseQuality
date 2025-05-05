@@ -1,10 +1,13 @@
-import { AfterViewInit, Component, Input, Renderer2, ElementRef, HostListener, EventEmitter, Output, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, Input, Renderer2, ElementRef, HostListener, EventEmitter, Output, ViewChild, OnInit, TemplateRef, ChangeDetectorRef } from '@angular/core';
 import { modelInterface, SceneComponent } from '../scene/scene.component';
-import { NgFor, NgIf } from '@angular/common';
+import { Location, NgFor, NgIf, NgTemplateOutlet } from '@angular/common';
 import { FormGroup, FormControl, ReactiveFormsModule, Validators, ValidatorFn, AbstractControl, ValidationErrors } from '@angular/forms';
 import { throttle } from 'lodash';
 import { objectSceneInterface } from '../scene/scene.component'
 import { Router } from '@angular/router';
+import { category, CategoryService } from '../../services/category.service';
+import { ErrorHandlerService } from '../../services/error-handler.service';
+import { UserCookieService } from '../../services/user-cookie.service';
 
 export interface roomData {
   name: string;
@@ -23,14 +26,19 @@ interface roomSpanSettings {
 @Component({
   selector: 'app-plan-house',
   standalone: true,
-  imports: [NgFor, ReactiveFormsModule, NgIf, SceneComponent],
+  imports: [NgTemplateOutlet,NgFor, ReactiveFormsModule, NgIf, SceneComponent],
   templateUrl: './plan-house.component.html',
   styleUrls: ['./plan-house.component.scss']
 })
-export class PlanHouseComponent implements AfterViewInit {
+export class PlanHouseComponent implements AfterViewInit,OnInit {
   constructor(
     private renderer: Renderer2,
-    private elementRef: ElementRef
+    private elementRef: ElementRef,
+    private categoryService:CategoryService,
+    private location:Location,
+    private errorHandler:ErrorHandlerService,
+    private cdr:ChangeDetectorRef,
+    private userCookieService:UserCookieService
   ) { }
 
   @Input()
@@ -61,9 +69,43 @@ export class PlanHouseComponent implements AfterViewInit {
   formElement!: HTMLFormElement;
   currentViewRoom: undefined | number = undefined
   sceneOpenToggle: boolean = false
-  furnitureCategoryDataArray: string[] = [
-    'Chair', 'Lamp', 'Sofa', 'Table'
-  ]
+  categoryArray: category[] = []
+  initCategories(){
+    this.categoryService.GETgetAllCategories()
+    .subscribe({
+      next:(value)=>{
+        this.categoryArray=value.categoryArray
+      },
+      error:(error)=>{
+        console.log(error)
+      }
+    })
+  }
+  isGuideIncluded:boolean = true
+  isGuideVisible: boolean = true;
+  @ViewChild('roomsGuideTemplate1', { static: true }) 
+  roomsGuideTemplate1!: TemplateRef<any>;
+  @ViewChild('roomsGuideTemplate2', { static: true }) 
+  roomsGuideTemplate2!: TemplateRef<any>;
+  @ViewChild('roomGuideTemplate', { static: true }) 
+  roomGuideTemplate!: TemplateRef<any>;
+  guideTemplate!:TemplateRef<any>
+
+  closeGuide() {
+    this.userCookieService.setGuideRule()
+    this.isGuideVisible = false;
+    if(this.guideTemplate==this.roomsGuideTemplate1){
+      this.guideTemplate=this.roomsGuideTemplate2
+      this.showGuide()
+    }
+  }
+  showGuide() {
+    this.isGuideVisible = true;
+  }
+  ngOnInit(): void {
+    this.checkGuideInclude()
+    this.initCategories()
+  }
   roomForm = new FormGroup({
     width: new FormControl<number | null>(
       null,
@@ -81,6 +123,8 @@ export class PlanHouseComponent implements AfterViewInit {
   });
   
   ngAfterViewInit(): void {
+    this.guideTemplate=this.roomsGuideTemplate1
+    this.cdr.detectChanges()
     this.furnitureListElement = this.elementRef.nativeElement.querySelector('.furnitureCategory') as HTMLSpanElement
     this.roomSpan = this.elementRef.nativeElement.querySelector('.roomSpan') as HTMLSpanElement;
     this.calculateRoomSpanSettings();
@@ -88,7 +132,20 @@ export class PlanHouseComponent implements AfterViewInit {
     this.toggleModuleButton = this.elementRef.nativeElement.querySelector('.addModuleBtn')
     this.initialized.emit();
   }
-
+  turnoffGuides(turnoff:boolean){
+    if(turnoff){
+      this.userCookieService.setGuideRule()
+      if(this.sceneOpenToggle===true&&this.currentViewRoom!==undefined){
+        this.guideTemplate=this.roomGuideTemplate
+      }
+    }else{
+      this.userCookieService.deleteGuideRule()
+    }
+    this.checkGuideInclude()  
+  }
+  checkGuideInclude(){
+    this.isGuideIncluded=this.userCookieService.getGuideRule()==='false'?false:true
+  }
   emitPlanHouse() {
     this.planHouseEmitter.emit(this.planHouse)
   }
@@ -110,9 +167,17 @@ export class PlanHouseComponent implements AfterViewInit {
   }
 
   openScene() {
+    if(this.isGuideIncluded){
+      this.guideTemplate=this.roomGuideTemplate
+      this.showGuide()
+    }
+    const newUrl = this.location.path()+'/'+this.currentViewRoom
+    this.location.replaceState(newUrl)
     this.sceneOpenToggle = true
   }
   closeScene() {
+    const newUrl = this.location.path().split('/').slice(0,-1).join('/')
+    this.location.replaceState(newUrl)
     this.sceneComponent.saveRoom()
     this.sceneOpenToggle = false
   }
@@ -144,6 +209,7 @@ export class PlanHouseComponent implements AfterViewInit {
 
   }
   closeViewRoom() {
+
     const roomElement = this.roomSpan.querySelector(`[data-index="${this.currentViewRoom}"]`) as HTMLDivElement;
     if (!roomElement || !this.oldSizeViewRoom) return;
     this.currentViewRoom = undefined;
@@ -244,6 +310,7 @@ export class PlanHouseComponent implements AfterViewInit {
         }
       }
     }
+    this.errorHandler.setError('Нет места',15000)
     return false;
   }
   deleteRoom() {
@@ -253,6 +320,7 @@ export class PlanHouseComponent implements AfterViewInit {
       this.toggleOpenRoomModule()
       this.emitPlanHouse()
       this.saveHouse()
+      this.toggleControls(true)
     }
   }
   toggleControls(enable: boolean): void {
@@ -493,16 +561,17 @@ export class PlanHouseComponent implements AfterViewInit {
     if (this.currentIdClickedRoom === undefined) return
     this.calculateRoomSpanSettings()
   }, 50)
-  // @HostListener('document:keydown.Escape')
-  // escapeDragginMod() {
-  //   console.log('keyup',this.currentIdClickedRoom)
-  //   this.isDragging = false
-  //   this.currentIdClickedRoom = undefined
-  //   const draggedElement = this.elementRef.nativeElement.querySelector('[style*="cursor: grabbing"]');
-  //   console.log(draggedElement)
-  //   if (draggedElement) {
-  //     this.renderer.removeStyle(draggedElement, 'background-color')
-  //     this.renderer.removeStyle(draggedElement, 'cursor');
-  //   }
-  // }
+  @HostListener('document:keydown.Escape')
+  escapeDragginMod() {
+    console.log('keyup',this.currentIdClickedRoom)
+    this.isDragging = false
+    this.currentIdClickedRoom = undefined
+    const draggedElement = this.elementRef.nativeElement.querySelector('[style*="cursor: grabbing"]');
+    console.log(draggedElement)
+    if (draggedElement) {
+      this.renderer.removeStyle(draggedElement, 'background-color')
+      this.renderer.removeStyle(draggedElement, 'cursor');
+    }
+  }
+
 }
