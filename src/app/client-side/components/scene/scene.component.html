@@ -7,4 +7,10 @@
 <div class="Loader"></div>
 <p style="font-size: 20px; color: white">Loading...</p>
 </ngx-spinner>
-<div id="canvasContainer"></div>
+<div id="canvasContainer">
+  <button (click)="deleteModel()" [style.opacity]="targetobject!==undefined?1:0" class="deleteModelBtn">
+    <p>Удалить мебель</p>
+  <img src="/assets/images/deleteIcon.svg" alt="">
+  </button>
+</div>
+

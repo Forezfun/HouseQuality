@@ -23,7 +23,7 @@
         </span>
       </span>
       <span class="category">
-        <div *ngFor="let furnitureData of furnituresArray" class="furnitureItem">
+        <div *ngFor="let furnitureData of furnituresArray;trackBy: trackByFn" class="furnitureItem">
           <h2 class="furnitureTitle" title="Название мебели">{{furnitureData.name}}</h2>
           <img loading="lazy" class="furniturePreview" [src]="furnitureData.preview" alt="Превью мебели" title="Превью мебели">
           <a class="furnitureLink" [routerLink]="'/shop/'+(categoryName ?? 'all')+'/'+furnitureData.id" title="Цена мебели">{{furnitureData.cost}}</a>
