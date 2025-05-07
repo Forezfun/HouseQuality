@@ -81,7 +81,7 @@ export class PlanHouseComponent implements AfterViewInit,OnInit {
       }
     })
   }
-  isGuideIncluded:boolean = true
+  isGuideIncluded:boolean = false
   isGuideVisible: boolean = true;
   @ViewChild('roomsGuideTemplate1', { static: true }) 
   roomsGuideTemplate1!: TemplateRef<any>;
@@ -123,6 +123,9 @@ export class PlanHouseComponent implements AfterViewInit,OnInit {
   });
   
   ngAfterViewInit(): void {
+    const parentElement = this.elementRef.nativeElement.parentElement;
+    if(parentElement.classList.contains('projectPreviewSpan'))this.isGuideIncluded=false
+
     this.guideTemplate=this.roomsGuideTemplate1
     this.cdr.detectChanges()
     this.furnitureListElement = this.elementRef.nativeElement.querySelector('.furnitureCategory') as HTMLSpanElement

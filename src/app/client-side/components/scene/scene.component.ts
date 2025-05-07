@@ -10,7 +10,7 @@ import { FurnitureCardControlService } from '../../services/furniture-card-contr
 import { firstValueFrom } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
 import { ErrorHandlerService } from '../../services/error-handler.service';
-import { Location } from '@angular/common';
+import { Location, NgIf } from '@angular/common';
 
 export interface modelInterface {
   width: number;
@@ -34,11 +34,11 @@ interface roomData extends modelInterface {
 @Component({
   selector: 'app-scene',
   standalone: true,
-  imports: [NgxSpinnerModule],
+  imports: [NgxSpinnerModule, NgIf],
   templateUrl: './scene.component.html',
   styleUrls: ['./scene.component.scss']
 })
-export class SceneComponent implements AfterViewInit,OnChanges {
+export class SceneComponent implements AfterViewInit, OnChanges {
   constructor(
     private elementRef: ElementRef,
     private spinner: NgxSpinnerService,
@@ -47,7 +47,7 @@ export class SceneComponent implements AfterViewInit,OnChanges {
     private userCookieService: UserCookieService,
     private route: ActivatedRoute,
     private errorHandler: ErrorHandlerService,
-    private location:Location
+    private location: Location
   ) { }
 
   @Input()
@@ -64,9 +64,9 @@ export class SceneComponent implements AfterViewInit,OnChanges {
   private roomProportions!: modelInterface;
   private raycaster = new THREE.Raycaster();
   private mouse = new THREE.Vector2();
-  private targetobject: THREE.Object3D | undefined = undefined;
+  targetobject: THREE.Object3D | undefined = undefined;
   private rectangleMesh!: THREE.Mesh;
-  
+
 
   ngAfterViewInit(): void {
     this.initThreeJs();
@@ -92,8 +92,8 @@ export class SceneComponent implements AfterViewInit,OnChanges {
     this.spinner.show()
     this.addModel(furnitureId, true)
   }
-  fixPath(){
-    const newUrl = this.location.path().split('/').slice(0,-1).join('/')
+  fixPath() {
+    const newUrl = this.location.path().split('/').slice(0, -1).join('/')
     this.location.replaceState(newUrl)
   }
 
@@ -115,6 +115,10 @@ export class SceneComponent implements AfterViewInit,OnChanges {
         }
       })
 
+  }
+  deleteModel() {
+    if (this.targetobject) this.scene.remove(this.targetobject)
+    this.saveRoom()
   }
   private initThreeJs(): void {
     this.scene = new THREE.Scene();
@@ -226,13 +230,13 @@ export class SceneComponent implements AfterViewInit,OnChanges {
     if (!moveData) return
     object.position.set(moveData.xDistance, 0, moveData.zDistance)
     object.rotation.y = moveData.yRotate
-    
+
   }
   async loadFurnitureModel(fileModel: Blob, furnitureSize: modelInterface, furnitureId: string, saveRoom: boolean, moveData?: objectLoadInterface) {
     this.spinner.show()
     try {
       const LOAD_OBJECT = await loadModel(fileModel)
-      
+
       if (moveData) { this.addObjectToScene(LOAD_OBJECT, furnitureSize, furnitureId, moveData) } else { this.addObjectToScene(LOAD_OBJECT, furnitureSize, furnitureId) }
       this.spinner.hide()
       if (saveRoom) this.saveRoom()
@@ -302,7 +306,10 @@ export class SceneComponent implements AfterViewInit,OnChanges {
   }
   @HostListener('click', ['$event'])
   private onMouseClick(event: MouseEvent): void {
-    if (this.targetobject) { this.targetobject = undefined; return; }
+    if (this.targetobject) {
+      this.targetobject = undefined;
+      return;
+    }
     const rect = (event.target as HTMLCanvasElement).getBoundingClientRect();
     const x = (event.clientX - rect.left) / rect.width * 2 - 1;
     const y = -(event.clientY - rect.top) / rect.height * 2 + 1;

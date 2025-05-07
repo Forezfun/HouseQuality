@@ -32,6 +32,10 @@ app-scene {
     transition: all 0.75s ease-in-out, background-color 0.4s ease-in-out;
     color: $light;
     font-size: 1em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
 }
 
 .guideSwitcher {

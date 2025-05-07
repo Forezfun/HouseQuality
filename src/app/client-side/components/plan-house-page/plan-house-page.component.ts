@@ -173,4 +173,5 @@ export class PlanHousePageComponent implements AfterViewInit, OnInit, AfterViewC
         }
       })
   }
+  
 }
