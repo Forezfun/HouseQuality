@@ -20,8 +20,7 @@ interface furnitureInShopData {
   standalone: true,
   imports: [NavigationPanelComponent, NgFor, NgIf, ViewFurnitureComponent, RouterLink, NgClass, RouterLink],
   templateUrl: './shop-page.component.html',
-  styleUrl: './shop-page.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  styleUrl: './shop-page.component.scss'
 })
 export class ShopPageComponent implements OnInit {
   furnitureId: undefined | string = undefined
@@ -103,7 +102,7 @@ export class ShopPageComponent implements OnInit {
       .subscribe({
         next: (response) => {
           this.furnituresArray = [...this.furnituresArray,...this.transformToClientDataFurnitures((response as any).resultsArray)]
-          this.cdr.detectChanges()
+          // this.cdr.detectChanges()
         },
         error: (error) => {
           console.log(error)
@@ -117,7 +116,7 @@ export class ShopPageComponent implements OnInit {
         next: (response) => {
           console.log(response)
           this.furnituresArray = [...this.furnituresArray,...this.transformToClientDataFurnitures((response as any).resultsArray)]
-          this.cdr.detectChanges()
+          // this.cdr.detectChanges()
         },
         error: (error) => {
           console.log(error)

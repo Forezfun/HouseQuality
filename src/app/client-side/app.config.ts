@@ -1,3 +1,4 @@
+import { provideEventPlugins } from "@taiga-ui/event-plugins";
 import { ApplicationConfig, isDevMode } from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { routes } from './app.routes';
@@ -12,7 +13,8 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     provideClientHydration(),
     provideAnimations(),
-    provideHttpClient(withInterceptorsFromDi())
-  ]
+    provideHttpClient(withInterceptorsFromDi()),
+        provideEventPlugins()
+    ]
 };
 bootstrapApplication(AppComponent, appConfig).catch(err => console.error(err));

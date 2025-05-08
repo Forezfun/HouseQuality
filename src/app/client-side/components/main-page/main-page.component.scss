@@ -167,6 +167,7 @@
     font-family: Gloock;
     font-size: 8vw;
     font-weight: 400;
+    color:black;
 
     @media (max-width: 600px) {
         font-size: 12vw;
@@ -224,7 +225,7 @@
 .chapterTitle {
     font-family: Calypso;
     font-weight: 700;
-    font-size: 3.5vw;
+    font: 3.5vw/1 Calypso;
     color: $light;
     width: 60%;
 
@@ -245,6 +246,7 @@
 .descriptionText {
     color: $lightGreen;
     width: 50%;
+    font-size: 20px;
 
     @media(max-width:768px) {
         width: 65%;
@@ -261,6 +263,7 @@
     flex-wrap: wrap;
     flex-direction: row;
     gap: 50px;
+    font-size: 15px;
 
     @media (max-width: 768px) {
         width: 350px;

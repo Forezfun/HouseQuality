@@ -1,7 +1,7 @@
 import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, HostListener, Input, OnInit, ViewChild } from '@angular/core';
 import { ImageSliderComponent } from '../image-slider/image-slider.component';
 import { imageSliderData } from '../image-slider/image-slider.component';
-import { NgFor, NgIf, NgTemplateOutlet } from '@angular/common';
+import { NgClass, NgFor, NgIf, NgTemplateOutlet } from '@angular/common';
 import { FormGroup, FormControl, Validators, ReactiveFormsModule, FormsModule, AbstractControl, ValidationErrors } from '@angular/forms';
 import { TemplateRef } from '@angular/core';
 import { ClientImageControlService } from '../../services/client-image-control.service';
@@ -47,7 +47,7 @@ export interface furnitureServerData extends furnitureData {
 @Component({
   selector: 'app-create-furniture',
   standalone: true,
-  imports: [AutoHeightDirective, ImageSliderComponent, NgFor, NgIf, ReactiveFormsModule, NgTemplateOutlet, FormsModule],
+  imports: [NgClass,AutoHeightDirective, ImageSliderComponent, NgFor, NgIf, ReactiveFormsModule, NgTemplateOutlet, FormsModule],
   templateUrl: './create-furniture.component.html',
   styleUrls: ['./create-furniture.component.scss']
 })
@@ -58,45 +58,71 @@ export class CreateFurnitureComponent implements OnInit, AfterViewInit {
     private clientImageControl: ClientImageControlService,
     private categoryService: CategoryService
   ) { }
+  
   isMobileView = false;
+  @Input() mode: 'create' | 'update' = 'create';
+  
   @ViewChild('colorModule') private colorModuleTemplate!: TemplateRef<any>;
   @ViewChild('shopsModule') private shopsModuleTemplate!: TemplateRef<any>;
   @ViewChild('additionalModule') private additionalModuleTemplate!: TemplateRef<any>;
-  lastClickedShop: number | undefined = undefined
-  lastClickedColor: number | undefined = undefined
+  
+  lastClickedShop: number | undefined = undefined;
+  lastClickedColor: number | undefined = undefined;
   addModuleTemplate!: TemplateRef<any>;
-  furnitureModelInput!: HTMLInputElement
+  furnitureModelInput!: HTMLInputElement;
   addColorVisible: boolean = false;
   addModule!: HTMLDivElement;
-  currentColorId: number | undefined = undefined
+  currentColorId: number | undefined = undefined;
+  
   @Input()
-  colorsClientData: { color: string, imagesData: imageSliderData }[] = []
+  colorsClientData: { color: string, imagesData: imageSliderData }[] = [];
+  
   @Input()
-  furnitureData!: furnitureServerData
-  categoriesArray: category[] = []
+  furnitureData!: furnitureServerData;
+  
+  categoriesArray: category[] = [];
+  
+  colorForm = new FormGroup({
+    color: new FormControl('', [Validators.required])
+  });
+  
+  shopForm = new FormGroup({
+    cost: new FormControl<number | null>(null, [Validators.required, this.numberValidator]),
+    url: new FormControl('', [Validators.required])
+  });
+  
+  proportionsForm = new FormGroup({
+    width: new FormControl<number | null>(null, [Validators.required, Validators.min(0)]),
+    length: new FormControl<number | null>(null, [Validators.required, Validators.min(0)]),
+    height: new FormControl<number | null>(null, [Validators.required, Validators.min(0)])
+  });
+
   ngOnInit(): void {
-    this.initCategories()
+    this.initCategories();
     this.checkViewport();
   }
+
   @HostListener('window:resize', ['$event'])
   checkViewport() {
     this.isMobileView = window.innerWidth <= 600;
   }
+
   initCategories() {
     this.categoryService.GETgetAllCategories()
       .subscribe({
         next: (value) => {
-          console.log(value)
-          this.categoriesArray = value.categoryArray
+          this.categoriesArray = value.categoryArray;
         },
         error: (error) => {
-          console.log(error)
+          console.log(error);
         }
-      })
+      });
   }
+
   ngAfterViewInit(): void {
+    console.log(this.furnitureData)
     this.addModule = this.elementRef.nativeElement.querySelector('.addModule');
-    this.furnitureModelInput = this.elementRef.nativeElement.querySelector('.furnitureModelInput')
+    this.furnitureModelInput = this.elementRef.nativeElement.querySelector('.furnitureModelInput');
   }
 
   async onInputImages(event: Event) {
@@ -112,18 +138,13 @@ export class CreateFurnitureComponent implements OnInit, AfterViewInit {
     this.furnitureData.colors[this.currentColorId].imagesData.images = compressedImages;
     this.colorsClientData[this.currentColorId].imagesData.images = compressedImages.map(blob => URL.createObjectURL(blob));
   }
+
   removeImages() {
-    if (this.currentColorId === undefined || !this.furnitureData.colors[this.currentColorId].imagesData.images) return
-    this.furnitureData.colors[this.currentColorId].imagesData.images.length = 0
-    this.colorsClientData[this.currentColorId].imagesData.images.length = 0
+    if (this.currentColorId === undefined || !this.furnitureData.colors[this.currentColorId].imagesData.images) return;
+    this.furnitureData.colors[this.currentColorId].imagesData.images.length = 0;
+    this.colorsClientData[this.currentColorId].imagesData.images.length = 0;
   }
-  colorForm = new FormGroup({
-    color: new FormControl('', [Validators.required])
-  });
-  shopForm = new FormGroup({
-    cost: new FormControl<number | null>(null, [Validators.required, this.numberValidator]),
-    url: new FormControl('', [Validators.required])
-  });
+
   numberValidator(control: AbstractControl): ValidationErrors | null {
     const value = control.value;
     if (value !== null && isNaN(value)) {
@@ -131,55 +152,59 @@ export class CreateFurnitureComponent implements OnInit, AfterViewInit {
     }
     return null;
   }
+
   addColor() {
-    const pushColor = this.colorForm.value.color
-    if (!pushColor) return
+    const pushColor = this.colorForm.value.color;
+    if (!pushColor) return;
     const colorItem = {
       color: pushColor,
       imagesData: {
         images: [],
         idMainImage: 0
       }
-    }
+    };
     this.furnitureData.colors.push(colorItem);
-    this.colorsClientData.push(colorItem)
+    this.colorsClientData.push(colorItem);
     this.colorForm.patchValue({
       color: ''
-    })
-    this.currentColorId = this.furnitureData.colors.length - 1
+    });
+    this.currentColorId = this.furnitureData.colors.length - 1;
 
     setTimeout(() => {
-      this.closeAddModule()
-      this.openFurnitureVariant(this.currentColorId!)
-    }, 0)
+      this.closeAddModule();
+      this.openFurnitureVariant(this.currentColorId!);
+    }, 0);
   }
+
   closeAddModule() {
     this.addModule.classList.add('disabled');
   }
+
   openColorModule(event: Event) {
-    event.preventDefault()
+    event.preventDefault();
     this.addModuleTemplate = this.colorModuleTemplate;
     this.addModule.classList.remove('disabled');
     setTimeout(() => {
-      const INPUT_COLOR_ELEMENT = this.elementRef.nativeElement.querySelector('.addModuleInput') as HTMLInputElement
-      INPUT_COLOR_ELEMENT.focus()
-    }, 0)
-
+      const INPUT_COLOR_ELEMENT = this.elementRef.nativeElement.querySelector('.addModuleInput') as HTMLInputElement;
+      INPUT_COLOR_ELEMENT.focus();
+    }, 0);
   }
+
   addShop() {
-    if (this.lastClickedShop) {
+    if (this.lastClickedShop !== undefined) {
       this.furnitureData.shops[this.lastClickedShop] = {
         cost: this.shopForm.value.cost!,
         url: this.shopForm.value.url!
-      }
-      return
+      };
+      return;
     }
     this.furnitureData.shops.push({
       cost: this.shopForm.value.cost!,
       url: this.shopForm.value.url!
-    })
-    this.closeAddModule()
+    });
+    this.closeAddModule();
   }
+
   deleteShop() {
     if (this.lastClickedShop != null && this.lastClickedShop >= 0 && this.lastClickedShop < this.furnitureData.shops.length) {
       this.furnitureData.shops.splice(this.lastClickedShop, 1);
@@ -187,69 +212,111 @@ export class CreateFurnitureComponent implements OnInit, AfterViewInit {
       this.lastClickedShop = undefined;
     }
   }
+
   autoHeightInput(event: Event) {
-    const input = event.target as HTMLInputElement
-    console.log(input)
+    const input = event.target as HTMLInputElement;
     throttle(() => {
-      console.log('123')
-      console.log((input.scrollHeight) + 'px')
       input.style.height = 'auto';
       input.style.height = (input.scrollHeight) + 'px';
-    }, 250)()
+    }, 250)();
   }
+
   deleteColor() {
-    const DELETE_COLOR_ID = this.currentColorId
-    this.currentColorId = 0
-    this.colorsClientData = this.colorsClientData.filter((colorData, index) => index !== DELETE_COLOR_ID)
-    this.furnitureData.colors = this.furnitureData.colors.filter((colorData, index) => index !== DELETE_COLOR_ID)
+    const DELETE_COLOR_ID = this.currentColorId;
+    this.currentColorId = 0;
+    this.colorsClientData = this.colorsClientData.filter((colorData, index) => index !== DELETE_COLOR_ID);
+    this.furnitureData.colors = this.furnitureData.colors.filter((colorData, index) => index !== DELETE_COLOR_ID);
   }
+
   openShopsModule(idShop?: number) {
     if (idShop !== undefined) {
-      this.lastClickedShop = idShop
+      this.lastClickedShop = idShop;
       this.shopForm.patchValue({
         cost: this.furnitureData.shops[idShop].cost,
         url: this.furnitureData.shops[idShop].url
-      })
+      });
     } else {
-      this.lastClickedShop = undefined
+      this.lastClickedShop = undefined;
       this.shopForm.patchValue({
         cost: null,
         url: ''
-      })
+      });
     }
     this.addModuleTemplate = this.shopsModuleTemplate;
     this.addModule.classList.remove('disabled');
   }
+
   openAdditional() {
+    this.proportionsForm.patchValue({
+      width: this.furnitureData.proportions.width,
+      length: this.furnitureData.proportions.length,
+      height: this.furnitureData.proportions.height
+    });
+    if (this.mode === 'create') {
+      if (this.furnitureData.proportions.width === null) {
+        this.proportionsForm.get('width')?.markAsTouched();
+      }
+      if (this.furnitureData.proportions.length === null) {
+        this.proportionsForm.get('length')?.markAsTouched();
+      }
+      if (this.furnitureData.proportions.height === null) {
+        this.proportionsForm.get('height')?.markAsTouched();
+      }
+    }
+    
     this.addModuleTemplate = this.additionalModuleTemplate;
     this.addModule.classList.remove('disabled');
   }
+
+  saveAdditional() {
+    if (this.mode === 'create' && this.proportionsForm.invalid) {
+      // В create режиме проверяем валидность
+      this.proportionsForm.markAllAsTouched();
+      return;
+    }
+    
+    // Сохраняем данные
+    if (this.proportionsForm.valid) {
+      this.furnitureData.proportions = {
+        width: this.proportionsForm.value.width ?? null,
+        length: this.proportionsForm.value.length ?? null,
+        height: this.proportionsForm.value.height ?? null
+      };
+    }
+    
+    this.closeAddModule();
+  }
+
   openFurnitureVariant(idColor: number) {
     const colorsElement = this.elementRef.nativeElement.querySelector('.colors') as HTMLSpanElement;
-    const colorButtonElement = colorsElement.querySelector(`[data-idColor="${idColor}"]`) as HTMLButtonElement
-    const colorVariants = colorsElement.querySelectorAll('.colorVariant')
-    let beforeColors: HTMLButtonElement[] = [], afterColors: HTMLButtonElement[] = []
+    const colorButtonElement = colorsElement.querySelector(`[data-idColor="${idColor}"]`) as HTMLButtonElement;
+    const colorVariants = colorsElement.querySelectorAll('.colorVariant');
+    let beforeColors: HTMLButtonElement[] = [], afterColors: HTMLButtonElement[] = [];
+    
     colorVariants.forEach((colorVariant, indexVariant) => {
       if (indexVariant > +idColor) {
-        afterColors = [...afterColors, colorVariant as HTMLButtonElement]
+        afterColors = [...afterColors, colorVariant as HTMLButtonElement];
       } else if (indexVariant < +idColor) {
-        beforeColors = [...beforeColors, colorVariant as HTMLButtonElement]
+        beforeColors = [...beforeColors, colorVariant as HTMLButtonElement];
       }
     });
+    
     [colorButtonElement, ...afterColors, ...beforeColors].forEach((colorVariant, newIndex) => {
-      (colorVariant as HTMLButtonElement).style.setProperty('--index', (newIndex + 1).toString())
-    })
+      (colorVariant as HTMLButtonElement).style.setProperty('--index', (newIndex + 1).toString());
+    });
+    
     setTimeout(() => {
-      colorButtonElement.style.setProperty('margin-right', '115px')
-    }, 500)
+      colorButtonElement.style.setProperty('margin-right', '115px');
+    }, 500);
+    
     setTimeout(() => {
-      this.currentColorId = +idColor
-      colorButtonElement.style.setProperty('margin-right', '0')
-    }, 1250)
-
+      this.currentColorId = +idColor;
+      colorButtonElement.style.setProperty('margin-right', '0');
+    }, 1250);
   }
+
   changeIdMainImage(idMainImage: number) {
-    if (this.currentColorId === undefined || this.furnitureData.colors[this.currentColorId].imagesData.idMainImage === undefined) return
-    this.furnitureData.colors[this.currentColorId].imagesData.idMainImage = idMainImage
+    if (this.currentColorId === undefined || this.furnitureData.colors[this.currentColorId].imagesData.idMainImage === undefined) return;
+    this.furnitureData.colors[this.currentColorId].imagesData.idMainImage = idMainImage;
   }
 }
