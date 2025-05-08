@@ -1,5 +1,6 @@
-import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, HostListener, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { NgIf, NgFor, NgClass } from '@angular/common';
+import {TuiCarousel} from '@taiga-ui/kit';
 
 export interface imageSliderData {
   images: String[];
@@ -9,34 +10,29 @@ export interface imageSliderData {
 @Component({
   selector: 'app-image-slider',
   standalone: true,
-  imports: [NgIf, NgFor,NgClass],
+  imports: [NgIf, NgFor,TuiCarousel],
   templateUrl: './image-slider.component.html',
   styleUrl: './image-slider.component.scss'
 })
-export class ImageSliderComponent implements OnChanges {
+export class ImageSliderComponent implements OnInit{
+  index:number = 0
   @Input()
-  imagesArray!: imageSliderData;
+  imagesData!: imageSliderData;
+  @Input()
+  changeModeSlider: boolean=false
   @Output()
   idMainImageEmitter =new EventEmitter<number>()
+  isMobileView:boolean=false
   visibleId: number[] = [];
-
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes['imagesArray'] && this.imagesArray) {
-      this.changeVisibleId(+this.imagesArray.idMainImage);
-    }
+  ngOnInit(): void {
+    this.checkViewport()
   }
-
-  changeImage(index:number) {
-    this.changeVisibleId(index);
+  @HostListener('window:resize', ['$event'])
+  checkViewport() {
+    this.isMobileView = window.innerWidth <= 768;
+  }
+  changeMainImage(index:number) {
+    this.imagesData.idMainImage=index
     this.idMainImageEmitter.emit(index)
-  }
-  changeVisibleId(idMainImage: number) {
-    this.visibleId = [idMainImage];
-    this.visibleId.push(
-      idMainImage === this.imagesArray.images.length - 1 ? 0 : idMainImage + 1
-    );
-    this.visibleId.push(
-      idMainImage === 0 ? this.imagesArray.images.length - 1 : idMainImage - 1
-    )
   }
 }

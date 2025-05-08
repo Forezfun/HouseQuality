@@ -79,6 +79,8 @@ export class CreateFurniturePageComponent implements OnInit {
     this.furnitureData.name = RECEIVED_DATA.name;
     this.furnitureData.description = RECEIVED_DATA.description;
     this.furnitureData.shops = RECEIVED_DATA.shops;
+    this.furnitureData.category=(RECEIVED_DATA as any).additionalData.category
+    this.furnitureData.proportions=RECEIVED_DATA.proportions
   }
 
   private async processColors(colors: any[]) {

@@ -1,7 +1,7 @@
 <span *ngIf="furnitureData" class="body">
     <h1 class="furnitureTitle" title="Название мебели">{{furnitureData.name}}</h1>
-    <!-- <app-image-slider *ngIf="furnitureData.colors[currentColorId].imagesData"
-        [imagesArray]="furnitureData.colors[currentColorId].imagesData"></app-image-slider> -->
+    <app-image-slider *ngIf="furnitureData.colors[currentColorId].imagesData"
+        [imagesData]="furnitureData.colors[currentColorId].imagesData"></app-image-slider>
     <div class="uploadImagesDiv" *ngIf="!furnitureData.colors[currentColorId].imagesData">
         <input class="uploadImagesInput" type="file" accept=".png,.jpeg" title="Загрузите изображения">
         <img loading="lazy" class="uploadImagesIcon" src="assets/images/uploadIcon.png" alt="Загрузить">

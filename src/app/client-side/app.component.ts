@@ -1,3 +1,4 @@
+import { TuiRoot } from "@taiga-ui/core";
 import { Component} from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { SceneComponent } from './components/scene/scene.component';
@@ -17,7 +18,7 @@ import { AutoHeightDirective } from './directives/auto-height.directive';
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet,ErrorHandlerComponent],
+  imports: [RouterOutlet,ErrorHandlerComponent, TuiRoot],
   providers:[AutoHeightDirective,ErrorHandlerComponent,AccountService,AuthService,UserCookieService,ServerImageControlService,ProjectService,PlanHouseComponent,SceneComponent,FurnitureCardControlService,FurnitureModelControlService,ShopService,FinderService,Location],
   templateUrl: './app.component.html'
 })

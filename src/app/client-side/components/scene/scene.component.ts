@@ -34,7 +34,7 @@ interface roomData extends modelInterface {
 @Component({
   selector: 'app-scene',
   standalone: true,
-  imports: [NgxSpinnerModule, NgIf],
+  imports: [NgxSpinnerModule],
   templateUrl: './scene.component.html',
   styleUrls: ['./scene.component.scss']
 })

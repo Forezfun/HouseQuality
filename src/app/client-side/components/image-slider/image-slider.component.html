@@ -1,8 +1,8 @@
-<span *ngIf="imagesArray" class="showImagesSpan">
-
-    <ng-container *ngFor="let imageUrl of imagesArray.images; let index = index">
-        <div [ngClass]="{'mainImage': visibleId[0]==index,'sideImage': visibleId[1]==index||visibleId[2]==index,'leftSide':visibleId[2]==index,'rightSide':visibleId[1]==index}" class="imgShell" *ngIf="visibleId.includes(index)">
-          <img loading="lazy"  class="showImage" (click)="changeImage(index)" [src]="imageUrl" alt="" class="showImage">
-        </div>
-      </ng-container>      
-</span>
+<tui-carousel *ngIf="imagesData" [draggable]="true" [itemsCount]="this.isMobileView?1:3" [(index)]="index">
+  <ng-container *ngFor="let imageUrl of imagesData.images; let i = index">
+    <div [class.active]="i === index + 1" *tuiItem alt="" draggable="false" class="item">
+      <img [src]="imageUrl" />
+      <button *ngIf="changeModeSlider" (click)="changeMainImage(i)">{{imagesData.idMainImage===i?'Основная':'Сделать основной'}}</button>
+    </div>
+  </ng-container>
+</tui-carousel>

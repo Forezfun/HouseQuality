@@ -39,10 +39,15 @@ button,
     align-self: start;
     z-index: 4;
     justify-self: end;
+    margin-top: -10px;
+    margin-right: -10px;
+    @media(max-width:768px){
+        margin:0;
+    }
 }
 
 .editImagesBtn>img {
-    width: 30px;
+    width: 25px;
     cursor: pointer
 }
 
@@ -537,5 +542,21 @@ app-image-slider {
     .furnitureModelInput {
         width: calc(100% - 20px);
         margin-top: 10px;
+    }
+}
+.error-message {
+    color: #ff4444;
+    font-size: 0.8rem;
+    margin-top: 5px;
+}
+
+.invalid {
+    border-color: #ff4444 !important;
+    box-shadow: 0 0 5px rgba(255, 68, 68, 0.5);
+}
+
+.addModuleInput {
+    &.ng-invalid.ng-touched {
+        border-color: #ff4444;
     }
 }
