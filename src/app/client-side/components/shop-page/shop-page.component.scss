@@ -173,13 +173,14 @@ app-view-furniture {
 }
 
 .chooseAddProjectBtn {
-    width: clamp(170px, 35%, 320px);
+    width: clamp(250px, 35%, 320px);
     padding: 15px;
     background-color: $lightGreen;
     color: $light;
     border-radius: 10px;
     border: none;
     cursor: pointer;
+
 }
 
 .addModule {
@@ -321,5 +322,9 @@ app-view-furniture {
         flex:auto;
         width:100%;
         max-width: none;
+    }
+    .chooseAddProjectBtn{
+        width:calc(100% - 20px);
+        max-width: 400px;
     }
 }

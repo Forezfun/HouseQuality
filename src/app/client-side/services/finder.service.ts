@@ -7,12 +7,12 @@ import { firstValueFrom } from 'rxjs';
 })
 export class FinderService {
   constructor(private httpModule: HttpClient) { }
-  private baseUrl = baseUrl+'finder?q=';
+  private baseServiceUrl = baseUrl+'finder?q=';
   /**
    * Получение 10-ти или меньше найденых публикаций по строке
    * @param findString Запрос пользователя
    */
   GETfindFurnitures(findString:string){
-    return firstValueFrom(this.httpModule.get(this.baseUrl + findString));
+    return firstValueFrom(this.httpModule.get(this.baseServiceUrl + findString));
   }
 }

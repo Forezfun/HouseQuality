@@ -101,7 +101,7 @@ export class SceneComponent implements AfterViewInit, OnChanges {
     const jwt = this.userCookieService.getJwt()
     if (!jwt) return
     try {
-      const proportions = (await this.furnitureCardService.GETfurnitureCard(furnitureId)).furnitureCard.proportions
+      const proportions = (await this.furnitureCardService.GETfurnitureCard(furnitureId)).furnitureCard.proportions as modelInterface
       const model = await this.furnitureModelService.GETfurnitureModel(jwt, furnitureId)
       this.loadFurnitureModel(model, proportions, furnitureId, saveRoom, moveData)
     } catch (error) {

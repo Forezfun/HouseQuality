@@ -59,7 +59,7 @@
             <h3 class="section-title">Моя мебель</h3>
             <div class="furniture-grid">
                 <a *ngFor="let item of userData.furnitures" 
-                   [routerLink]="'/create/' + item.furnitureId" 
+                   [routerLink]="'/create/' + item._id" 
                    class="furniture-card">
                     <h4 class="furniture-name">{{item.name}}</h4>
                     <img [src]="item.previewUrl" alt="Превью мебели" class="furniture-image">

@@ -2,6 +2,7 @@ import { NgClass, NgFor, NgIf } from '@angular/common';
 import { AfterViewInit, Component, ElementRef, Renderer2 } from '@angular/core';
 import { FinderService } from '../../services/finder.service';
 import { ServerImageControlService } from '../../services/server-image-control.service';
+import { RouterLink } from '@angular/router';
 interface foundFurniture {
   name: string;
   cost: number;
@@ -12,7 +13,7 @@ interface foundFurniture {
 @Component({
   selector: 'app-finder',
   standalone: true,
-  imports: [NgClass,NgFor,NgIf],
+  imports: [NgClass,NgFor,NgIf,RouterLink],
   templateUrl: './finder.component.html',
   styleUrl: './finder.component.scss'
 })

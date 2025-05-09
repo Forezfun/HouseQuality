@@ -12,11 +12,11 @@ ROUTER.use(async (req, res, next) => {
     try {
         console.log('model')
         const JWT_TOKEN = req.query.jwtToken || req.body.jwtToken;
-        const USER_ID = await checkUserAccess(JWT_TOKEN);
-        if (!USER_ID) return res.status(404).json({ message: 'User not found' })
-        const FURNITURE_CARD_ITEM = await FURNITURE_CARD.findOne({authorId:USER_ID})
-        if(!FURNITURE_CARD_ITEM||FURNITURE_CARD_ITEM.authorId!==USER_ID)return res.status(409).json({message:"User hasn't access"})
-        req.query.userId = USER_ID;
+        const ACCOUNT_ID = await checkUserAccess(JWT_TOKEN);
+        if (!ACCOUNT_ID) return res.status(404).json({ message: 'User not found' })
+        const FURNITURE_CARD_ITEM = await FURNITURE_CARD.findOne({authorId:ACCOUNT_ID})
+        if(!FURNITURE_CARD_ITEM||FURNITURE_CARD_ITEM.authorId!==ACCOUNT_ID)return res.status(409).json({message:"User hasn't access"})
+        req.query.accountId = ACCOUNT_ID;
         console.log('model continue')
         next();
     } catch (error) {
@@ -73,7 +73,7 @@ async function saveModel(fileName, furnitureId) {
 const upload = multer({ storage: storage });
 
 // Маршрут для загрузки 3D модели
-ROUTER.post('/upload', upload.single('model'), async (req, res) => {
+ROUTER.post('/', upload.single('model'), async (req, res) => {
     console.log(req.query.fileName)
     try {
         let FURNITURE_MODEL_ITEM = await FURNITURE_MODEL.findOne({ furnitureId: req.query.furnitureId })
@@ -96,15 +96,15 @@ ROUTER.post('/upload', upload.single('model'), async (req, res) => {
 });
 
 // Маршрут для удаления документа и файла
-ROUTER.delete('/delete/', async (req, res) => {
+ROUTER.delete('/', async (req, res) => {
     try {
         const JWT_TOKEN = request.query.jwtToken;
         const FURNITURE_CARD_ID = request.query.furnitureCardId
-        const USER_ID = await checkUserAccess(JWT_TOKEN);
-        if (!USER_ID) return res.status(404).json({ message: 'User not found' });
+        const ACCOUNT_ID = await checkUserAccess(JWT_TOKEN);
+        if (!ACCOUNT_ID) return res.status(404).json({ message: 'User not found' });
         let FURNITURE_CARD_ITEM = await FURNITURE_CARD.findById(FURNITURE_CARD_ID)
         if (!FURNITURE_CARD_ITEM) return res.status(404).json({ message: 'Furniture card not found' });
-        if(FURNITURE_CARD_ITEM.authorId!==USER_ID)return res.status(409).json({ message: "User hasn't access" });
+        if(FURNITURE_CARD_ITEM.authorId!==ACCOUNT_ID)return res.status(409).json({ message: "User hasn't access" });
         const FURNITURE_MODEL_ITEM = await FURNITURE_MODEL.findOne({ furnitureId: FURNITURE_CARD_ID });
         if (!FURNITURE_MODEL_ITEM) {
             return res.status(404).json({ message: 'Model not found' });

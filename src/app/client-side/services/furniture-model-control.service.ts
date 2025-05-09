@@ -6,7 +6,7 @@ import { firstValueFrom } from 'rxjs';
   providedIn: 'root'
 })
 export class FurnitureModelControlService {
-
+  private baseServiceUrl = baseUrl+'furniture/model/'
   constructor(private httpModule: HttpClient) { }
 
   /**
@@ -19,7 +19,7 @@ export class FurnitureModelControlService {
     const HTTP_PARAMS = new HttpParams()
     .set('jwtToken', jwt)
     .set('furnitureId', furnitureId)
-    return firstValueFrom(this.httpModule.get(`${baseUrl}furniture/model`, { params: HTTP_PARAMS, responseType: 'blob' })) as Promise<Blob>
+    return firstValueFrom(this.httpModule.get(this.baseServiceUrl, { params: HTTP_PARAMS, responseType: 'blob' })) as Promise<Blob>
   }
 
   /**
@@ -36,7 +36,7 @@ export class FurnitureModelControlService {
     .set('jwtToken', jwt)
     .set('furnitureId', furnitureId)
     .set('fileName', (modelFile as any).name);
-    return firstValueFrom(this.httpModule.post(`${baseUrl}furniture/model/upload`, formData, { params: HTTP_PARAMS })) as Promise<{message:string}>
+    return firstValueFrom(this.httpModule.post(this.baseServiceUrl, formData, { params: HTTP_PARAMS })) as Promise<{message:string}>
   }
 
   /**
@@ -47,6 +47,6 @@ export class FurnitureModelControlService {
    */
   DELETEfurnitureModel(jwt: string, furnitureId: string): Promise<any> {
     const HTTP_PARAMS = new HttpParams().set('jwtToken', jwt);
-    return firstValueFrom(this.httpModule.delete(`${baseUrl}furniture/model/delete/${furnitureId}`, { params: HTTP_PARAMS })) as Promise<{message:string}>
+    return firstValueFrom(this.httpModule.delete(this.baseServiceUrl+furnitureId, { params: HTTP_PARAMS })) as Promise<{message:string}>
   }
 }

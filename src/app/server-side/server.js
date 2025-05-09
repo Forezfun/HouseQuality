@@ -2,7 +2,7 @@ const EXPRESS = require('express');
 const BODYPARSER = require('body-parser');
 const CORS = require('cors');
 const CONNECT_DB = require('./config/db');
-const USERS_ROUTES = require('./routes/accountRoutes');
+const ACCOUNTS_ROUTES = require('./routes/accountRoutes');
 const AUTH_ROUTES = require('./routes/authRoutes');
 const PROJECT_ROUTES = require('./routes/projectRoutes');
 const IMAGE_AVATAR_ROUTES = require('./routes/imageAvatarRoutes')
@@ -14,7 +14,7 @@ const FINDER_ROUTES = require('./routes/finderRoutes')
 const CATEGORY_ROUTES = require('./routes/categoryRoutes')
 
 const APP_PORT = 5000;
-const USER_ROUTE = '/user';
+const ACCOUNT_ROUTE = '/account';
 const PROJECT_ROUTE = '/projects';
 const AUTH_ROUTE = '/auth'
 const IMAGE_AVATAR_ROUTE = '/avatar'
@@ -27,7 +27,7 @@ const CATEGORY_ROUTE = '/category'
 
 const APP = EXPRESS();
 // Подключение к базе данных
-CONNECT_DB(); 
+CONNECT_DB();
 
 // Мидлвары
 APP.use(CORS());
@@ -36,7 +36,7 @@ APP.use(BODYPARSER.urlencoded({ extended: true }));
 
 // Маршруты
 APP.use(PROJECT_ROUTE, PROJECT_ROUTES);
-APP.use(USER_ROUTE, USERS_ROUTES);
+APP.use(ACCOUNT_ROUTE, ACCOUNTS_ROUTES);
 APP.use(AUTH_ROUTE, AUTH_ROUTES);
 APP.use(IMAGE_AVATAR_ROUTE, IMAGE_AVATAR_ROUTES);
 APP.use(IMAGE_FURNITURE_ROUTE, IMAGE_FURNITURE_ROUTES);
@@ -47,7 +47,7 @@ APP.use(CATEGORY_ROUTE, CATEGORY_ROUTES);
 APP.use(FINDER_ROUTE, FINDER_ROUTES);
 
 // Запуск сервера
-APP.listen(APP_PORT,'0.0.0.0', () => {
+APP.listen(APP_PORT, '0.0.0.0', () => {
   console.log(`Server running on port ${APP_PORT}`);
 });
 APP.get('/error', (req, res) => {

@@ -9,9 +9,9 @@ interface shopData {
   url: string;
 }
 interface furnitureProportions {
-  width: number;
-  length: number;
-  height: number;
+  width: number|null;
+  length: number|null;
+  height: number|null;
 }
 export interface colorClientData {
   color: string,
@@ -22,7 +22,7 @@ export interface colorFromServerData {
   imagesData: imageSliderFromServerData
 }
 export interface additionalData {
-  category?: categoryData
+  category?: string
 }
 interface furnitureBaseData {
   name: string;
@@ -42,7 +42,7 @@ export interface furnitureFromServerData extends furnitureBaseData {
 })
 export class FurnitureCardControlService {
 
-  private baseUrl = baseUrl + 'furniture/card/';
+  private baseServiceUrl = baseUrl + 'furniture/card';
 
   constructor(private httpModule: HttpClient) { }
 
@@ -51,13 +51,46 @@ export class FurnitureCardControlService {
    * @param jwt Токен пользователя
    * @returns Promise с данными карточки мебели
    */
-  GETfurnitureCard(furnitureCardId: string, jwt?: string) {
+  async GETfurnitureCard(furnitureCardId: string, jwt?: string) {
     let HTTP_PARAMS = new HttpParams()
-      .set('furnitureCardId', furnitureCardId)
+      .set('furnitureCardId', furnitureCardId);
+
     if (jwt !== undefined) {
-      HTTP_PARAMS = HTTP_PARAMS.set('jwtToken', jwt)
+      HTTP_PARAMS = HTTP_PARAMS.set('jwtToken', jwt);
     }
-    return firstValueFrom(this.httpModule.get(`${this.baseUrl}`, { params: HTTP_PARAMS })) as Promise<{ furnitureCard: furnitureFromServerData, authorMatched: boolean }>
+
+    try {
+      const response = await firstValueFrom(
+        this.httpModule.get(this.baseServiceUrl, { params: HTTP_PARAMS })) as {
+          furnitureCard: furnitureFromServerData;
+          authorMatched: boolean;
+        }
+
+
+      if (!response?.furnitureCard) {
+        throw new Error('Invalid response structure: furnitureCard missing');
+      }
+
+      const transformedFurnitureCard = {
+        ...response.furnitureCard,
+        colors: response.furnitureCard.colors.map(colorData => ({
+          color: colorData.color,
+          imagesData: {
+            idMainImage: colorData.imagesData.idMainImage,
+            images: colorData.imagesData.images.map(url => baseUrl + url)
+          }
+        }))
+      };
+
+      return {
+        furnitureCard: transformedFurnitureCard,
+        authorMatched: response.authorMatched
+      };
+
+    } catch (error) {
+      console.error('Error in GETfurnitureCard:', error);
+      throw error; // Пробрасываем ошибку дальше
+    }
   }
 
   /**
@@ -69,7 +102,7 @@ export class FurnitureCardControlService {
   POSTcreateFurnitureCard(furnitureData: furnitureFromServerData, jwt: string) {
     let HTTP_PARAMS = new HttpParams()
       .set('jwtToken', jwt);
-    return firstValueFrom(this.httpModule.post(`${this.baseUrl}`, furnitureData, { params: HTTP_PARAMS })) as Promise<{ message: string }>
+    return firstValueFrom(this.httpModule.post(this.baseServiceUrl, furnitureData, { params: HTTP_PARAMS })) as Promise<{ furnitureData: furnitureFromServerData & { _id: string } }>
   }
 
   /**
@@ -82,7 +115,7 @@ export class FurnitureCardControlService {
     let HTTP_PARAMS = new HttpParams()
       .set('jwtToken', jwt)
       .set('furnitureId', furnitureId);
-    return firstValueFrom(this.httpModule.put(`${this.baseUrl}`, furnitureCardUpdateData, { params: HTTP_PARAMS })) as Promise<{ message: string }>
+    return firstValueFrom(this.httpModule.put(this.baseServiceUrl, furnitureCardUpdateData, { params: HTTP_PARAMS })) as Promise<{ message: string }>
   }
 
   /**
@@ -94,6 +127,6 @@ export class FurnitureCardControlService {
     const HTTP_PARAMS = new HttpParams()
       .set('jwtToken', jwt)
       .set('furnitureCardId', furnitureCardId)
-    return firstValueFrom(this.httpModule.delete(`${this.baseUrl}`, { params: HTTP_PARAMS })) as Promise<{ message: string }>
+    return firstValueFrom(this.httpModule.delete(this.baseServiceUrl, { params: HTTP_PARAMS })) as Promise<{ message: string }>
   }
 }

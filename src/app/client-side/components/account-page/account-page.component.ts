@@ -11,6 +11,11 @@ import { AuthService } from '../../services/auth.service';
 import { ErrorHandlerService } from '../../services/error-handler.service';
 import { furnitureClientData } from '../../services/furniture-card-control.service';
 
+interface editForm {
+  nickname: FormControl<string | null | undefined>;
+  password?: FormControl<string | null | undefined>;
+}
+
 @Component({
   selector: 'app-account-page',
   standalone: true,
@@ -18,10 +23,7 @@ import { furnitureClientData } from '../../services/furniture-card-control.servi
   templateUrl: './account-page.component.html',
   styleUrls: ['./account-page.component.scss']
 })
-export class AccountPageComponent implements AfterViewInit, OnInit {
-  userData?: accountFullData
-  isEditFormOpen = false;
-  editForm!: FormGroup;
+export class AccountPageComponent implements OnInit {
 
   constructor(
     private elementRef: ElementRef,
@@ -32,16 +34,16 @@ export class AccountPageComponent implements AfterViewInit, OnInit {
     private imageClientControlService: ClientImageControlService,
     private authService: AuthService,
     private errorHandler: ErrorHandlerService,
-    private accountService:AccountService
+    private accountService: AccountService
   ) { }
+
+  public userData?: accountFullData;
+  public isEditFormOpen = false;
+  public editForm!: FormGroup<editForm>;
 
   ngOnInit(): void {
     this.checkAuthAndLoadData();
     this.initEditForm();
-  }
-
-  ngAfterViewInit(): void {
-    // Инициализация, если требуется
   }
 
   private checkAuthAndLoadData(): void {
@@ -55,7 +57,7 @@ export class AccountPageComponent implements AfterViewInit, OnInit {
 
   private async loadUserData(jwt: string) {
     try {
-      const accountData = (await this.userService.GETaccount(jwt)).accountData
+      const accountData = (await this.userService.GETaccount(jwt)).accountData;
       this.userData = {
         email: accountData.email,
         nickname: accountData.nickname,
@@ -63,14 +65,15 @@ export class AccountPageComponent implements AfterViewInit, OnInit {
         avatarUrl: this.imageServerControlService.GETuserAvatar(jwt),
         furnitures: accountData.furnitures
       };
+
       if (accountData.password !== undefined) {
         this.userData.password = accountData.password;
       }
     } catch (error) {
-      console.log(error)
+      this.errorHandler.setError('Ошибка загрузки данных пользователя', 5000);
+      console.error(error);
     }
   }
-
 
   private initEditForm(): void {
     this.editForm = new FormGroup({
@@ -81,7 +84,6 @@ export class AccountPageComponent implements AfterViewInit, OnInit {
       ])
     });
 
-    console.log(this.userCookieService.getUserType())
     if (this.userCookieService.getUserType() === 'email') {
       this.editForm.addControl('password', new FormControl(this.userData?.password, [
         Validators.required,
@@ -90,91 +92,125 @@ export class AccountPageComponent implements AfterViewInit, OnInit {
     }
   }
 
-  async uploadAvatar(event: Event): Promise<void> {
+  public async uploadAvatar(event: Event): Promise<void> {
     const jwt = this.userCookieService.getJwt();
-    if (!jwt||!this.userData) return;
+    if (!jwt || !this.userData) {
+      this.errorHandler.setError('Ошибка аутентификации', 5000);
+      return;
+    }
 
     const target = event.target as HTMLInputElement;
     const file = target.files?.[0];
-    if (!file) return;
+    if (!file) {
+      this.errorHandler.setError('Файл не выбран', 5000);
+      return;
+    }
 
     try {
       const compressedImage = await this.imageClientControlService.compressImage(file);
-      if (!compressedImage) return;
+      if (!compressedImage) {
+        this.errorHandler.setError('Ошибка сжатия изображения', 5000);
+        return;
+      }
 
-      await this.imageServerControlService.POSTuploadUserAvatar(compressedImage, jwt)
+      await this.imageServerControlService.POSTuploadUserAvatar(compressedImage, jwt);
       this.userData.avatarUrl = URL.createObjectURL(compressedImage);
     } catch (error) {
+      this.errorHandler.setError('Ошибка загрузки аватара', 5000);
       console.error(error);
-      this.errorHandler.setError('Ошибка обработки изображения', 5000);
     }
   }
 
-  openEditForm(): void {
-    if (!this.userData) return;
-
+  public openEditForm(): void {
+    if (!this.userData) {
+      this.errorHandler.setError('Данные пользователя не загружены', 5000);
+      return;
+    }
     this.isEditFormOpen = true;
   }
 
-  closeEditForm(): void {
+  public closeEditForm(): void {
     this.isEditFormOpen = false;
+    if (this.userData) {
+      this.userData.nickname != this.editForm.value.nickname;
+      if (this.userData.password) {
+        this.userData.password != this.editForm.value.password;
+      }
+    }
     this.editForm.reset();
   }
 
-  saveChanges(): void {
-    if (!this.userData || !this.editForm.valid) return;
+  public async saveChanges() {
+    if (!this.userData || !this.editForm.valid) {
+      this.errorHandler.setError('Некорректные данные формы', 5000);
+      return;
+    }
 
     const jwt = this.userCookieService.getJwt();
     const accountType = this.userCookieService.getUserType() as accountType;
-    if (!jwt || !accountType) return;
+    if (!jwt || !accountType) {
+      this.errorHandler.setError('Ошибка аутентификации', 5000);
+      return;
+    }
 
-    this.updateSecondaryAccountData(jwt);
-    this.updateBaseDataIfNeeded(jwt, accountType);
-
-    this.closeEditForm();
+    try {
+      await this.updateSecondaryAccountData(jwt);
+      await this.updateBaseDataIfNeeded(jwt, accountType);
+      this.closeEditForm();
+    } catch (error) {
+      this.errorHandler.setError('Ошибка сохранения данных', 5000);
+      console.error(error);
+    }
   }
 
   private async updateSecondaryAccountData(jwt: string) {
-    if(!this.userData)return
+    if (!this.userData) return;
+
     const changeData = {
-      jwt:jwt,
-      nickname: this.userData.nickname
-    }
+      jwt: jwt,
+      nickname: this.editForm.value.nickname!
+    };
+
     try {
-      await this.accountService.PUTupdateSecondaryAccountData(changeData)
+      await this.accountService.PUTupdateSecondaryAccountData(changeData);
+      this.userData.nickname = this.editForm.value.nickname!;
     } catch (error) {
-      console.log(error)
+      this.errorHandler.setError('Ошибка обновления никнейма', 5000);
+      console.error(error);
+      throw error;
     }
   }
 
   private async updateBaseDataIfNeeded(jwt: string, accountType: accountType) {
-    if (this.userData?.password === undefined || !this.editForm.value.password||accountType==='google') return;
-    try {
-      const changeData={
-        jwt:jwt,
-        accountType:accountType,
-        password:this.editForm.value.password
-      }
-      this.userData.password = this.editForm.value.password;
-      await this.authService.PUTupdateBaseData(changeData)
-    } catch (error) {
-      console.log(error)
-    }
+    if (this.userData?.password === undefined || !this.editForm.value.password || accountType === 'google') return;
 
+    const changeData = {
+      jwt: jwt,
+      accountType: accountType,
+      password: this.editForm.value.password
+    };
+
+    try {
+      await this.authService.PUTupdateBaseData(changeData);
+      this.userData.password = this.editForm.value.password;
+    } catch (error) {
+      this.errorHandler.setError('Ошибка обновления пароля', 5000);
+      console.error(error);
+      throw error;
+    }
   }
 
-  getFurnitureImageUrl(furnitureCardId: string, color: string): string {
+  public getFurnitureImageUrl(furnitureCardId: string, color: string): string {
     return this.imageServerControlService.GETmainImage(furnitureCardId, color);
   }
 
-  openProject(projectId: number): void {
+  public openProject(projectId: number): void {
     this.router.navigateByUrl('/plan/' + projectId);
   }
 
-  logout(): void {
+  public logout(): void {
     this.userCookieService.deleteJwt();
     this.userCookieService.deleteUserType();
     this.router.navigateByUrl('/');
   }
 }
-
