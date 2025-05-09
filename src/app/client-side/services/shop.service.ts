@@ -1,21 +1,49 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { baseUrl } from '.';
+import { firstValueFrom } from 'rxjs';
+export interface furnitureShopData{
+  name:string;
+  cost:string;
+  previewUrl:string;
+  furnitureId:string;
+}
 @Injectable({
   providedIn: 'root'
 })
 export class ShopService {
-  private baseUrl= baseUrl+'shop/'
+  private baseServiceUrl= baseUrl+'shop/'
   constructor(
     private httpModule: HttpClient
   ) {}
-  GETgetCategoryData(categoryName:string,startRange:number){
-    return this.httpModule.get(`${this.baseUrl}category?category=${categoryName}&startRange=${startRange}`)
+  async GETgetCategoryData(categoryName:string,startRange:number){
+    try {
+      let {resultsArray} = await firstValueFrom(this.httpModule.get(`${this.baseServiceUrl}category?category=${categoryName}&startRange=${startRange}`)) as {resultsArray:furnitureShopData[]}
+      resultsArray=resultsArray.map(furniture=>{
+        return {
+          ...furniture,
+          previewUrl:baseUrl+furniture.previewUrl
+        }
+      })
+      return {resultsArray:resultsArray}
+    } catch (error) {
+      console.error(error)
+      throw error
+    }
   }
-  GETgetAllFurnitures(startRange:number){
-    return this.httpModule.get(`${this.baseUrl}all?startRange=${startRange}`)
-  }
-  GETgetImageByPath(filePath:string){
-    return `${this.baseUrl}image/simple?filePath=${filePath}`
+  async GETgetAllFurnitures(startRange:number){
+        try {
+      let {resultsArray} = await firstValueFrom(this.httpModule.get(`${this.baseServiceUrl}all?startRange=${startRange}`)) as {resultsArray:furnitureShopData[]}
+      resultsArray=resultsArray.map(furniture=>{
+        return {
+          ...furniture,
+          previewUrl:baseUrl+furniture.previewUrl
+        }
+      })
+      return {resultsArray:resultsArray}
+    } catch (error) {
+      console.error(error)
+      throw error
+    }
   }
 }

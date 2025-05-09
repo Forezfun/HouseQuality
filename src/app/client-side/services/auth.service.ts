@@ -19,6 +19,7 @@ export type authData = googleAuthData|emailAuthData
   providedIn: 'root'
 })
 export class AuthService {
+  private baseServiceUrl = baseUrl+'auth/'
   constructor(
     private httpModule: HttpClient
   ) { }
@@ -37,7 +38,7 @@ export class AuthService {
         .set('email', authData.email)
         .set('password', authData.password);
     }
-    return firstValueFrom(this.httpModule.post(baseUrl + 'auth/jwt/long/create', HTTP_PARAMS)) as Promise<{ jwtToken: string }>
+    return firstValueFrom(this.httpModule.post(this.baseServiceUrl + 'jwt/long', HTTP_PARAMS)) as Promise<{ jwtToken: string }>
   }
 
   /**
@@ -48,7 +49,7 @@ export class AuthService {
   POSTcreateShortJWT(email: string) {
     let HTTP_PARAMS = new HttpParams()
       .set('email', email)
-    return firstValueFrom(this.httpModule.post(baseUrl + 'auth/jwt/temporary/create', HTTP_PARAMS)) as Promise<{ jwtToken: string }>
+    return firstValueFrom(this.httpModule.post(this.baseServiceUrl + 'jwt/temporary', HTTP_PARAMS)) as Promise<{ jwtToken: string }>
   }
 
   /**
@@ -62,15 +63,16 @@ export class AuthService {
   PUTupdateBaseData(changeData: changeAccountData) {
     let HTTP_PARAMS = new HttpParams()
       .set('accountType', changeData.accountType)
+      .set('jwtToken', changeData.jwt)
     if (isEmailAccount(changeData)) {
       HTTP_PARAMS = HTTP_PARAMS
         .set('password', changeData.password);
     }
-    return firstValueFrom(this.httpModule.put(baseUrl + 'auth/user/update', HTTP_PARAMS)) as Promise<{message:string}>
+    return firstValueFrom(this.httpModule.put(this.baseServiceUrl + 'account', HTTP_PARAMS)) as Promise<{message:string}>
   }
   GETrequestPasswordCode(email: string) {
     let HTTP_PARAMS = new HttpParams()
       .set('email', email);
-    return firstValueFrom(this.httpModule.get(baseUrl + 'auth/user/code', { params: HTTP_PARAMS })) as Promise<{ resetCode: number }>
+    return firstValueFrom(this.httpModule.get(this.baseServiceUrl + 'account/code', { params: HTTP_PARAMS })) as Promise<{ resetCode: number }>
   }
 }

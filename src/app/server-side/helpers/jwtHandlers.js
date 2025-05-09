@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
 const cryptoKey = process.env.CRYPTO_KEY
-const USER = require('../models/user')
+const ACCOUNT = require('../models/account')
 // Экспортируем функции
 module.exports.isTokenNoneExpired = function isTokenNoneExpired(jwtToken) {
     try {
@@ -17,15 +17,15 @@ module.exports.isTokenNoneExpired = function isTokenNoneExpired(jwtToken) {
 
 module.exports.checkUserAccess = async function checkUserAccess(jwtToken) {
     const JWT_TOKEN = jwtToken;
-    let DECODED_USER_TOKEN;
+    let DECODED_ACCOUNT_TOKEN;
+    console.log(JWT_TOKEN,DECODED_ACCOUNT_TOKEN)
     try {
-        DECODED_USER_TOKEN = jwt.verify(JWT_TOKEN, cryptoKey);
+        DECODED_ACCOUNT_TOKEN = jwt.verify(JWT_TOKEN, cryptoKey);
     } catch (err) {
         return false;
     }
-
-    if (!DECODED_USER_TOKEN) return false;
-    const USER_ITEM = await USER.findById(DECODED_USER_TOKEN.userId);
-    if (!USER_ITEM) return false;
-    return DECODED_USER_TOKEN.userId;
+    if (!DECODED_ACCOUNT_TOKEN) return false;
+    const ACCOUNT_ITEM = await ACCOUNT.findById(DECODED_ACCOUNT_TOKEN.accountId);
+    if (!ACCOUNT_ITEM) return false;
+    return DECODED_ACCOUNT_TOKEN.accountId;
 }

@@ -6,10 +6,10 @@ ROUTER.delete('/', async (request, result) => {
   try {
     console.log(request)
     const JWT_TOKEN = request.query.jwtToken
-    const USER_ID = await checkUserAccess(JWT_TOKEN)
-    if (!USER_ID) return result.status(404).json({ message: 'User not found' });
-    const AUTH_USER_ITEM = await PROJECT.findByIdAndDelete(request.query.projectId);
-    if (!AUTH_USER_ITEM) {
+    const ACCOUNT_ID = await checkUserAccess(JWT_TOKEN)
+    if (!ACCOUNT_ID) return result.status(404).json({ message: 'User not found' });
+    const AUTH_ACCOUNT_ITEM = await PROJECT.findByIdAndDelete(request.query.projectId);
+    if (!AUTH_ACCOUNT_ITEM) {
       return result.status(404).json({ message: 'Project not found' });
     }
     result.status(201).json({ message: 'Project deleted' });
@@ -19,14 +19,15 @@ ROUTER.delete('/', async (request, result) => {
 });
 ROUTER.post('/', async (request, result) => {
   try {
+    console.log(request.body)
     const JWT_TOKEN = request.body.jwtToken
-    const USER_ID = await checkUserAccess(JWT_TOKEN)
-    console.log(USER_ID)
-    if (!USER_ID) return result.status(404).json({ message: 'User not found' });
+    const ACCOUNT_ID = await checkUserAccess(JWT_TOKEN)
+    console.log(ACCOUNT_ID)
+    if (!ACCOUNT_ID) return result.status(404).json({ message: 'User not found' });
     const NEW_PROJECT_ITEM = new PROJECT({
-      name: request.body.nameProject,
+      name: request.body.name,
       rooms: [],
-      authorId: USER_ID
+      authorId: ACCOUNT_ID
     })
     await NEW_PROJECT_ITEM.save()
     result.status(201).json({ projectData: NEW_PROJECT_ITEM});
@@ -37,9 +38,9 @@ ROUTER.post('/', async (request, result) => {
 ROUTER.get('/', async (request, result) => {
   try {
     const JWT_TOKEN = request.query.jwtToken
-    const USER_ID = await checkUserAccess(JWT_TOKEN)
-    console.log(USER_ID)
-    if (!USER_ID) return result.status(404).json({ message: 'User not found' });
+    const ACCOUNT_ID = await checkUserAccess(JWT_TOKEN)
+    console.log(ACCOUNT_ID)
+    if (!ACCOUNT_ID) return result.status(404).json({ message: 'User not found' });
     const PROJECT_ITEM = await PROJECT.findById(request.query.projectId)
     if (!PROJECT_ITEM) return result.status(404).json({ message: 'Project not found' });
     result.status(201).json({ projectData: PROJECT_ITEM });
@@ -52,12 +53,12 @@ ROUTER.put('/', async (request, result) => {
     console.log(request.body)
     const JWT_TOKEN = request.body.jwtToken
     console.log('before user id')
-    const USER_ID = await checkUserAccess(JWT_TOKEN)
-    console.log('after user id: ', USER_ID)
-    if (!USER_ID) return result.status(404).json({ message: 'User not found' });
-    const PROJECT_ITEM = await PROJECT.findOne({ authorId: USER_ID })
+    const ACCOUNT_ID = await checkUserAccess(JWT_TOKEN)
+    console.log('after user id: ', ACCOUNT_ID)
+    if (!ACCOUNT_ID) return result.status(404).json({ message: 'User not found' });
+    const PROJECT_ITEM = await PROJECT.findOne({ authorId: ACCOUNT_ID })
     if (!PROJECT_ITEM) return result.status(404).json({ message: 'Project not found' });
-    PROJECT_ITEM.name = request.body.nameProject
+    PROJECT_ITEM.name = request.body.name
     PROJECT_ITEM.rooms = JSON.parse(request.body.rooms)
     await PROJECT_ITEM.save()
     result.status(201).json({ message: 'Project successfully updated' });

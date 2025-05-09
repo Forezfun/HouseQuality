@@ -22,11 +22,11 @@ export interface projectServerInformation extends projectInformation {
   providedIn: 'root'
 })
 export class ProjectService {
+  private baseServiceUrl = baseUrl+'projects/';
   constructor(
     private httpModule: HttpClient
   ) {}
 
-  private baseUrl = baseUrl+"projects/";
 
   /**
    * Создание нового проекта
@@ -38,7 +38,7 @@ export class ProjectService {
     const HTTP_PARAMS = new HttpParams()
       .set('jwtToken', jwt)
       .set('name', name);
-    return firstValueFrom(this.httpModule.post(this.baseUrl, HTTP_PARAMS)) as Promise<{projectData:projectServerInformation}>
+    return firstValueFrom(this.httpModule.post(this.baseServiceUrl, HTTP_PARAMS)) as Promise<{projectData:projectServerInformation}>
   }
 
   /**
@@ -51,7 +51,7 @@ export class ProjectService {
     const HTTP_PARAMS = new HttpParams()
       .set('jwtToken', jwt)
       .set('projectId', projectId);
-    return firstValueFrom(this.httpModule.delete(this.baseUrl, { params: HTTP_PARAMS })) as Promise<{message:string}>
+    return firstValueFrom(this.httpModule.delete(this.baseServiceUrl, { params: HTTP_PARAMS })) as Promise<{message:string}>
   }
 
   /**
@@ -64,7 +64,7 @@ export class ProjectService {
     const HTTP_PARAMS = new HttpParams()
       .set('jwtToken', jwt)
       .set('projectId', projectId);
-    return firstValueFrom(this.httpModule.get(this.baseUrl, { params: HTTP_PARAMS })) as Promise<{projectData:projectServerInformation}>
+    return firstValueFrom(this.httpModule.get(this.baseServiceUrl, { params: HTTP_PARAMS })) as Promise<{projectData:projectServerInformation}>
   }
 
   /**
@@ -78,8 +78,8 @@ export class ProjectService {
     const HTTP_PARAMS = new HttpParams()
       .set('jwtToken', jwt)
       .set('projectId', projectId)
-      .set('nameProject', projectInformation.name)
+      .set('name', projectInformation.name)
       .set('rooms', JSON.stringify(projectInformation.rooms));
-    return firstValueFrom(this.httpModule.put(this.baseUrl, HTTP_PARAMS)) as Promise<{message:string}>
+    return firstValueFrom(this.httpModule.put(this.baseServiceUrl, HTTP_PARAMS)) as Promise<{message:string}>
   }
 }

@@ -7,6 +7,7 @@ import { imageSliderClientData } from '../components/image-slider/image-slider.c
   providedIn: 'root'
 })
 export class ServerImageControlService {
+  private baseServiceUrl=baseUrl+'furniture/images/'
   constructor(
     private httpModule: HttpClient
   ) { }
@@ -53,7 +54,7 @@ export class ServerImageControlService {
       .set('idMainImage', imagesData.idMainImage)
       .set('jwtToken', jwt)
             
-    return firstValueFrom(this.httpModule.post(baseUrl+'furniture/images/upload/images', formData, { params: HTTP_PARAMS })) as Promise<{ message: string }>
+    return firstValueFrom(this.httpModule.post(this.baseServiceUrl+'upload/images', formData, { params: HTTP_PARAMS })) as Promise<{ message: string }>
   }
 
 
@@ -71,7 +72,7 @@ export class ServerImageControlService {
       .set('furnitureCardId', furnitureCardId)
       .set('color', color);
 
-    return firstValueFrom(this.httpModule.delete(baseUrl+'furniture/images/delete/color', { params: HTTP_PARAMS })) as Promise<{ message: string }>
+    return firstValueFrom(this.httpModule.delete(this.baseServiceUrl+'delete/color', { params: HTTP_PARAMS })) as Promise<{ message: string }>
   }
 
   /**
@@ -85,7 +86,7 @@ export class ServerImageControlService {
       .set('jwtToken', jwt)
       .set('furnitureCardId', furnitureCardId);
 
-    return firstValueFrom(this.httpModule.delete(`${baseUrl}furniture/images/delete/project`, { params: HTTP_PARAMS })) as Promise<{ message: string }>
+    return firstValueFrom(this.httpModule.delete(this.baseServiceUrl+'delete/project', { params: HTTP_PARAMS })) as Promise<{ message: string }>
   }
   /**
  * Получение всех изображений проекта по ID карточки мебели и цвету
@@ -98,7 +99,7 @@ export class ServerImageControlService {
       .set('furnitureCardId', furnitureCardId)
       .set('color', color);
 
-    return firstValueFrom(this.httpModule.get(`${baseUrl}furniture/images/all`, { params: HTTP_PARAMS })) as Promise<{ imagesURLS: string[],idMainImage: number}>
+    return firstValueFrom(this.httpModule.get(this.baseServiceUrl+'all', { params: HTTP_PARAMS })) as Promise<{ imagesURLS: string[],idMainImage: number}>
   }
 
   /**
@@ -108,10 +109,6 @@ export class ServerImageControlService {
    * @returns Observable с главным изображением
    */
   GETmainImage(furnitureCardId: string, color: string) {
-    return `${baseUrl}furniture/images/main?furnitureCardId=${furnitureCardId}&color=${color}`;
+    return `${this.baseServiceUrl}main?furnitureCardId=${furnitureCardId}&color=${color}`;
   }
-  GETsimpleImage(filePath: string) {
-    return `${baseUrl}furniture/images/simple?filePath=${filePath}`;
-  }
-
 }

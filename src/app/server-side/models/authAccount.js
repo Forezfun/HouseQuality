@@ -1,6 +1,6 @@
 const MONGOOSE = require('mongoose');
 const AUTH_USER_SCHEM = new MONGOOSE.Schema({
-    userId:String,
+    accountId:String,
     emailData:{email:String,password:String},
     googleData:{email:String,googleId:String}
   })

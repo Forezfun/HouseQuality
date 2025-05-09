@@ -42,11 +42,7 @@ export class MainPageComponent implements AfterViewInit {
       Макс. нагрузка: 100 кг`,
     shops: [{ cost: 125990, url: 'https://www.divan.ru/blagoveshchensk/product/divan-uglovoj-onte-bucle-white' }, { cost: 84990, url: 'https://avtorm.ru/catalog/product-divan-uglovoy-onte-bucle-white' }],
     additionalData:{
-      category:{
-        name:'sofa',
-        translateMany:'Диваны',
-        translateOne:'Диван'
-      }
+      category:'sofa'
     },
     proportions: {
       width: 1,

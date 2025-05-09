@@ -1,20 +1,19 @@
 const EXPRESS = require('express');
 const ROUTER = EXPRESS.Router();
-const USER = require('../models/user');
 const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
 const IMAGE_AVATAR = require('../models/imageAvatar');
 const { isTokenNoneExpired, checkUserAccess } = require('../helpers/jwtHandlers');
 
-// Middleware для проверки JWT и добавления USER_ID в req.body
+// Middleware для проверки JWT и добавления ACCOUNT_ID в req.body
 ROUTER.use(async (req, res, next) => {
     try {
         const JWT_TOKEN = req.query.jwtToken || req.body.jwtToken;
-        const USER_ID = await checkUserAccess(JWT_TOKEN);
-        if (!USER_ID) return res.status(404).json({ message: 'User not found' });
+        const ACCOUNT_ID = await checkUserAccess(JWT_TOKEN);
+        if (!ACCOUNT_ID) return res.status(404).json({ message: 'User not found' });
         req.query = {};
-        req.query.userId = USER_ID;
+        req.query.accountId = ACCOUNT_ID;
         next();
     } catch (error) {
         res.status(500).json({ message: 'Error validating user access: ' + error.message });
@@ -22,10 +21,10 @@ ROUTER.use(async (req, res, next) => {
 });
 
 // Логика для удаления старого файла с другим расширением
-function removeOldAvatarIfExists(userId, uploadDir) {
+function removeOldAvatarIfExists(accountId, uploadDir) {
     const extensions = ['.png', '.jpg', '.jpeg'];
     for (const ext of extensions) {
-        const filePath = path.join(uploadDir, `${userId}${ext}`);
+        const filePath = path.join(uploadDir, `${accountId}${ext}`);
         if (fs.existsSync(filePath)) {
             fs.unlinkSync(filePath); // Удаляем файл
         }
@@ -39,7 +38,7 @@ const storage = multer.diskStorage({
             fs.mkdirSync(uploadDir);
         }
         // Удаляем старый аватар, если он существует
-        removeOldAvatarIfExists(req.query.userId, uploadDir);
+        removeOldAvatarIfExists(req.query.accountId, uploadDir);
         cb(null, uploadDir);
     },
     filename: (req, file, cb) => {
@@ -48,14 +47,14 @@ const storage = multer.diskStorage({
             extension = '.jpg'; // Если расширение неподдерживаемое или отсутствует, используем .jpg
         }
 
-        const fileName = req.query.userId + extension;
-        saveAvatar(fileName, req.query.userId); // Сохраняем информацию об аватаре в БД
+        const fileName = req.query.accountId + extension;
+        saveAvatar(fileName, req.query.accountId); // Сохраняем информацию об аватаре в БД
         cb(null, fileName);
     }
 });
 
-async function saveAvatar(fileName, userId) {
-    let IMAGE_AVATAR_FIND_ITEM = await IMAGE_AVATAR.findOne({ userId: userId });
+async function saveAvatar(fileName, accountId) {
+    let IMAGE_AVATAR_FIND_ITEM = await IMAGE_AVATAR.findOne({ accountId: accountId });
     if (IMAGE_AVATAR_FIND_ITEM) {
         // Обновляем запись с новым именем файла
         IMAGE_AVATAR_FIND_ITEM.filename = fileName;
@@ -64,7 +63,7 @@ async function saveAvatar(fileName, userId) {
         // Создаём новую запись
         const IMAGE_AVATAR_ITEM = new IMAGE_AVATAR({
             filename: fileName,
-            userId: userId
+            accountId: accountId
         });
         await IMAGE_AVATAR_ITEM.save();
     }
@@ -74,11 +73,11 @@ const upload = multer({ storage: storage });
 
 ROUTER.post('/upload', upload.single('image'), async (req, res) => {
     try {
-        let IMAGE_AVATAR_ITEM = await IMAGE_AVATAR.findOne({ userId: req.query.userId })
+        let IMAGE_AVATAR_ITEM = await IMAGE_AVATAR.findOne({ accountId: req.query.accountId })
         if (!IMAGE_AVATAR_ITEM) {
             IMAGE_AVATAR_ITEM = new IMAGE_AVATAR({
                 filename: req.file.filename,
-                userId: req.query.userId
+                accountId: req.query.accountId
             });
         }
         await IMAGE_AVATAR_ITEM.save();
@@ -88,12 +87,12 @@ ROUTER.post('/upload', upload.single('image'), async (req, res) => {
     }
 });
 
-// Маршрут для получения аватара по userId
+// Маршрут для получения аватара по accountId
 ROUTER.get('', async (req, res) => {
     try {
         let filePath
         const directory = path.join(__dirname, '..', 'uploads','avatars');
-        const IMAGE_AVATAR_ITEM = await IMAGE_AVATAR.findOne({ userId: req.query.userId });
+        const IMAGE_AVATAR_ITEM = await IMAGE_AVATAR.findOne({ accountId: req.query.accountId });
         if (!IMAGE_AVATAR_ITEM) {
             filePath=path.join(directory,'default.png')
         }
@@ -107,7 +106,6 @@ ROUTER.get('', async (req, res) => {
             filePath=path.join(directory,'default.png')
             }
         }
-        console.log(filePath)
         res.sendFile(filePath);
     } catch (error) {
         res.status(500).json({ message: error.message });

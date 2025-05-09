@@ -7,14 +7,14 @@ const IMAGES_FURNITURE = require('../models/imagesFurniture');
 const FURNITURE_CARD = require('../models/furnitureCard')
 const { checkUserAccess } = require('../helpers/jwtHandlers');
 
-// Middleware для проверки JWT и добавления USER_ID в req.body
+// Middleware для проверки JWT и добавления ACCOUNT_ID в req.body
 ROUTER.use(async (req, res, next) => {
     try {
         if (req.method !== 'GET') {
             const jwtToken = req.query.jwtToken || req.body.jwtToken;
-            const userId = await checkUserAccess(jwtToken);
-            if (!userId) return res.status(404).json({ message: 'User not found' });
-            req.query.userId = userId;
+            const accountId = await checkUserAccess(jwtToken);
+            if (!accountId) return res.status(404).json({ message: 'User not found' });
+            req.query.accountId = accountId;
             const furnitureCard = await FURNITURE_CARD.findById(req.query.furnitureCardId);
             if (!furnitureCard) return res.status(404).json({ message: 'Furniture card not found' });
         }
@@ -188,9 +188,9 @@ ROUTER.post('/upload/images', (req, res) => {
 
             const uploadedFiles = req.files.map(file => ({ filename: file.filename }));
 
-            let FIND_FURNITURE_IMAGES = await IMAGES_FURNITURE.findOne({ furnitureCardId, color });
+            let FIND_FURNITURE_IMAGES = await IMAGES_FURNITURE.findOne({ furnitureId:furnitureCardId, color:color });
             if (FIND_FURNITURE_IMAGES) {
-                FIND_FURNITURE_IMAGES.images.push(...uploadedFiles);
+                FIND_FURNITURE_IMAGES.images=uploadedFiles;
             } else {
                 FIND_FURNITURE_IMAGES = new IMAGES_FURNITURE({
                     furnitureId: furnitureCardId,
@@ -238,10 +238,10 @@ ROUTER.delete('/delete/project', async (req, res) => {
     try {
         const { furnitureCardId, jwtToken } = req.query;
         const FURNITURE_CARD_ID = req.query.furnitureCardId
-        const USER_ID = await checkUserAccess(jwtToken);
-        if (!USER_ID) return res.status(404).json({ message: 'User not found' });
+        const ACCOUNT_ID = await checkUserAccess(jwtToken);
+        if (!ACCOUNT_ID) return res.status(404).json({ message: 'User not found' });
         let FURNITURE_CARD_ITEM = await FURNITURE_CARD.findById(FURNITURE_CARD_ID)
-        if (FURNITURE_CARD_ITEM.authorId !== USER_ID) return res.status(409).json({ message: "User hasn't access" });
+        if (FURNITURE_CARD_ITEM.authorId !== ACCOUNT_ID) return res.status(409).json({ message: "User hasn't access" });
 
         const projectDir = path.join(__dirname, '..', 'uploads', 'cards', furnitureCardId);
 

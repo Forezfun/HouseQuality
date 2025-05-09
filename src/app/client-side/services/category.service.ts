@@ -11,11 +11,11 @@ export interface categoryData {
   providedIn: 'root'
 })
 export class CategoryService {
-
+  private baseServiceUrl = baseUrl+'category/'
   constructor(
     private httpModule: HttpClient
   ) { }
   GETgetAllCategories() {
-    return firstValueFrom(this.httpModule.get(baseUrl + 'category/all')) as Promise<{ categoryArray: categoryData[] }>
+    return firstValueFrom(this.httpModule.get(this.baseServiceUrl + 'all')) as Promise<{ categoryArray: categoryData[] }>
   }
 }

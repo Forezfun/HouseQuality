@@ -44,7 +44,6 @@ export class CreateFurnitureComponent implements OnInit, AfterViewInit {
   furnitureData!: furnitureFromServerData;
 
   categoriesArray: categoryData[] = [];
-
   colorForm = new FormGroup({
     color: new FormControl('', [Validators.required])
   });
@@ -60,8 +59,8 @@ export class CreateFurnitureComponent implements OnInit, AfterViewInit {
     height: new FormControl<number | null>(null, [Validators.required, Validators.min(0)])
   });
 
-  ngOnInit(): void {
-    this.initCategories();
+  async ngOnInit() {
+    await this.initCategories();
     this.checkViewport();
   }
 
@@ -136,8 +135,8 @@ export class CreateFurnitureComponent implements OnInit, AfterViewInit {
     this.addModule.classList.add('disabled');
   }
 
-  openColorModule(event: Event) {
-    event.preventDefault();
+  openColorModule(event?: Event) {
+    if(event)event.preventDefault();
     this.addModuleTemplate = this.colorModuleTemplate;
     this.addModule.classList.remove('disabled');
     setTimeout(() => {
@@ -225,7 +224,7 @@ export class CreateFurnitureComponent implements OnInit, AfterViewInit {
 
   saveAdditional() {
     if (this.mode === 'create' && this.proportionsForm.invalid) {
-      // В create режиме проверяем валидность
+
       this.proportionsForm.markAllAsTouched();
       return;
     }

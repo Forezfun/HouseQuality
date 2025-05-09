@@ -116,7 +116,7 @@
             <h2 class="addModuleTitle">Информация</h2>
             <span *ngIf="categoriesArray!==undefined" class="addModuleInputSpan">
                 <label class="inputLabel" for="category">Категория</label>
-                <select aria-placeholder="Диван" [(ngModel)]="furnitureData.additionalData.category" class="categorySelect"
+                <select aria-placeholder="Диван" [ngModelOptions]="{standalone: true}" [(ngModel)]="furnitureData.additionalData.category" class="categorySelect"
                     name="category" id="category" title="Выберите категорию">
                     <option [value]="category.name" *ngFor="let category of categoriesArray">{{category.translateOne}}</option>
                 </select>

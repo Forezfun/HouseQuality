@@ -2,19 +2,13 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, OnIn
 import { NavigationPanelComponent } from '../navigation-panel/navigation-panel.component';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Location, NgClass, NgFor, NgIf } from '@angular/common';
-import { ShopService } from '../../services/shop.service';
+import { furnitureShopData, ShopService } from '../../services/shop.service';
 import { ViewFurnitureComponent } from '../view-furniture/view-furniture.component';
 import { AccountService } from '../../services/account.service';
 import { UserCookieService } from '../../services/account-cookie.service';
 import { projectInformation } from '../../services/project.service';
 import { ErrorHandlerService } from '../../services/error-handler.service';
 import { categoryData, CategoryService } from '../../services/category.service';
-interface furnitureInShopData {
-  name: string,
-  cost: number,
-  preview: string,
-  id: string
-}
 @Component({
   selector: 'app-shop-page',
   standalone: true,
@@ -27,7 +21,7 @@ export class ShopPageComponent implements OnInit {
   categoryName: undefined | string = undefined
   userProjects: projectInformation[] | undefined = undefined
   currentCategoryId: number | undefined
-  furnituresArray: furnitureInShopData[] = []
+  furnituresArray: furnitureShopData[] = []
   openAddModuleToggle: boolean = false
   categoryArray: categoryData[] = []
   constructor(
@@ -39,8 +33,7 @@ export class ShopPageComponent implements OnInit {
     private errorHandler: ErrorHandlerService,
     private categoryService: CategoryService,
     private location: Location,
-    private elementRef: ElementRef,
-    private cdr: ChangeDetectorRef
+    private elementRef: ElementRef
   ) { }
   openAddModule() {
     this.openAddModuleToggle = true
@@ -64,7 +57,7 @@ export class ShopPageComponent implements OnInit {
   }
   async initCategories() {
     try {
-      this.categoryArray=(await this.categoryService.GETgetAllCategories()).categoryArray
+      this.categoryArray = (await this.categoryService.GETgetAllCategories()).categoryArray
       this.categoryArray.forEach((categoryData, index) => {
         if (this.categoryName === categoryData.name) this.currentCategoryId = index
       })
@@ -81,46 +74,27 @@ export class ShopPageComponent implements OnInit {
         console.log(error)
       }
     } else if (this.categoryName !== undefined) {
-      this.requestCategoryFurnitures(this.categoryName, 0)
+      await this.requestCategoryFurnitures(this.categoryName, 0)
     } else {
-      this.requestAllFurnitures(0)
+      await this.requestAllFurnitures(0)
     }
 
   }
-  requestCategoryFurnitures(categoryName: string, furnituresCount: number) {
-    this.shopService.GETgetCategoryData(categoryName, furnituresCount)
-      .subscribe({
-        next: (response) => {
-          this.furnituresArray = [...this.furnituresArray, ...this.transformToClientDataFurnitures((response as any).resultsArray)]
-          // this.cdr.detectChanges()
-        },
-        error: (error) => {
-          console.log(error)
-          this.errorHandler.setError('Error while finding items', 5000)
-        }
-      })
+  async requestCategoryFurnitures(categoryName: string, furnituresCount: number) {
+    const furnitures = (await this.shopService.GETgetCategoryData(categoryName, furnituresCount)).resultsArray
+    this.furnituresArray = [...this.furnituresArray, ...furnitures]
   }
-  requestAllFurnitures(furnituresCount: number) {
-    this.shopService.GETgetAllFurnitures(furnituresCount)
-      .subscribe({
-        next: (response) => {
-          console.log(response)
-          this.furnituresArray = [...this.furnituresArray, ...this.transformToClientDataFurnitures((response as any).resultsArray)]
-          // this.cdr.detectChanges()
-        },
-        error: (error) => {
-          console.log(error)
-          this.errorHandler.setError('Error while finding items', 5000)
-        }
-      })
+  async requestAllFurnitures(furnituresCount: number) {
+    const furnitures = (await this.shopService.GETgetAllFurnitures(furnituresCount)).resultsArray
+    this.furnituresArray = [...this.furnituresArray, ...furnitures]
+
+
+  }
+  checkDesktop() {
+    return /windows nt|macintosh|x11|linux/.test(navigator.userAgent.toLowerCase())
   }
   getUrlForBlobImage(blob: Blob) {
     return URL.createObjectURL(blob)
-  }
-  private transformToClientDataFurnitures(furnituresArray: furnitureInShopData[]) {
-    return furnituresArray.map((furnitureData: furnitureInShopData) => {
-      return { ...furnitureData, preview: this.shopService.GETgetImageByPath(furnitureData.preview) }
-    })
   }
   changeCategory(categoryIndex: number | undefined) {
     this.furnituresArray.length = 0
@@ -155,7 +129,7 @@ export class ShopPageComponent implements OnInit {
     };
 
     const observerCallback: IntersectionObserverCallback = (entries, observer) => {
-      entries.forEach((entry) => {
+      entries.forEach(async (entry) => {
         if (entry.isIntersecting) {
           const item = entry.target as HTMLDivElement;
           const itemIndex: number = Array.from(items).indexOf(item);
@@ -164,9 +138,9 @@ export class ShopPageComponent implements OnInit {
             item.dataset['observed'] = 'true';
             observedCount++;
             if (this.categoryName !== undefined) {
-              this.requestCategoryFurnitures(this.categoryName, this.furnituresArray.length)
+              await this.requestCategoryFurnitures(this.categoryName, this.furnituresArray.length)
             } else {
-              this.requestAllFurnitures(this.furnituresArray.length)
+              await this.requestAllFurnitures(this.furnituresArray.length)
             }
           }
         }

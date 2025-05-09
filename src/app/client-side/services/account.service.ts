@@ -12,47 +12,46 @@ interface changePasswordData {
   jwt: string;
   password: string;
 }
-export interface changeAccountDataEmail{
+export interface changeAccountDataEmail {
   jwt: string;
   accountType: 'email';
   password: string;
 }
 export interface accountFullData {
-  avatarUrl:string;
-  nickname:string;
+  avatarUrl: string;
+  nickname: string;
   email: string;
   projects: projectInformation[];
   furnitures: furnitureAccountData[];
-  password?:string
+  password?: string
 }
-export interface changeSecondaryData{
-  jwt:string;
-  nickname:string;
+export interface changeSecondaryData {
+  jwt: string;
+  nickname: string;
 }
 export interface furnitureAccountData {
-  furnitureId:string;
+  _id: string;
   name: string;
   previewUrl: string;
-  firstColor:string;
 }
 type jwtType = 'long' | 'temporary';
 export type accountType = 'google' | 'email';
 export type changeAccountData = changeAccountDataEmail
 interface createEmailAccountData {
-  email:string;
-  password:string;
-  nickname:string;
-  accountType:'email'
+  email: string;
+  password: string;
+  nickname: string;
+  accountType: 'email'
 }
 export type createAccountData = createEmailAccountData
-export function isEmailAccount(account:{accountType:accountType}): account is changeAccountDataEmail {
+export function isEmailAccount(account: { accountType: accountType }): account is changeAccountDataEmail {
   return account.accountType === 'email';
 }
 @Injectable({
   providedIn: 'root'
 })
 export class AccountService {
-  private baseUrl = baseUrl+'user/' 
+  private baseServiceUrl = baseUrl + 'account'
   constructor(
     private httpModule: HttpClient,
     private userCookieService: UserCookieService
@@ -61,12 +60,12 @@ export class AccountService {
   /**
    * Создание нового пользователя
    * @param accountBaseData Основная информация о пользователе (никнейм, email, пароль)
-   * @param userType Тип пользователя (email или google)
+   * @param accountType Тип пользователя (email или google)
    * @return firstValueFrom(s Promise с результатом создания пользователя
    */
   POSTcreateAccount(createAccountData: createAccountData) {
     let HTTP_PARAMS = new HttpParams()
-      .set('userType', createAccountData.accountType)
+      .set('accountType', createAccountData.accountType)
       .set('nickname', createAccountData.nickname)
     if (isEmailAccount(createAccountData)) {
       HTTP_PARAMS = HTTP_PARAMS
@@ -74,7 +73,7 @@ export class AccountService {
         .set('password', createAccountData.password);
     }
 
-    return firstValueFrom(this.httpModule.post(baseUrl + 'user/create', HTTP_PARAMS)) as Promise<{message:string}>
+    return firstValueFrom(this.httpModule.post(this.baseServiceUrl, HTTP_PARAMS)) as Promise<{ message: string }>
   }
 
   /**
@@ -85,12 +84,13 @@ export class AccountService {
   DELETEaccountJwt(jwt: string) {
     const HTTP_PARAMS = new HttpParams()
       .set('jwtToken', jwt);
-    return firstValueFrom(this.httpModule.delete(baseUrl + 'jwt/delete', { params: HTTP_PARAMS })) as Promise<{message:string}>
+    return firstValueFrom(this.httpModule.delete(this.baseServiceUrl + '/jwt/delete', { params: HTTP_PARAMS })) as Promise<{ message: string }>
   }
   PUTupdateSecondaryAccountData(changeData: changeSecondaryData) {
     let HTTP_PARAMS = new HttpParams()
-      .set('nickname', changeData.nickname);
-    return firstValueFrom(this.httpModule.put(baseUrl + 'user/put', HTTP_PARAMS)) as Promise<{message:string}>
+      .set('nickname', changeData.nickname)
+      .set('jwtToken', changeData.jwt)
+    return firstValueFrom(this.httpModule.put(this.baseServiceUrl, HTTP_PARAMS)) as Promise<{ message: string }>
   }
   /**
    * Удаление пользователя
@@ -100,7 +100,7 @@ export class AccountService {
   DELETEaccount(jwt: string) {
     const HTTP_PARAMS = new HttpParams()
       .set('jwtToken', jwt);
-    return firstValueFrom(this.httpModule.delete(baseUrl + 'user/delete', { params: HTTP_PARAMS })) as Promise<{message:string}>
+    return firstValueFrom(this.httpModule.delete(this.baseServiceUrl, { params: HTTP_PARAMS })) as Promise<{ message: string }>
   }
 
   /**
@@ -108,10 +108,22 @@ export class AccountService {
    * @param jwt JWT токен пользователя
    * @return firstValueFrom(s Promise с данными пользователя
    */
-  GETaccount(jwt: string) {
+  async GETaccount(jwt: string) {
     const HTTP_PARAMS = new HttpParams()
       .set('jwtToken', jwt);
-    return firstValueFrom(this.httpModule.get(baseUrl + 'user/get', { params: HTTP_PARAMS })) as Promise<{ accountData: accountFullData&{projects:projectServerInformation[]}}>
+    try {
+      let {accountData} = await firstValueFrom(this.httpModule.get(this.baseServiceUrl, { params: HTTP_PARAMS })) as { accountData: accountFullData & { projects: projectServerInformation[] } }
+      accountData.furnitures = accountData.furnitures.map(furnitureData => {
+        return {
+          ...furnitureData,
+          previewUrl: baseUrl + furnitureData.previewUrl
+        }
+      })
+      return { accountData: accountData }
+    } catch (error) {
+      console.error('Error in GETfurnitureCard:', error);
+      throw error;
+    }
   }
   /**
    * Проверка наличия JWT токена в куках
