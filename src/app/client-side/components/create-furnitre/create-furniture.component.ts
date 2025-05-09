@@ -1,53 +1,19 @@
 import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, HostListener, Input, OnInit, ViewChild } from '@angular/core';
 import { ImageSliderComponent } from '../image-slider/image-slider.component';
-import { imageSliderData } from '../image-slider/image-slider.component';
 import { NgClass, NgFor, NgIf, NgTemplateOutlet } from '@angular/common';
 import { FormGroup, FormControl, Validators, ReactiveFormsModule, FormsModule, AbstractControl, ValidationErrors } from '@angular/forms';
 import { TemplateRef } from '@angular/core';
 import { ClientImageControlService } from '../../services/client-image-control.service';
-import { category, CategoryService } from '../../services/category.service';
+import { categoryData, CategoryService } from '../../services/category.service';
 import { throttle } from 'lodash';
 import { AutoHeightDirective } from '../../directives/auto-height.directive';
+import { colorClientData, colorFromServerData, furnitureClientData, furnitureFromServerData } from '../../services/furniture-card-control.service';
 
-interface shopData {
-  cost: number;
-  url: string;
-}
-interface furnitureProportions {
-  width: number | null;
-  length: number | null;
-  height: number | null;
-}
-export interface furnitureData {
-  name: string;
-  description: string;
-  shops: shopData[];
-  category?: string;
-  proportions: furnitureProportions
-}
-interface colorClientData {
-  color: string, imagesData: imageSliderData
-}
-export interface colorServerData {
-  color: string,
-  imagesData: {
-    images: Blob[],
-    idMainImage: number
-  }
-}
-export interface additionalData {
-  category: string
-}
-export interface furnitureClientData extends furnitureData {
-  colors: colorClientData[]
-}
-export interface furnitureServerData extends furnitureData {
-  colors: colorServerData[]
-}
+
 @Component({
   selector: 'app-create-furniture',
   standalone: true,
-  imports: [NgClass,AutoHeightDirective, ImageSliderComponent, NgFor, NgIf, ReactiveFormsModule, NgTemplateOutlet, FormsModule],
+  imports: [NgClass, AutoHeightDirective, ImageSliderComponent, NgFor, NgIf, ReactiveFormsModule, NgTemplateOutlet, FormsModule],
   templateUrl: './create-furniture.component.html',
   styleUrls: ['./create-furniture.component.scss']
 })
@@ -58,14 +24,14 @@ export class CreateFurnitureComponent implements OnInit, AfterViewInit {
     private clientImageControl: ClientImageControlService,
     private categoryService: CategoryService
   ) { }
-  
+
   isMobileView = false;
   @Input() mode: 'create' | 'update' = 'create';
-  
+
   @ViewChild('colorModule') private colorModuleTemplate!: TemplateRef<any>;
   @ViewChild('shopsModule') private shopsModuleTemplate!: TemplateRef<any>;
   @ViewChild('additionalModule') private additionalModuleTemplate!: TemplateRef<any>;
-  
+
   lastClickedShop: number | undefined = undefined;
   lastClickedColor: number | undefined = undefined;
   addModuleTemplate!: TemplateRef<any>;
@@ -73,24 +39,21 @@ export class CreateFurnitureComponent implements OnInit, AfterViewInit {
   addColorVisible: boolean = false;
   addModule!: HTMLDivElement;
   currentColorId: number | undefined = undefined;
-  
+
   @Input()
-  colorsClientData: { color: string, imagesData: imageSliderData }[] = [];
-  
-  @Input()
-  furnitureData!: furnitureServerData;
-  
-  categoriesArray: category[] = [];
-  
+  furnitureData!: furnitureFromServerData;
+
+  categoriesArray: categoryData[] = [];
+
   colorForm = new FormGroup({
     color: new FormControl('', [Validators.required])
   });
-  
+
   shopForm = new FormGroup({
     cost: new FormControl<number | null>(null, [Validators.required, this.numberValidator]),
     url: new FormControl('', [Validators.required])
   });
-  
+
   proportionsForm = new FormGroup({
     width: new FormControl<number | null>(null, [Validators.required, Validators.min(0)]),
     length: new FormControl<number | null>(null, [Validators.required, Validators.min(0)]),
@@ -107,16 +70,12 @@ export class CreateFurnitureComponent implements OnInit, AfterViewInit {
     this.isMobileView = window.innerWidth <= 600;
   }
 
-  initCategories() {
-    this.categoryService.GETgetAllCategories()
-      .subscribe({
-        next: (value) => {
-          this.categoriesArray = value.categoryArray;
-        },
-        error: (error) => {
-          console.log(error);
-        }
-      });
+  private async initCategories() {
+    try {
+      this.categoriesArray = (await this.categoryService.GETgetAllCategories()).categoryArray
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   ngAfterViewInit(): void {
@@ -130,19 +89,17 @@ export class CreateFurnitureComponent implements OnInit, AfterViewInit {
     const files = inputElement.files;
     if (!files || this.currentColorId === undefined) return;
 
-    const compressedImages: Blob[] = [];
+    const compressedImages: string[] = [];
     for (let i = 0; i < files.length; i++) {
       const compressedImage = await this.clientImageControl.compressImage(files[i]);
-      if (compressedImage) compressedImages.push(compressedImage);
+      if (compressedImage) compressedImages.push(URL.createObjectURL(compressedImage));
     }
     this.furnitureData.colors[this.currentColorId].imagesData.images = compressedImages;
-    this.colorsClientData[this.currentColorId].imagesData.images = compressedImages.map(blob => URL.createObjectURL(blob));
   }
 
   removeImages() {
     if (this.currentColorId === undefined || !this.furnitureData.colors[this.currentColorId].imagesData.images) return;
     this.furnitureData.colors[this.currentColorId].imagesData.images.length = 0;
-    this.colorsClientData[this.currentColorId].imagesData.images.length = 0;
   }
 
   numberValidator(control: AbstractControl): ValidationErrors | null {
@@ -164,7 +121,6 @@ export class CreateFurnitureComponent implements OnInit, AfterViewInit {
       }
     };
     this.furnitureData.colors.push(colorItem);
-    this.colorsClientData.push(colorItem);
     this.colorForm.patchValue({
       color: ''
     });
@@ -224,7 +180,6 @@ export class CreateFurnitureComponent implements OnInit, AfterViewInit {
   deleteColor() {
     const DELETE_COLOR_ID = this.currentColorId;
     this.currentColorId = 0;
-    this.colorsClientData = this.colorsClientData.filter((colorData, index) => index !== DELETE_COLOR_ID);
     this.furnitureData.colors = this.furnitureData.colors.filter((colorData, index) => index !== DELETE_COLOR_ID);
   }
 
@@ -263,7 +218,7 @@ export class CreateFurnitureComponent implements OnInit, AfterViewInit {
         this.proportionsForm.get('height')?.markAsTouched();
       }
     }
-    
+
     this.addModuleTemplate = this.additionalModuleTemplate;
     this.addModule.classList.remove('disabled');
   }
@@ -274,16 +229,13 @@ export class CreateFurnitureComponent implements OnInit, AfterViewInit {
       this.proportionsForm.markAllAsTouched();
       return;
     }
-    
-    // Сохраняем данные
-    if (this.proportionsForm.valid) {
+    const { width, length, height } = this.proportionsForm.value
+    if (width && length && height) {
       this.furnitureData.proportions = {
-        width: this.proportionsForm.value.width ?? null,
-        length: this.proportionsForm.value.length ?? null,
-        height: this.proportionsForm.value.height ?? null
-      };
+        width, length, height
+      }
     }
-    
+
     this.closeAddModule();
   }
 
@@ -292,7 +244,7 @@ export class CreateFurnitureComponent implements OnInit, AfterViewInit {
     const colorButtonElement = colorsElement.querySelector(`[data-idColor="${idColor}"]`) as HTMLButtonElement;
     const colorVariants = colorsElement.querySelectorAll('.colorVariant');
     let beforeColors: HTMLButtonElement[] = [], afterColors: HTMLButtonElement[] = [];
-    
+
     colorVariants.forEach((colorVariant, indexVariant) => {
       if (indexVariant > +idColor) {
         afterColors = [...afterColors, colorVariant as HTMLButtonElement];
@@ -300,15 +252,15 @@ export class CreateFurnitureComponent implements OnInit, AfterViewInit {
         beforeColors = [...beforeColors, colorVariant as HTMLButtonElement];
       }
     });
-    
+
     [colorButtonElement, ...afterColors, ...beforeColors].forEach((colorVariant, newIndex) => {
       (colorVariant as HTMLButtonElement).style.setProperty('--index', (newIndex + 1).toString());
     });
-    
+
     setTimeout(() => {
       colorButtonElement.style.setProperty('margin-right', '115px');
     }, 500);
-    
+
     setTimeout(() => {
       this.currentColorId = +idColor;
       colorButtonElement.style.setProperty('margin-right', '0');

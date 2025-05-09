@@ -1,13 +1,21 @@
 import { Injectable } from '@angular/core';
-import { roomData } from '../components/plan-house/plan-house.component';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { baseUrl } from '.';
+import { modelInterface, objectSceneInterface } from '../components/scene/scene.component';
+import { firstValueFrom } from 'rxjs';
+export interface roomData {
+  name: string;
+  gridArea: string;
+  roomProportions: modelInterface;
+  objects: objectSceneInterface[]
+}
 export interface projectInformation {
   rooms: roomData[];
   name: string;
 }
-export interface serverProjectInformation extends projectInformation {
+export interface projectServerInformation extends projectInformation {
   _id: string;
+  authorId: String;
 }
 
 @Injectable({
@@ -23,14 +31,14 @@ export class ProjectService {
   /**
    * Создание нового проекта
    * @param jwt JWT токен пользователя
-   * @param nameProject Название проекта
+   * @param name Название проекта
    * @returns Observable с результатом создания проекта
    */
-  POSTcreateProject(jwt: string, nameProject: string) {
+  POSTcreateProject(jwt: string, name: string) {
     const HTTP_PARAMS = new HttpParams()
       .set('jwtToken', jwt)
-      .set('nameProject', nameProject);
-    return this.httpModule.post(this.baseUrl, HTTP_PARAMS);
+      .set('name', name);
+    return firstValueFrom(this.httpModule.post(this.baseUrl, HTTP_PARAMS)) as Promise<{projectData:projectServerInformation}>
   }
 
   /**
@@ -43,7 +51,7 @@ export class ProjectService {
     const HTTP_PARAMS = new HttpParams()
       .set('jwtToken', jwt)
       .set('projectId', projectId);
-    return this.httpModule.delete(this.baseUrl, { params: HTTP_PARAMS });
+    return firstValueFrom(this.httpModule.delete(this.baseUrl, { params: HTTP_PARAMS })) as Promise<{message:string}>
   }
 
   /**
@@ -56,7 +64,7 @@ export class ProjectService {
     const HTTP_PARAMS = new HttpParams()
       .set('jwtToken', jwt)
       .set('projectId', projectId);
-    return this.httpModule.get(this.baseUrl, { params: HTTP_PARAMS });
+    return firstValueFrom(this.httpModule.get(this.baseUrl, { params: HTTP_PARAMS })) as Promise<{projectData:projectServerInformation}>
   }
 
   /**
@@ -72,6 +80,6 @@ export class ProjectService {
       .set('projectId', projectId)
       .set('nameProject', projectInformation.name)
       .set('rooms', JSON.stringify(projectInformation.rooms));
-    return this.httpModule.put(this.baseUrl, HTTP_PARAMS);
+    return firstValueFrom(this.httpModule.put(this.baseUrl, HTTP_PARAMS)) as Promise<{message:string}>
   }
 }

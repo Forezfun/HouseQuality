@@ -58,9 +58,9 @@
         </span>
 
         <span class="furnitureModule">
-            <app-create-furniture (click)="navigateToPage('/create/new')" [furnitureData]="furnitureExamplesData" [colorsClientData]="exampleClientColors" [ngClass]="{'opacityDisable': furnitureTemplate==='view'}" class="furnitureModuleVariant"></app-create-furniture>
+            <app-create-furniture (click)="navigateToPage('/create/new')" [furnitureData]="furnitureExamplesData" [ngClass]="{'opacityDisable': furnitureTemplate==='view'}" class="furnitureModuleVariant"></app-create-furniture>
 
-            <app-view-furniture (click)="navigateToPage('/shop')" [furnitureData]="viewExampleData" [ngClass]="{'opacityDisable': furnitureTemplate==='create'}" class="furnitureModuleVariant"></app-view-furniture>
+            <app-view-furniture (click)="navigateToPage('/shop')" [furnitureData]="furnitureExamplesData" [ngClass]="{'opacityDisable': furnitureTemplate==='create'}" class="furnitureModuleVariant"></app-view-furniture>
         </span>
 
         <span class="someSpan">

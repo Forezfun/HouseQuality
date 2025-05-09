@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { CookieService } from 'ngx-cookie-service';
-import { userType } from './account.service';
+import { accountType } from './account.service';
 
 @Injectable({
   providedIn: 'root'
@@ -50,10 +50,10 @@ export class UserCookieService {
 
   /**
    * Установка типа пользователя в куки
-   * @param userType Тип пользователя (email или google)
+   * @param accountType Тип пользователя (email или google)
    */
-  setUserType(userType: userType) {
-    this.cookieService.set('userType', userType, { expires: new Date().getDate() + 7, path: '/', sameSite: 'Strict' });
+  setUserType(accountType: accountType) {
+    this.cookieService.set('accountType', accountType, { expires: new Date().getDate() + 7, path: '/', sameSite: 'Strict' });
   }
 
   /**
@@ -61,13 +61,13 @@ export class UserCookieService {
    * @returns Тип пользователя (email или google)
    */
   getUserType() {
-    return this.cookieService.get('userType');
+    return this.cookieService.get('accountType');
   }
 
   /**
    * Удаление типа пользователя из куки
    */
   deleteUserType() {
-    this.cookieService.delete('userType');
+    this.cookieService.delete('accountType');
   }
 }

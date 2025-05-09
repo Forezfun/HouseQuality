@@ -20,7 +20,7 @@
                     </div>
                     <div class="stat-item">
                         <span class="stat-label">Мебель:</span>
-                        <span class="stat-value">{{userData.furnitureCards.length}}</span>
+                        <span class="stat-value">{{userData.furnitures.length}}</span>
                     </div>
                     <div class="stat-item">
                         <span class="stat-label">Email:</span>
@@ -58,8 +58,8 @@
         <div class="furniture-section">
             <h3 class="section-title">Моя мебель</h3>
             <div class="furniture-grid">
-                <a *ngFor="let item of userData.furnitureCards" 
-                   [routerLink]="'/create/' + item.furnitureCardId" 
+                <a *ngFor="let item of userData.furnitures" 
+                   [routerLink]="'/create/' + item.furnitureId" 
                    class="furniture-card">
                     <h4 class="furniture-name">{{item.name}}</h4>
                     <img [src]="item.previewUrl" alt="Превью мебели" class="furniture-image">

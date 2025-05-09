@@ -1,6 +1,6 @@
 <span class="body">
   <app-navigation-panel></app-navigation-panel>
-  <app-create-furniture [furnitureData]="furnitureData" [colorsClientData]="colorsClientData"></app-create-furniture>
+  <app-create-furniture [furnitureData]="furnitureData"></app-create-furniture>
   <span class="functionalBtns">
     <button *ngIf="getCurrentColorId()!==undefined" (click)="deleteColor()" class="functionalBtn deleteBtn deleteColorBtn">
       <div [style.background-color]="deleteColorCalculate()" class="colorCircle">

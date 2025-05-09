@@ -1,12 +1,13 @@
 import { AfterViewInit, Component, ElementRef, HostListener, ViewEncapsulation } from '@angular/core';
-import { CreateFurnitureComponent, furnitureClientData, furnitureServerData } from '../create-furnitre/create-furniture.component';
+import { CreateFurnitureComponent } from '../create-furnitre/create-furniture.component';
 import { ViewFurnitureComponent } from '../view-furniture/view-furniture.component';
 import { PlanHouseComponent } from '../plan-house/plan-house.component';
 import { NgClass, NgIf } from '@angular/common';
-import { roomData } from '../plan-house/plan-house.component';
 import { NavigationPanelComponent } from '../navigation-panel/navigation-panel.component';
 import { Router, RouterLink } from '@angular/router';
-import { imageSliderData } from '../image-slider/image-slider.component';
+import { imageSliderFromServerData } from '../image-slider/image-slider.component';
+import { furnitureFromServerData } from '../../services/furniture-card-control.service';
+import { roomData } from '../../services/project.service';
 @Component({
   selector: 'app-main-page',
   standalone: true,
@@ -27,12 +28,12 @@ export class MainPageComponent implements AfterViewInit {
       });
     });
   }
-  imagesData: imageSliderData = {
+  imagesData: imageSliderFromServerData = {
     images: ['/assets/images/sofaSliderPhotos/1.png', '/assets/images/sofaSliderPhotos/2.png', '/assets/images/sofaSliderPhotos/3.png', '/assets/images/sofaSliderPhotos/4.png'],
     idMainImage: 0
   }
   furnitureTemplate: 'view' | 'create' = 'create'
-  furnitureExamplesData: furnitureServerData = {
+  furnitureExamplesData: furnitureFromServerData = {
     name: 'Onte Bucle White',
     colors: [],
     description: `Механизм: пантограф
@@ -40,7 +41,13 @@ export class MainPageComponent implements AfterViewInit {
       Ящик для белья: да
       Макс. нагрузка: 100 кг`,
     shops: [{ cost: 125990, url: 'https://www.divan.ru/blagoveshchensk/product/divan-uglovoj-onte-bucle-white' }, { cost: 84990, url: 'https://avtorm.ru/catalog/product-divan-uglovoy-onte-bucle-white' }],
-    category: 'sofa',
+    additionalData:{
+      category:{
+        name:'sofa',
+        translateMany:'Диваны',
+        translateOne:'Диван'
+      }
+    },
     proportions: {
       width: 1,
       height: 1,
@@ -48,14 +55,6 @@ export class MainPageComponent implements AfterViewInit {
     }
   }
   exampleClientColors = [{ color: '#FFC2CC', imagesData: this.imagesData }]
-  viewExampleData: furnitureClientData = {
-    name: this.furnitureExamplesData.name,
-    colors: this.exampleClientColors,
-    description: this.furnitureExamplesData.description,
-    shops: this.furnitureExamplesData.shops,
-    category: this.furnitureExamplesData.category,
-    proportions: this.furnitureExamplesData.proportions
-  }
   planHouseExampleData: roomData[] = [
     {
       name: 'Прихожая',

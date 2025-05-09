@@ -20,3 +20,4 @@ const FURNITURE_CARD_SCHEM = new MONGOOSE.Schema({
 const FURNITURE_CARD = MONGOOSE.model('FurnitureCard', FURNITURE_CARD_SCHEM);
 
 module.exports = FURNITURE_CARD;
+ 

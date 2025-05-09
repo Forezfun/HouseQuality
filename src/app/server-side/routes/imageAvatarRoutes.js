@@ -81,8 +81,8 @@ ROUTER.post('/upload', upload.single('image'), async (req, res) => {
                 userId: req.query.userId
             });
         }
-        const savedImage = await IMAGE_AVATAR_ITEM.save();  // Используем await для сохранения без колбэка
-        res.status(200).json({ message: 'Image uploaded successfully!', image: savedImage });
+        await IMAGE_AVATAR_ITEM.save();
+        res.status(200).json({ message: 'Image uploaded successfully!'});
     } catch (err) {
         res.status(400).json({ message: err.message });
     }

@@ -5,16 +5,12 @@ import { FormGroup, FormControl, ReactiveFormsModule, Validators, ValidatorFn, A
 import { throttle } from 'lodash';
 import { objectSceneInterface } from '../scene/scene.component'
 import { Router } from '@angular/router';
-import { category, CategoryService } from '../../services/category.service';
+import { categoryData, CategoryService } from '../../services/category.service';
 import { ErrorHandlerService } from '../../services/error-handler.service';
-import { UserCookieService } from '../../services/user-cookie.service';
+import { UserCookieService } from '../../services/account-cookie.service';
+import { roomData } from '../../services/project.service';
 
-export interface roomData {
-  name: string;
-  gridArea: string;
-  roomProportions: modelInterface;
-  objects: objectSceneInterface[]
-}
+
 
 interface roomSpanSettings {
   startX: number;
@@ -69,17 +65,9 @@ export class PlanHouseComponent implements AfterViewInit,OnInit {
   formElement!: HTMLFormElement;
   currentViewRoom: undefined | number = undefined
   sceneOpenToggle: boolean = false
-  categoryArray: category[] = []
-  initCategories(){
-    this.categoryService.GETgetAllCategories()
-    .subscribe({
-      next:(value)=>{
-        this.categoryArray=value.categoryArray
-      },
-      error:(error)=>{
-        console.log(error)
-      }
-    })
+  categoryArray: categoryData[] = []
+  async initCategories(){
+    this.categoryArray = (await this.categoryService.GETgetAllCategories()).categoryArray
   }
   isGuideIncluded:boolean = false
   isGuideVisible: boolean = true;

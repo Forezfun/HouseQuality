@@ -1,8 +1,20 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { accountSignInData, userType, accountChangeBaseData } from './account.service';
+import { accountType, changeAccountDataEmail,changeAccountData } from './account.service';
 import { baseUrl } from '.';
-import { Observable } from 'rxjs';
+import { isEmailAccount } from './account.service';
+import { firstValueFrom } from 'rxjs';
+
+export interface emailAuthData {
+  email:string;
+  password:string
+  accountType:'email';
+}
+export interface googleAuthData {
+  accountType:'google'
+}
+export type authData = googleAuthData|emailAuthData
+
 @Injectable({
   providedIn: 'root'
 })
@@ -14,26 +26,29 @@ export class AuthService {
   /**
    * Создание длинного JWT токена
    * @param signInData Данные для входа (email и пароль)
-   * @param userType Тип пользователя (email или google)
-   * @returns Observable с результатом создания токена
+   * @param accountType Тип пользователя (email или google)
+   * @return firstValueFrom(s Promise с результатом создания токена
    */
-  POSTcreateLongJWT(signInData: accountSignInData, userType: userType) {
+  POSTcreateLongJWT(authData: authData) {
     let HTTP_PARAMS = new HttpParams()
-      .set('userType', userType)
-      .set('email', signInData.email)
-      .set('password', signInData.password);
-    return this.httpModule.post(baseUrl + 'auth/jwt/long/create', HTTP_PARAMS) as Observable<{jwt:string}>
+      .set('accountType', authData.accountType)
+    if (isEmailAccount(authData)) {
+      HTTP_PARAMS = HTTP_PARAMS
+        .set('email', authData.email)
+        .set('password', authData.password);
+    }
+    return firstValueFrom(this.httpModule.post(baseUrl + 'auth/jwt/long/create', HTTP_PARAMS)) as Promise<{ jwtToken: string }>
   }
 
   /**
    * Создание короткого JWT токена
    * @param signInData Данные для входа (email и пароль)
-   * @returns Observable с результатом создания временного токена
+   * @return firstValueFrom(s Promise с результатом создания временного токена
    */
-  POSTcreateShortJWT(email:string) {
+  POSTcreateShortJWT(email: string) {
     let HTTP_PARAMS = new HttpParams()
       .set('email', email)
-    return this.httpModule.post(baseUrl + 'auth/jwt/temporary/create', HTTP_PARAMS) as Observable<{jwtToken:string}>
+    return firstValueFrom(this.httpModule.post(baseUrl + 'auth/jwt/temporary/create', HTTP_PARAMS)) as Promise<{ jwtToken: string }>
   }
 
   /**
@@ -41,24 +56,21 @@ export class AuthService {
    * @param jwt JWT токен пользователя
    * @param changeData Новые данные для обновления
    * @param typeJwt Тип JWT токена (короткий или длинный)
-   * @param userType Тип пользователя (email или google)
-   * @returns Observable с результатом обновления информации о пользователе
+   * @param accountType Тип пользователя (email или google)
+   * @return Promise с результатом обновления информации о пользователе
    */
-  PUTupdateBaseData(jwt: string, changeData: accountChangeBaseData, typeJwt: 'short' | 'long', userType: userType) {
+  PUTupdateBaseData(changeData: changeAccountData) {
     let HTTP_PARAMS = new HttpParams()
-      .set('typeJwt', typeJwt)
-      .set('jwtToken', jwt)
-      .set('userType', userType);
-
-    if (userType === 'email' && changeData.password !== undefined) {
-      HTTP_PARAMS = HTTP_PARAMS.set('password', changeData.password);
+      .set('accountType', changeData.accountType)
+    if (isEmailAccount(changeData)) {
+      HTTP_PARAMS = HTTP_PARAMS
+        .set('password', changeData.password);
     }
-
-    return this.httpModule.put(baseUrl + 'auth/user/update', HTTP_PARAMS);
+    return firstValueFrom(this.httpModule.put(baseUrl + 'auth/user/update', HTTP_PARAMS)) as Promise<{message:string}>
   }
   GETrequestPasswordCode(email: string) {
     let HTTP_PARAMS = new HttpParams()
       .set('email', email);
-    return this.httpModule.get(baseUrl + 'auth/user/code', { params: HTTP_PARAMS }) as Observable<{resetCode:number}>
+    return firstValueFrom(this.httpModule.get(baseUrl + 'auth/user/code', { params: HTTP_PARAMS })) as Promise<{ resetCode: number }>
   }
 }

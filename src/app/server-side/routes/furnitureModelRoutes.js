@@ -26,11 +26,11 @@ ROUTER.use(async (req, res, next) => {
 
 // Логика для удаления старого файла
 function removeOldModelIfExists(furnitureId, uploadDir) {
-    const extensions = ['.obj', '.fbx', '.stl']; // Расширения файлов для 3D моделей
+    const extensions = ['.obj', '.fbx', '.stl'];
     for (const ext of extensions) {
         const filePath = path.join(uploadDir, `${furnitureId}${ext}`);
         if (fs.existsSync(filePath)) {
-            fs.unlinkSync(filePath); // Удаляем файл
+            fs.unlinkSync(filePath);
         }
     }
 }
@@ -41,16 +41,15 @@ const storage = multer.diskStorage({
         if (!fs.existsSync(uploadDir)) {
             fs.mkdirSync(uploadDir);
         }
-        // Удаляем старую модель, если она существует
         removeOldModelIfExists(req.query.furnitureId, uploadDir);
         cb(null, uploadDir);
     },
     filename: (req, file, cb) => {
-        let extension = path.extname(file.originalname).toLowerCase(); // Получаем расширение
+        let extension = path.extname(file.originalname).toLowerCase();
         if (!extension || !['.obj', '.fbx', '.stl'].includes(extension))return
 
         const fileName = req.query.furnitureId + extension;
-        saveModel(fileName, req.query.furnitureId); // Сохраняем информацию о модели в БД
+        saveModel(fileName, req.query.furnitureId);
         cb(null, fileName);
     }
 });
@@ -77,7 +76,7 @@ const upload = multer({ storage: storage });
 ROUTER.post('/upload', upload.single('model'), async (req, res) => {
     console.log(req.query.fileName)
     try {
-        let FURNITURE_MODEL_ITEM = await FURNITURE_MODEL.findOne({ furnitureId: req.query.furnitureId });
+        let FURNITURE_MODEL_ITEM = await FURNITURE_MODEL.findOne({ furnitureId: req.query.furnitureId })
         if (!FURNITURE_MODEL_ITEM) {
             FURNITURE_MODEL_ITEM = new FURNITURE_MODEL({
                 filename: req.file.filename,
@@ -85,30 +84,12 @@ ROUTER.post('/upload', upload.single('model'), async (req, res) => {
                 originalName:req.query.fileName
             });
             FURNITURE_MODEL_ITEM.originalName=req.query.fileName
-        }
-        const savedModel = await FURNITURE_MODEL_ITEM.save();  // Сохраняем модель
-        res.status(200).json({ message: 'Model uploaded successfully!', model: savedModel });
-    } catch (err) {
-        res.status(400).json({ message: err.message });
-    }
-});
-
-// Маршрут для обновления документа и файла модели
-ROUTER.put('/update/', upload.single('model'), async (req, res) => {
-    try {
-        const FURNITURE_MODEL_ITEM = await FURNITURE_MODEL.findOne({ furnitureId: req.query.furnitureId });
-        if (!FURNITURE_MODEL_ITEM) {
-            return res.status(404).json({ message: 'Model not found' });
-        }
-
-        // Обновляем файл
-        if (req.file) {
+        }else{
             FURNITURE_MODEL_ITEM.filename = req.file.filename;
             FURNITURE_MODEL_ITEM.originalName = req.query.fileName
         }
-
-        const updatedModel = await FURNITURE_MODEL_ITEM.save();
-        res.status(200).json({ message: 'Model updated successfully!', model: updatedModel });
+        await FURNITURE_MODEL_ITEM.save();
+        res.status(200).json({ message: 'Model uploaded successfully!'});
     } catch (err) {
         res.status(400).json({ message: err.message });
     }

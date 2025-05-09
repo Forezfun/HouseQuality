@@ -5,7 +5,7 @@ import { Subject } from 'rxjs';
   providedIn: 'root'
 })
 export class LoaderServiceControlService {
-  private worker: Worker | undefined; // Объявляем тип Worker или undefined
+  private worker: Worker | undefined;
   public objectLoaded$ = new Subject<any>();
 
   constructor() {
@@ -20,13 +20,12 @@ export class LoaderServiceControlService {
               this.objectLoaded$.next(event.data);
           };
       } else {
-          // Worker не поддерживается
           console.error('Web Workers are not supported in this environment.');
       }
   }
 
   loadModel(blobFile: Blob) {
-      if (this.worker) { // Проверяем, инициализирован ли worker
+      if (this.worker) {
           this.worker.postMessage({ blobFile });
       } else {
           console.error('Worker is not initialized.');

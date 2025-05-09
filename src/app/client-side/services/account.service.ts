@@ -1,32 +1,58 @@
 import { Injectable } from '@angular/core';
-import { projectInformation } from './project.service';
+import { projectInformation, projectServerInformation } from './project.service';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { UserCookieService } from './user-cookie.service';
+import { UserCookieService } from './account-cookie.service';
 import { baseUrl } from '.';
-export interface accountSignInData {
+import { firstValueFrom } from 'rxjs';
+interface baseEmailAccountData {
   email: string;
   password: string;
 }
-export interface accountChangeBaseData {
-  password?: string;
+interface changePasswordData {
+  jwt: string;
+  password: string;
 }
-export interface accountChangeSecondaryData {
-  nickname: string;
+export interface changeAccountDataEmail{
+  jwt: string;
+  accountType: 'email';
+  password: string;
 }
-export interface accountBaseInformation {
-  nickname: string;
+export interface accountFullData {
+  avatarUrl:string;
+  nickname:string;
   email: string;
-  password?: string;
-}
-export type userType = 'email' | 'google'
-export interface accountFullInformation extends accountBaseInformation {
   projects: projectInformation[];
-  avatarUrl: File|string
+  furnitures: furnitureAccountData[];
+  password?:string
+}
+export interface changeSecondaryData{
+  jwt:string;
+  nickname:string;
+}
+export interface furnitureAccountData {
+  furnitureId:string;
+  name: string;
+  previewUrl: string;
+  firstColor:string;
+}
+type jwtType = 'long' | 'temporary';
+export type accountType = 'google' | 'email';
+export type changeAccountData = changeAccountDataEmail
+interface createEmailAccountData {
+  email:string;
+  password:string;
+  nickname:string;
+  accountType:'email'
+}
+export type createAccountData = createEmailAccountData
+export function isEmailAccount(account:{accountType:accountType}): account is changeAccountDataEmail {
+  return account.accountType === 'email';
 }
 @Injectable({
   providedIn: 'root'
 })
 export class AccountService {
+  private baseUrl = baseUrl+'user/' 
   constructor(
     private httpModule: HttpClient,
     private userCookieService: UserCookieService
@@ -36,72 +62,60 @@ export class AccountService {
    * Создание нового пользователя
    * @param accountBaseData Основная информация о пользователе (никнейм, email, пароль)
    * @param userType Тип пользователя (email или google)
-   * @returns Observable с результатом создания пользователя
+   * @return firstValueFrom(s Promise с результатом создания пользователя
    */
-  POSTcreateUser(accountBaseData: accountBaseInformation, userType: userType) {
+  POSTcreateAccount(createAccountData: createAccountData) {
     let HTTP_PARAMS = new HttpParams()
-      .set('userType', userType)
-      .set('nickname', accountBaseData.nickname)
-      .set('email', accountBaseData.email);
-
-    if (userType === 'email') {
-      HTTP_PARAMS = HTTP_PARAMS.set('password', accountBaseData.password!);
+      .set('userType', createAccountData.accountType)
+      .set('nickname', createAccountData.nickname)
+    if (isEmailAccount(createAccountData)) {
+      HTTP_PARAMS = HTTP_PARAMS
+        .set('email', createAccountData.email)
+        .set('password', createAccountData.password);
     }
 
-    return this.httpModule.post(baseUrl + 'user/user/create', HTTP_PARAMS);
+    return firstValueFrom(this.httpModule.post(baseUrl + 'user/create', HTTP_PARAMS)) as Promise<{message:string}>
   }
 
   /**
    * Удаление JWT токена пользователя
    * @param jwt JWT токен пользователя
-   * @returns Observable с результатом удаления токена
+   * @return firstValueFrom(s Promise с результатом удаления токена
    */
-  DELETEuserJwt(jwt: string) {
+  DELETEaccountJwt(jwt: string) {
     const HTTP_PARAMS = new HttpParams()
       .set('jwtToken', jwt);
-    return this.httpModule.delete(baseUrl + 'user/jwt/delete', { params: HTTP_PARAMS });
+    return firstValueFrom(this.httpModule.delete(baseUrl + 'jwt/delete', { params: HTTP_PARAMS })) as Promise<{message:string}>
   }
-
+  PUTupdateSecondaryAccountData(changeData: changeSecondaryData) {
+    let HTTP_PARAMS = new HttpParams()
+      .set('nickname', changeData.nickname);
+    return firstValueFrom(this.httpModule.put(baseUrl + 'user/put', HTTP_PARAMS)) as Promise<{message:string}>
+  }
   /**
    * Удаление пользователя
    * @param jwt JWT токен пользователя
-   * @returns Observable с результатом удаления пользователя
+   * @return firstValueFrom(s Promise с результатом удаления пользователя
    */
-  DELETEuser(jwt: string) {
+  DELETEaccount(jwt: string) {
     const HTTP_PARAMS = new HttpParams()
       .set('jwtToken', jwt);
-    return this.httpModule.delete(baseUrl + 'user/user/delete', { params: HTTP_PARAMS });
+    return firstValueFrom(this.httpModule.delete(baseUrl + 'user/delete', { params: HTTP_PARAMS })) as Promise<{message:string}>
   }
 
   /**
    * Получение информации о пользователе
    * @param jwt JWT токен пользователя
-   * @returns Observable с данными пользователя
+   * @return firstValueFrom(s Promise с данными пользователя
    */
-  GETuser(jwt: string) {
+  GETaccount(jwt: string) {
     const HTTP_PARAMS = new HttpParams()
       .set('jwtToken', jwt);
-    return this.httpModule.get(baseUrl + 'user/user/get', { params: HTTP_PARAMS });
+    return firstValueFrom(this.httpModule.get(baseUrl + 'user/get', { params: HTTP_PARAMS })) as Promise<{ accountData: accountFullData&{projects:projectServerInformation[]}}>
   }
-
-  /**
-   * Обновление дополнительной информации о пользователе (например, никнейм)
-   * @param jwt JWT токен пользователя
-   * @param changeData Новые данные для обновления
-   * @param userType Тип пользователя (email или google)
-   * @returns Observable с результатом обновления информации
-   */
-  PUTupdateSecondaryInformation(jwt: string, changeData: accountChangeSecondaryData, userType: userType) {
-    const HTTP_PARAMS = new HttpParams()
-      .set('jwtToken', jwt)
-      .set('userType', userType)
-      .set('nickname', changeData.nickname);
-    return this.httpModule.put(baseUrl + 'user/user/put', HTTP_PARAMS);
-  }
-
   /**
    * Проверка наличия JWT токена в куках
-   * @returns boolean
+   * @return firstValueFrom(s boolean
    */
   checkJwt(): boolean {
     return this.userCookieService.getJwt() ? true : false;

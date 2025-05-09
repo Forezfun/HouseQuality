@@ -2,8 +2,8 @@ import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, HostListener, 
 import { NavigationPanelComponent } from '../navigation-panel/navigation-panel.component';
 import { FormGroup, FormControl, Validators, ReactiveFormsModule, FormsModule, AbstractControlOptions, ValidatorFn, AbstractControl, ValidationErrors } from '@angular/forms';
 import { NgIf, NgTemplateOutlet } from '@angular/common';
-import { AccountService, accountBaseInformation, accountSignInData } from '../../services/account.service';
-import { UserCookieService } from '../../services/user-cookie.service';
+import { AccountService, accountType, createAccountData} from '../../services/account.service';
+import { UserCookieService } from '../../services/account-cookie.service';
 import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
 import { ErrorHandlerService } from '../../services/error-handler.service';
@@ -26,9 +26,9 @@ export class LoginPageComponent implements AfterViewInit {
   inputValues: string[] = new Array(4).fill('');
 
   signupForm = new FormGroup({
-    email: new FormControl('', [Validators.required, Validators.email]),
-    nickname: new FormControl('', [Validators.required]),
-    password: new FormControl('', [Validators.required,Validators.minLength(6)])
+    email: new FormControl<string>('', [Validators.required, Validators.email]),
+    nickname: new FormControl<string>('', [Validators.required]),
+    password: new FormControl<string>('', [Validators.required, Validators.minLength(6)])
   });
 
   codeForm = new FormGroup({
@@ -41,8 +41,8 @@ export class LoginPageComponent implements AfterViewInit {
       ? null : { mismatch: true };
   };
   changePasswordForm = new FormGroup({
-    newPassword: new FormControl('', [Validators.required,Validators.minLength(6)]),
-    repeatPassword: new FormControl('', [Validators.required,Validators.minLength(6)])
+    newPassword: new FormControl('', [Validators.required, Validators.minLength(6)]),
+    repeatPassword: new FormControl('', [Validators.required, Validators.minLength(6)])
   }, { validators: this.passwordMatchValidator } as AbstractControlOptions);
 
   signinForm = new FormGroup({
@@ -94,94 +94,76 @@ export class LoginPageComponent implements AfterViewInit {
   }
   private currentChangeCode: number | undefined
   private currentJwtToken: string | undefined
-  requestChangeCode() {
+  async requestChangeCode() {
     if (this.requestChangeForm.invalid) return;
-
-    this.authService.GETrequestPasswordCode(this.requestChangeForm.value.email!)
-      .subscribe({
-        next: (value) => {
-          this.currentChangeCode = value.resetCode
-          this.changeTemplate('code')
-        },
-        error: (err) => this.errorHandler.setError('Ошибка запроса кода', 5000)
-      });
+    try {
+      this.currentChangeCode = (await this.authService.GETrequestPasswordCode(this.requestChangeForm.value.email!)).resetCode
+      this.changeTemplate('code')
+    } catch (error) {
+      console.log(error)
+    }
   }
 
-  signinUser() {
+  async signinUser() {
     if (this.signinForm.invalid) return;
+    const data = {
+      email:this.signinForm.value.email!,
+      password:this.signinForm.value.password!,
+      accountType:'email' as accountType
+    };
+    try {
+      const jwtToken = (await this.authService.POSTcreateLongJWT(data)).jwtToken
+      this.userCookieService.setJwt(jwtToken,'long')
+      this.userCookieService.setUserType('email')
+      this.router.navigateByUrl('/account')
+    } catch (error) {
+      console.log(error)
+    }
 
-    const data = this.signinForm.value as accountSignInData;
-    this.authService.POSTcreateLongJWT(data, 'email')
-      .subscribe({
-        next: (value) => {
-          this.userCookieService.setJwt(value.jwt, 'long')
-          this.userCookieService.setUserType('email')
-          this.router.navigateByUrl('/account')
-        },
-        error: (err) => this.errorHandler.setError('Ошибка входа', 5000)
-      });
   }
 
-  signUpUser() {
+  async signUpUser() {
     if (this.signupForm.invalid) return;
-
-    const data = this.signupForm.value as accountBaseInformation;
-    this.userService.POSTcreateUser(data, 'email')
-      .subscribe({
-        next: (value) => {
-          if (data.password !== undefined) {
-            const AUTH_DATA: accountSignInData = {
-              email: data.email,
-              password: data.password
-            }
-            this.authService.POSTcreateLongJWT(AUTH_DATA, 'email')
-              .subscribe({
-                next: (value) => {
-                  this.userCookieService.setJwt(value.jwt, 'long')
-                  this.userCookieService.setUserType('email')
-                  this.router.navigateByUrl('/account')
-                },
-                error: (error) => {
-                  console.log(error)
-                  this.errorHandler.setError('Ошибка регистрации', 5000)
-                }
-              })
-          }
-        },
-        error: (error) => {
-          console.log(error)
-          this.errorHandler.setError('Ошибка регистрации', 5000)
-        }
-      });
+    try {
+      const accountData:createAccountData = {
+        email: this.signupForm.value.email!,
+        password: this.signupForm.value.password!,
+        nickname: this.signupForm.value.nickname!,
+        accountType:'email'
+      };
+      await this.userService.POSTcreateAccount(accountData)
+      const jwtToken = (await this.authService.POSTcreateLongJWT(accountData)).jwtToken
+      this.userCookieService.setJwt(jwtToken, 'long')
+      this.userCookieService.setUserType('email')
+      this.router.navigateByUrl('/account')
+    } catch (error) {
+      console.log(error)
+    }
   }
 
-  changePasswordUser() {
-    if (this.changePasswordForm.invalid) return;
-    this.authService.PUTupdateBaseData(this.currentJwtToken!, { password: this.changePasswordForm.value.newPassword! }, 'short', 'email')
-      .subscribe({
-        next: (value) => {
-          console.log(value)
-          this.changeTemplate('signin')
-        },
-        error: (error) => {
-          console.log(error)
-        }
-      })
+  async changePasswordUser() {
+    if (this.changePasswordForm.invalid||!this.currentJwtToken) return;
+    const changeData = {
+      password: this.changePasswordForm.value.newPassword!,
+      accountType:'email' as const,
+      jwt:this.currentJwtToken
+    }
+    try {     
+      await this.authService.PUTupdateBaseData(changeData)
+      this.changeTemplate('signin')
+    } catch (error) {
+      console.log(error)
+    }
+
   }
-  checkMatchCodes() {
+  async checkMatchCodes() {
     if (this.codeForm.value.code === this.currentChangeCode) {
-      this.authService.POSTcreateShortJWT(this.requestChangeForm.value.email!)
-        .subscribe({
-          next: (value) => {
-            console.log(value)
-            this.currentJwtToken = value.jwtToken
-            this.changeTemplate('changePassword')
-          },
-          error: (error) => {
-            console.log(error)
-          }
-        })
-
+      try {
+        this.currentJwtToken = (await this.authService.POSTcreateShortJWT(this.requestChangeForm.value.email!)).jwtToken
+        this.changeTemplate('changePassword')
+      } catch (error) {
+        console.log(error)
+      }
     } else {
       this.errorHandler.setError('Неверный код', 2500)
     }

@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { baseUrl } from '.';
+import { firstValueFrom, Observable } from 'rxjs';
+import { imageSliderClientData } from '../components/image-slider/image-slider.component';
 @Injectable({
   providedIn: 'root'
 })
@@ -25,11 +27,11 @@ export class ServerImageControlService {
    * @param jwt JWT токен пользователя
    * @returns Observable с результатом загрузки аватара
    */
-  POSTloadUserAvatar(imageFile: Blob, jwt: string) {
+  POSTuploadUserAvatar(imageFile: Blob, jwt: string) {
     const formData = new FormData();
     formData.append('image', imageFile);
     const HTTP_PARAMS = new HttpParams().set('jwtToken', jwt);
-    return this.httpModule.post(`${baseUrl}avatar/upload`, formData, { params: HTTP_PARAMS });
+    return firstValueFrom(this.httpModule.post(`${baseUrl}avatar/upload`, formData, { params: HTTP_PARAMS })) as Promise<{ message: string }>
   }
 
   /**
@@ -40,23 +42,21 @@ export class ServerImageControlService {
    * @param color Цвет мебели
    * @returns Observable с результатом загрузки изображений
    */
-  POSTloadProjectImages(imageFiles: Blob[], jwt: string, furnitureCardId: string, color: string,idMainImage:number) {
+  POSTuploadProjectImages(color: string, imagesData: imageSliderClientData, jwt: string, furnitureCardId: string) {
     const formData = new FormData();
-    
-    // Добавляем изображения
-    console.log(imageFiles)
-    imageFiles.forEach((file) => formData.append('images', file));
-    
-    // Добавляем дополнительные данные
+    console.log(imagesData.images)
+    imagesData.images.forEach((file) => formData.append('images', file));
+
     const HTTP_PARAMS = new HttpParams()
-    .set('furnitureCardId', furnitureCardId)
-    .set('color', color)
-    .set('idMainImage',idMainImage)
-    // Отправляем запрос с использованием FormData
-    return this.httpModule.post(`${baseUrl}furniture/images/upload/images?jwtToken=${jwt}`, formData,{params:HTTP_PARAMS});
+      .set('furnitureCardId', furnitureCardId)
+      .set('color', color)
+      .set('idMainImage', imagesData.idMainImage)
+      .set('jwtToken', jwt)
+            
+    return firstValueFrom(this.httpModule.post(baseUrl+'furniture/images/upload/images', formData, { params: HTTP_PARAMS })) as Promise<{ message: string }>
   }
-  
-  
+
+
 
   /**
    * Удаление цвета мебели
@@ -71,7 +71,7 @@ export class ServerImageControlService {
       .set('furnitureCardId', furnitureCardId)
       .set('color', color);
 
-    return this.httpModule.delete(`${baseUrl}furniture/images/delete/color`, { params: HTTP_PARAMS });
+    return firstValueFrom(this.httpModule.delete(baseUrl+'furniture/images/delete/color', { params: HTTP_PARAMS })) as Promise<{ message: string }>
   }
 
   /**
@@ -85,39 +85,33 @@ export class ServerImageControlService {
       .set('jwtToken', jwt)
       .set('furnitureCardId', furnitureCardId);
 
-    return this.httpModule.delete(`${baseUrl}furniture/images/delete/project`, { params: HTTP_PARAMS });
+    return firstValueFrom(this.httpModule.delete(`${baseUrl}furniture/images/delete/project`, { params: HTTP_PARAMS })) as Promise<{ message: string }>
   }
-    /**
-   * Получение всех изображений проекта по ID карточки мебели и цвету
-   * @param furnitureCardId ID карточки мебели
+  /**
+ * Получение всех изображений проекта по ID карточки мебели и цвету
+ * @param furnitureCardId ID карточки мебели
+ * @param color Цвет мебели
+ * @returns Observable с массивом всех изображений
+ */
+  GETallProjectImages(furnitureCardId: string, color: string) {
+    const HTTP_PARAMS = new HttpParams()
+      .set('furnitureCardId', furnitureCardId)
+      .set('color', color);
+
+    return firstValueFrom(this.httpModule.get(`${baseUrl}furniture/images/all`, { params: HTTP_PARAMS })) as Promise<{ imagesURLS: string[],idMainImage: number}>
+  }
+
+  /**
+   * Получение главного изображения цвета по ID картинок мебели и цвету
+   * @param imagesId ID картинок мебели
    * @param color Цвет мебели
-   * @returns Observable с массивом всех изображений
+   * @returns Observable с главным изображением
    */
-    async GETallProjectImages(furnitureCardId: string, color: string): Promise<any> {
-      const HTTP_PARAMS = new HttpParams()
-        .set('furnitureCardId', furnitureCardId)
-        .set('color', color);
-    
-      try {
-        const response = await this.httpModule.get(`${baseUrl}furniture/images/all`, { params: HTTP_PARAMS }).toPromise();
-        return response;
-      } catch (error) {
-        console.error('Error fetching project images:', error);
-        throw error; // Важно выбрасывать ошибку для обработки в вызывающем коде
-      }
-    }
-  
-    /**
-     * Получение главного изображения цвета по ID картинок мебели и цвету
-     * @param imagesId ID картинок мебели
-     * @param color Цвет мебели
-     * @returns Observable с главным изображением
-     */
-    GETmainImage(furnitureCardId: string, color: string) {
-        return `${baseUrl}furniture/images/main?furnitureCardId=${furnitureCardId}&color=${color}`;
-    }
-    GETsimpleImage(filePath:string){
-      return `${baseUrl}furniture/images/simple?filePath=${filePath}`;
-    }
-    
+  GETmainImage(furnitureCardId: string, color: string) {
+    return `${baseUrl}furniture/images/main?furnitureCardId=${furnitureCardId}&color=${color}`;
+  }
+  GETsimpleImage(filePath: string) {
+    return `${baseUrl}furniture/images/simple?filePath=${filePath}`;
+  }
+
 }

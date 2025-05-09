@@ -4,11 +4,11 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Location, NgClass, NgFor, NgIf } from '@angular/common';
 import { ShopService } from '../../services/shop.service';
 import { ViewFurnitureComponent } from '../view-furniture/view-furniture.component';
-import { accountFullInformation, AccountService } from '../../services/account.service';
-import { UserCookieService } from '../../services/user-cookie.service';
+import { AccountService } from '../../services/account.service';
+import { UserCookieService } from '../../services/account-cookie.service';
 import { projectInformation } from '../../services/project.service';
 import { ErrorHandlerService } from '../../services/error-handler.service';
-import { category, CategoryService } from '../../services/category.service';
+import { categoryData, CategoryService } from '../../services/category.service';
 interface furnitureInShopData {
   name: string,
   cost: number,
@@ -29,7 +29,7 @@ export class ShopPageComponent implements OnInit {
   currentCategoryId: number | undefined
   furnituresArray: furnitureInShopData[] = []
   openAddModuleToggle: boolean = false
-  categoryArray: category[] = []
+  categoryArray: categoryData[] = []
   constructor(
     private route: ActivatedRoute,
     private shopService: ShopService,
@@ -40,7 +40,7 @@ export class ShopPageComponent implements OnInit {
     private categoryService: CategoryService,
     private location: Location,
     private elementRef: ElementRef,
-    private cdr:ChangeDetectorRef
+    private cdr: ChangeDetectorRef
   ) { }
   openAddModule() {
     this.openAddModuleToggle = true
@@ -62,34 +62,24 @@ export class ShopPageComponent implements OnInit {
     this.furnituresInit();
     this.initCategories();
   }
-  initCategories() {
-    this.categoryService.GETgetAllCategories()
-      .subscribe({
-        next: (value) => {
-          console.log(value)
-          this.categoryArray = value.categoryArray
-          this.categoryArray.forEach((categoryData, index) => {
-            if (this.categoryName === categoryData.name) this.currentCategoryId = index
-          })
-        },
-        error: (error) => {
-
-        }
+  async initCategories() {
+    try {
+      this.categoryArray=(await this.categoryService.GETgetAllCategories()).categoryArray
+      this.categoryArray.forEach((categoryData, index) => {
+        if (this.categoryName === categoryData.name) this.currentCategoryId = index
       })
+    } catch (error) {
+      console.log(error)
+    }
   }
-  furnituresInit() {
+  async furnituresInit() {
     if (this.furnitureId) {
       const jwt = this.userCookieService.getJwt()
-      this.userService.GETuser(jwt)
-        .subscribe({
-          next: (response) => {
-            this.userProjects = (((response as any).userData) as accountFullInformation).projects
-          },
-          error: (error) => {
-            console.log(error)
-            this.errorHandler.setError('Error while receiving user', 5000)
-          }
-        })
+      try {
+        this.userProjects = (await this.userService.GETaccount(jwt)).accountData.projects
+      } catch (error) {
+        console.log(error)
+      }
     } else if (this.categoryName !== undefined) {
       this.requestCategoryFurnitures(this.categoryName, 0)
     } else {
@@ -101,7 +91,7 @@ export class ShopPageComponent implements OnInit {
     this.shopService.GETgetCategoryData(categoryName, furnituresCount)
       .subscribe({
         next: (response) => {
-          this.furnituresArray = [...this.furnituresArray,...this.transformToClientDataFurnitures((response as any).resultsArray)]
+          this.furnituresArray = [...this.furnituresArray, ...this.transformToClientDataFurnitures((response as any).resultsArray)]
           // this.cdr.detectChanges()
         },
         error: (error) => {
@@ -115,7 +105,7 @@ export class ShopPageComponent implements OnInit {
       .subscribe({
         next: (response) => {
           console.log(response)
-          this.furnituresArray = [...this.furnituresArray,...this.transformToClientDataFurnitures((response as any).resultsArray)]
+          this.furnituresArray = [...this.furnituresArray, ...this.transformToClientDataFurnitures((response as any).resultsArray)]
           // this.cdr.detectChanges()
         },
         error: (error) => {
@@ -133,7 +123,7 @@ export class ShopPageComponent implements OnInit {
     })
   }
   changeCategory(categoryIndex: number | undefined) {
-    this.furnituresArray.length=0
+    this.furnituresArray.length = 0
     this.currentCategoryId = categoryIndex
     let newUrl = this.location.path()
     if (categoryIndex !== undefined) {
