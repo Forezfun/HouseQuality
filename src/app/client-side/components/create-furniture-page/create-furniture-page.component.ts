@@ -1,14 +1,14 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { NavigationPanelComponent } from '../navigation-panel/navigation-panel.component';
-import { CreateFurnitureComponent, furnitureServerData, additionalData } from '../create-furnitre/create-furniture.component';
+import { CreateFurnitureComponent } from '../create-furnitre/create-furniture.component';
 import { ActivatedRoute, Router } from '@angular/router';
-import { imageSliderData } from '../image-slider/image-slider.component';
-import { UserCookieService } from '../../services/user-cookie.service';
-import { FurnitureCardControlService } from '../../services/furniture-card-control.service';
+import { UserCookieService } from '../../services/account-cookie.service';
+import { additionalData, colorFromServerData, FurnitureCardControlService, furnitureFromServerData } from '../../services/furniture-card-control.service';
 import { ServerImageControlService } from '../../services/server-image-control.service';
 import { NgIf } from '@angular/common';
 import { FurnitureModelControlService } from '../../services/furniture-model-control.service';
 import { ErrorHandlerService } from '../../services/error-handler.service';
+import { imageSliderClientData } from '../image-slider/image-slider.component';
 
 @Component({
   selector: 'app-create-furniture-page',
@@ -31,17 +31,16 @@ export class CreateFurniturePageComponent implements OnInit {
   idPage!: string
   @ViewChild(CreateFurnitureComponent)
   private createFurnitureComponent!: CreateFurnitureComponent;
-  colorsClientData: { color: string, imagesData: imageSliderData }[] = []
-  furnitureData: furnitureServerData = {
+  furnitureData: furnitureFromServerData = {
     name: '',
     description: '',
     colors: [],
     shops: [],
-    category: undefined,
+    additionalData: {},
     proportions: {
-      width: null,
-      height: null,
-      length: null
+      width: 0,
+      height: 0,
+      length: 0
     }
   }
 
@@ -55,57 +54,18 @@ export class CreateFurniturePageComponent implements OnInit {
     if (this.idPage === 'new') return
     this.pageInit(jwt)
   }
-  pageInit(jwt: string) {
-    this.furnitureCardService.GETfurnitureCard(this.idPage, jwt)
-      .subscribe({
-        next: async (response) => {
-          const RECEIVED_DATA: furnitureServerData = response.furnitureCard;
-          if (response.authorMatched === false) {
-            this.router.navigateByUrl('/create/new');
-            return;
-          }
-          this.populateFurnitureData(RECEIVED_DATA);
-          await this.processColors(RECEIVED_DATA.colors);
-          this.createFurnitureComponent.currentColorId = 0;
-        },
-        error: (error) => {
-          console.log(error);
-          this.errorHandler.setError('Error while loading furniture', 5000);
-        }
-      });
-  }
-
-  private populateFurnitureData(RECEIVED_DATA: furnitureServerData) {
-    this.furnitureData.name = RECEIVED_DATA.name;
-    this.furnitureData.description = RECEIVED_DATA.description;
-    this.furnitureData.shops = RECEIVED_DATA.shops;
-    this.furnitureData.category=(RECEIVED_DATA as any).additionalData.category
-    this.furnitureData.proportions=RECEIVED_DATA.proportions
-  }
-
-  private async processColors(colors: any[]) {
-    const COLORS_PROMISES = colors.map(async (colorObject: any) => {
-      const IMAGES_DATA = await this.serverImageControl.GETallProjectImages(this.idPage, colorObject.color);
-      const IMAGES_URLS: string[] = IMAGES_DATA.imagesURLS;
-      const REQUEST_URLS: string[] = IMAGES_URLS.map(url => this.serverImageControl.GETsimpleImage(url));
-      const BLOB_URLS: Blob[] = await this.fetchBlobUrls(REQUEST_URLS);
-
-      this.furnitureData.colors.push({
-        color: colorObject.color,
-        imagesData: {
-          images: BLOB_URLS,
-          idMainImage: IMAGES_DATA.idMainImage
-        }
-      });
-      this.colorsClientData.push({
-        color: colorObject.color,
-        imagesData: {
-          images: REQUEST_URLS,
-          idMainImage: IMAGES_DATA.idMainImage
-        }
-      });
-    });
-    await Promise.all(COLORS_PROMISES);
+  async pageInit(jwt: string) {
+    try {
+      const response = await this.furnitureCardService.GETfurnitureCard(this.idPage, jwt)
+      if (response.authorMatched === false) {
+        this.router.navigateByUrl('/create/new');
+        return;
+      }
+      this.furnitureData = response.furnitureCard
+      this.createFurnitureComponent.currentColorId = 0;
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   private async fetchBlobUrls(requestUrls: string[]): Promise<Blob[]> {
@@ -128,178 +88,66 @@ export class CreateFurniturePageComponent implements OnInit {
     );
     return imagesBlobArray
   }
-  checkValid() {
-    const { name, colors, shops, category, proportions } = this.furnitureData
+  checkValid(typeRequest: 'update' | 'create') {
+    const { name, colors, shops, proportions } = this.furnitureData
+    if (!name || !colors || !shops || !proportions) return
     const FURNITURE_MODEL_BLOB = this.createFurnitureComponent.furnitureModelInput.files![0]
     if (
       name.length < 3 ||
-      !category ||
-      !FURNITURE_MODEL_BLOB ||
+      (!FURNITURE_MODEL_BLOB && typeRequest === 'create') ||
       shops.length < 0
     ) return false
     if (!proportions.height || !proportions.width || !proportions.length) return false
     colors.forEach(colorData => {
-      return colorData.imagesData.images.length > 0
+      return colorData.imagesData.images.length > 0 && typeRequest === 'create'
     })
     return true
   }
-  createFurnitureCard() {
-    if (!this.checkValid()) return
-
-    const currentColorId = this.createFurnitureComponent.currentColorId
-    if (currentColorId === undefined) return
-    const furnitureData = this.createFurnitureComponent.furnitureData;
-    const FURNITURE_TEXT_DATA = {
-      name: furnitureData.name,
-      description: furnitureData.description,
-      colors: furnitureData.colors.map(colorObject => colorObject.color),
-      shops: furnitureData.shops,
-      proportions: furnitureData.proportions
-    }
-    let ADDITIONAL_DATA: additionalData | undefined = undefined
-    if (
-      furnitureData.category !== undefined
-    ) {
-      ADDITIONAL_DATA = {
-        category: furnitureData.category
-      }
-      console.log(ADDITIONAL_DATA)
-    }
-
+  async createFurnitureCard() {
     const jwt = this.cookieService.getJwt()
-    if (!jwt) return
+    if (!this.checkValid('create') || !jwt) return
+    try {
+      const furnitureData = this.createFurnitureComponent.furnitureData;
+      await this.furnitureCardService.POSTcreateFurnitureCard(furnitureData, jwt)
 
-    (() => {
-      if (ADDITIONAL_DATA !== undefined) {
-        return this.furnitureCardService.POSTcreateFurnitureCard(jwt, FURNITURE_TEXT_DATA, ADDITIONAL_DATA);
-      } else {
-        return this.furnitureCardService.POSTcreateFurnitureCard(jwt, FURNITURE_TEXT_DATA);
-      }
-    }
-    )()
-      .subscribe({
-        next: (response) => {
-          const FURNITURE_ID = (response as any).furnitureData._id
-
-          furnitureData.colors.forEach(async colorData => {
-            const { color, imagesData } = colorData
-            if (imagesData.images.length === 0) return
-            let imagesBlobArray: Blob[] = imagesData.images
-            if (!(imagesData.images[0] instanceof Blob)) {
-              imagesBlobArray = await this.transformUrlArrayToBlob(imagesData.images.map(blobUrl => blobUrl.toString()))
-            }
-            this.serverImageControl.POSTloadProjectImages(imagesBlobArray, jwt, FURNITURE_ID, color, imagesData.idMainImage)
-              .subscribe({
-                next: (response) => {
-                  this.router.navigateByUrl('/account')
-                },
-                error: (error) => {
-                  console.log(error)
-                  this.errorHandler.setError('Error while uploading images', 5000)
-                }
-              })
-          })
-
-          const FURNITURE_MODEL_BLOB = this.createFurnitureComponent.furnitureModelInput.files![0]
-          this.furnitureModelService.POSTloadFurnitureModel(FURNITURE_MODEL_BLOB, jwt, FURNITURE_ID)
-            .subscribe({
-              next: (response) => {
-              },
-              error: (error) => {
-                console.log(error)
-                this.errorHandler.setError('Error while uploading model', 5000)
-              }
-            })
-        },
-        error: (error) => {
-          console.log(error)
-          this.errorHandler.setError('Error while uploading furniture', 5000)
+      furnitureData.colors.forEach(async (colorData) => {
+        const imagesBlobArray = await this.transformUrlArrayToBlob(colorData.imagesData.images)
+        const imagesData: imageSliderClientData = {
+          images: imagesBlobArray,
+          idMainImage: colorData.imagesData.idMainImage
         }
+        await this.serverImageControl.POSTuploadProjectImages(colorData.color, imagesData, jwt, this.idPage)
       })
+
+      const FURNITURE_MODEL_BLOB = this.createFurnitureComponent.furnitureModelInput.files![0]
+      await this.furnitureModelService.POSTuploadFurnitureModel(FURNITURE_MODEL_BLOB, jwt, this.idPage)
+
+    } catch (error) {
+      console.log(error)
+    }
+
   }
-  updateFurnitureCard() {
-    const currentColorId = this.createFurnitureComponent.currentColorId
-    if (currentColorId === undefined) return
-    const furnitureData = this.createFurnitureComponent.furnitureData;
-    const FURNITURE_TEXT_DATA = {
-      name: furnitureData.name,
-      description: furnitureData.description,
-      colors: furnitureData.colors.map(colorObject => colorObject.color),
-      shops: furnitureData.shops,
-      proportions: furnitureData.proportions
-    }
-    let ADDITIONAL_DATA: additionalData | undefined = undefined
-    if (
-      furnitureData.category !== undefined
-    ) {
-      ADDITIONAL_DATA = {
-        category: furnitureData.category
-
-      }
-      
-    }
-    console.log(ADDITIONAL_DATA,ADDITIONAL_DATA !== undefined)
+  async updateFurnitureCard() {
     const jwt = this.cookieService.getJwt()
+    if (!this.checkValid('update') || !jwt) return
+    try {
+      const furnitureData = this.createFurnitureComponent.furnitureData;
+      await this.furnitureCardService.PUTupdateFurnitureCard(furnitureData, this.idPage, jwt)
 
-    if (!jwt) return
-
-    (() => {
-      if (ADDITIONAL_DATA !== undefined) {
-        return this.furnitureCardService.PUTupdateFurnitureCard(jwt, FURNITURE_TEXT_DATA, ADDITIONAL_DATA);
-      } else {
-        return this.furnitureCardService.PUTupdateFurnitureCard(jwt, FURNITURE_TEXT_DATA);
-      }
-    }
-    )()
-      .subscribe({
-        next: (response) => {
-          this.serverImageControl.DELETEproject(jwt, this.idPage)
-            .subscribe({
-              next: (response) => {
-                furnitureData.colors.forEach(async colorData => {
-                  const { color, imagesData } = colorData
-                  let imagesBlobArray: Blob[] = imagesData.images
-                  if (imagesData.images.length !== 0) {
-                    if (!(imagesData.images[0] instanceof Blob)) {
-                      imagesBlobArray = await this.transformUrlArrayToBlob(imagesData.images.map(blobUrl => blobUrl.toString()))
-                    }
-                    this.serverImageControl.POSTloadProjectImages(imagesBlobArray, jwt, this.idPage, color, imagesData.idMainImage)
-                      .subscribe({
-                        next: (response) => {
-                          // window.location.href = window.location.href
-                        },
-                        error: (error) => {
-                          console.log(error)
-                          this.errorHandler.setError('Error while updating images', 5000)
-                        }
-                      })
-                  }
-                  const FURNITURE_FILES = this.createFurnitureComponent.furnitureModelInput.files!
-                  if(FURNITURE_FILES.length==0)return
-                  this.furnitureModelService.PUTupdateFurnitureModel(FURNITURE_FILES[0], jwt, this.idPage)
-                    .subscribe({
-                      next: (response) => {
-                      },
-                      error: (error) => {
-                        console.log(error)
-                        this.errorHandler.setError('Error while updating model', 5000)
-
-                      }
-                    })
-                })
-              },
-              error: (error) => {
-                console.log(error)
-                this.errorHandler.setError('Error while updating images', 5000)
-              }
-            })
-        },
-        error: (error) => {
-          console.log(error)
-          this.errorHandler.setError('Error while updating model', 5000)
+      furnitureData.colors.forEach(async (colorData) => {
+        if(colorData.imagesData.images.length===0)return
+        const imagesBlobArray = await this.transformUrlArrayToBlob(colorData.imagesData.images)
+        const imagesData: imageSliderClientData = {
+          images: imagesBlobArray,
+          idMainImage: colorData.imagesData.idMainImage
         }
+        await this.serverImageControl.POSTuploadProjectImages(colorData.color, imagesData, jwt, this.idPage)
       })
-
+      const FURNITURE_MODEL_BLOB = this.createFurnitureComponent.furnitureModelInput.files!
+      if(FURNITURE_MODEL_BLOB[0]) await this.furnitureModelService.POSTuploadFurnitureModel(FURNITURE_MODEL_BLOB[0],jwt,this.idPage)
+    } catch (error) {
+      console.log(error)
+    }
   }
   clearFurnitureCard() {
     this.createFurnitureComponent.currentColorId = undefined
@@ -308,45 +156,34 @@ export class CreateFurniturePageComponent implements OnInit {
       description: '',
       colors: [],
       shops: [],
-      category: undefined,
+      additionalData:{
+
+      },
       proportions: {
         width: 0,
         height: 0,
         length: 0
       }
     }
-    this.colorsClientData = []
   }
-  deleteFurnitureCard() {
+  async deleteFurnitureCard() {
     const jwt = this.cookieService.getJwt()
     if (!jwt) return
-    this.serverImageControl.DELETEproject(jwt, this.idPage)
-      .subscribe({
-        next: (response) => {
-          this.furnitureCardService.DELETEfurnitureCard(jwt, this.idPage)
-            .subscribe({
-              next: (response) => {
-                this.router.navigateByUrl('/account')
-              },
-              error: (error) => {
-                console.log(error)
-                this.errorHandler.setError('Error while deleting furniture', 5000)
-              }
-            })
-        },
-        error: (error) => {
-          console.log(error)
-          this.errorHandler.setError('Error while deleting images', 5000)
-        }
-      })
+    try {
+      await this.serverImageControl.DELETEproject(jwt, this.idPage)
+      await this.furnitureCardService.DELETEfurnitureCard(jwt, this.idPage)
+      this.router.navigateByUrl('/account')   
+    } catch (error) {
+      console.log(error)
+    }
 
   }
   deleteColorCalculate() {
     if (!this.createFurnitureComponent || this.createFurnitureComponent.currentColorId === undefined) return
-    return this.createFurnitureComponent.colorsClientData[this.createFurnitureComponent.currentColorId].color
+    return this.createFurnitureComponent.furnitureData.colors[this.createFurnitureComponent.currentColorId].color
   }
   deleteColor() {
-    if (this.createFurnitureComponent.colorsClientData.length <= 1) return
+    if (this.createFurnitureComponent.furnitureData.colors.length <= 1) return
     this.createFurnitureComponent.deleteColor()
   }
   getCurrentColorId() {

@@ -44,7 +44,7 @@ ROUTER.post('/jwt/long/create', async (request, result) => {
         console.log(JWT)
         USER_ITEM.jwtTokens.push(JWT);
         await USER_ITEM.save();
-        result.status(201).json({ jwt: JWT });
+        result.status(201).json({ jwtToken: JWT });
     } catch (err) {
         result.status(400).json({ message: err.message });
     }

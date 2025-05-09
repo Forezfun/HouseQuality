@@ -1,16 +1,16 @@
 <span class="body" (click)="currentColorId ?? openColorModule($event)">
     <input class="furnitureTitle" [(ngModel)]="furnitureData.name" placeholder="Название" title="Введите название мебели">
     <span class="imageSlideSpan">
-        <button *ngIf="currentColorId!==undefined&&colorsClientData[currentColorId].imagesData.images.length>0"
+        <button *ngIf="currentColorId!==undefined&&furnitureData.colors[currentColorId].imagesData.images.length>0"
             (click)="removeImages()" class="editImagesBtn">
             <img loading="lazy" alt="edit" src="/assets/images/editIcon.svg" alt=""></button>
         <app-image-slider
-            *ngIf="currentColorId!==undefined&&colorsClientData[currentColorId].imagesData.images.length>0"
-            [imagesData]="colorsClientData[currentColorId].imagesData" [changeModeSlider]="true"
+            *ngIf="currentColorId!==undefined&&furnitureData.colors[currentColorId].imagesData.images.length>0"
+            [imagesData]="furnitureData.colors[currentColorId].imagesData" [changeModeSlider]="true"
             (idMainImageEmitter)="changeIdMainImage($event)"></app-image-slider>
     </span>
     <div class="uploadImagesDiv"
-        *ngIf="currentColorId===undefined||(currentColorId!==undefined&&colorsClientData[currentColorId].imagesData.images.length<=0)">
+        *ngIf="currentColorId===undefined||(currentColorId!==undefined&&furnitureData.colors[currentColorId].imagesData.images.length<=0)">
         <input (input)="onInputImages($event)" class="uploadImagesInput" multiple type="file" accept=".png,.jpeg,.jpg" title="Загрузите изображения">
         <img loading="lazy" class="uploadImagesIcon" src="/assets/images/uploadIcon.png" alt="Загрузить">
     </div>
@@ -116,7 +116,7 @@
             <h2 class="addModuleTitle">Информация</h2>
             <span *ngIf="categoriesArray!==undefined" class="addModuleInputSpan">
                 <label class="inputLabel" for="category">Категория</label>
-                <select aria-placeholder="Диван" [(ngModel)]="furnitureData.category" class="categorySelect"
+                <select aria-placeholder="Диван" [(ngModel)]="furnitureData.additionalData.category" class="categorySelect"
                     name="category" id="category" title="Выберите категорию">
                     <option [value]="category.name" *ngFor="let category of categoriesArray">{{category.translateOne}}</option>
                 </select>

@@ -2,10 +2,10 @@ import { Component, AfterViewInit, ElementRef, HostListener, Input, SimpleChange
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { NgxSpinnerModule, NgxSpinnerService } from 'ngx-spinner';
-import { roomData as roomDataPlan } from '../plan-house/plan-house.component';
+import { roomData as roomDataPlan } from '../../services/project.service';
 import { loadModel } from './loaders';
 import { FurnitureModelControlService } from '../../services/furniture-model-control.service';
-import { UserCookieService } from '../../services/user-cookie.service';
+import { UserCookieService } from '../../services/account-cookie.service';
 import { FurnitureCardControlService } from '../../services/furniture-card-control.service';
 import { firstValueFrom } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
@@ -97,24 +97,16 @@ export class SceneComponent implements AfterViewInit, OnChanges {
     this.location.replaceState(newUrl)
   }
 
-  private addModel(furnitureId: string, saveRoom: boolean, moveData?: objectLoadInterface) {
+  private async addModel(furnitureId: string, saveRoom: boolean, moveData?: objectLoadInterface) {
     const jwt = this.userCookieService.getJwt()
     if (!jwt) return
-    this.furnitureCardService.GETfurnitureCard(furnitureId)
-      .subscribe({
-        next: async (response) => {
-          const proportions = (response as any).furnitureCard.proportions
-          const modelBlobUrl = this.furnitureModelService.GETfurnitureModel(jwt, furnitureId)
-          const blob: Blob = await firstValueFrom(modelBlobUrl);
-
-          this.loadFurnitureModel(blob, proportions, furnitureId, saveRoom, moveData)
-        },
-        error: (error) => {
-          console.log(error)
-          this.errorHandler.setError('Error while loading model', 5000)
-        }
-      })
-
+    try {
+      const proportions = (await this.furnitureCardService.GETfurnitureCard(furnitureId)).furnitureCard.proportions
+      const model = await this.furnitureModelService.GETfurnitureModel(jwt, furnitureId)
+      this.loadFurnitureModel(model, proportions, furnitureId, saveRoom, moveData)
+    } catch (error) {
+      console.log(error)
+    }
   }
   deleteModel() {
     if (this.targetobject) this.scene.remove(this.targetobject)
@@ -236,7 +228,6 @@ export class SceneComponent implements AfterViewInit, OnChanges {
     this.spinner.show()
     try {
       const LOAD_OBJECT = await loadModel(fileModel)
-
       if (moveData) { this.addObjectToScene(LOAD_OBJECT, furnitureSize, furnitureId, moveData) } else { this.addObjectToScene(LOAD_OBJECT, furnitureSize, furnitureId) }
       this.spinner.hide()
       if (saveRoom) this.saveRoom()

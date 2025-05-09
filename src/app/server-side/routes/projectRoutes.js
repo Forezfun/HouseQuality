@@ -29,7 +29,7 @@ ROUTER.post('/', async (request, result) => {
       authorId: USER_ID
     })
     await NEW_PROJECT_ITEM.save()
-    result.status(201).json({ message: 'Project created successfully' });
+    result.status(201).json({ projectData: NEW_PROJECT_ITEM});
   } catch (err) {
     result.status(400).json({ message: err.message });
   }

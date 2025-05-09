@@ -2,8 +2,12 @@ import { Component, EventEmitter, HostListener, Input, OnChanges, OnInit, Output
 import { NgIf, NgFor, NgClass } from '@angular/common';
 import {TuiCarousel} from '@taiga-ui/kit';
 
-export interface imageSliderData {
-  images: String[];
+export interface imageSliderClientData {
+  images: Blob[];
+  idMainImage: number;
+}
+export interface imageSliderFromServerData {
+  images: string[];
   idMainImage: number;
 }
 
@@ -17,7 +21,7 @@ export interface imageSliderData {
 export class ImageSliderComponent implements OnInit{
   index:number = 0
   @Input()
-  imagesData!: imageSliderData;
+  imagesData!: imageSliderFromServerData;
   @Input()
   changeModeSlider: boolean=false
   @Output()

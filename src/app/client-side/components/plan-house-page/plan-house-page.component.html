@@ -2,8 +2,8 @@
   <app-navigation-panel></app-navigation-panel>
   <p *ngIf="!checkDesktop()" class="mobileAlert">Просмотр этой страницы с мобильных устройств невозможен. Пожалуйста, используйте компьютер.</p>
   <span *ngIf="checkDesktop()" class="functionalModule">
-    <span [ngClass]="{'disabled': currentProjectId!==undefined}" *ngIf="userData!==undefined" class="chooseProjectSpan">
-      <button (click)="openProject(index)" *ngFor="let projectData of userData.projects;let index=index"
+    <span [ngClass]="{'disabled': currentProjectId!==undefined}" *ngIf="accountData!==undefined" class="chooseProjectSpan">
+      <button (click)="openProject(index)" *ngFor="let projectData of accountData.projects;let index=index"
         class="projectCard">
         <span class="mainProjectInformation">
           <h3 class="projectTitle">{{projectData.name}}</h3>
@@ -27,12 +27,12 @@
       </button>
       <app-plan-house #planHouse (callSaveEmitter)="saveProject()" (planHouseEmitter)="updatePlanData($event)"
         [ngClass]="{'disabled': currentProjectId===undefined}" *ngIf="currentProjectId!==undefined"
-        [planHouse]="userData.projects[currentProjectId].rooms"></app-plan-house>
+        [planHouse]="accountData.projects[currentProjectId].rooms"></app-plan-house>
     </span>
   </span>
 </span>
 <span class="addModule disabled">
-  <form *ngIf="userData" class="addModuleSpan" [formGroup]="projectNameForm" (ngSubmit)="createProject()">
+  <form *ngIf="accountData" class="addModuleSpan" [formGroup]="projectNameForm" (ngSubmit)="createProject()">
     <button (click)="closeAddModule()" class="closeAddModuleBtn" type="button">
       <img loading="lazy" src="/assets/images/addIcon.svg" alt="">
     </button>

@@ -18,6 +18,16 @@ ROUTER.use(async (req, res, next) => {
             const furnitureCard = await FURNITURE_CARD.findById(req.query.furnitureCardId);
             if (!furnitureCard) return res.status(404).json({ message: 'Furniture card not found' });
         }
+        if (req.method == 'POST') {
+            const { furnitureCardId, color, idMainImage } = req.query;
+            if (!furnitureCardId || !color || idMainImage === undefined) return res.status(400).json({ message: 'Images data is missing' });
+            const projectDir = path.join(__dirname, '..', 'uploads', 'cards', furnitureCardId);
+            const colorDir = path.join(projectDir, color);
+            if (fs.existsSync(colorDir)) {
+                fs.rmdirSync(colorDir, { recursive: true });
+                fs.mkdirSync(colorDir);
+            }
+        }
         next();
     } catch (error) {
         res.status(500).json({ message: 'Error validating user access: ' + error.message });
@@ -30,7 +40,7 @@ function ensureProjectAndColorDirectories(furnitureCardId, color) {
         throw new Error('furnitureCardId or color is missing');
     }
 
-    const projectDir = path.join(__dirname, '..', 'uploads', 'cards',furnitureCardId);
+    const projectDir = path.join(__dirname, '..', 'uploads', 'cards', furnitureCardId);
     const colorDir = path.join(projectDir, color);
 
     if (!fs.existsSync(projectDir)) {
@@ -80,7 +90,7 @@ ROUTER.get('/main', async (req, res) => {
         }
         const INDEX_COLOR = FURNITURE_CARD_ITEM.colors.findIndex(colorData => colorData.color === color)
         console.log(INDEX_COLOR)
-        if (INDEX_COLOR===undefined) {
+        if (INDEX_COLOR === undefined) {
             return res.status(404).json({ message: 'Color not found' });
         }
         const ID_IMAGES = FURNITURE_CARD_ITEM.colors[INDEX_COLOR].idImages
@@ -89,7 +99,7 @@ ROUTER.get('/main', async (req, res) => {
             return res.status(404).json({ message: 'Images furniture item not found' });
         }
         const MAIN_IMAGE_NAME = IMAGES_FURNITURE_ITEM.images[IMAGES_FURNITURE_ITEM.idMainImage].filename
-        const directory = path.join(__dirname, '..', 'uploads', 'cards',furnitureCardId,color);
+        const directory = path.join(__dirname, '..', 'uploads', 'cards', furnitureCardId, color);
         const filePath = path.join(directory, MAIN_IMAGE_NAME);
 
         console.log(`Looking for file: ${filePath}`);
@@ -105,9 +115,18 @@ ROUTER.get('/main', async (req, res) => {
 });
 ROUTER.get('/simple', async (req, res) => {
     try {
-        const { filePath } = req.query;
-        if(filePath===undefined)return
-        res.sendFile(filePath);
+        const { furnitureCardId, color, idImage } = req.query;
+        const IMAGES_FURNITURE_ITEM = await IMAGES_FURNITURE.findOne({ furnitureId: furnitureCardId })
+        if (!IMAGES_FURNITURE_ITEM) return res.status(404).json({ message: 'Изображения не найдены' })
+
+        const IMAGE_NAME = IMAGES_FURNITURE_ITEM.images[idImage].filename
+        const directory = path.join(__dirname, '..', 'uploads', 'cards', furnitureCardId, color);
+        const filePath = path.join(directory, IMAGE_NAME);
+        if (fs.existsSync(filePath)) {
+            res.sendFile(filePath);
+        } else {
+            res.status(404).json({ message: 'Файл не найден на сервере' });
+        }
     } catch (err) {
         console.log(err)
         res.status(500).json({ message: 'Error fetching images: ' + err.message });
@@ -128,8 +147,8 @@ ROUTER.get('/all', async (req, res) => {
         if (!FURNITURE_CARD_ITEM) {
             return res.status(404).json({ message: 'Furniture card not found' });
         }
-        const INDEX_COLOR = FURNITURE_CARD_ITEM.colors.findIndex(colorData =>colorData.color === color)
-        if (INDEX_COLOR===undefined) {
+        const INDEX_COLOR = FURNITURE_CARD_ITEM.colors.findIndex(colorData => colorData.color === color)
+        if (INDEX_COLOR === undefined) {
             return res.status(404).json({ message: 'Color not found' });
         }
         const ID_IMAGES = FURNITURE_CARD_ITEM.colors[INDEX_COLOR].idImages
@@ -137,11 +156,11 @@ ROUTER.get('/all', async (req, res) => {
         if (!IMAGES_FURNITURE_ITEM) {
             return res.status(404).json({ message: 'Images furniture item not found' });
         }
-        let FURNITURE_IMAGES_PATH_ARRAY=[]
-        const directory = path.join(__dirname, '..', 'uploads', 'cards',furnitureCardId,color);
+        let FURNITURE_IMAGES_PATH_ARRAY = []
+        const directory = path.join(__dirname, '..', 'uploads', 'cards', furnitureCardId, color);
         IMAGES_FURNITURE_ITEM.images.forEach(imageData => FURNITURE_IMAGES_PATH_ARRAY.push(path.join(directory, imageData.filename)))
 
-        res.status(200).json({ imagesURLS: FURNITURE_IMAGES_PATH_ARRAY,idMainImage: IMAGES_FURNITURE_ITEM.idMainImage});
+        res.status(200).json({ imagesURLS: FURNITURE_IMAGES_PATH_ARRAY, idMainImage: IMAGES_FURNITURE_ITEM.idMainImage });
     } catch (err) {
         console.log(err)
         res.status(500).json({ message: 'Error fetching main image: ' + err.message });
@@ -162,33 +181,32 @@ ROUTER.post('/upload/images', (req, res) => {
 
             const { furnitureCardId, color, idMainImage } = req.query;
 
-            // Проверяем, что данные присутствуют
+
             if (!furnitureCardId || !color || idMainImage === undefined) {
                 return res.status(400).json({ message: 'Images data is missing' });
             }
 
-            // Обработка файлов
             const uploadedFiles = req.files.map(file => ({ filename: file.filename }));
 
-            let furnitureItem = await IMAGES_FURNITURE.findOne({ furnitureCardId, color });
-            if (furnitureItem) {
-                furnitureItem.images.push(...uploadedFiles);
+            let FIND_FURNITURE_IMAGES = await IMAGES_FURNITURE.findOne({ furnitureCardId, color });
+            if (FIND_FURNITURE_IMAGES) {
+                FIND_FURNITURE_IMAGES.images.push(...uploadedFiles);
             } else {
-                furnitureItem = new IMAGES_FURNITURE({
-                    furnitureId:furnitureCardId,
-                    color:color,
+                FIND_FURNITURE_IMAGES = new IMAGES_FURNITURE({
+                    furnitureId: furnitureCardId,
+                    color: color,
                     images: uploadedFiles,
                     idMainImage: idMainImage
                 });
             }
             let FURNITURE_CARD_ITEM = await FURNITURE_CARD.findById(furnitureCardId)
             const INDEX_COLOR = FURNITURE_CARD_ITEM.colors.findIndex(colorData => colorData.color === color)
-            const idFurnitureImages = furnitureItem._id
+            const idFurnitureImages = FIND_FURNITURE_IMAGES._id
             console.log(FURNITURE_CARD_ITEM.colors[INDEX_COLOR], idFurnitureImages)
             FURNITURE_CARD_ITEM.colors[INDEX_COLOR].idImages = idFurnitureImages
             console.log(FURNITURE_CARD_ITEM.colors[INDEX_COLOR])
             await FURNITURE_CARD_ITEM.save();
-            await furnitureItem.save();
+            await FIND_FURNITURE_IMAGES.save();
             res.status(200).json({ message: 'Images uploaded successfully!' });
         } catch (err) {
             res.status(500).json({ message: 'Error processing request: ' + err.message });
@@ -200,7 +218,7 @@ ROUTER.post('/upload/images', (req, res) => {
 ROUTER.delete('/delete/color', async (req, res) => {
     try {
         const { furnitureCardId, color } = req.body;
-        
+
         const projectDir = path.join(__dirname, '..', 'uploads', 'cards', furnitureCardId);
         const colorDir = path.join(projectDir, color);
 
@@ -218,12 +236,12 @@ ROUTER.delete('/delete/color', async (req, res) => {
 // Удаление проекта и всех его папок (цветов)
 ROUTER.delete('/delete/project', async (req, res) => {
     try {
-        const { furnitureCardId,jwtToken } = req.query;
+        const { furnitureCardId, jwtToken } = req.query;
         const FURNITURE_CARD_ID = req.query.furnitureCardId
         const USER_ID = await checkUserAccess(jwtToken);
         if (!USER_ID) return res.status(404).json({ message: 'User not found' });
         let FURNITURE_CARD_ITEM = await FURNITURE_CARD.findById(FURNITURE_CARD_ID)
-        if(FURNITURE_CARD_ITEM.authorId!==USER_ID)return res.status(409).json({ message: "User hasn't access" });
+        if (FURNITURE_CARD_ITEM.authorId !== USER_ID) return res.status(409).json({ message: "User hasn't access" });
 
         const projectDir = path.join(__dirname, '..', 'uploads', 'cards', furnitureCardId);
 
@@ -231,7 +249,7 @@ ROUTER.delete('/delete/project', async (req, res) => {
             fs.rmdirSync(projectDir, { recursive: true });
         }
 
-        await IMAGES_FURNITURE.deleteMany({ furnitureId:furnitureCardId });
+        await IMAGES_FURNITURE.deleteMany({ furnitureId: furnitureCardId });
         res.status(200).json({ message: `Project '${furnitureCardId}' and all related images deleted successfully.` });
     } catch (err) {
         res.status(500).json({ message: 'Error deleting project: ' + err.message });

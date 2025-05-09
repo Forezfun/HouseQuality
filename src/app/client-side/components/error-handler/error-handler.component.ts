@@ -1,7 +1,7 @@
 import { NgClass } from '@angular/common';
 import { Component } from '@angular/core';
 import { ErrorHandlerService } from '../../services/error-handler.service';
-import { UserCookieService } from '../../services/user-cookie.service';
+import { UserCookieService } from '../../services/account-cookie.service';
 @Component({
   selector: 'app-error-handler',
   standalone: true,

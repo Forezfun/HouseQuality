@@ -3,8 +3,7 @@ import { ImageSliderComponent } from '../image-slider/image-slider.component';
 import { NgFor, NgIf } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ClipboardService } from 'ngx-clipboard';
-import { furnitureClientData } from '../create-furnitre/create-furniture.component';
-import { FurnitureCardControlService } from '../../services/furniture-card-control.service';
+import { FurnitureCardControlService, furnitureFromServerData } from '../../services/furniture-card-control.service';
 import { ServerImageControlService } from '../../services/server-image-control.service';
 import { ErrorHandlerService } from '../../services/error-handler.service';
 
@@ -19,7 +18,7 @@ export class ViewFurnitureComponent implements OnChanges {
   @Input()
   furnitureId?: string
   @Input()
-  furnitureData?: furnitureClientData;
+  furnitureData?: furnitureFromServerData;
   constructor(
     private elementRef: ElementRef,
     private clipboardService: ClipboardService,
@@ -27,29 +26,13 @@ export class ViewFurnitureComponent implements OnChanges {
     private imagesServerControl: ServerImageControlService,
     private errorHandler:ErrorHandlerService
   ) { }
-  ngOnChanges(changes: SimpleChanges): void {
+  async ngOnChanges(changes: SimpleChanges) {
     if (this.furnitureId === undefined) return
-    this.furnitureCardService.GETfurnitureCard(this.furnitureId, '')
-      .subscribe({
-        next: (response) => {
-          this.furnitureData = (response as any).furnitureCard;
-          (response as any).furnitureCard.colors.forEach(async (colorData: any, index: number) => {
-            if (!this.furnitureData) return
-            const IMAGES_DATA = await this.imagesServerControl.GETallProjectImages(this.furnitureId!, colorData.color) as any
-            const IMAGES_PATHES = IMAGES_DATA.imagesURLS as string[]
-
-            this.furnitureData.colors[index].imagesData={
-              idMainImage:IMAGES_DATA.idMainImage,
-              images:IMAGES_PATHES.map(imageUrl => this.imagesServerControl.GETsimpleImage(imageUrl))
-            }
-          })
-
-        },
-        error: (error) => {
-          console.log(error)
-          this.errorHandler.setError('Error while receiving furniture', 5000)
-        }
-      })
+    try {
+      this.furnitureData = (await this.furnitureCardService.GETfurnitureCard(this.furnitureId)).furnitureCard
+    } catch (error) {
+      console.log(error)
+    }
   }
   currentColorId: number = 0
   openFurnitureVariant(colorButton: EventTarget) {

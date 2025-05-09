@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { baseUrl } from '.';
+import { firstValueFrom } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
@@ -11,7 +12,7 @@ export class FinderService {
    * Получение 10-ти или меньше найденых публикаций по строке
    * @param findString Запрос пользователя
    */
-  GETfindFurnitures(findString:string): Promise<any> {
-    return this.httpModule.get(this.baseUrl+findString).toPromise()
+  GETfindFurnitures(findString:string){
+    return firstValueFrom(this.httpModule.get(this.baseUrl + findString));
   }
 }

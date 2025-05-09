@@ -1,14 +1,15 @@
 import { AfterViewInit, Component, ElementRef, OnInit } from '@angular/core';
 import { NavigationPanelComponent } from '../navigation-panel/navigation-panel.component';
 import { CommonModule, NgFor, NgIf } from '@angular/common';
-import { accountChangeBaseData, accountChangeSecondaryData, accountFullInformation, AccountService, userType } from '../../services/account.service';
+import { accountFullData, AccountService, furnitureAccountData, accountType } from '../../services/account.service';
 import { FormGroup, ReactiveFormsModule, FormControl, Validators, AbstractControl } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
-import { UserCookieService } from '../../services/user-cookie.service';
+import { UserCookieService } from '../../services/account-cookie.service';
 import { ServerImageControlService } from '../../services/server-image-control.service';
 import { ClientImageControlService } from '../../services/client-image-control.service';
 import { AuthService } from '../../services/auth.service';
 import { ErrorHandlerService } from '../../services/error-handler.service';
+import { furnitureClientData } from '../../services/furniture-card-control.service';
 
 @Component({
   selector: 'app-account-page',
@@ -18,7 +19,7 @@ import { ErrorHandlerService } from '../../services/error-handler.service';
   styleUrls: ['./account-page.component.scss']
 })
 export class AccountPageComponent implements AfterViewInit, OnInit {
-  userData?: accountFullInformation & { furnitureCards: any[] };
+  userData?: accountFullData
   isEditFormOpen = false;
   editForm!: FormGroup;
 
@@ -30,7 +31,8 @@ export class AccountPageComponent implements AfterViewInit, OnInit {
     private imageServerControlService: ServerImageControlService,
     private imageClientControlService: ClientImageControlService,
     private authService: AuthService,
-    private errorHandler: ErrorHandlerService
+    private errorHandler: ErrorHandlerService,
+    private accountService:AccountService
   ) { }
 
   ngOnInit(): void {
@@ -51,39 +53,24 @@ export class AccountPageComponent implements AfterViewInit, OnInit {
     this.loadUserData(jwt);
   }
 
-  private loadUserData(jwt: string): void {
-    this.userService.GETuser(jwt).subscribe({
-      next: (response) => {
-        const responseData = (response as any).userData;
-        this.userData = {
-          email: responseData.email,
-          nickname: responseData.nickname,
-          projects: responseData.projects,
-          avatarUrl: this.imageServerControlService.GETuserAvatar(jwt),
-          furnitureCards: this.processFurnitureCards(responseData.furnitureCards)
-        };
-
-        if (responseData.password !== undefined) {
-          this.userData.password = responseData.password;
-        }
-      },
-      error: (error) => {
-        console.error(error);
-        this.errorHandler.setError('Ошибка загрузки данных пользователя', 5000);
+  private async loadUserData(jwt: string) {
+    try {
+      const accountData = (await this.userService.GETaccount(jwt)).accountData
+      this.userData = {
+        email: accountData.email,
+        nickname: accountData.nickname,
+        projects: accountData.projects,
+        avatarUrl: this.imageServerControlService.GETuserAvatar(jwt),
+        furnitures: accountData.furnitures
+      };
+      if (accountData.password !== undefined) {
+        this.userData.password = accountData.password;
       }
-    });
+    } catch (error) {
+      console.log(error)
+    }
   }
 
-  private processFurnitureCards(furnitureCards: any[]): any[] {
-    return furnitureCards.map(furnitureData => ({
-      furnitureCardId: furnitureData._id,
-      name: furnitureData.name,
-      previewUrl: this.imageServerControlService.GETmainImage(
-        furnitureData._id,
-        furnitureData.colors[0].color
-      )
-    }));
-  }
 
   private initEditForm(): void {
     this.editForm = new FormGroup({
@@ -93,7 +80,7 @@ export class AccountPageComponent implements AfterViewInit, OnInit {
         Validators.maxLength(30)
       ])
     });
-    
+
     console.log(this.userCookieService.getUserType())
     if (this.userCookieService.getUserType() === 'email') {
       this.editForm.addControl('password', new FormControl(this.userData?.password, [
@@ -105,7 +92,7 @@ export class AccountPageComponent implements AfterViewInit, OnInit {
 
   async uploadAvatar(event: Event): Promise<void> {
     const jwt = this.userCookieService.getJwt();
-    if (!jwt) return;
+    if (!jwt||!this.userData) return;
 
     const target = event.target as HTMLInputElement;
     const file = target.files?.[0];
@@ -115,17 +102,8 @@ export class AccountPageComponent implements AfterViewInit, OnInit {
       const compressedImage = await this.imageClientControlService.compressImage(file);
       if (!compressedImage) return;
 
-      this.imageServerControlService.POSTloadUserAvatar(compressedImage, jwt).subscribe({
-        next: () => {
-          if (this.userData) {
-            this.userData.avatarUrl = URL.createObjectURL(compressedImage);
-          }
-        },
-        error: (error) => {
-          console.error(error);
-          this.errorHandler.setError('Ошибка загрузки аватара', 5000);
-        }
-      });
+      await this.imageServerControlService.POSTuploadUserAvatar(compressedImage, jwt)
+      this.userData.avatarUrl = URL.createObjectURL(compressedImage);
     } catch (error) {
       console.error(error);
       this.errorHandler.setError('Ошибка обработки изображения', 5000);
@@ -134,7 +112,7 @@ export class AccountPageComponent implements AfterViewInit, OnInit {
 
   openEditForm(): void {
     if (!this.userData) return;
-    
+
     this.isEditFormOpen = true;
   }
 
@@ -145,53 +123,44 @@ export class AccountPageComponent implements AfterViewInit, OnInit {
 
   saveChanges(): void {
     if (!this.userData || !this.editForm.valid) return;
-    
-    const jwt = this.userCookieService.getJwt();
-    const userType = this.userCookieService.getUserType() as userType;
-    if (!jwt || !userType) return;
 
-    this.updateSecondaryData(jwt, userType);
-    this.updateBaseDataIfNeeded(jwt, userType);
-    
+    const jwt = this.userCookieService.getJwt();
+    const accountType = this.userCookieService.getUserType() as accountType;
+    if (!jwt || !accountType) return;
+
+    this.updateSecondaryAccountData(jwt);
+    this.updateBaseDataIfNeeded(jwt, accountType);
+
     this.closeEditForm();
   }
 
-  private updateSecondaryData(jwt: string, userType: userType): void {
-    const changes: accountChangeSecondaryData = { 
-      nickname: this.editForm.value.nickname 
-    };
-
-    this.userService.PUTupdateSecondaryInformation(jwt, changes, userType).subscribe({
-      next: () => {
-        if (this.userData) {
-          this.userData.nickname = changes.nickname;
-        }
-      },
-      error: (error) => {
-        console.error(error);
-        this.errorHandler.setError('Ошибка обновления данных', 5000);
-      }
-    });
+  private async updateSecondaryAccountData(jwt: string) {
+    if(!this.userData)return
+    const changeData = {
+      jwt:jwt,
+      nickname: this.userData.nickname
+    }
+    try {
+      await this.accountService.PUTupdateSecondaryAccountData(changeData)
+    } catch (error) {
+      console.log(error)
+    }
   }
 
-  private updateBaseDataIfNeeded(jwt: string, userType: userType): void {
-    if (this.userData?.password === undefined || !this.editForm.value.password) return;
-
-    const changes: accountChangeBaseData = { 
-      password: this.editForm.value.password 
-    };
-
-    this.authService.PUTupdateBaseData(jwt, changes, 'long', userType).subscribe({
-      next: () => {
-        if (this.userData) {
-          this.userData.password = changes.password;
-        }
-      },
-      error: (error) => {
-        console.error(error);
-        this.errorHandler.setError('Ошибка обновления пароля', 5000);
+  private async updateBaseDataIfNeeded(jwt: string, accountType: accountType) {
+    if (this.userData?.password === undefined || !this.editForm.value.password||accountType==='google') return;
+    try {
+      const changeData={
+        jwt:jwt,
+        accountType:accountType,
+        password:this.editForm.value.password
       }
-    });
+      this.userData.password = this.editForm.value.password;
+      await this.authService.PUTupdateBaseData(changeData)
+    } catch (error) {
+      console.log(error)
+    }
+
   }
 
   getFurnitureImageUrl(furnitureCardId: string, color: string): string {
