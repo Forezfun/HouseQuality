@@ -4,7 +4,6 @@ import { NgFor, NgIf } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ClipboardService } from 'ngx-clipboard';
 import { FurnitureCardControlService, furnitureFromServerData } from '../../services/furniture-card-control.service';
-import { ServerImageControlService } from '../../services/server-image-control.service';
 import { ErrorHandlerService } from '../../services/error-handler.service';
 
 @Component({
@@ -15,17 +14,20 @@ import { ErrorHandlerService } from '../../services/error-handler.service';
   styleUrl: './view-furniture.component.scss'
 })
 export class ViewFurnitureComponent implements OnChanges {
-  @Input()
-  furnitureId?: string
-  @Input()
-  furnitureData?: furnitureFromServerData;
   constructor(
     private elementRef: ElementRef,
     private clipboardService: ClipboardService,
     private furnitureCardService: FurnitureCardControlService,
-    private imagesServerControl: ServerImageControlService,
     private errorHandler:ErrorHandlerService
   ) { }
+
+  protected currentColorId: number = 0
+
+  @Input()
+  furnitureId?: string
+  @Input()
+  furnitureData?: furnitureFromServerData;
+
   async ngOnChanges(changes: SimpleChanges) {
     if (this.furnitureId === undefined) return
     try {
@@ -34,34 +36,34 @@ export class ViewFurnitureComponent implements OnChanges {
       console.log(error)
     }
   }
-  currentColorId: number = 0
-  openFurnitureVariant(colorButton: EventTarget) {
-    const colorButtonElement = colorButton as HTMLButtonElement;
-    const colorsElement = this.elementRef.nativeElement.querySelector('.colors') as HTMLSpanElement;
-    const idColor = colorButtonElement.getAttribute('data-idcolor');
+
+  protected openFurnitureVariant(colorButton: EventTarget) {
+    const COLOR_BUTTON_ELEMENT = colorButton as HTMLButtonElement;
+    const COLORS_ELEMENT = this.elementRef.nativeElement.querySelector('.colors') as HTMLSpanElement;
+    const idColor = COLOR_BUTTON_ELEMENT.getAttribute('data-idcolor');
     if (!idColor) return;
 
-    const colorVariants = colorsElement.querySelectorAll('.colorVariant')
+    const COLORS_VARIANTS = COLORS_ELEMENT.querySelectorAll('.colorVariant')
     let beforeColors: HTMLButtonElement[] = [], afterColors: HTMLButtonElement[] = []
-    colorVariants.forEach((colorVariant, indexVariant) => {
+    COLORS_VARIANTS.forEach((colorVariant, indexVariant) => {
       if (indexVariant > +idColor) {
         afterColors = [...afterColors, colorVariant as HTMLButtonElement]
       } else if (indexVariant < +idColor) {
         beforeColors = [...beforeColors, colorVariant as HTMLButtonElement]
       }
     });
-    [colorButtonElement, ...afterColors, ...beforeColors].forEach((colorVariant, newIndex) => {
+    [COLOR_BUTTON_ELEMENT, ...afterColors, ...beforeColors].forEach((colorVariant, newIndex) => {
       (colorVariant as HTMLButtonElement).style.setProperty('--index', (newIndex + 1).toString())
     })
     setTimeout(() => {
-      colorButtonElement.style.setProperty('margin-right', '115px')
+      COLOR_BUTTON_ELEMENT.style.setProperty('margin-right', '115px')
     }, 500)
     setTimeout(() => {
       this.currentColorId = +idColor
-      colorButtonElement.style.setProperty('margin-right', '0')
+      COLOR_BUTTON_ELEMENT.style.setProperty('margin-right', '0')
     }, 1250)
   }
-  copyShopLink(furnitureUrl: string) {
+  protected copyShopLink(furnitureUrl: string) {
     this.clipboardService.copyFromContent(furnitureUrl)
   }
 }

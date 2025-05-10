@@ -5,10 +5,9 @@ import { FormGroup, FormControl, Validators, ReactiveFormsModule, FormsModule, A
 import { TemplateRef } from '@angular/core';
 import { ClientImageControlService } from '../../services/client-image-control.service';
 import { categoryData, CategoryService } from '../../services/category.service';
-import { throttle } from 'lodash';
 import { AutoHeightDirective } from '../../directives/auto-height.directive';
-import { colorClientData, colorFromServerData, furnitureClientData, furnitureFromServerData } from '../../services/furniture-card-control.service';
-
+import { furnitureFromServerData } from '../../services/furniture-card-control.service';
+import { ErrorHandlerService } from '../../services/error-handler.service';
 
 @Component({
   selector: 'app-create-furniture',
@@ -22,98 +21,123 @@ export class CreateFurnitureComponent implements OnInit, AfterViewInit {
     private elementRef: ElementRef,
     private changeDetectorRef: ChangeDetectorRef,
     private clientImageControl: ClientImageControlService,
-    private categoryService: CategoryService
+    private categoryService: CategoryService,
+    private errorHandler: ErrorHandlerService
   ) { }
 
-  isMobileView = false;
-  @Input() mode: 'create' | 'update' = 'create';
-
-  @ViewChild('colorModule') private colorModuleTemplate!: TemplateRef<any>;
-  @ViewChild('shopsModule') private shopsModuleTemplate!: TemplateRef<any>;
-  @ViewChild('additionalModule') private additionalModuleTemplate!: TemplateRef<any>;
-
-  lastClickedShop: number | undefined = undefined;
-  lastClickedColor: number | undefined = undefined;
-  addModuleTemplate!: TemplateRef<any>;
-  furnitureModelInput!: HTMLInputElement;
-  addColorVisible: boolean = false;
-  addModule!: HTMLDivElement;
-  currentColorId: number | undefined = undefined;
+  private addModule!: HTMLDivElement;
+  protected isMobileView = false;
+  protected lastClickedShop: number | undefined = undefined;
+  protected lastClickedColor: number | undefined = undefined;
+  protected addModuleTemplate!: TemplateRef<any>;
+  protected addColorVisible: boolean = false;
+  protected categoriesArray: categoryData[] = [];
+  public currentColorId: number | undefined = undefined;
+  public furnitureModelInput!: HTMLInputElement;
 
   @Input()
   furnitureData!: furnitureFromServerData;
+  @ViewChild('colorModule') private colorModuleTemplate!: TemplateRef<any>;
+  @ViewChild('shopsModule') private shopsModuleTemplate!: TemplateRef<any>;
+  @ViewChild('additionalModule') private additionalModuleTemplate!: TemplateRef<any>;
+  @HostListener('window:resize', ['$event'])
 
-  categoriesArray: categoryData[] = [];
-  colorForm = new FormGroup({
-    color: new FormControl('', [Validators.required])
-  });
-
-  shopForm = new FormGroup({
-    cost: new FormControl<number | null>(null, [Validators.required, this.numberValidator]),
-    url: new FormControl('', [Validators.required])
-  });
-
-  proportionsForm = new FormGroup({
-    width: new FormControl<number | null>(null, [Validators.required, Validators.min(0)]),
-    length: new FormControl<number | null>(null, [Validators.required, Validators.min(0)]),
-    height: new FormControl<number | null>(null, [Validators.required, Validators.min(0)])
-  });
-
-  async ngOnInit() {
-    await this.initCategories();
+  ngOnInit() {
+    this.initCategories();
     this.checkViewport();
   }
-
-  @HostListener('window:resize', ['$event'])
-  checkViewport() {
-    this.isMobileView = window.innerWidth <= 600;
-  }
-
-  private async initCategories() {
-    try {
-      this.categoriesArray = (await this.categoryService.GETgetAllCategories()).categoryArray
-    } catch (error) {
-      console.log(error)
-    }
-  }
-
   ngAfterViewInit(): void {
-    console.log(this.furnitureData)
     this.addModule = this.elementRef.nativeElement.querySelector('.addModule');
     this.furnitureModelInput = this.elementRef.nativeElement.querySelector('.furnitureModelInput');
   }
 
-  async onInputImages(event: Event) {
-    const inputElement = event.target as HTMLInputElement;
-    const files = inputElement.files;
-    if (!files || this.currentColorId === undefined) return;
-
-    const compressedImages: string[] = [];
-    for (let i = 0; i < files.length; i++) {
-      const compressedImage = await this.clientImageControl.compressImage(files[i]);
-      if (compressedImage) compressedImages.push(URL.createObjectURL(compressedImage));
+  private async initCategories() {
+    try {
+      this.categoriesArray = (await this.categoryService.GETgetAllCategories()).categoryArray;
+    } catch (error) {
+      this.errorHandler.setError('Ошибка загрузки категорий', 5000);
     }
-    this.furnitureData.colors[this.currentColorId].imagesData.images = compressedImages;
+  }
+  protected async onInputImages(event: Event) {
+    const INPUT_ELEMENT = event.target as HTMLInputElement;
+    const FILES = INPUT_ELEMENT.files;
+    if (!FILES || this.currentColorId === undefined) return;
+
+    try {
+      let compressedImages: string[] = [];
+      for (let i = 0; i < FILES.length; i++) {
+        const COMPRESSED_IMAGE = await this.clientImageControl.compressImage(FILES[i]);
+        if (COMPRESSED_IMAGE) compressedImages.push(URL.createObjectURL(COMPRESSED_IMAGE));
+      }
+      this.furnitureData.colors[this.currentColorId].imagesData.images = compressedImages;
+    } catch (error) {
+      this.errorHandler.setError('Ошибка загрузки изображений', 5000);
+    }
   }
 
-  removeImages() {
-    if (this.currentColorId === undefined || !this.furnitureData.colors[this.currentColorId].imagesData.images) return;
-    this.furnitureData.colors[this.currentColorId].imagesData.images.length = 0;
+  private checkViewport() {
+    this.isMobileView = window.innerWidth <= 600;
   }
-
-  numberValidator(control: AbstractControl): ValidationErrors | null {
-    const value = control.value;
-    if (value !== null && isNaN(value)) {
+  private numberValidator(control: AbstractControl): ValidationErrors | null {
+    const VALUE = control.value;
+    if (VALUE !== null && isNaN(VALUE)) {
       return { notANumber: true };
     }
     return null;
   }
+  protected removeImages() {
+    if (this.currentColorId === undefined || !this.furnitureData.colors[this.currentColorId].imagesData.images) return;
+    this.furnitureData.colors[this.currentColorId].imagesData.images.length = 0;
+  }
+  protected saveAdditional() {
+    if (this.proportionsForm.invalid) {
+      this.proportionsForm.markAllAsTouched();
+      this.errorHandler.setError('Заполните все параметры', 5000);
+      return;
+    }
+    const { width, length, height } = this.proportionsForm.value;
+    if (width && length && height) {
+      this.furnitureData.proportions = {
+        width, length, height
+      };
+    }
+    this.closeAddModule();
+  }
+  protected openFurnitureVariant(idColor: number) {
+    const COLORS_ELEMENT = this.elementRef.nativeElement.querySelector('.colors') as HTMLSpanElement;
+    const COLOR_BUTTON_ELEMENT = COLORS_ELEMENT.querySelector(`[data-idColor="${idColor}"]`) as HTMLButtonElement;
+    const COLORS_VARIANTS = COLORS_ELEMENT.querySelectorAll('.colorVariant');
+    let beforeColors: HTMLButtonElement[] = [], afterColors: HTMLButtonElement[] = [];
 
-  addColor() {
-    const pushColor = this.colorForm.value.color;
-    if (!pushColor) return;
+    COLORS_VARIANTS.forEach((colorVariant, indexVariant) => {
+      if (indexVariant > +idColor) {
+        afterColors = [...afterColors, colorVariant as HTMLButtonElement];
+      } else if (indexVariant < +idColor) {
+        beforeColors = [...beforeColors, colorVariant as HTMLButtonElement];
+      }
+    });
+
+    [COLOR_BUTTON_ELEMENT, ...afterColors, ...beforeColors].forEach((colorVariant, newIndex) => {
+      (colorVariant as HTMLButtonElement).style.setProperty('--index', (newIndex + 1).toString());
+    });
+
+    setTimeout(() => {
+      COLOR_BUTTON_ELEMENT.style.setProperty('margin-right', '115px');
+    }, 500);
+
+    setTimeout(() => {
+      this.currentColorId = +idColor;
+      COLOR_BUTTON_ELEMENT.style.setProperty('margin-right', '0');
+    }, 1250);
+  }
+  protected addColor() {
+    const PUSH_COLOR = this.colorForm.value.color;
+    if (!PUSH_COLOR) {
+      this.errorHandler.setError('Укажите цвет', 5000);
+      return;
+    }
     const colorItem = {
-      color: pushColor,
+      color: PUSH_COLOR,
       imagesData: {
         images: [],
         idMainImage: 0
@@ -130,22 +154,10 @@ export class CreateFurnitureComponent implements OnInit, AfterViewInit {
       this.openFurnitureVariant(this.currentColorId!);
     }, 0);
   }
-
-  closeAddModule() {
+  protected closeAddModule() {
     this.addModule.classList.add('disabled');
   }
-
-  openColorModule(event?: Event) {
-    if(event)event.preventDefault();
-    this.addModuleTemplate = this.colorModuleTemplate;
-    this.addModule.classList.remove('disabled');
-    setTimeout(() => {
-      const INPUT_COLOR_ELEMENT = this.elementRef.nativeElement.querySelector('.addModuleInput') as HTMLInputElement;
-      INPUT_COLOR_ELEMENT.focus();
-    }, 0);
-  }
-
-  addShop() {
+  protected addShop() {
     if (this.lastClickedShop !== undefined) {
       this.furnitureData.shops[this.lastClickedShop] = {
         cost: this.shopForm.value.cost!,
@@ -159,8 +171,7 @@ export class CreateFurnitureComponent implements OnInit, AfterViewInit {
     });
     this.closeAddModule();
   }
-
-  deleteShop() {
+  protected deleteShop() {
     if (this.lastClickedShop != null && this.lastClickedShop >= 0 && this.lastClickedShop < this.furnitureData.shops.length) {
       this.furnitureData.shops.splice(this.lastClickedShop, 1);
       this.changeDetectorRef.detectChanges();
@@ -168,21 +179,21 @@ export class CreateFurnitureComponent implements OnInit, AfterViewInit {
     }
   }
 
-  autoHeightInput(event: Event) {
-    const input = event.target as HTMLInputElement;
-    throttle(() => {
-      input.style.height = 'auto';
-      input.style.height = (input.scrollHeight) + 'px';
-    }, 250)();
+  public openColorModule(event?: Event) {
+    if (event) event.preventDefault();
+    this.addModuleTemplate = this.colorModuleTemplate;
+    this.addModule.classList.remove('disabled');
+    setTimeout(() => {
+      const INPUT_COLOR_ELEMENT = this.elementRef.nativeElement.querySelector('.addModuleInput') as HTMLInputElement;
+      INPUT_COLOR_ELEMENT.focus();
+    }, 10);
   }
-
-  deleteColor() {
+  public deleteColor() {
     const DELETE_COLOR_ID = this.currentColorId;
     this.currentColorId = 0;
     this.furnitureData.colors = this.furnitureData.colors.filter((colorData, index) => index !== DELETE_COLOR_ID);
   }
-
-  openShopsModule(idShop?: number) {
+  public openShopsModule(idShop?: number) {
     if (idShop !== undefined) {
       this.lastClickedShop = idShop;
       this.shopForm.patchValue({
@@ -199,75 +210,36 @@ export class CreateFurnitureComponent implements OnInit, AfterViewInit {
     this.addModuleTemplate = this.shopsModuleTemplate;
     this.addModule.classList.remove('disabled');
   }
-
-  openAdditional() {
+  public openAdditional() {
     this.proportionsForm.patchValue({
       width: this.furnitureData.proportions.width,
       length: this.furnitureData.proportions.length,
       height: this.furnitureData.proportions.height
     });
-    if (this.mode === 'create') {
-      if (this.furnitureData.proportions.width === null) {
-        this.proportionsForm.get('width')?.markAsTouched();
-      }
-      if (this.furnitureData.proportions.length === null) {
-        this.proportionsForm.get('length')?.markAsTouched();
-      }
-      if (this.furnitureData.proportions.height === null) {
-        this.proportionsForm.get('height')?.markAsTouched();
-      }
+    if (this.furnitureData.proportions.width === null) {
+      this.proportionsForm.get('width')?.markAsTouched();
+    }
+    if (this.furnitureData.proportions.length === null) {
+      this.proportionsForm.get('length')?.markAsTouched();
+    }
+    if (this.furnitureData.proportions.height === null) {
+      this.proportionsForm.get('height')?.markAsTouched();
     }
 
     this.addModuleTemplate = this.additionalModuleTemplate;
     this.addModule.classList.remove('disabled');
   }
 
-  saveAdditional() {
-    if (this.mode === 'create' && this.proportionsForm.invalid) {
-
-      this.proportionsForm.markAllAsTouched();
-      return;
-    }
-    const { width, length, height } = this.proportionsForm.value
-    if (width && length && height) {
-      this.furnitureData.proportions = {
-        width, length, height
-      }
-    }
-
-    this.closeAddModule();
-  }
-
-  openFurnitureVariant(idColor: number) {
-    const colorsElement = this.elementRef.nativeElement.querySelector('.colors') as HTMLSpanElement;
-    const colorButtonElement = colorsElement.querySelector(`[data-idColor="${idColor}"]`) as HTMLButtonElement;
-    const colorVariants = colorsElement.querySelectorAll('.colorVariant');
-    let beforeColors: HTMLButtonElement[] = [], afterColors: HTMLButtonElement[] = [];
-
-    colorVariants.forEach((colorVariant, indexVariant) => {
-      if (indexVariant > +idColor) {
-        afterColors = [...afterColors, colorVariant as HTMLButtonElement];
-      } else if (indexVariant < +idColor) {
-        beforeColors = [...beforeColors, colorVariant as HTMLButtonElement];
-      }
-    });
-
-    [colorButtonElement, ...afterColors, ...beforeColors].forEach((colorVariant, newIndex) => {
-      (colorVariant as HTMLButtonElement).style.setProperty('--index', (newIndex + 1).toString());
-    });
-
-    setTimeout(() => {
-      colorButtonElement.style.setProperty('margin-right', '115px');
-    }, 500);
-
-    setTimeout(() => {
-      this.currentColorId = +idColor;
-      colorButtonElement.style.setProperty('margin-right', '0');
-    }, 1250);
-  }
-
-  changeIdMainImage(idMainImage: number) {
-    if (this.currentColorId === undefined || this.furnitureData.colors[this.currentColorId].imagesData.idMainImage === undefined) return;
-    this.furnitureData.colors[this.currentColorId].imagesData.idMainImage = idMainImage;
-  }
+  protected colorForm = new FormGroup({
+    color: new FormControl('', [Validators.required])
+  });
+  protected shopForm = new FormGroup({
+    cost: new FormControl<number | null>(null, [Validators.required, this.numberValidator]),
+    url: new FormControl('', [Validators.required])
+  });
+  protected proportionsForm = new FormGroup({
+    width: new FormControl<number | null>(null, [Validators.required, Validators.min(0)]),
+    length: new FormControl<number | null>(null, [Validators.required, Validators.min(0)]),
+    height: new FormControl<number | null>(null, [Validators.required, Validators.min(0)])
+  });
 }

@@ -10,21 +10,21 @@ import { NgIf } from '@angular/common';
   styleUrl: './navigation-panel.component.scss'
 })
 export class NavigationPanelComponent implements OnInit {
-  menuOpen = false;
-  isMobileView = false;
+  protected menuOpen = false;
+  protected isMobileView = false;
 
   ngOnInit() {
     this.checkViewport();
   }
+
   @HostListener('window:resize', ['$event'])
-  checkViewport() {
+  private checkViewport() {
     this.isMobileView = window.innerWidth <= 750;
     if (!this.isMobileView) {
       this.menuOpen = false;
     }
   }
-
-  toggleMenu() {
+  protected toggleMenu() {
     this.menuOpen = !this.menuOpen;
   }
 }

@@ -1,5 +1,5 @@
 @import 'base.scss';
-button,
+button:not(.colorVariant),
 .furnitureModelInput {
     transition: all 0.3s ease-in-out;
     &:hover {
@@ -304,6 +304,7 @@ app-image-slider {
 .descriptionInformation {
     color: white;
     padding: 0px 10px;
+    min-height: 300px;
     background: none;
     border: none;
     outline: none;
@@ -367,7 +368,7 @@ app-image-slider {
     border-radius: 10px 0px 0px 10px;
     align-content: center;
     text-align: center;
-    box-shadow: 0 0 10px 0px white;
+    border: 2px solid rgba($lightGreen,0.3);
 }
 
 .shopsListSpan {
@@ -380,10 +381,9 @@ app-image-slider {
     width: 25%;
     background-color: black;
     border-radius: 0px 10px 10px 0px;
-    border: none;
     place-content: center;
     display: flex;
-    box-shadow: 0 0 10px 0px white;
+    border: 2px solid rgba($lightGreen,0.3);
 }
 
 .linkShop>img {
@@ -392,11 +392,10 @@ app-image-slider {
 
 .addShopButton {
     background-color: black;
-    box-shadow: 0 0 10px 0px white;
+    border: 2px solid rgba($lightGreen,0.3);
     display: flex;
     place-content: center;
     border-radius: 10px;
-    border: none;
     height: 45px;
     cursor: pointer;
 }

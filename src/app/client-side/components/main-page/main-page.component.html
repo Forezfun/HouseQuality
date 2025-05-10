@@ -19,7 +19,7 @@
             <button class="startNavigationBtn" routerLink="/shop">Shop</button>
             <button class="startNavigationBtn" routerLink="/create/new">Furniture</button>
             <button class="startNavigationBtn" routerLink="/plan">Project</button>
-            <a class="startNavigationBtn" routerLink="/account">Profile</a>
+            <button class="startNavigationBtn" routerLink="/account">Profile</button>
         </span>
     </span>
 </span>
@@ -58,9 +58,9 @@
         </span>
 
         <span class="furnitureModule">
-            <app-create-furniture (click)="navigateToPage('/create/new')" [furnitureData]="furnitureExamplesData" [ngClass]="{'opacityDisable': furnitureTemplate==='view'}" class="furnitureModuleVariant"></app-create-furniture>
+            <app-create-furniture (click)="navigateToPage('/create/new')" [furnitureData]="furnitureExampleData" [ngClass]="{'opacityDisable': furnitureTemplate==='view'}" class="furnitureModuleVariant"></app-create-furniture>
 
-            <app-view-furniture (click)="navigateToPage('/shop')" [furnitureData]="furnitureExamplesData" [ngClass]="{'opacityDisable': furnitureTemplate==='create'}" class="furnitureModuleVariant"></app-view-furniture>
+            <app-view-furniture (click)="navigateToPage('/shop')" [furnitureData]="furnitureExampleData" [ngClass]="{'opacityDisable': furnitureTemplate==='create'}" class="furnitureModuleVariant"></app-view-furniture>
         </span>
 
         <span class="someSpan">
@@ -74,7 +74,7 @@
 <footer>
     <span class="footerColumnsSpan">
         <span class="footerColumn">
-            <a (click)="focusOnFinder()" style="color:#DAD7CD" class="footerMenuBtn">Найти мебель</a>
+            <a (click)="focusFinder()" style="color:#DAD7CD" class="footerMenuBtn">Найти мебель</a>
             <a routerLink="/account" class="footerMenuBtn">Аккаунт</a>
         </span>
         <span class="footerColumn">

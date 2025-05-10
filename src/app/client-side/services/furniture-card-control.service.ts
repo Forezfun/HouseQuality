@@ -56,7 +56,7 @@ export class FurnitureCardControlService {
       .set('furnitureCardId', furnitureCardId);
 
     if (jwt !== undefined) {
-      HTTP_PARAMS = HTTP_PARAMS.set('jwtToken', jwt);
+      HTTP_PARAMS = HTTP_PARAMS.set('jwt', jwt);
     }
 
     try {
@@ -101,7 +101,7 @@ export class FurnitureCardControlService {
    */
   POSTcreateFurnitureCard(furnitureData: furnitureFromServerData, jwt: string) {
     let HTTP_PARAMS = new HttpParams()
-      .set('jwtToken', jwt);
+      .set('jwt', jwt);
     return firstValueFrom(this.httpModule.post(this.baseServiceUrl, furnitureData, { params: HTTP_PARAMS })) as Promise<{ furnitureData: furnitureFromServerData & { _id: string } }>
   }
 
@@ -113,7 +113,7 @@ export class FurnitureCardControlService {
    */
   PUTupdateFurnitureCard(furnitureCardUpdateData: furnitureFromServerData, furnitureId: string, jwt: string) {
     let HTTP_PARAMS = new HttpParams()
-      .set('jwtToken', jwt)
+      .set('jwt', jwt)
       .set('furnitureId', furnitureId);
     return firstValueFrom(this.httpModule.put(this.baseServiceUrl, furnitureCardUpdateData, { params: HTTP_PARAMS })) as Promise<{ message: string }>
   }
@@ -125,7 +125,7 @@ export class FurnitureCardControlService {
    */
   DELETEfurnitureCard(jwt: string, furnitureCardId: string) {
     const HTTP_PARAMS = new HttpParams()
-      .set('jwtToken', jwt)
+      .set('jwt', jwt)
       .set('furnitureCardId', furnitureCardId)
     return firstValueFrom(this.httpModule.delete(this.baseServiceUrl, { params: HTTP_PARAMS })) as Promise<{ message: string }>
   }

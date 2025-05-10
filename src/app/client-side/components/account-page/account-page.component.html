@@ -1,10 +1,10 @@
 <div class="account-page">
     <app-navigation-panel></app-navigation-panel>
     
-    <div *ngIf="userData" class="account-container">
+    <div *ngIf="accountData" class="account-container">
         <div class="profile-card">
             <div class="avatar-container">
-                <img [src]="userData.avatarUrl" alt="Аватар" class="avatar-image">
+                <img [src]="accountData.avatarUrl" alt="Аватар" class="avatar-image">
                 <label class="avatar-edit-btn">
                     <input type="file" id="avatarInput" (change)="uploadAvatar($event)" accept=".png,.jpeg,.jpg">
                     <img src="/assets/images/editIcon.svg" alt="Изменить аватар">
@@ -12,19 +12,19 @@
             </div>
             
             <div class="profile-info">
-                <h2 class="profile-name">{{userData.nickname}}</h2>
+                <h2 class="profile-name">{{accountData.nickname}}</h2>
                 <div class="profile-stats">
                     <div class="stat-item">
                         <span class="stat-label">Проекты:</span>
-                        <span class="stat-value">{{userData.projects.length}}</span>
+                        <span class="stat-value">{{accountData.projects.length}}</span>
                     </div>
                     <div class="stat-item">
                         <span class="stat-label">Мебель:</span>
-                        <span class="stat-value">{{userData.furnitures.length}}</span>
+                        <span class="stat-value">{{accountData.furnitures.length}}</span>
                     </div>
                     <div class="stat-item">
                         <span class="stat-label">Email:</span>
-                        <span class="stat-value">{{userData.email}}</span>
+                        <span class="stat-value">{{accountData.email}}</span>
                     </div>
                 </div>
             </div>
@@ -42,7 +42,7 @@
         <div class="projects-section">
             <h3 class="section-title">Мои проекты</h3>
             <div class="projects-grid">
-                <div *ngFor="let project of userData.projects; let i = index" 
+                <div *ngFor="let project of accountData.projects; let i = index" 
                      (click)="openProject(i)" 
                      class="project-card">
                     <h4 class="project-name">{{project.name}}</h4>
@@ -58,7 +58,7 @@
         <div class="furniture-section">
             <h3 class="section-title">Моя мебель</h3>
             <div class="furniture-grid">
-                <a *ngFor="let item of userData.furnitures" 
+                <a *ngFor="let item of accountData.furnitures" 
                    [routerLink]="'/create/' + item._id" 
                    class="furniture-card">
                     <h4 class="furniture-name">{{item.name}}</h4>

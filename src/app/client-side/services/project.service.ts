@@ -36,7 +36,7 @@ export class ProjectService {
    */
   POSTcreateProject(jwt: string, name: string) {
     const HTTP_PARAMS = new HttpParams()
-      .set('jwtToken', jwt)
+      .set('jwt', jwt)
       .set('name', name);
     return firstValueFrom(this.httpModule.post(this.baseServiceUrl, HTTP_PARAMS)) as Promise<{projectData:projectServerInformation}>
   }
@@ -49,7 +49,7 @@ export class ProjectService {
    */
   DELETEdeleteProject(jwt: string, projectId: string) {
     const HTTP_PARAMS = new HttpParams()
-      .set('jwtToken', jwt)
+      .set('jwt', jwt)
       .set('projectId', projectId);
     return firstValueFrom(this.httpModule.delete(this.baseServiceUrl, { params: HTTP_PARAMS })) as Promise<{message:string}>
   }
@@ -62,7 +62,7 @@ export class ProjectService {
    */
   GETgetProject(jwt: string, projectId: string) {
     const HTTP_PARAMS = new HttpParams()
-      .set('jwtToken', jwt)
+      .set('jwt', jwt)
       .set('projectId', projectId);
     return firstValueFrom(this.httpModule.get(this.baseServiceUrl, { params: HTTP_PARAMS })) as Promise<{projectData:projectServerInformation}>
   }
@@ -76,7 +76,7 @@ export class ProjectService {
    */
   PUTupdateProject(jwt: string, projectId: string, projectInformation: projectInformation) {
     const HTTP_PARAMS = new HttpParams()
-      .set('jwtToken', jwt)
+      .set('jwt', jwt)
       .set('projectId', projectId)
       .set('name', projectInformation.name)
       .set('rooms', JSON.stringify(projectInformation.rooms));

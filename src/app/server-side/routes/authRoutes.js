@@ -34,15 +34,15 @@ ROUTER.post('/jwt/long', async (request, result) => {
         }
         const ACCOUNT_ITEM = await ACCOUNT.findById(AUTH_ACCOUNT_ITEM.accountId);
         if (!ACCOUNT_ITEM) return result.status(404).json({ message: 'User not found' });
-        ACCOUNT_ITEM.jwtTokens = ACCOUNT_ITEM.jwtTokens.filter(jwt => { const expired = isTokenNoneExpired(jwt); console.log(expired); return expired });
+        ACCOUNT_ITEM.jwts = ACCOUNT_ITEM.jwts.filter(jwt => { const expired = isTokenNoneExpired(jwt); console.log(expired); return expired });
         console.log(ACCOUNT_ITEM)
-        const payload = { accountId: AUTH_ACCOUNT_ITEM.accountId };
-        const options = { expiresIn: '1w' };
-        const JWT = jwtService.sign(payload, cryptoKey, options);
+        const PAYLOAD = { accountId: AUTH_ACCOUNT_ITEM.accountId };
+        const OPTIONS = { expiresIn: '1w' };
+        const JWT = jwtService.sign(PAYLOAD, cryptoKey, OPTIONS);
         console.log(JWT)
-        ACCOUNT_ITEM.jwtTokens.push(JWT);
+        ACCOUNT_ITEM.jwts.push(JWT);
         await ACCOUNT_ITEM.save();
-        result.status(201).json({ jwtToken: JWT });
+        result.status(201).json({ jwt: JWT });
     } catch (err) {
         result.status(400).json({ message: err.message });
     }
@@ -57,16 +57,16 @@ ROUTER.post('/jwt/temporary', async (request, result) => {
             ]
         });
         if (!AUTH_ACCOUNT_ITEM) return result.status(404).json({ message: 'User not found' });
-        const payload = { accountId: AUTH_ACCOUNT_ITEM.accountId }
-        const options = {
+        const PAYLOAD = { accountId: AUTH_ACCOUNT_ITEM.accountId }
+        const OPTIONS = {
             expiresIn: '10min'
         };
-        const JWT = jwtService.sign(payload, cryptoKey, options)
+        const JWT = jwtService.sign(PAYLOAD, cryptoKey, OPTIONS)
         const ACCOUNT_ITEM = await ACCOUNT.findById(AUTH_ACCOUNT_ITEM.accountId);
         if (!ACCOUNT_ITEM) return result.status(404).json({ message: 'User not found' });
-        ACCOUNT_ITEM.jwtTokens.push(JWT);
+        ACCOUNT_ITEM.jwts.push(JWT);
         await ACCOUNT_ITEM.save();
-        result.status(201).json({ jwtToken: JWT });
+        result.status(201).json({ jwt: JWT });
     } catch (err) {
         result.status(400).json({ message: err.message });
     }
@@ -74,18 +74,18 @@ ROUTER.post('/jwt/temporary', async (request, result) => {
 ROUTER.put('/account', async (request, result) => {
     try {
         console.log(request.query, request.body, request.params)
-        const JWT_TOKEN = request.body.jwtToken
-        const ACCOUNT_ID = await checkUserAccess(JWT_TOKEN)
+        const JWT = request.body.jwt
+        const ACCOUNT_ID = await checkUserAccess(JWT)
 
         if (!ACCOUNT_ID) return result.status(404).json({ message: 'User not found' });
         console.log(ACCOUNT_ID)
-        AUTH_ACCOUNT_ITEM = await AUTH_ACCOUNT.findOne({ accountId: ACCOUNT_ID })
-        if (!AUTH_ACCOUNT_ITEM) return result.status(404).json({ message: 'User not found' });
+        let authAccountItem = await AUTH_ACCOUNT.findOne({ accountId: ACCOUNT_ID })
+        if (!authAccountItem) return result.status(404).json({ message: 'User not found' });
 
         if (request.body.accountType === 'email') {
-            AUTH_ACCOUNT_ITEM.emailData.password = request.body.password
+            authAccountItem.emailData.password = request.body.password
         }
-        await AUTH_ACCOUNT_ITEM.save();
+        await authAccountItem.save();
         result.status(201).json({ message: 'User successfully updated' });
     } catch (err) {
         result.status(400).json({ message: err.message });
@@ -106,7 +106,5 @@ ROUTER.get('/account/code', async (request, result) => {
         result.status(400).json({ message: err.message });
     }
 })
-
-
 
 module.exports = ROUTER;

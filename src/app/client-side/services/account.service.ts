@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { projectInformation, projectServerInformation } from './project.service';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { UserCookieService } from './account-cookie.service';
+import { AcountCookieService } from './account-cookie.service';
 import { baseUrl } from '.';
 import { firstValueFrom } from 'rxjs';
 interface baseEmailAccountData {
@@ -54,7 +54,7 @@ export class AccountService {
   private baseServiceUrl = baseUrl + 'account'
   constructor(
     private httpModule: HttpClient,
-    private userCookieService: UserCookieService
+    private accountCookieService: AcountCookieService
   ) { }
 
   /**
@@ -83,13 +83,13 @@ export class AccountService {
    */
   DELETEaccountJwt(jwt: string) {
     const HTTP_PARAMS = new HttpParams()
-      .set('jwtToken', jwt);
+      .set('jwt', jwt);
     return firstValueFrom(this.httpModule.delete(this.baseServiceUrl + '/jwt/delete', { params: HTTP_PARAMS })) as Promise<{ message: string }>
   }
   PUTupdateSecondaryAccountData(changeData: changeSecondaryData) {
     let HTTP_PARAMS = new HttpParams()
       .set('nickname', changeData.nickname)
-      .set('jwtToken', changeData.jwt)
+      .set('jwt', changeData.jwt)
     return firstValueFrom(this.httpModule.put(this.baseServiceUrl, HTTP_PARAMS)) as Promise<{ message: string }>
   }
   /**
@@ -99,7 +99,7 @@ export class AccountService {
    */
   DELETEaccount(jwt: string) {
     const HTTP_PARAMS = new HttpParams()
-      .set('jwtToken', jwt);
+      .set('jwt', jwt);
     return firstValueFrom(this.httpModule.delete(this.baseServiceUrl, { params: HTTP_PARAMS })) as Promise<{ message: string }>
   }
 
@@ -110,7 +110,7 @@ export class AccountService {
    */
   async GETaccount(jwt: string) {
     const HTTP_PARAMS = new HttpParams()
-      .set('jwtToken', jwt);
+      .set('jwt', jwt);
     try {
       let {accountData} = await firstValueFrom(this.httpModule.get(this.baseServiceUrl, { params: HTTP_PARAMS })) as { accountData: accountFullData & { projects: projectServerInformation[] } }
       accountData.furnitures = accountData.furnitures.map(furnitureData => {
@@ -130,6 +130,6 @@ export class AccountService {
    * @return firstValueFrom(s boolean
    */
   checkJwt(): boolean {
-    return this.userCookieService.getJwt() ? true : false;
+    return this.accountCookieService.getJwt() ? true : false;
   }
 }

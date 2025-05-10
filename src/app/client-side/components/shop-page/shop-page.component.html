@@ -37,13 +37,13 @@
       <button (click)="closeAddModule()" class="closeAddModuleBtn" type="button" title="Закрыть">
           <img loading="lazy" src="/assets/images/addIcon.svg" alt="Закрыть">
       </button>
-      <span *ngIf="userProjects" class="addModuleFormContent">
+      <span *ngIf="accountProjects" class="addModuleFormContent">
         <h2 class="addModuleTitle" title="Проекты">Проекты</h2>
-        <span *ngFor="let projectsData of userProjects; let planId = index">
+        <span *ngFor="let projectsData of accountProjects; let planId = index">
           <h3 title="Название проекта">{{projectsData.name}}</h3>
           <a *ngFor="let roomData of projectsData.rooms; let roomId = index" [routerLink]="getPlanUrl(planId, roomId)" title="Название комнаты">{{roomData.name}}</a>
         </span>
-        <a routerLink="/plan" *ngIf="userProjects!.length == 0" class="noProjectsBtn" title="Создать план">Создать план</a>
+        <a routerLink="/plan" *ngIf="accountProjects!.length == 0" class="noProjectsBtn" title="Создать план">Создать план</a>
       </span>
   </span>
 </span>

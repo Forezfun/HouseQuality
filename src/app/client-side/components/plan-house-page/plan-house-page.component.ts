@@ -1,13 +1,14 @@
-import { AfterViewChecked, AfterViewInit, Component, ElementRef, OnInit, Renderer2, TemplateRef, ViewChild } from '@angular/core';
+import { AfterViewChecked, AfterViewInit, Component, ElementRef, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { NavigationPanelComponent } from '../navigation-panel/navigation-panel.component';
 import { PlanHouseComponent } from '../plan-house/plan-house.component';
 import { Location, NgClass, NgFor, NgIf } from '@angular/common';
 import { accountFullData, AccountService } from '../../services/account.service';
-import { UserCookieService } from '../../services/account-cookie.service';
+import { AcountCookieService } from '../../services/account-cookie.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { projectServerInformation, ProjectService, roomData } from '../../services/project.service';
 import { ErrorHandlerService } from '../../services/error-handler.service';
+import { checkDesktop } from '../../mock-data/reusable-functions.used';
 
 @Component({
   selector: 'app-plan-house-page',
@@ -18,8 +19,8 @@ import { ErrorHandlerService } from '../../services/error-handler.service';
 })
 export class PlanHousePageComponent implements AfterViewInit, OnInit, AfterViewChecked {
   constructor(
-    private userService: AccountService,
-    private userCookieService: UserCookieService,
+    private accountService: AccountService,
+    private accountCookieService: AcountCookieService,
     private router: Router,
     private route: ActivatedRoute,
     private elemenetRef: ElementRef,
@@ -29,85 +30,68 @@ export class PlanHousePageComponent implements AfterViewInit, OnInit, AfterViewC
     private location: Location
   ) { }
 
-  accountData!: accountFullData&{projects:projectServerInformation[]}
-  currentProjectId: number | undefined = undefined
-  addModule!: HTMLSpanElement
-  currentPlanHouse: roomData[] | undefined
-  projectNameForm = new FormGroup({
-    name: new FormControl<string>('', [Validators.required])
-  })
-  checkDesktop() {
-    return /windows nt|macintosh|x11|linux/.test(navigator.userAgent.toLowerCase())
-  }
-  @ViewChild('planHouse') planHouse!: PlanHouseComponent;
   private hasRoomIdBeenProcessed = false;
+  private addModule!: HTMLSpanElement
+  private currentPlanHouse: roomData[] | undefined
+  protected accountData!: accountFullData & { projects: projectServerInformation[] }
+  protected currentProjectId: number | undefined = undefined
+
+  @ViewChild('planHouse')
+  private planHouse!: PlanHouseComponent;
+
+  ngOnInit(): void {
+    const JWT = this.accountCookieService.getJwt()
+    if (!JWT) {
+      this.router.navigateByUrl('/login')
+      return
+    }
+    this.pageInit(JWT)
+  }
+  ngAfterViewInit(): void {
+    this.addModule = this.elemenetRef.nativeElement.querySelector('.addModule')
+  }
   ngAfterViewChecked(): void {
     if (this.hasRoomIdBeenProcessed || !this.planHouse || !this.route.snapshot.params['roomId']) return;
-    const roomId = parseInt(this.route.snapshot.params['roomId']!) as number;
+    const ROOM_ID = parseInt(this.route.snapshot.params['roomId']!) as number;
     setTimeout(() => {
-      if (typeof roomId === 'number') {
-        this.planHouse.currentViewRoom = roomId;
-        this.planHouse.currentIdClickedRoom = roomId;
+      if (typeof ROOM_ID === 'number') {
+        this.planHouse.currentViewRoom = ROOM_ID;
+        this.planHouse.currentIdClickedRoom = ROOM_ID;
 
-        this.planHouse.openViewRoom(roomId);
+        this.planHouse.openViewRoom(ROOM_ID);
         this.planHouse.sceneOpenToggle = true;
         this.planHouse.guideTemplate = this.planHouse.roomGuideTemplate
         this.hasRoomIdBeenProcessed = true;
       }
     }, 0)
   }
-  ngAfterViewInit(): void {
-    this.addModule = this.elemenetRef.nativeElement.querySelector('.addModule')
 
-  }
-  getCurrentViewRoom() {
-    if (this.planHouse === undefined) return undefined
-    return this.planHouse.currentViewRoom
-  }
-  ngOnInit(): void {
-    const jwt = this.userCookieService.getJwt()
-    if (!jwt) {
-      this.router.navigateByUrl('/login')
-      return
-    }
-    this.pageInit(jwt)
-  }
-  async pageInit(jwt: string) {
+  private async pageInit(jwt: string) {
     try {
-      this.accountData = (await this.userService.GETaccount(jwt)).accountData
-  
+      this.accountData = (await this.accountService.GETaccount(jwt)).accountData
+
       this.route.paramMap.subscribe(params => {
         if (params.get('planId') === null) return
-        const planId = parseInt(params.get('planId')!)
-        if (this.accountData.projects.length >= planId && planId >= 0) {
-          this.currentProjectId = planId
+        const PLAN_ID = parseInt(params.get('planId')!)
+        if (this.accountData.projects.length >= PLAN_ID && PLAN_ID >= 0) {
+          this.currentProjectId = PLAN_ID
         }
       })
     } catch (error) {
       console.log(error)
     }
   }
-  async deleteProject(indexProject: number) {
-    const jwt = this.userCookieService.getJwt()
-    const CURRENT_PROJECT_ID = this.accountData.projects[indexProject]._id
-    if (!jwt || !CURRENT_PROJECT_ID) return
-
-    await this.projectService.DELETEdeleteProject(jwt, CURRENT_PROJECT_ID)
-    this.accountData.projects.splice(indexProject, 1);
+  protected async createProject() {
+    this.closeAddModule()
+    const JWT = this.accountCookieService.getJwt()
+    if (!this.projectNameForm.value || !this.projectNameForm.value.name || !JWT) return
+    try {
+      this.accountData.projects = [...this.accountData.projects, (await this.projectService.POSTcreateProject(JWT, this.projectNameForm.value.name)).projectData]
+    } catch (error) {
+      console.log(error)
+    }
   }
-  updatePlanData(planHouse: roomData[]) {
-    this.currentPlanHouse = planHouse
-    this.accountData.projects[this.currentProjectId!].rooms = planHouse
-  }
-  closeAddModule() {
-    if (!this.addModule) return
-    this.renderer.addClass(this.addModule, 'disabled')
-  }
-  openAddModule() {
-    if (!this.addModule) return
-    this.renderer.removeClass(this.addModule, 'disabled')
-  }
-  async saveProject() {
+  protected async saveProject() {
     if (this.currentProjectId === undefined) return
     const CURRENT_PROJECT_ID = this.accountData.projects[this.currentProjectId]._id
 
@@ -115,36 +99,57 @@ export class PlanHousePageComponent implements AfterViewInit, OnInit, AfterViewC
     if (ROOM_DATA === undefined) {
       return
     }
-    const jwt = this.userCookieService.getJwt()
+    const JWT = this.accountCookieService.getJwt()
     const PROJECT_DATA = {
       rooms: ROOM_DATA,
       name: this.accountData.projects[this.currentProjectId].name
     }
-    try {      
-      await this.projectService.PUTupdateProject(jwt, CURRENT_PROJECT_ID, PROJECT_DATA)
+    try {
+      await this.projectService.PUTupdateProject(JWT, CURRENT_PROJECT_ID, PROJECT_DATA)
     } catch (error) {
       console.log(error)
     }
   }
-  closeProject() {
+  protected async deleteProject(indexProject: number) {
+    const JWT = this.accountCookieService.getJwt()
+    const CURRENT_PROJECT_ID = this.accountData.projects[indexProject]._id
+    if (!JWT || !CURRENT_PROJECT_ID) return
+
+    await this.projectService.DELETEdeleteProject(JWT, CURRENT_PROJECT_ID)
+    this.accountData.projects.splice(indexProject, 1);
+  }
+
+
+protected checkDesktop=checkDesktop
+  protected getCurrentViewRoom() {
+    if (this.planHouse === undefined) return undefined
+    return this.planHouse.currentViewRoom
+  }
+  protected updatePlanData(planHouse: roomData[]) {
+    this.currentPlanHouse = planHouse
+    this.accountData.projects[this.currentProjectId!].rooms = planHouse
+  }
+  protected closeAddModule() {
+    if (!this.addModule) return
+    this.renderer.addClass(this.addModule, 'disabled')
+  }
+  protected openAddModule() {
+    if (!this.addModule) return
+    this.renderer.removeClass(this.addModule, 'disabled')
+  }
+  protected closeProject() {
     this.saveProject()
     this.currentProjectId = undefined
-    const newUrl = this.location.path().split('/').slice(0, -1).join('/')
-    this.location.replaceState(newUrl)
+    const NEW_URL = this.location.path().split('/').slice(0, -1).join('/')
+    this.location.replaceState(NEW_URL)
   }
-  openProject(indexProject: number) {
-    const newUrl = this.location.path() + '/' + indexProject
-    this.location.replaceState(newUrl)
+  protected openProject(indexProject: number) {
+    const NEW_URL = this.location.path() + '/' + indexProject
+    this.location.replaceState(NEW_URL)
     this.currentProjectId = indexProject
   }
-  async createProject() {
-    this.closeAddModule()
-    const jwt = this.userCookieService.getJwt()
-    if (!this.projectNameForm.value || !this.projectNameForm.value.name || !jwt) return
-    try {
-      this.accountData.projects = [...this.accountData.projects, (await this.projectService.POSTcreateProject(jwt, this.projectNameForm.value.name)).projectData]
-    } catch (error) {
-      console.log(error)
-    }
-  }
+
+  protected projectNameForm = new FormGroup({
+    name: new FormControl<string>('', [Validators.required])
+  })
 }

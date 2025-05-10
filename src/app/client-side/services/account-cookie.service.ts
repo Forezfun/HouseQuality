@@ -5,7 +5,7 @@ import { accountType } from './account.service';
 @Injectable({
   providedIn: 'root'
 })
-export class UserCookieService {
+export class AcountCookieService {
   constructor(
     private cookieService: CookieService
   ) { }

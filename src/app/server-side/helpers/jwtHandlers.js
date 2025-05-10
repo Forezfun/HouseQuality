@@ -1,11 +1,11 @@
-const jwt = require('jsonwebtoken');
+const JWT_SERVICE = require('jsonwebtoken');
 require('dotenv').config();
 const cryptoKey = process.env.CRYPTO_KEY
 const ACCOUNT = require('../models/account')
 // Экспортируем функции
-module.exports.isTokenNoneExpired = function isTokenNoneExpired(jwtToken) {
+module.exports.isTokenNoneExpired = function isTokenNoneExpired(jwt) {
     try {
-        jwt.verify(jwtToken, cryptoKey);
+        jwt.verify(jwt, cryptoKey);
         return true;
     } catch (err) {
         if (err.name === 'TokenExpiredError') {
@@ -15,15 +15,15 @@ module.exports.isTokenNoneExpired = function isTokenNoneExpired(jwtToken) {
     }
 }
 
-module.exports.checkUserAccess = async function checkUserAccess(jwtToken) {
-    const JWT_TOKEN = jwtToken;
+module.exports.checkUserAccess = async function checkUserAccess(jwt) {
+    const JWT = jwt;
     let DECODED_ACCOUNT_TOKEN;
-    console.log(JWT_TOKEN,DECODED_ACCOUNT_TOKEN)
     try {
-        DECODED_ACCOUNT_TOKEN = jwt.verify(JWT_TOKEN, cryptoKey);
+        DECODED_ACCOUNT_TOKEN = JWT_SERVICE.verify(JWT, cryptoKey);
     } catch (err) {
         return false;
     }
+    console.log(JWT,DECODED_ACCOUNT_TOKEN)
     if (!DECODED_ACCOUNT_TOKEN) return false;
     const ACCOUNT_ITEM = await ACCOUNT.findById(DECODED_ACCOUNT_TOKEN.accountId);
     if (!ACCOUNT_ITEM) return false;
