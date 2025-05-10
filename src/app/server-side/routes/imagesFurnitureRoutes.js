@@ -24,7 +24,7 @@ ROUTER.use(async (request, result, next) => {
             const projectDir = path.join(__dirname, '..', 'uploads', 'cards', furnitureCardId);
             const colorDir = path.join(projectDir, color);
             if (fs.existsSync(colorDir)) {
-                fs.rmdirSync(colorDir, { recursive: true });
+                fs.rmSync(colorDir, { recursive: true });
                 fs.mkdirSync(colorDir);
             }
         }
@@ -215,7 +215,7 @@ ROUTER.delete('/delete/color', async (request, result) => {
         const COLOR_DIR = path.join(PROJECT_DIR, color);
 
         if (fs.existsSync(COLOR_DIR)) {
-            fs.rmdirSync(COLOR_DIR, { recursive: true });
+            fs.rmSync(COLOR_DIR, { recursive: true });
         }
 
         await IMAGES_FURNITURE.deleteOne({ furnitureCardId, color });
@@ -238,7 +238,7 @@ ROUTER.delete('/delete/project', async (request, result) => {
         const PROJECT_DIR = path.join(__dirname, '..', 'uploads', 'cards', furnitureCardId);
 
         if (fs.existsSync(PROJECT_DIR)) {
-            fs.rmdirSync(PROJECT_DIR, { recursive: true });
+            fs.rmSync(PROJECT_DIR, { recursive: true });
         }
 
         await IMAGES_FURNITURE.deleteMany({ furnitureId: furnitureCardId });
