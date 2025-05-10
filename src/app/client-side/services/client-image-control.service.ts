@@ -18,10 +18,10 @@ export class ClientImageControlService {
         success: (compressedFile: Blob) => {
           resolve(compressedFile);
         },
-        error: (err: Error) => {
-          console.error('Ошибка сжатия:', err.message);
+        error: (error) => {
+          console.error('Ошибка сжатия:', error.message);
           
-          reject(err); 
+          reject(error); 
         },
       });
     });

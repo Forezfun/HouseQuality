@@ -15,6 +15,7 @@ import { ShopService } from './services/shop.service';
 import { FinderService } from './services/finder.service';
 import { AutoHeightDirective } from './directives/auto-height.directive';
 
+
 @Component({
   selector: 'app-root',
   standalone: true,

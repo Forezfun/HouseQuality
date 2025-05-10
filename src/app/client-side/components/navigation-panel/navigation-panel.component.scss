@@ -1,5 +1,5 @@
 /* navigation.component.scss */
-@import 'base.scss';
+@use 'base.scss' as *;
 
 .desktop-content{
     display: flex;

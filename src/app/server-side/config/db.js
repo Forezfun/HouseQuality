@@ -8,8 +8,8 @@ const connectDB = async () => {
       serverSelectionTimeoutMS: 10000 // Устанавливаем таймаут в 10 секунд
     });
     console.log('MongoDB connected');
-  } catch (err) {
-    console.error('MongoDB connection error:', err);
+  } catch (error) {
+    console.error('MongoDB connection error:', error);
     process.exit(1); // Остановить процесс если подключение не удалось
   }
 };

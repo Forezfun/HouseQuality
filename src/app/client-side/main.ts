@@ -7,7 +7,7 @@ bootstrapApplication(AppComponent, appConfig)
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('/csw.js')
         .then(reg => console.log('Service Worker зарегистрирован:', reg))
-        .catch(err => console.error('Ошибка регистрации Service Worker:', err));
+        .catch(error => console.error('Ошибка регистрации Service Worker:', error));
     }
   })
-  .catch((err) => console.error(err));
+  .catch((error) => console.error(error));

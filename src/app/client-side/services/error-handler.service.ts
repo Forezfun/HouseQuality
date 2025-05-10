@@ -3,7 +3,7 @@ import { BehaviorSubject } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
-export class ErrorHandlerService {
+export class ErrorHandlerService{
 
   private errorSubject = new BehaviorSubject<string>('');
 

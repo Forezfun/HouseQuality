@@ -50,12 +50,12 @@ APP.use(FINDER_ROUTE, FINDER_ROUTES);
 APP.listen(APP_PORT, '0.0.0.0', () => {
   console.log(`Server running on port ${APP_PORT}`);
 });
-APP.get('/error', (req, res) => {
+APP.get('/error', (request, result) => {
   throw new Error('This is a forced error.');
 });
 
 // Middleware для обработки ошибок
-APP.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).send('Something broke!');
+APP.use((err, request, result, next) => {
+  console.error(error.stack);
+  result.status(500).send('Something broke!');
 });

@@ -114,14 +114,12 @@ export class AccountPageComponent implements OnInit {
         this.accountData.password = ACCOUNT_DATA.password;
       }
     } catch (error) {
-      this.errorHandler.setError('Ошибка загрузки данных пользователя', 5000);
       console.error(error);
     }
   }
   protected async uploadAvatar(event: Event) {
     const JWT = this.accountCookieService.getJwt();
     if (!JWT || !this.accountData) {
-      this.errorHandler.setError('Ошибка аутентификации', 5000);
       return;
     }
 

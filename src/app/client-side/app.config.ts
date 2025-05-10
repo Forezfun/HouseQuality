@@ -7,6 +7,8 @@ import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideServiceWorker } from '@angular/service-worker';
 import { AppComponent } from './app.component';
 import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { HttpErrorInterceptorService } from "./services/http-error-interceptor.service";
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -14,7 +16,13 @@ export const appConfig: ApplicationConfig = {
     provideClientHydration(),
     provideAnimations(),
     provideHttpClient(withInterceptorsFromDi()),
-        provideEventPlugins()
-    ]
+    provideEventPlugins(),
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: HttpErrorInterceptorService,
+      multi: true
+    },
+  ]
+
 };
-bootstrapApplication(AppComponent, appConfig).catch(err => console.error(err));
+bootstrapApplication(AppComponent, appConfig).catch(error => console.error(error));

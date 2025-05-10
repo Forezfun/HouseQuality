@@ -7,19 +7,17 @@ const FURNITURE_MODEL = require('../models/furnitureModel');
 const FURNITURE_CARD = require('../models/furnitureCard')
 const { checkUserAccess } = require('../helpers/jwtHandlers');
 
-ROUTER.use(async (req, res, next) => {
+ROUTER.use(async (request, result, next) => {
     try {
-        console.log('model')
-        const JWT = req.query.jwt || req.body.jwt;
+        const JWT = request.query.jwt || request.body.jwt;
         const ACCOUNT_ID = await checkUserAccess(JWT);
-        if (!ACCOUNT_ID) return res.status(404).json({ message: 'User not found' })
+        if (!ACCOUNT_ID) return result.status(404).json({ message: 'Аккаунт не найден' })
         const FURNITURE_CARD_ITEM = await FURNITURE_CARD.findOne({ authorId: ACCOUNT_ID })
-        if (!FURNITURE_CARD_ITEM || FURNITURE_CARD_ITEM.authorId !== ACCOUNT_ID) return res.status(409).json({ message: "User hasn't access" })
-        req.query.accountId = ACCOUNT_ID;
-        console.log('model continue')
+        if (!FURNITURE_CARD_ITEM || FURNITURE_CARD_ITEM.authorId !== ACCOUNT_ID) return result.status(409).json({ message: "User hasn't access" })
+        request.query.accountId = ACCOUNT_ID;
         next();
     } catch (error) {
-        res.status(500).json({ message: 'Error validating account access: ' + error.message });
+        result.status(500).json({ message: 'Ошибка при валидации: ' + error.message });
     }
 });
 
@@ -34,20 +32,20 @@ function removeOldModelIfExists(furnitureId, uploadDir) {
 }
 
 const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
+    destination: (request, file, cb) => {
         const uploadDir = path.join(__dirname, '..', 'uploads', 'models');
         if (!fs.existsSync(uploadDir)) {
             fs.mkdirSync(uploadDir);
         }
-        removeOldModelIfExists(req.query.furnitureId, uploadDir);
+        removeOldModelIfExists(request.query.furnitureId, uploadDir);
         cb(null, uploadDir);
     },
-    filename: (req, file, cb) => {
+    filename: (request, file, cb) => {
         let extension = path.extname(file.originalname).toLowerCase();
         if (!extension || !['.obj', '.fbx', '.stl'].includes(extension)) return
 
-        const fileName = req.query.furnitureId + extension;
-        saveModel(fileName, req.query.furnitureId);
+        const fileName = request.query.furnitureId + extension;
+        saveModel(fileName, request.query.furnitureId);
         cb(null, fileName);
     }
 });
@@ -70,40 +68,39 @@ async function saveModel(fileName, furnitureId) {
 
 const upload = multer({ storage: storage });
 
-ROUTER.post('/', upload.single('model'), async (req, res) => {
-    console.log(req.query.fileName)
+ROUTER.post('/', upload.single('model'), async (request, result) => {
     try {
-        let FURNITURE_MODEL_ITEM = await FURNITURE_MODEL.findOne({ furnitureId: req.query.furnitureId })
+        let FURNITURE_MODEL_ITEM = await FURNITURE_MODEL.findOne({ furnitureId: request.query.furnitureId })
         if (!FURNITURE_MODEL_ITEM) {
             FURNITURE_MODEL_ITEM = new FURNITURE_MODEL({
-                filename: req.file.filename,
-                furnitureId: req.query.furnitureId,
-                originalName: req.query.fileName
+                filename: request.file.filename,
+                furnitureId: request.query.furnitureId,
+                originalName: request.query.fileName
             });
-            FURNITURE_MODEL_ITEM.originalName = req.query.fileName
+            FURNITURE_MODEL_ITEM.originalName = request.query.fileName
         } else {
-            FURNITURE_MODEL_ITEM.filename = req.file.filename;
-            FURNITURE_MODEL_ITEM.originalName = req.query.fileName
+            FURNITURE_MODEL_ITEM.filename = request.file.filename;
+            FURNITURE_MODEL_ITEM.originalName = request.query.fileName
         }
         await FURNITURE_MODEL_ITEM.save();
-        res.status(200).json({ message: 'Model uploaded successfully!' });
-    } catch (err) {
-        res.status(400).json({ message: err.message });
+        result.status(200).json({ message: 'Модель добавлена' });
+    } catch (error) {
+        result.status(400).json({ message: error.message });
     }
 });
 
-ROUTER.delete('/', async (req, res) => {
+ROUTER.delete('/', async (request, result) => {
     try {
         const JWT = request.query.jwt;
         const FURNITURE_CARD_ID = request.query.furnitureCardId
         const ACCOUNT_ID = await checkUserAccess(JWT);
-        if (!ACCOUNT_ID) return res.status(404).json({ message: 'User not found' });
+        if (!ACCOUNT_ID) return result.status(404).json({ message: 'Аккаунт не найден' });
         let FURNITURE_CARD_ITEM = await FURNITURE_CARD.findById(FURNITURE_CARD_ID)
-        if (!FURNITURE_CARD_ITEM) return res.status(404).json({ message: 'Furniture card not found' });
-        if (FURNITURE_CARD_ITEM.authorId !== ACCOUNT_ID) return res.status(409).json({ message: "User hasn't access" });
+        if (!FURNITURE_CARD_ITEM) return result.status(404).json({ message: 'Товар не найден' });
+        if (FURNITURE_CARD_ITEM.authorId !== ACCOUNT_ID) return result.status(409).json({ message: 'Нет доступа' });
         const FURNITURE_MODEL_ITEM = await FURNITURE_MODEL.findOne({ furnitureId: FURNITURE_CARD_ID });
         if (!FURNITURE_MODEL_ITEM) {
-            return res.status(404).json({ message: 'Model not found' });
+            return result.status(404).json({ message: 'Модель не найдена' });
         }
 
 
@@ -116,24 +113,24 @@ ROUTER.delete('/', async (req, res) => {
 
 
         await FURNITURE_MODEL_ITEM.deleteOne();
-        res.status(200).json({ message: 'Model deleted successfully!' });
-    } catch (err) {
-        res.status(400).json({ message: err.message });
+        result.status(200).json({ message: 'Модель удалена' });
+    } catch (error) {
+        result.status(400).json({ message: error.message });
     }
 });
 
-ROUTER.get('/', async (req, res) => {
+ROUTER.get('/', async (request, result) => {
     try {
-        const FURNITURE_MODEL_ITEM = await FURNITURE_MODEL.findOne({ furnitureId: req.query.furnitureId });
+        const FURNITURE_MODEL_ITEM = await FURNITURE_MODEL.findOne({ furnitureId: request.query.furnitureId });
         if (!FURNITURE_MODEL_ITEM) {
-            return res.status(404).json({ message: 'Model not found' });
+            return result.status(404).json({ message: 'Модель не найдена' });
         }
 
         const DIRECTORY = path.join(__dirname, '..', 'uploads', 'models');
         const FILE_PATH = path.join(DIRECTORY, FURNITURE_MODEL_ITEM.filename);
 
         if (!fs.existsSync(FILE_PATH)) {
-            return res.status(404).json({ message: 'File not found' });
+            return result.status(404).json({ message: 'Модель не найдена' });
         }
 
 
@@ -154,13 +151,13 @@ ROUTER.get('/', async (req, res) => {
                 mimeType = 'application/octet-stream';
         }
 
-        res.setHeader('Content-Type', mimeType);
-        res.setHeader('Content-Disposition', `attachment; filename="${FURNITURE_MODEL_ITEM.filename}"`);
+        result.setHeader('Content-Type', mimeType);
+        result.setHeader('Content-Disposition', `attachment; filename="${FURNITURE_MODEL_ITEM.filename}"`);
 
 
-        res.sendFile(FILE_PATH);
+        result.sendFile(FILE_PATH);
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        result.status(500).json({ message: error.message });
     }
 });
 

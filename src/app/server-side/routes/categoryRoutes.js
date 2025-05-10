@@ -6,8 +6,8 @@ ROUTER.get('/all', async (request, result) => {
     try {
         const CATEGORY_ARRAY=await CATEGORY.find()
         result.status(201).json({categoryArray:CATEGORY_ARRAY});
-    } catch (err) {
-        result.status(400).json({ message: err.message });
+    } catch (error) {
+        result.status(400).json({ message: error.message });
     }
 })
 

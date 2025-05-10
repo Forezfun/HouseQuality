@@ -11,30 +11,27 @@ ROUTER.delete('/jwt/delete', async (request, result) => {
   try {
     const JWT = request.params.jwt
     const ACCOUNT_ID = await checkUserAccess(JWT)
-    if (!ACCOUNT_ID) return result.status(404).json({ message: 'User not found' });
+    if (!ACCOUNT_ID) return result.status(404).json({ message: 'Аккаунт не найден' });
     const AUTH_ACCOUNT_ITEM = await AUTH_ACCOUNT.findOne({ accountId: ACCOUNT_ID });
     if (!AUTH_ACCOUNT_ITEM) {
-      return result.status(404).json({ message: 'User not found' });
+      return result.status(404).json({ message: 'Аккаунт не найден' });
     }
-    console.log(AUTH_ACCOUNT_ITEM.jwts)
     AUTH_ACCOUNT_ITEM.jwts.filter(jwt => { return jwt !== JWT ? true : false })
-    console.log(AUTH_ACCOUNT_ITEM.jwts)
     await AUTH_ACCOUNT_ITEM.save()
     result.status(201).json({ message: 'JWT deleted' });
-  } catch (err) {
-    result.status(400).json({ message: err.message });
+  } catch (error) {
+    result.status(400).json({ message: error.message });
   }
 });
 ROUTER.post('/', async (request, result) => {
   try {
-    console.log(request.body)
     let ACCOUNT_ITEM = await AUTH_ACCOUNT.findOne({
       $or: [
         { 'emailData.email': request.body.email },
         { 'googleData.email': request.body.email }
       ]
     });
-    if (ACCOUNT_ITEM) return result.status(409).json({ message: 'User already exists' });
+    if (ACCOUNT_ITEM) return result.status(409).json({ message: 'Аккаунт уже существует' });
     ACCOUNT_ITEM = new ACCOUNT({
       nickname: request.body.nickname,
       jwts: []
@@ -58,21 +55,20 @@ ROUTER.post('/', async (request, result) => {
     }
     await ACCOUNT_ITEM.save()
     await AUTH_ACCOUNT_ITEM.save()
-    result.status(201).json({ message: 'User created successfully' });
-  } catch (err) {
-    result.status(400).json({ message: err.message });
+    result.status(201).json({ message: 'Пользователь создан' });
+  } catch (error) {
+    result.status(400).json({ message: error.message });
   }
 });
 ROUTER.get('/', async (request, result) => {
   try {
     const JWT = request.query.jwt
     const ACCOUNT_ID = await checkUserAccess(JWT)
-    console.log('id: ',ACCOUNT_ID)
-    if (!ACCOUNT_ID) return result.status(404).json({ message: 'User not found' });
+    if (!ACCOUNT_ID) return result.status(404).json({ message: 'Аккаунт не найден' });
     const ACCOUNT_ITEM = await ACCOUNT.findById(ACCOUNT_ID);
     const AUTH_ACCOUNT_ITEM = await AUTH_ACCOUNT.findOne({ accountId: ACCOUNT_ID });
     if (!ACCOUNT_ITEM || !AUTH_ACCOUNT_ITEM) {
-      return result.status(404).json({ message: 'User not found' });
+      return result.status(404).json({ message: 'Аккаунт не найден' });
     }
     let RESULT_DATA_ITEM = {
       email: AUTH_ACCOUNT_ITEM.emailData.email,
@@ -86,8 +82,8 @@ ROUTER.get('/', async (request, result) => {
     RESULT_DATA_ITEM.projects = ACCOUNT_PROJECTS
     RESULT_DATA_ITEM.furnitures = await proccessFurnitures(ACCOUNT_ID)
     result.status(201).json({ accountData: RESULT_DATA_ITEM });
-  } catch (err) {
-    result.status(400).json({ message: err.message });
+  } catch (error) {
+    result.status(400).json({ message: error.message });
   }
 })
 async function proccessFurnitures(ACCOUNT_ID) {
@@ -103,7 +99,6 @@ async function proccessFurnitures(ACCOUNT_ID) {
       })
     }
   } catch (error) {
-    console.log(error)
     return error
   }
   return furnitures
@@ -112,35 +107,33 @@ ROUTER.delete('/', async (request, result) => {
   try {
     const JWT = request.params.jwt
     const ACCOUNT_ID = await checkUserAccess(JWT)
-    if (!ACCOUNT_ID) return result.status(404).json({ message: 'User not found' });
+    if (!ACCOUNT_ID) return result.status(404).json({ message: 'Аккаунт не найден' });
     const ACCOUNT_ITEM = await ACCOUNT.findById(ACCOUNT_ID);
     const AUTH_ACCOUNT_ITEM = await AUTH_ACCOUNT.findOne({ accountId: ACCOUNT_ID });
     if (!ACCOUNT_ITEM || !AUTH_ACCOUNT_ITEM) {
-      return result.status(404).json({ message: 'User not found' });
+      return result.status(404).json({ message: 'Аккаунт не найден' });
     }
     await AUTH_ACCOUNT_ITEM.remove()
     await ACCOUNT_ITEM.remove()
-    result.status(201).json({ message: 'User deleted successfully' });
-  } catch (err) {
-    result.status(400).json({ message: err.message });
+    result.status(201).json({ message: 'Аккаунт успешно удален' });
+  } catch (error) {
+    result.status(400).json({ message: error.message });
   }
 })
 ROUTER.put('/', async (request, result) => {
   try {
-    console.log('acc', request.query, request.body, request.params)
     const JWT = request.body.jwt
     const ACCOUNT_ID = await checkUserAccess(JWT)
-    console.log(ACCOUNT_ID)
-    if (!ACCOUNT_ID) return result.status(404).json({ message: 'User not found' });
+    if (!ACCOUNT_ID) return result.status(404).json({ message: 'Аккаунт не найден' });
     const ACCOUNT_ITEM = await ACCOUNT.findById(ACCOUNT_ID);
     if (!ACCOUNT_ITEM) {
-      return result.status(404).json({ message: 'User not found' });
+      return result.status(404).json({ message: 'Аккаунт не найден' });
     }
     ACCOUNT_ITEM.nickname = request.body.nickname
     await ACCOUNT_ITEM.save()
-    result.status(201).json({ message: 'User successfully updated' });
-  } catch (err) {
-    result.status(400).json({ message: err.message });
+    result.status(201).json({ message: 'Аккаунт обновлен' });
+  } catch (error) {
+    result.status(400).json({ message: error.message });
   }
 })
 module.exports = ROUTER;

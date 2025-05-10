@@ -1,9 +1,9 @@
-import { Component, ElementRef, Input, OnChanges, SimpleChanges} from '@angular/core';
+import { Component, ElementRef, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { ImageSliderComponent } from '../image-slider/image-slider.component';
 import { NgFor, NgIf } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ClipboardService } from 'ngx-clipboard';
-import { FurnitureCardControlService, furnitureFromServerData } from '../../services/furniture-card-control.service';
+import { FurnitureCardControlService, furnitureFromServerData, furnitureProportions } from '../../services/furniture-card-control.service';
 import { ErrorHandlerService } from '../../services/error-handler.service';
 
 @Component({
@@ -18,7 +18,7 @@ export class ViewFurnitureComponent implements OnChanges {
     private elementRef: ElementRef,
     private clipboardService: ClipboardService,
     private furnitureCardService: FurnitureCardControlService,
-    private errorHandler:ErrorHandlerService
+    private errorHandler: ErrorHandlerService
   ) { }
 
   protected currentColorId: number = 0
@@ -62,6 +62,9 @@ export class ViewFurnitureComponent implements OnChanges {
       this.currentColorId = +idColor
       COLOR_BUTTON_ELEMENT.style.setProperty('margin-right', '0')
     }, 1250)
+  }
+  protected proccessDescription(description: string, proportions: furnitureProportions) {
+    return `Ширина: ${proportions.width}м\nДлина: ${proportions.length}м\nВысота: ${proportions.height}м\n${description}`;
   }
   protected copyShopLink(furnitureUrl: string) {
     this.clipboardService.copyFromContent(furnitureUrl)

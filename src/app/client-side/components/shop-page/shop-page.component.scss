@@ -1,4 +1,4 @@
-@import 'base.scss';
+@use 'base.scss' as *;
 
 .furnitureLink,.furnitureCategoryButton{
     transition: all 0.3s ease-in-out;
