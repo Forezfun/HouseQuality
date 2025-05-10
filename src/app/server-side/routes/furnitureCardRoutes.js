@@ -49,9 +49,8 @@ ROUTER.put('/', async (request, result) => {
         FURNITURE_CARD_ITEM.shops = request.body.shops;
         FURNITURE_CARD_ITEM.additionalData={}
 
-        if (request.query.additionalData !== undefined) {
-            const ADDITIONAL_DATA = JSON.parse(request.query.additionalData);
-
+        if (request.body.additionalData !== undefined) {
+            const ADDITIONAL_DATA = request.body.additionalData;
             Object.keys(ADDITIONAL_DATA).forEach(propertyKey => {
                 if (propertyKey in FURNITURE_CARD.schema.paths.additionalData.schema.paths) {
                     FURNITURE_CARD_ITEM.additionalData[propertyKey] = ADDITIONAL_DATA[propertyKey] || FURNITURE_CARD_ITEM.additionalData[propertyKey]
