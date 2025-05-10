@@ -1,12 +1,13 @@
 const EXPRESS = require('express');
 const ROUTER = EXPRESS.Router();
 const PROJECT = require('../models/project.js');
-const { isTokenNoneExpired, checkUserAccess } = require('../helpers/jwtHandlers');
+const { checkUserAccess } = require('../helpers/jwtHandlers');
+
 ROUTER.delete('/', async (request, result) => {
   try {
     console.log(request)
-    const JWT_TOKEN = request.query.jwtToken
-    const ACCOUNT_ID = await checkUserAccess(JWT_TOKEN)
+    const JWT = request.query.jwt
+    const ACCOUNT_ID = await checkUserAccess(JWT)
     if (!ACCOUNT_ID) return result.status(404).json({ message: 'User not found' });
     const AUTH_ACCOUNT_ITEM = await PROJECT.findByIdAndDelete(request.query.projectId);
     if (!AUTH_ACCOUNT_ITEM) {
@@ -17,11 +18,12 @@ ROUTER.delete('/', async (request, result) => {
     result.status(400).json({ message: err.message });
   }
 });
+
 ROUTER.post('/', async (request, result) => {
   try {
     console.log(request.body)
-    const JWT_TOKEN = request.body.jwtToken
-    const ACCOUNT_ID = await checkUserAccess(JWT_TOKEN)
+    const JWT = request.body.jwt
+    const ACCOUNT_ID = await checkUserAccess(JWT)
     console.log(ACCOUNT_ID)
     if (!ACCOUNT_ID) return result.status(404).json({ message: 'User not found' });
     const NEW_PROJECT_ITEM = new PROJECT({
@@ -35,10 +37,11 @@ ROUTER.post('/', async (request, result) => {
     result.status(400).json({ message: err.message });
   }
 });
+
 ROUTER.get('/', async (request, result) => {
   try {
-    const JWT_TOKEN = request.query.jwtToken
-    const ACCOUNT_ID = await checkUserAccess(JWT_TOKEN)
+    const JWT = request.query.jwt
+    const ACCOUNT_ID = await checkUserAccess(JWT)
     console.log(ACCOUNT_ID)
     if (!ACCOUNT_ID) return result.status(404).json({ message: 'User not found' });
     const PROJECT_ITEM = await PROJECT.findById(request.query.projectId)
@@ -48,13 +51,14 @@ ROUTER.get('/', async (request, result) => {
     result.status(400).json({ message: err.message });
   }
 })
+
 ROUTER.put('/', async (request, result) => {
   try {
     console.log(request.body)
-    const JWT_TOKEN = request.body.jwtToken
-    console.log('before user id')
-    const ACCOUNT_ID = await checkUserAccess(JWT_TOKEN)
-    console.log('after user id: ', ACCOUNT_ID)
+    const JWT = request.body.jwt
+    console.log('before account id')
+    const ACCOUNT_ID = await checkUserAccess(JWT)
+    console.log('after account id: ', ACCOUNT_ID)
     if (!ACCOUNT_ID) return result.status(404).json({ message: 'User not found' });
     const PROJECT_ITEM = await PROJECT.findOne({ authorId: ACCOUNT_ID })
     if (!PROJECT_ITEM) return result.status(404).json({ message: 'Project not found' });
@@ -66,6 +70,5 @@ ROUTER.put('/', async (request, result) => {
     result.status(400).json({ message: err.message });
   }
 })
-
 
 module.exports = ROUTER;

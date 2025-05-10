@@ -18,8 +18,8 @@ export class ServerImageControlService {
    * @param jwt JWT токен пользователя
    * @returns URL для получения аватара пользователя
    */
-  GETuserAvatar(jwt: string) {
-    return `${baseUrl}avatar?jwtToken=${jwt}`;
+  GETaccountAvatar(jwt: string) {
+    return `${baseUrl}avatar?jwt=${jwt}`;
   }
 
   /**
@@ -31,7 +31,7 @@ export class ServerImageControlService {
   POSTuploadUserAvatar(imageFile: Blob, jwt: string) {
     const formData = new FormData();
     formData.append('image', imageFile);
-    const HTTP_PARAMS = new HttpParams().set('jwtToken', jwt);
+    const HTTP_PARAMS = new HttpParams().set('jwt', jwt);
     return firstValueFrom(this.httpModule.post(`${baseUrl}avatar/upload`, formData, { params: HTTP_PARAMS })) as Promise<{ message: string }>
   }
 
@@ -52,7 +52,7 @@ export class ServerImageControlService {
       .set('furnitureCardId', furnitureCardId)
       .set('color', color)
       .set('idMainImage', imagesData.idMainImage)
-      .set('jwtToken', jwt)
+      .set('jwt', jwt)
             
     return firstValueFrom(this.httpModule.post(this.baseServiceUrl+'upload/images', formData, { params: HTTP_PARAMS })) as Promise<{ message: string }>
   }
@@ -68,7 +68,7 @@ export class ServerImageControlService {
    */
   DELETEprojectColor(jwt: string, furnitureCardId: string, color: string) {
     const HTTP_PARAMS = new HttpParams()
-      .set('jwtToken', jwt)
+      .set('jwt', jwt)
       .set('furnitureCardId', furnitureCardId)
       .set('color', color);
 
@@ -83,7 +83,7 @@ export class ServerImageControlService {
    */
   DELETEproject(jwt: string, furnitureCardId: string) {
     const HTTP_PARAMS = new HttpParams()
-      .set('jwtToken', jwt)
+      .set('jwt', jwt)
       .set('furnitureCardId', furnitureCardId);
 
     return firstValueFrom(this.httpModule.delete(this.baseServiceUrl+'delete/project', { params: HTTP_PARAMS })) as Promise<{ message: string }>

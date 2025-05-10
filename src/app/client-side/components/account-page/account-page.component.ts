@@ -1,15 +1,14 @@
-import { AfterViewInit, Component, ElementRef, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { NavigationPanelComponent } from '../navigation-panel/navigation-panel.component';
 import { CommonModule, NgFor, NgIf } from '@angular/common';
-import { accountFullData, AccountService, furnitureAccountData, accountType } from '../../services/account.service';
+import { accountFullData, AccountService, accountType } from '../../services/account.service';
 import { FormGroup, ReactiveFormsModule, FormControl, Validators, AbstractControl } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
-import { UserCookieService } from '../../services/account-cookie.service';
+import { AcountCookieService } from '../../services/account-cookie.service';
 import { ServerImageControlService } from '../../services/server-image-control.service';
 import { ClientImageControlService } from '../../services/client-image-control.service';
 import { AuthService } from '../../services/auth.service';
 import { ErrorHandlerService } from '../../services/error-handler.service';
-import { furnitureClientData } from '../../services/furniture-card-control.service';
 
 interface editForm {
   nickname: FormControl<string | null | undefined>;
@@ -24,193 +23,177 @@ interface editForm {
   styleUrls: ['./account-page.component.scss']
 })
 export class AccountPageComponent implements OnInit {
-
   constructor(
-    private elementRef: ElementRef,
-    private userService: AccountService,
+    private accountService: AccountService,
     private router: Router,
-    private userCookieService: UserCookieService,
+    private accountCookieService: AcountCookieService,
     private imageServerControlService: ServerImageControlService,
     private imageClientControlService: ClientImageControlService,
     private authService: AuthService,
-    private errorHandler: ErrorHandlerService,
-    private accountService: AccountService
+    private errorHandler: ErrorHandlerService
   ) { }
 
-  public userData?: accountFullData;
-  public isEditFormOpen = false;
-  public editForm!: FormGroup<editForm>;
+  protected accountData?: accountFullData;
+  protected isEditFormOpen = false;
+  protected editForm!: FormGroup<editForm>;
 
   ngOnInit(): void {
     this.checkAuthAndLoadData();
     this.initEditForm();
   }
 
-  private checkAuthAndLoadData(): void {
-    const jwt = this.userCookieService.getJwt();
-    if (!jwt) {
-      this.router.navigateByUrl('/login');
-      return;
-    }
-    this.loadUserData(jwt);
-  }
-
-  private async loadUserData(jwt: string) {
-    try {
-      const accountData = (await this.userService.GETaccount(jwt)).accountData;
-      this.userData = {
-        email: accountData.email,
-        nickname: accountData.nickname,
-        projects: accountData.projects,
-        avatarUrl: this.imageServerControlService.GETuserAvatar(jwt),
-        furnitures: accountData.furnitures
-      };
-
-      if (accountData.password !== undefined) {
-        this.userData.password = accountData.password;
-      }
-    } catch (error) {
-      this.errorHandler.setError('Ошибка загрузки данных пользователя', 5000);
-      console.error(error);
-    }
-  }
-
-  private initEditForm(): void {
-    this.editForm = new FormGroup({
-      nickname: new FormControl(this.userData?.nickname, [
-        Validators.required,
-        Validators.minLength(3),
-        Validators.maxLength(30)
-      ])
-    });
-
-    if (this.userCookieService.getUserType() === 'email') {
-      this.editForm.addControl('password', new FormControl(this.userData?.password, [
-        Validators.required,
-        Validators.minLength(6)
-      ]));
-    }
-  }
-
-  public async uploadAvatar(event: Event): Promise<void> {
-    const jwt = this.userCookieService.getJwt();
-    if (!jwt || !this.userData) {
-      this.errorHandler.setError('Ошибка аутентификации', 5000);
-      return;
-    }
-
-    const target = event.target as HTMLInputElement;
-    const file = target.files?.[0];
-    if (!file) {
-      this.errorHandler.setError('Файл не выбран', 5000);
-      return;
-    }
-
-    try {
-      const compressedImage = await this.imageClientControlService.compressImage(file);
-      if (!compressedImage) {
-        this.errorHandler.setError('Ошибка сжатия изображения', 5000);
-        return;
-      }
-
-      await this.imageServerControlService.POSTuploadUserAvatar(compressedImage, jwt);
-      this.userData.avatarUrl = URL.createObjectURL(compressedImage);
-    } catch (error) {
-      this.errorHandler.setError('Ошибка загрузки аватара', 5000);
-      console.error(error);
-    }
-  }
-
-  public openEditForm(): void {
-    if (!this.userData) {
-      this.errorHandler.setError('Данные пользователя не загружены', 5000);
-      return;
-    }
-    this.isEditFormOpen = true;
-  }
-
-  public closeEditForm(): void {
-    this.isEditFormOpen = false;
-    if (this.userData) {
-      this.userData.nickname != this.editForm.value.nickname;
-      if (this.userData.password) {
-        this.userData.password != this.editForm.value.password;
-      }
-    }
-    this.editForm.reset();
-  }
-
-  public async saveChanges() {
-    if (!this.userData || !this.editForm.valid) {
-      this.errorHandler.setError('Некорректные данные формы', 5000);
-      return;
-    }
-
-    const jwt = this.userCookieService.getJwt();
-    const accountType = this.userCookieService.getUserType() as accountType;
-    if (!jwt || !accountType) {
-      this.errorHandler.setError('Ошибка аутентификации', 5000);
-      return;
-    }
-
-    try {
-      await this.updateSecondaryAccountData(jwt);
-      await this.updateBaseDataIfNeeded(jwt, accountType);
-      this.closeEditForm();
-    } catch (error) {
-      this.errorHandler.setError('Ошибка сохранения данных', 5000);
-      console.error(error);
-    }
-  }
-
   private async updateSecondaryAccountData(jwt: string) {
-    if (!this.userData) return;
+    if (!this.accountData) return;
 
-    const changeData = {
+    const CHANGE_DATA = {
       jwt: jwt,
       nickname: this.editForm.value.nickname!
     };
 
     try {
-      await this.accountService.PUTupdateSecondaryAccountData(changeData);
-      this.userData.nickname = this.editForm.value.nickname!;
+      await this.accountService.PUTupdateSecondaryAccountData(CHANGE_DATA);
+      this.accountData.nickname = this.editForm.value.nickname!;
     } catch (error) {
       this.errorHandler.setError('Ошибка обновления никнейма', 5000);
       console.error(error);
       throw error;
     }
   }
+  protected async saveChanges() {
+    if (!this.accountData || !this.editForm.valid) {
+      this.errorHandler.setError('Некорректные данные формы', 5000);
+      return;
+    }
 
+    const JWT = this.accountCookieService.getJwt();
+    const ACCOUNT_TYPE = this.accountCookieService.getUserType() as accountType;
+    if (!JWT || !ACCOUNT_TYPE) {
+      this.errorHandler.setError('Ошибка аутентификации', 5000);
+      return;
+    }
+
+    try {
+      await this.updateSecondaryAccountData(JWT);
+      await this.updateBaseDataIfNeeded(JWT, ACCOUNT_TYPE);
+      this.closeEditForm();
+    } catch (error) {
+      this.errorHandler.setError('Ошибка сохранения данных', 5000);
+      console.error(error);
+    }
+  }
   private async updateBaseDataIfNeeded(jwt: string, accountType: accountType) {
-    if (this.userData?.password === undefined || !this.editForm.value.password || accountType === 'google') return;
+    if (this.accountData?.password === undefined || !this.editForm.value.password || accountType === 'google') return;
 
-    const changeData = {
+    const CHANGE_DATA = {
       jwt: jwt,
       accountType: accountType,
       password: this.editForm.value.password
     };
 
     try {
-      await this.authService.PUTupdateBaseData(changeData);
-      this.userData.password = this.editForm.value.password;
+      await this.authService.PUTupdateBaseData(CHANGE_DATA);
+      this.accountData.password = this.editForm.value.password;
     } catch (error) {
       this.errorHandler.setError('Ошибка обновления пароля', 5000);
       console.error(error);
       throw error;
     }
   }
+  private async loadUserData(jwt: string) {
+    try {
+      const ACCOUNT_DATA = (await this.accountService.GETaccount(jwt)).accountData;
+      this.accountData = {
+        email: ACCOUNT_DATA.email,
+        nickname: ACCOUNT_DATA.nickname,
+        projects: ACCOUNT_DATA.projects,
+        avatarUrl: this.imageServerControlService.GETaccountAvatar(jwt),
+        furnitures: ACCOUNT_DATA.furnitures
+      };
 
-  public getFurnitureImageUrl(furnitureCardId: string, color: string): string {
-    return this.imageServerControlService.GETmainImage(furnitureCardId, color);
+      if (ACCOUNT_DATA.password !== undefined) {
+        this.accountData.password = ACCOUNT_DATA.password;
+      }
+    } catch (error) {
+      this.errorHandler.setError('Ошибка загрузки данных пользователя', 5000);
+      console.error(error);
+    }
+  }
+  protected async uploadAvatar(event: Event) {
+    const JWT = this.accountCookieService.getJwt();
+    if (!JWT || !this.accountData) {
+      this.errorHandler.setError('Ошибка аутентификации', 5000);
+      return;
+    }
+
+    const TARGET = event.target as HTMLInputElement;
+    const FILE = TARGET.files?.[0];
+    if (!FILE) {
+      this.errorHandler.setError('Файл не выбран', 5000);
+      return;
+    }
+
+    try {
+      const COMPRESSED_IMAGE = await this.imageClientControlService.compressImage(FILE);
+      if (!COMPRESSED_IMAGE) {
+        this.errorHandler.setError('Ошибка сжатия изображения', 5000);
+        return;
+      }
+
+      await this.imageServerControlService.POSTuploadUserAvatar(COMPRESSED_IMAGE, JWT);
+      this.accountData.avatarUrl = URL.createObjectURL(COMPRESSED_IMAGE);
+    } catch (error) {
+      this.errorHandler.setError('Ошибка загрузки аватара', 5000);
+      console.error(error);
+    }
   }
 
-  public openProject(projectId: number): void {
+  private checkAuthAndLoadData() {
+    const JWT = this.accountCookieService.getJwt();
+    if (!JWT) {
+      this.router.navigateByUrl('/login');
+      return;
+    }
+    this.loadUserData(JWT);
+  }
+  private initEditForm() {
+    this.editForm = new FormGroup({
+      nickname: new FormControl(this.accountData?.nickname, [
+        Validators.required,
+        Validators.minLength(3),
+        Validators.maxLength(30)
+      ])
+    });
+
+    if (this.accountCookieService.getUserType() === 'email') {
+      this.editForm.addControl('password', new FormControl(this.accountData?.password, [
+        Validators.required,
+        Validators.minLength(6)
+      ]));
+    }
+  }
+  protected openEditForm() {
+    if (!this.accountData) {
+      this.errorHandler.setError('Данные пользователя не загружены', 5000);
+      return;
+    }
+    this.isEditFormOpen = true;
+  }
+  protected closeEditForm() {
+    this.isEditFormOpen = false;
+    if (this.accountData) {
+      this.accountData.nickname != this.editForm.value.nickname;
+      if (this.accountData.password) {
+        this.accountData.password != this.editForm.value.password;
+      }
+    }
+    this.editForm.reset();
+  }
+  protected openProject(projectId: number) {
     this.router.navigateByUrl('/plan/' + projectId);
   }
-
-  public logout(): void {
-    this.userCookieService.deleteJwt();
-    this.userCookieService.deleteUserType();
+  protected logout() {
+    this.accountCookieService.deleteJwt();
+    this.accountCookieService.deleteUserType();
     this.router.navigateByUrl('/');
   }
 }

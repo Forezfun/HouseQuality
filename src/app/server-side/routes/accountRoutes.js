@@ -6,19 +6,19 @@ const PROJECT = require('../models/project')
 const FURNITURE_CARD = require('../models/furnitureCard')
 const { checkUserAccess } = require('../helpers/jwtHandlers');
 const IMAGES_FURNITURE = require('../models/imagesFurniture');
-const IMAGE_AVATAR = require('../models/imageAvatar');
+
 ROUTER.delete('/jwt/delete', async (request, result) => {
   try {
-    const JWT_TOKEN = request.params.jwtToken
-    const ACCOUNT_ID = await checkUserAccess(JWT_TOKEN)
+    const JWT = request.params.jwt
+    const ACCOUNT_ID = await checkUserAccess(JWT)
     if (!ACCOUNT_ID) return result.status(404).json({ message: 'User not found' });
     const AUTH_ACCOUNT_ITEM = await AUTH_ACCOUNT.findOne({ accountId: ACCOUNT_ID });
     if (!AUTH_ACCOUNT_ITEM) {
       return result.status(404).json({ message: 'User not found' });
     }
-    console.log(AUTH_ACCOUNT_ITEM.jwtTokens)
-    AUTH_ACCOUNT_ITEM.jwtTokens.filter(jwtToken => { return jwtToken !== JWT_TOKEN ? true : false })
-    console.log(AUTH_ACCOUNT_ITEM.jwtTokens)
+    console.log(AUTH_ACCOUNT_ITEM.jwts)
+    AUTH_ACCOUNT_ITEM.jwts.filter(jwt => { return jwt !== JWT ? true : false })
+    console.log(AUTH_ACCOUNT_ITEM.jwts)
     await AUTH_ACCOUNT_ITEM.save()
     result.status(201).json({ message: 'JWT deleted' });
   } catch (err) {
@@ -37,7 +37,7 @@ ROUTER.post('/', async (request, result) => {
     if (ACCOUNT_ITEM) return result.status(409).json({ message: 'User already exists' });
     ACCOUNT_ITEM = new ACCOUNT({
       nickname: request.body.nickname,
-      jwtTokens: []
+      jwts: []
     })
     let AUTH_ACCOUNT_ITEM = new AUTH_ACCOUNT({
       accountId: ACCOUNT_ITEM._id,
@@ -65,9 +65,9 @@ ROUTER.post('/', async (request, result) => {
 });
 ROUTER.get('/', async (request, result) => {
   try {
-    const JWT_TOKEN = request.query.jwtToken
-    const ACCOUNT_ID = await checkUserAccess(JWT_TOKEN)
-    console.log(ACCOUNT_ID)
+    const JWT = request.query.jwt
+    const ACCOUNT_ID = await checkUserAccess(JWT)
+    console.log('id: ',ACCOUNT_ID)
     if (!ACCOUNT_ID) return result.status(404).json({ message: 'User not found' });
     const ACCOUNT_ITEM = await ACCOUNT.findById(ACCOUNT_ID);
     const AUTH_ACCOUNT_ITEM = await AUTH_ACCOUNT.findOne({ accountId: ACCOUNT_ID });
@@ -94,12 +94,12 @@ async function proccessFurnitures(ACCOUNT_ID) {
   let furnitures =[]
   try {
     const ACCOUNT_FUNRITURE_CARDS = await FURNITURE_CARD.find({ authorId: ACCOUNT_ID })
-    for(furnitureData of ACCOUNT_FUNRITURE_CARDS){
-      const IMAGES_FURNITURE_ITEM = await IMAGES_FURNITURE.findOne({furnitureId:furnitureData._id})
+    for(const FURNITURE_DATA of ACCOUNT_FUNRITURE_CARDS){
+      const IMAGES_FURNITURE_ITEM = await IMAGES_FURNITURE.findOne({furnitureId:FURNITURE_DATA._id})
       furnitures.push({
-        _id:furnitureData._id,
-        name:furnitureData.name,
-        previewUrl:`furniture/images/simple?furnitureCardId=${furnitureData._id}&color=${IMAGES_FURNITURE_ITEM.color}&idImage=${IMAGES_FURNITURE_ITEM.idMainImage||0}`
+        _id:FURNITURE_DATA._id,
+        name:FURNITURE_DATA.name,
+        previewUrl:`furniture/images/simple?furnitureCardId=${FURNITURE_DATA._id}&color=${IMAGES_FURNITURE_ITEM.color}&idImage=${IMAGES_FURNITURE_ITEM.idMainImage||0}`
       })
     }
   } catch (error) {
@@ -110,8 +110,8 @@ async function proccessFurnitures(ACCOUNT_ID) {
 }
 ROUTER.delete('/', async (request, result) => {
   try {
-    const JWT_TOKEN = request.params.jwtToken
-    const ACCOUNT_ID = await checkUserAccess(JWT_TOKEN)
+    const JWT = request.params.jwt
+    const ACCOUNT_ID = await checkUserAccess(JWT)
     if (!ACCOUNT_ID) return result.status(404).json({ message: 'User not found' });
     const ACCOUNT_ITEM = await ACCOUNT.findById(ACCOUNT_ID);
     const AUTH_ACCOUNT_ITEM = await AUTH_ACCOUNT.findOne({ accountId: ACCOUNT_ID });
@@ -128,8 +128,8 @@ ROUTER.delete('/', async (request, result) => {
 ROUTER.put('/', async (request, result) => {
   try {
     console.log('acc', request.query, request.body, request.params)
-    const JWT_TOKEN = request.body.jwtToken
-    const ACCOUNT_ID = await checkUserAccess(JWT_TOKEN)
+    const JWT = request.body.jwt
+    const ACCOUNT_ID = await checkUserAccess(JWT)
     console.log(ACCOUNT_ID)
     if (!ACCOUNT_ID) return result.status(404).json({ message: 'User not found' });
     const ACCOUNT_ITEM = await ACCOUNT.findById(ACCOUNT_ID);

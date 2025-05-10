@@ -1,5 +1,5 @@
-import { Component, EventEmitter, HostListener, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
-import { NgIf, NgFor, NgClass } from '@angular/common';
+import { Component, HostListener, Input, OnInit} from '@angular/core';
+import { NgIf, NgFor} from '@angular/common';
 import {TuiCarousel} from '@taiga-ui/kit';
 
 export interface imageSliderClientData {
@@ -19,24 +19,23 @@ export interface imageSliderFromServerData {
   styleUrl: './image-slider.component.scss'
 })
 export class ImageSliderComponent implements OnInit{
-  index:number = 0
+  protected index:number = 0
+  protected isMobileView:boolean=false
+
   @Input()
   imagesData!: imageSliderFromServerData;
   @Input()
   changeModeSlider: boolean=false
-  @Output()
-  idMainImageEmitter =new EventEmitter<number>()
-  isMobileView:boolean=false
-  visibleId: number[] = [];
+
   ngOnInit(): void {
     this.checkViewport()
   }
+
   @HostListener('window:resize', ['$event'])
-  checkViewport() {
+  private checkViewport() {
     this.isMobileView = window.innerWidth <= 768;
   }
-  changeMainImage(index:number) {
+  protected changeMainImage(index:number) {
     this.imagesData.idMainImage=index
-    this.idMainImageEmitter.emit(index)
   }
 }

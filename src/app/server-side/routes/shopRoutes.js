@@ -1,9 +1,8 @@
 const EXPRESS = require('express');
 const ROUTER = EXPRESS.Router();
-const { checkUserAccess } = require('../helpers/jwtHandlers')
 const FURNITURE_CARD = require('../models/furnitureCard')
-const path = require('path');
 const IMAGES_FURNITURE = require('../models/imagesFurniture')
+
 ROUTER.get('/all', async (request, result) => {
     try {
         const START_RANGE = +request.query.startRange
@@ -15,7 +14,7 @@ ROUTER.get('/all', async (request, result) => {
             .limit(10);
         const RESULTS_ARRAY = await Promise.all(
             FURNITURE_CARDS_ARRAY.map(async (furnitureData) => {
-                const maxCost = furnitureData.shops.sort((a, b) => a.cost - b.cost)[0].cost;
+                const MIN_COST = furnitureData.shops.sort((a, b) => a.cost - b.cost)[0].cost;
 
                 const IMAGES_FURNITURE_ITEM = await IMAGES_FURNITURE.findOne({
                     furnitureId: furnitureData._id
@@ -24,7 +23,7 @@ ROUTER.get('/all', async (request, result) => {
 
                 return {
                     name: furnitureData.name,
-                    cost: maxCost,
+                    cost: MIN_COST,
                     furnitureId: furnitureData._id.toString(),
                     previewUrl: `furniture/images/simple?furnitureCardId=${furnitureData._id}&color=${IMAGES_FURNITURE_ITEM.color}&idImage=${IMAGES_FURNITURE_ITEM.idMainImage}`
 
@@ -37,6 +36,7 @@ ROUTER.get('/all', async (request, result) => {
         result.status(400).json({ message: err.message });
     }
 })
+
 ROUTER.get('/category', async (request, result) => {
     try {
         const START_RANGE = +request.query.startRange
@@ -74,4 +74,5 @@ ROUTER.get('/category', async (request, result) => {
         result.status(400).json({ message: err.message });
     }
 })
+
 module.exports = ROUTER;

@@ -8,7 +8,7 @@ declare module 'three/examples/jsm/loaders/GLTFLoader' {
         cameras: Camera[];
         asset: object;
         parser: object;
-        userData: object;
+        accountData: object;
     }
 
     export class GLTFLoader extends Loader {

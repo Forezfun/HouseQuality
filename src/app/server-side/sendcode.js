@@ -2,13 +2,13 @@ const nodemailer = require('nodemailer');
 require('dotenv').config();
 const CODE_PASSWORD = process.env.CODE_AUTH_PASSWORD
 
-function sendCheckCode(userEmail){
+function sendCheckCode(accountEmail){
 let transporter = nodemailer.createTransport({
     host: 'smtp.gmail.com',
     port: 465,
     secure: true,
     auth: {
-      user: 'housequalityteam@gmail.com',
+      account: 'housequalityteam@gmail.com',
       pass: CODE_PASSWORD
     }
   });
@@ -16,7 +16,7 @@ let transporter = nodemailer.createTransport({
 
   let mailOptions = {
     from: 'housequalityteam@gmail.com',
-    to: userEmail,
+    to: accountEmail,
     subject: 'HouseQuality',
     html: `<!DOCTYPE html>
 <html lang="en">

@@ -6,15 +6,18 @@ import { throttle } from 'lodash';
   standalone: true
 })
 export class AutoHeightDirective implements OnInit {
+  constructor() { }
+
+  private el = inject(ElementRef)
+  
   @Input()
   mobileView: boolean = false
-  private el = inject(ElementRef)
-  constructor() { }
 
   ngOnInit(): void {
     if (!this.mobileView) return
     this.el.nativeElement.addEventListener('input', this.onInput.bind(this.el.nativeElement));
   }
+  
   onInput(event:Event) {
     const input = event.target as HTMLTextAreaElement
     throttle(() => {

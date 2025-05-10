@@ -4,63 +4,62 @@ const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
 const IMAGE_AVATAR = require('../models/imageAvatar');
-const { isTokenNoneExpired, checkUserAccess } = require('../helpers/jwtHandlers');
+const { checkUserAccess } = require('../helpers/jwtHandlers');
 
-// Middleware для проверки JWT и добавления ACCOUNT_ID в req.body
 ROUTER.use(async (req, res, next) => {
     try {
-        const JWT_TOKEN = req.query.jwtToken || req.body.jwtToken;
-        const ACCOUNT_ID = await checkUserAccess(JWT_TOKEN);
+        const JWT = req.query.jwt || req.body.jwt;
+        const ACCOUNT_ID = await checkUserAccess(JWT);
         if (!ACCOUNT_ID) return res.status(404).json({ message: 'User not found' });
         req.query = {};
         req.query.accountId = ACCOUNT_ID;
         next();
     } catch (error) {
-        res.status(500).json({ message: 'Error validating user access: ' + error.message });
+        res.status(500).json({ message: 'Error validating account access: ' + error.message });
     }
 });
 
-// Логика для удаления старого файла с другим расширением
+
 function removeOldAvatarIfExists(accountId, uploadDir) {
-    const extensions = ['.png', '.jpg', '.jpeg'];
-    for (const ext of extensions) {
-        const filePath = path.join(uploadDir, `${accountId}${ext}`);
-        if (fs.existsSync(filePath)) {
-            fs.unlinkSync(filePath); // Удаляем файл
+    const EXTENSIONS = ['.png', '.jpg', '.jpeg'];
+    for (const EXTENSION of EXTENSIONS) {
+        const FILE_PATH = path.join(uploadDir, `${accountId}${EXTENSION}`);
+        if (fs.existsSync(FILE_PATH)) {
+            fs.unlinkSync(FILE_PATH); 
         }
     }
 }
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        const uploadDir = path.join(__dirname, '..', 'uploads','avatars');
-        if (!fs.existsSync(uploadDir)) {
-            fs.mkdirSync(uploadDir);
+        const UPLOAD_DIR = path.join(__dirname, '..', 'uploads','avatars');
+        if (!fs.existsSync(UPLOAD_DIR)) {
+            fs.mkdirSync(UPLOAD_DIR);
         }
-        // Удаляем старый аватар, если он существует
-        removeOldAvatarIfExists(req.query.accountId, uploadDir);
-        cb(null, uploadDir);
+        
+        removeOldAvatarIfExists(req.query.accountId, UPLOAD_DIR);
+        cb(null, UPLOAD_DIR);
     },
     filename: (req, file, cb) => {
-        let extension = path.extname(file.originalname).toLowerCase(); // Получаем расширение
+        let extension = path.extname(file.originalname).toLowerCase(); 
         if (!extension || !['.png', '.jpg', '.jpeg'].includes(extension)) {
-            extension = '.jpg'; // Если расширение неподдерживаемое или отсутствует, используем .jpg
+            extension = '.jpg'; 
         }
 
-        const fileName = req.query.accountId + extension;
-        saveAvatar(fileName, req.query.accountId); // Сохраняем информацию об аватаре в БД
-        cb(null, fileName);
+        const FILE_NAME = req.query.accountId + extension;
+        saveAvatar(FILE_NAME, req.query.accountId); 
+        cb(null, FILE_NAME);
     }
 });
 
 async function saveAvatar(fileName, accountId) {
     let IMAGE_AVATAR_FIND_ITEM = await IMAGE_AVATAR.findOne({ accountId: accountId });
     if (IMAGE_AVATAR_FIND_ITEM) {
-        // Обновляем запись с новым именем файла
+        
         IMAGE_AVATAR_FIND_ITEM.filename = fileName;
         await IMAGE_AVATAR_FIND_ITEM.save();
     } else {
-        // Создаём новую запись
+        
         const IMAGE_AVATAR_ITEM = new IMAGE_AVATAR({
             filename: fileName,
             accountId: accountId
@@ -87,18 +86,17 @@ ROUTER.post('/upload', upload.single('image'), async (req, res) => {
     }
 });
 
-// Маршрут для получения аватара по accountId
 ROUTER.get('', async (req, res) => {
     try {
         let filePath
-        const directory = path.join(__dirname, '..', 'uploads','avatars');
+        const DIRECTORY = path.join(__dirname, '..', 'uploads','avatars');
         const IMAGE_AVATAR_ITEM = await IMAGE_AVATAR.findOne({ accountId: req.query.accountId });
         if (!IMAGE_AVATAR_ITEM) {
-            filePath=path.join(directory,'default.png')
+            filePath=path.join(DIRECTORY,'default.png')
         }
 
         if(IMAGE_AVATAR_ITEM){
-            filePath = path.join(directory, IMAGE_AVATAR_ITEM.filename);
+            filePath = path.join(DIRECTORY, IMAGE_AVATAR_ITEM.filename);
 
             console.log(`Looking for file: ${filePath}`);
 

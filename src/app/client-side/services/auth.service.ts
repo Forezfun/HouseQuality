@@ -38,7 +38,7 @@ export class AuthService {
         .set('email', authData.email)
         .set('password', authData.password);
     }
-    return firstValueFrom(this.httpModule.post(this.baseServiceUrl + 'jwt/long', HTTP_PARAMS)) as Promise<{ jwtToken: string }>
+    return firstValueFrom(this.httpModule.post(this.baseServiceUrl + 'jwt/long', HTTP_PARAMS)) as Promise<{ jwt: string }>
   }
 
   /**
@@ -49,7 +49,7 @@ export class AuthService {
   POSTcreateShortJWT(email: string) {
     let HTTP_PARAMS = new HttpParams()
       .set('email', email)
-    return firstValueFrom(this.httpModule.post(this.baseServiceUrl + 'jwt/temporary', HTTP_PARAMS)) as Promise<{ jwtToken: string }>
+    return firstValueFrom(this.httpModule.post(this.baseServiceUrl + 'jwt/temporary', HTTP_PARAMS)) as Promise<{ jwt: string }>
   }
 
   /**
@@ -63,7 +63,7 @@ export class AuthService {
   PUTupdateBaseData(changeData: changeAccountData) {
     let HTTP_PARAMS = new HttpParams()
       .set('accountType', changeData.accountType)
-      .set('jwtToken', changeData.jwt)
+      .set('jwt', changeData.jwt)
     if (isEmailAccount(changeData)) {
       HTTP_PARAMS = HTTP_PARAMS
         .set('password', changeData.password);

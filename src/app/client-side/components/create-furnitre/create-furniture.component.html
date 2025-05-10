@@ -6,8 +6,8 @@
             <img loading="lazy" alt="edit" src="/assets/images/editIcon.svg" alt=""></button>
         <app-image-slider
             *ngIf="currentColorId!==undefined&&furnitureData.colors[currentColorId].imagesData.images.length>0"
-            [imagesData]="furnitureData.colors[currentColorId].imagesData" [changeModeSlider]="true"
-            (idMainImageEmitter)="changeIdMainImage($event)"></app-image-slider>
+            [imagesData]="furnitureData.colors[currentColorId].imagesData" [changeModeSlider]="true">
+        </app-image-slider>
     </span>
     <div class="uploadImagesDiv"
         *ngIf="currentColorId===undefined||(currentColorId!==undefined&&furnitureData.colors[currentColorId].imagesData.images.length<=0)">
@@ -20,7 +20,7 @@
                 <button (click)="openColorModule($event)" class="addColorBtn" title="Добавить новый цвет">
                     <img loading="lazy" src="/assets/images/addIcon.svg" alt="Добавить">
                 </button>
-                <span class="colors" [style.--total-items]="furnitureData.colors.length.toString()">
+                <span *ngIf="furnitureData.colors!==undefined" class="colors" [style.--total-items]="furnitureData.colors.length.toString()">
                     <button (click)="openFurnitureVariant(index)"
                         *ngFor="let colorVariant of furnitureData.colors;let index=index" [attr.data-idColor]="index"
                         [style.background-color]="colorVariant.color" class="colorVariant" title="Выбрать цвет"></button>
@@ -136,7 +136,7 @@
                     Пожалуйста, укажите высоту
                 </span>
             </span>
-            <button [disabled]="mode === 'create' && proportionsForm.invalid" class="submitAddModuleFormBtn additionalBtn" type="submit" title="Сохранить информацию">Сохранить</button>
+            <button [disabled]="proportionsForm.invalid" class="submitAddModuleFormBtn additionalBtn" type="submit" title="Сохранить информацию">Сохранить</button>
         </span>
     </form>
 </ng-template>

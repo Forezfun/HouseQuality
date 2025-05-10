@@ -17,7 +17,7 @@ export class FurnitureModelControlService {
    */
   GETfurnitureModel(jwt: string, furnitureId: string) {
     const HTTP_PARAMS = new HttpParams()
-    .set('jwtToken', jwt)
+    .set('jwt', jwt)
     .set('furnitureId', furnitureId)
     return firstValueFrom(this.httpModule.get(this.baseServiceUrl, { params: HTTP_PARAMS, responseType: 'blob' })) as Promise<Blob>
   }
@@ -33,7 +33,7 @@ export class FurnitureModelControlService {
     const formData = new FormData();
     formData.append('model', modelFile);
     const HTTP_PARAMS = new HttpParams()
-    .set('jwtToken', jwt)
+    .set('jwt', jwt)
     .set('furnitureId', furnitureId)
     .set('fileName', (modelFile as any).name);
     return firstValueFrom(this.httpModule.post(this.baseServiceUrl, formData, { params: HTTP_PARAMS })) as Promise<{message:string}>
@@ -46,7 +46,7 @@ export class FurnitureModelControlService {
    * @returns Promise с результатом запроса
    */
   DELETEfurnitureModel(jwt: string, furnitureId: string): Promise<any> {
-    const HTTP_PARAMS = new HttpParams().set('jwtToken', jwt);
+    const HTTP_PARAMS = new HttpParams().set('jwt', jwt);
     return firstValueFrom(this.httpModule.delete(this.baseServiceUrl+furnitureId, { params: HTTP_PARAMS })) as Promise<{message:string}>
   }
 }

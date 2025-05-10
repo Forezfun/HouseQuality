@@ -4,12 +4,11 @@ const { checkUserAccess } = require('../helpers/jwtHandlers')
 const FURNITURE_CARD = require('../models/furnitureCard');
 const IMAGES_FURNITURE = require('../models/imagesFurniture');
 
-
 ROUTER.post('/', async (request, result) => {
     try {
         console.log(request.query, request.body, request.params)
-        const JWT_TOKEN = request.query.jwtToken;
-        const ACCOUNT_ID = await checkUserAccess(JWT_TOKEN);
+        const JWT = request.query.jwt;
+        const ACCOUNT_ID = await checkUserAccess(JWT);
         if (!ACCOUNT_ID) return res.status(404).json({ message: 'User not found' });
         let FURNITURE_CARD_ITEM = new FURNITURE_CARD({
             name: request.body.name,
@@ -43,8 +42,8 @@ ROUTER.post('/', async (request, result) => {
 ROUTER.put('/', async (request, result) => {
     try {
         console.log('query: ', request.query)
-        const JWT_TOKEN = request.query.jwtToken;
-        const ACCOUNT_ID = await checkUserAccess(JWT_TOKEN);
+        const JWT = request.query.jwt;
+        const ACCOUNT_ID = await checkUserAccess(JWT);
         if (!ACCOUNT_ID) return result.status(404).json({ message: 'User not found' });
         let FURNITURE_CARD_ITEM = await FURNITURE_CARD.findOne({ authorId: ACCOUNT_ID })
         if (!FURNITURE_CARD_ITEM) return result.status(404).json({ message: 'Furniture card not found' });
@@ -71,11 +70,12 @@ ROUTER.put('/', async (request, result) => {
         result.status(400).json({ message: err.message });
     }
 });
+
 ROUTER.delete('/', async (request, result) => {
     try {
-        const JWT_TOKEN = request.query.jwtToken;
+        const JWT = request.query.jwt;
         const FURNITURE_CARD_ID = request.query.furnitureCardId
-        const ACCOUNT_ID = await checkUserAccess(JWT_TOKEN);
+        const ACCOUNT_ID = await checkUserAccess(JWT);
         if (!ACCOUNT_ID) return res.status(404).json({ message: 'User not found' });
         let FURNITURE_CARD_ITEM = await FURNITURE_CARD.findById(FURNITURE_CARD_ID)
         if (!FURNITURE_CARD_ITEM) return res.status(404).json({ message: 'Furniture card not found' });
@@ -86,12 +86,13 @@ ROUTER.delete('/', async (request, result) => {
         result.status(400).json({ message: err.message });
     }
 });
+
 ROUTER.get('/', async (request, result) => {
     try {
         let FURNITURE_CARD_ITEM = await FURNITURE_CARD.findById(request.query.furnitureCardId)
         if (!FURNITURE_CARD_ITEM) return res.status(404).json({ message: 'Furniture card not found' });
-        const JWT_TOKEN = request.query.jwtToken;
-        const ACCOUNT_ID = await checkUserAccess(JWT_TOKEN);
+        const JWT = request.query.jwt;
+        const ACCOUNT_ID = await checkUserAccess(JWT);
         const AUTHOR_MATCHED = ACCOUNT_ID === FURNITURE_CARD_ITEM.authorId ? true : false
         const colorsFromServerData = await proccessColorsData(FURNITURE_CARD_ITEM)
         const PROCESSED_FURNITURE_ITEM = {
@@ -108,10 +109,11 @@ ROUTER.get('/', async (request, result) => {
         result.status(400).json({ message: err.message });
     }
 })
-async function proccessColorsData(FURNITURE_CARD_ITEM) {
-    const colorsFromServerData = [];
 
-    for (const colorData of FURNITURE_CARD_ITEM.colors) {
+async function proccessColorsData(FURNITURE_CARD_ITEM) {
+    let colorsFromServerData = [];
+
+    for (const COLOR_DATA of FURNITURE_CARD_ITEM.colors) {
         try {
             const IMAGES_FURNITURE_ITEM = await IMAGES_FURNITURE.findOne({
                 furnitureId: FURNITURE_CARD_ITEM._id
@@ -119,14 +121,14 @@ async function proccessColorsData(FURNITURE_CARD_ITEM) {
 
             if (!IMAGES_FURNITURE_ITEM) continue;
 
-            const imagesURLS = IMAGES_FURNITURE_ITEM.images.map((imageData, index) => {
+            const IMAGES_URLS = IMAGES_FURNITURE_ITEM.images.map((imageData, index) => {
                 return `furniture/images/simple?furnitureCardId=${FURNITURE_CARD_ITEM._id}&color=${IMAGES_FURNITURE_ITEM.color}&idImage=${index}`;
             });
 
             colorsFromServerData.push({
-                color: colorData.color,
+                color: COLOR_DATA.color,
                 imagesData: {
-                    images: imagesURLS,
+                    images: IMAGES_URLS,
                     idMainImage: IMAGES_FURNITURE_ITEM.idMainImage
                 }
             });

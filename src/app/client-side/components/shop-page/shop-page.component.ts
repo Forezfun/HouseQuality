@@ -1,14 +1,15 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit } from '@angular/core';
 import { NavigationPanelComponent } from '../navigation-panel/navigation-panel.component';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Location, NgClass, NgFor, NgIf } from '@angular/common';
 import { furnitureShopData, ShopService } from '../../services/shop.service';
 import { ViewFurnitureComponent } from '../view-furniture/view-furniture.component';
 import { AccountService } from '../../services/account.service';
-import { UserCookieService } from '../../services/account-cookie.service';
+import { AcountCookieService } from '../../services/account-cookie.service';
 import { projectInformation } from '../../services/project.service';
 import { ErrorHandlerService } from '../../services/error-handler.service';
 import { categoryData, CategoryService } from '../../services/category.service';
+import { checkDesktop } from '../../mock-data/reusable-functions.used';
 @Component({
   selector: 'app-shop-page',
   standalone: true,
@@ -17,45 +18,32 @@ import { categoryData, CategoryService } from '../../services/category.service';
   styleUrl: './shop-page.component.scss'
 })
 export class ShopPageComponent implements OnInit {
-  furnitureId: undefined | string = undefined
-  categoryName: undefined | string = undefined
-  userProjects: projectInformation[] | undefined = undefined
-  currentCategoryId: number | undefined
-  furnituresArray: furnitureShopData[] = []
-  openAddModuleToggle: boolean = false
-  categoryArray: categoryData[] = []
   constructor(
     private route: ActivatedRoute,
     private shopService: ShopService,
     private router: Router,
-    private userService: AccountService,
-    private userCookieService: UserCookieService,
+    private accountService: AccountService,
+    private accountCookieService: AcountCookieService,
     private errorHandler: ErrorHandlerService,
     private categoryService: CategoryService,
     private location: Location,
     private elementRef: ElementRef
   ) { }
-  openAddModule() {
-    this.openAddModuleToggle = true
-  }
-  closeAddModule() {
-    this.openAddModuleToggle = false
-  }
+
+  protected furnitureId: undefined | string
+  protected categoryName: undefined | string
+  protected accountProjects: projectInformation[] | undefined
+  protected currentCategoryId: number | undefined
+  protected furnituresArray: furnitureShopData[] = []
+  protected openAddModuleToggle: boolean = false
+  protected categoryArray: categoryData[] = []
+
   ngOnInit() {
     this.processRouteParams();
     console.log('init');
   }
 
-  private processRouteParams() {
-    const params = this.route.snapshot.params;
-
-    this.furnitureId = params['furnitureId'];
-    this.categoryName = params['category'];
-
-    this.furnituresInit();
-    this.initCategories();
-  }
-  async initCategories() {
+  private async initCategories() {
     try {
       this.categoryArray = (await this.categoryService.GETgetAllCategories()).categoryArray
       this.categoryArray.forEach((categoryData, index) => {
@@ -65,11 +53,11 @@ export class ShopPageComponent implements OnInit {
       console.log(error)
     }
   }
-  async furnituresInit() {
+  private async furnituresInit() {
     if (this.furnitureId) {
-      const jwt = this.userCookieService.getJwt()
+      const JWT = this.accountCookieService.getJwt()
       try {
-        this.userProjects = (await this.userService.GETaccount(jwt)).accountData.projects
+        this.accountProjects = (await this.accountService.GETaccount(JWT)).accountData.projects
       } catch (error) {
         console.log(error)
       }
@@ -80,23 +68,65 @@ export class ShopPageComponent implements OnInit {
     }
 
   }
-  async requestCategoryFurnitures(categoryName: string, furnituresCount: number) {
-    const furnitures = (await this.shopService.GETgetCategoryData(categoryName, furnituresCount)).resultsArray
-    this.furnituresArray = [...this.furnituresArray, ...furnitures]
+  private async requestCategoryFurnitures(categoryName: string, furnituresCount: number) {
+    const FURNITURES = (await this.shopService.GETgetCategoryData(categoryName, furnituresCount)).resultsArray
+    this.furnituresArray = [...this.furnituresArray, ...FURNITURES]
   }
-  async requestAllFurnitures(furnituresCount: number) {
-    const furnitures = (await this.shopService.GETgetAllFurnitures(furnituresCount)).resultsArray
-    this.furnituresArray = [...this.furnituresArray, ...furnitures]
+  private async requestAllFurnitures(furnituresCount: number) {
+    const FURNITURES = (await this.shopService.GETgetAllFurnitures(furnituresCount)).resultsArray
+    this.furnituresArray = [...this.furnituresArray, ...FURNITURES]
+  }
 
+  private processRouteParams() {
+    const PARAMS = this.route.snapshot.params;
 
+    this.furnitureId = PARAMS['furnitureId'];
+    this.categoryName = PARAMS['category'];
+
+    this.furnituresInit();
+    this.initCategories();
   }
-  checkDesktop() {
-    return /windows nt|macintosh|x11|linux/.test(navigator.userAgent.toLowerCase())
+  private setScrollObserver() {
+    const SCROLL_CONTAINER = this.elementRef.nativeElement.querySelector('.category') as HTMLSpanElement
+    const items = SCROLL_CONTAINER.querySelectorAll('.furnitureItem') as NodeListOf<HTMLDivElement>
+    let observedCount = 0;
+
+    const observerOptions = {
+      root: SCROLL_CONTAINER,
+      rootMargin: '0px',
+      threshold: 0.5
+    };
+
+    const OBSERVER_CALLBACK: IntersectionObserverCallback = (entries, observer) => {
+      entries.forEach(async (entry) => {
+        if (entry.isIntersecting) {
+          const ITEM = entry.target as HTMLDivElement;
+          const ITEM_INDEX: number = Array.from(items).indexOf(ITEM);
+
+          if ((ITEM_INDEX + 1) % 8 === 0 && !ITEM.dataset['observed']) {
+            ITEM.dataset['observed'] = 'true';
+            observedCount++;
+            if (this.categoryName !== undefined) {
+              await this.requestCategoryFurnitures(this.categoryName, this.furnituresArray.length)
+            } else {
+              await this.requestAllFurnitures(this.furnituresArray.length)
+            }
+          }
+        }
+      });
+    };
+
+    const OBSERVER: IntersectionObserver = new IntersectionObserver(OBSERVER_CALLBACK, observerOptions);
+    items.forEach((item: HTMLElement) => OBSERVER.observe(item));
   }
-  getUrlForBlobImage(blob: Blob) {
-    return URL.createObjectURL(blob)
+  protected openAddModule() {
+    this.openAddModuleToggle = true
   }
-  changeCategory(categoryIndex: number | undefined) {
+  protected closeAddModule() {
+    this.openAddModuleToggle = false
+  }
+  protected checkDesktop = checkDesktop
+  protected changeCategory(categoryIndex: number | undefined) {
     this.furnituresArray.length = 0
     this.currentCategoryId = categoryIndex
     let newUrl = this.location.path()
@@ -110,47 +140,13 @@ export class ShopPageComponent implements OnInit {
     this.location.replaceState(newUrl)
     this.furnituresInit()
   }
-  capitalizeFirstLetter(string: string) {
-    return string.charAt(0).toUpperCase() + string.slice(1);
-  }
-  closeFurniture() {
+  protected closeFurniture() {
     this.router.navigateByUrl('/shop' + (this.categoryName === 'all' ? '' : ('/' + this.categoryName)))
   }
-  getPlanUrl = (planId: number, roomId: number) => `/plan/${planId}/${roomId}/${this.furnitureId}`
-  setScrollObserver() {
-    const scrollContainer = this.elementRef.nativeElement.querySelector('.category') as HTMLSpanElement
-    const items = scrollContainer.querySelectorAll('.furnitureItem') as NodeListOf<HTMLDivElement>
-    let observedCount = 0;
-
-    const observerOptions = {
-      root: scrollContainer,
-      rootMargin: '0px',
-      threshold: 0.5
-    };
-
-    const observerCallback: IntersectionObserverCallback = (entries, observer) => {
-      entries.forEach(async (entry) => {
-        if (entry.isIntersecting) {
-          const item = entry.target as HTMLDivElement;
-          const itemIndex: number = Array.from(items).indexOf(item);
-
-          if ((itemIndex + 1) % 8 === 0 && !item.dataset['observed']) {
-            item.dataset['observed'] = 'true';
-            observedCount++;
-            if (this.categoryName !== undefined) {
-              await this.requestCategoryFurnitures(this.categoryName, this.furnituresArray.length)
-            } else {
-              await this.requestAllFurnitures(this.furnituresArray.length)
-            }
-          }
-        }
-      });
-    };
-
-    const observer: IntersectionObserver = new IntersectionObserver(observerCallback, observerOptions);
-    items.forEach((item: HTMLElement) => observer.observe(item));
+  protected getPlanUrl(planId: number, roomId: number) {
+    return `/plan/${planId}/${roomId}/${this.furnitureId}`
   }
-  trackByFn(index: number, item: any): number {
+  protected trackByFn(index: number, item: any): number {
     return item.id;
   }
 }

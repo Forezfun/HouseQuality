@@ -5,12 +5,11 @@ import { NgxSpinnerModule, NgxSpinnerService } from 'ngx-spinner';
 import { roomData as roomDataPlan } from '../../services/project.service';
 import { loadModel } from './loaders';
 import { FurnitureModelControlService } from '../../services/furniture-model-control.service';
-import { UserCookieService } from '../../services/account-cookie.service';
+import { AcountCookieService } from '../../services/account-cookie.service';
 import { FurnitureCardControlService } from '../../services/furniture-card-control.service';
-import { firstValueFrom } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
 import { ErrorHandlerService } from '../../services/error-handler.service';
-import { Location, NgIf } from '@angular/common';
+import { Location} from '@angular/common';
 
 export interface modelInterface {
   width: number;
@@ -44,7 +43,7 @@ export class SceneComponent implements AfterViewInit, OnChanges {
     private spinner: NgxSpinnerService,
     private furnitureModelService: FurnitureModelControlService,
     private furnitureCardService: FurnitureCardControlService,
-    private userCookieService: UserCookieService,
+    private accountCookieService: AcountCookieService,
     private route: ActivatedRoute,
     private errorHandler: ErrorHandlerService,
     private location: Location
@@ -64,7 +63,7 @@ export class SceneComponent implements AfterViewInit, OnChanges {
   private roomProportions!: modelInterface;
   private raycaster = new THREE.Raycaster();
   private mouse = new THREE.Vector2();
-  targetobject: THREE.Object3D | undefined = undefined;
+  protected targetobject: THREE.Object3D | undefined = undefined;
   private rectangleMesh!: THREE.Mesh;
 
 
@@ -86,73 +85,77 @@ export class SceneComponent implements AfterViewInit, OnChanges {
     }
     if (this.getObjectSize(this.rectangleMesh).width === 0) return
     this.loadRoom(LOAD_OBJECT)
-    const furnitureId = this.route.snapshot.params['furnitureId']
-    if (!furnitureId || changes['roomData'].previousValue) return
+    const FURNITURE_ID = this.route.snapshot.params['furnitureId']
+    if (!FURNITURE_ID || changes['roomData'].previousValue) return
     this.fixPath()
     this.spinner.show()
-    this.addModel(furnitureId, true)
-  }
-  fixPath() {
-    const newUrl = this.location.path().split('/').slice(0, -1).join('/')
-    this.location.replaceState(newUrl)
+    this.addModel(FURNITURE_ID, true)
   }
 
-  private async addModel(furnitureId: string, saveRoom: boolean, moveData?: objectLoadInterface) {
-    const jwt = this.userCookieService.getJwt()
-    if (!jwt) return
+  private async loadFurnitureModel(fileModel: Blob, furnitureSize: modelInterface, furnitureId: string, saveRoom: boolean, moveData?: objectLoadInterface) {
+    this.spinner.show()
     try {
-      const proportions = (await this.furnitureCardService.GETfurnitureCard(furnitureId)).furnitureCard.proportions as modelInterface
-      const model = await this.furnitureModelService.GETfurnitureModel(jwt, furnitureId)
-      this.loadFurnitureModel(model, proportions, furnitureId, saveRoom, moveData)
+      const LOAD_OBJECT = await loadModel(fileModel)
+      if (moveData) { this.addObjectToScene(LOAD_OBJECT, furnitureSize, furnitureId, moveData) } else { this.addObjectToScene(LOAD_OBJECT, furnitureSize, furnitureId) }
+      this.spinner.hide()
+      if (saveRoom) this.saveRoom()
+    } catch (error) {
+      this.spinner.hide()
+    }
+  }
+  private async addModel(furnitureId: string, saveRoom: boolean, moveData?: objectLoadInterface) {
+    const JWT = this.accountCookieService.getJwt()
+    if (!JWT) return
+    try {
+      const PROPORTIONS = (await this.furnitureCardService.GETfurnitureCard(furnitureId)).furnitureCard.proportions as modelInterface
+      const MODEL = await this.furnitureModelService.GETfurnitureModel(JWT, furnitureId)
+      this.loadFurnitureModel(MODEL, PROPORTIONS, furnitureId, saveRoom, moveData)
     } catch (error) {
       console.log(error)
     }
   }
-  deleteModel() {
-    if (this.targetobject) this.scene.remove(this.targetobject)
-    this.saveRoom()
+
+  private fixPath() {
+    const NEW_URL = this.location.path().split('/').slice(0, -1).join('/')
+    this.location.replaceState(NEW_URL)
   }
   private initThreeJs(): void {
     this.scene = new THREE.Scene();
     this.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-    const hemisphereLight = new THREE.HemisphereLight(0xaaaaaa, 0x000000, 2);
-    this.scene.add(hemisphereLight);
+    const HEMISPHERE_LIGHT = new THREE.HemisphereLight(0xaaaaaa, 0x000000, 2);
+    this.scene.add(HEMISPHERE_LIGHT);
     this.renderer = new THREE.WebGLRenderer({ alpha: true });
-    const canvasContainer = this.elementRef.nativeElement.querySelector('#canvasContainer');
+    const CANVAS_CONTAINER = this.elementRef.nativeElement.querySelector('#canvasContainer');
     this.camera.position.z = 5;
     this.renderer.setSize(window.innerWidth / this.canvasRatioOfWindow, window.innerHeight / this.canvasRatioOfWindow);
-    canvasContainer.appendChild(this.renderer.domElement);
+    CANVAS_CONTAINER.appendChild(this.renderer.domElement);
     this.animationFrameId = requestAnimationFrame(() => this.animate());
     this.renderer.render(this.scene, this.camera);
   }
-
   private animate(): void {
     this.animationFrameId = requestAnimationFrame(() => this.animate());
     this.renderer.render(this.scene, this.camera);
   }
-
   private createRoundedRectangleGeometry(width: number, height: number, radius: number, segments: number): THREE.BufferGeometry {
-    const shape = new THREE.Shape();
-    shape.moveTo(-width / 2 + radius, -height / 2);
-    shape.lineTo(width / 2 - radius, -height / 2);
-    shape.quadraticCurveTo(width / 2, -height / 2, width / 2, -height / 2 + radius);
-    shape.lineTo(width / 2, height / 2 - radius);
-    shape.quadraticCurveTo(width / 2, height / 2, width / 2 - radius, height / 2);
-    shape.lineTo(-width / 2 + radius, height / 2);
-    shape.quadraticCurveTo(-width / 2, height / 2, -width / 2, height / 2 - radius);
-    shape.lineTo(-width / 2, -height / 2 + radius);
-    shape.quadraticCurveTo(-width / 2, -height / 2, -width / 2 + radius, -height / 2);
+    const SHAPE = new THREE.Shape();
+    SHAPE.moveTo(-width / 2 + radius, -height / 2);
+    SHAPE.lineTo(width / 2 - radius, -height / 2);
+    SHAPE.quadraticCurveTo(width / 2, -height / 2, width / 2, -height / 2 + radius);
+    SHAPE.lineTo(width / 2, height / 2 - radius);
+    SHAPE.quadraticCurveTo(width / 2, height / 2, width / 2 - radius, height / 2);
+    SHAPE.lineTo(-width / 2 + radius, height / 2);
+    SHAPE.quadraticCurveTo(-width / 2, height / 2, -width / 2, height / 2 - radius);
+    SHAPE.lineTo(-width / 2, -height / 2 + radius);
+    SHAPE.quadraticCurveTo(-width / 2, -height / 2, -width / 2 + radius, -height / 2);
 
-    const geometry = new THREE.ShapeGeometry(shape, segments);
+    const geometry = new THREE.ShapeGeometry(SHAPE, segments);
 
     return geometry;
   }
-
-
   private createRoom(): void {
     if (!this.roomData) return
-    const roomProportions = this.roomData.roomProportions
-    const radius = 0.1
+    const ROOM_PROPORTIONS = this.roomData.roomProportions
+    const RADIUS = 0.1
     this.controls = new OrbitControls(this.camera, this.renderer.domElement);
     this.controls.enableDamping = true;
     this.controls.dampingFactor = 0.15;
@@ -161,58 +164,57 @@ export class SceneComponent implements AfterViewInit, OnChanges {
     this.controls.maxDistance = 10;
     const paddingPolarAngle = 5;
     this.controls.maxPolarAngle = THREE.MathUtils.degToRad(90 - paddingPolarAngle);
-    this.createRoomShape(roomProportions.width, roomProportions.length, radius);
+    this.createRoomShape(ROOM_PROPORTIONS.width, ROOM_PROPORTIONS.length, RADIUS);
     this.rectangleMesh.name = 'roomFloorBase';
     this.rectangleMesh
   }
-
   private calculateObjectSaveData(object: THREE.Object3D) {
-    const floorSize = this.getObjectSize(this.rectangleMesh)
-    const objectPosition = object.position
+    const FLOOR_SIZE = this.getObjectSize(this.rectangleMesh)
+    const OBJECT_POSITION = object.position
     const objectSaveData: objectSceneInterface = {
       objectId: (object.userData as any).id,
-      xMetersDistance: objectPosition.x / floorSize.width * this.roomProportions.width,
-      zMetersDistance: objectPosition.z / floorSize.length * this.roomProportions.length,
+      xMetersDistance: OBJECT_POSITION.x / FLOOR_SIZE.width * this.roomProportions.width,
+      zMetersDistance: OBJECT_POSITION.z / FLOOR_SIZE.length * this.roomProportions.length,
       yRotate: object.rotation.y
     }
     return objectSaveData
   }
   private calculateMoveObjectData(objectSaveData: objectSceneInterface): objectLoadInterface {
-    const floorSize = this.getObjectSize(this.rectangleMesh)
+    const FLOOR_SIZE = this.getObjectSize(this.rectangleMesh)
     return {
-      xDistance: objectSaveData.xMetersDistance * floorSize.width / this.roomProportions.width,
-      zDistance: objectSaveData.zMetersDistance * floorSize.length / this.roomProportions.length,
+      xDistance: objectSaveData.xMetersDistance * FLOOR_SIZE.width / this.roomProportions.width,
+      zDistance: objectSaveData.zMetersDistance * FLOOR_SIZE.length / this.roomProportions.length,
       yRotate: objectSaveData.yRotate
     }
   }
   private createRoomShape(widthRatio: number, heightRatio: number, radius: number): void {
-    const cameraFrustumBounds = this.calculateFrustumBounds();
-    const shapeRatio = widthRatio / heightRatio;
+    const CAMERA_FRUSTUM_BOUNDS = this.calculateFrustumBounds();
+    const SHAPE_RATIO = widthRatio / heightRatio;
     let width: number, height: number;
 
-    if (shapeRatio <= 1) {
-      width = cameraFrustumBounds.height * shapeRatio;
-      height = cameraFrustumBounds.height;
+    if (SHAPE_RATIO <= 1) {
+      width = CAMERA_FRUSTUM_BOUNDS.height * SHAPE_RATIO;
+      height = CAMERA_FRUSTUM_BOUNDS.height;
     } else {
-      width = cameraFrustumBounds.width;
-      height = cameraFrustumBounds.width / shapeRatio;
+      width = CAMERA_FRUSTUM_BOUNDS.width;
+      height = CAMERA_FRUSTUM_BOUNDS.width / SHAPE_RATIO;
     }
-    const segments = 10;
-    const geometry = this.createRoundedRectangleGeometry(width * 0.9, height * 0.9, radius, segments);
-    const material = new THREE.MeshBasicMaterial({ color: 3427905 });
+    const SEGMENTS = 10;
+    const GEOMETRY = this.createRoundedRectangleGeometry(width * 0.9, height * 0.9, radius, SEGMENTS);
+    const MATERIAL = new THREE.MeshBasicMaterial({ color: 3427905 });
 
-    this.rectangleMesh = new THREE.Mesh(geometry, material);
+    this.rectangleMesh = new THREE.Mesh(GEOMETRY, MATERIAL);
     this.scene.add(this.rectangleMesh)
     this.renderer.render(this.scene, this.camera);
     this.rectangleMesh.updateMatrixWorld(true);
   }
   private calculateFrustumBounds(): { width: number; height: number } {
-    const cameraY = this.camera.position.y;
-    const fovRad = THREE.MathUtils.degToRad(this.camera.fov);
-    const frustumHeight = 2 * Math.tan(fovRad / 2) * Math.abs(cameraY);
-    const frustumWidth = frustumHeight * this.camera.aspect;
+    const CAMERA_Y = this.camera.position.y;
+    const FOV_RAD = THREE.MathUtils.degToRad(this.camera.fov);
+    const FRUSTUM_HEIGHT = 2 * Math.tan(FOV_RAD / 2) * Math.abs(CAMERA_Y);
+    const FRUSTUM_WIDTH = FRUSTUM_HEIGHT * this.camera.aspect;
 
-    return { width: frustumWidth, height: frustumHeight };
+    return { width: FRUSTUM_WIDTH, height: FRUSTUM_HEIGHT };
   }
   private addObjectToScene(object: THREE.Object3D, objectProportions: modelInterface, furnitureId: string, moveData?: objectLoadInterface) {
     object.userData = { id: furnitureId }
@@ -224,70 +226,38 @@ export class SceneComponent implements AfterViewInit, OnChanges {
     object.rotation.y = moveData.yRotate
 
   }
-  async loadFurnitureModel(fileModel: Blob, furnitureSize: modelInterface, furnitureId: string, saveRoom: boolean, moveData?: objectLoadInterface) {
-    this.spinner.show()
-    try {
-      const LOAD_OBJECT = await loadModel(fileModel)
-      if (moveData) { this.addObjectToScene(LOAD_OBJECT, furnitureSize, furnitureId, moveData) } else { this.addObjectToScene(LOAD_OBJECT, furnitureSize, furnitureId) }
-      this.spinner.hide()
-      if (saveRoom) this.saveRoom()
-    } catch (error) {
-      this.spinner.hide()
-    }
-  }
   private getObjectSize(object: THREE.Object3D): { width: number; height: number; length: number } {
-    const boundingBox = new THREE.Box3().setFromObject(object);
-    const size = boundingBox.getSize(new THREE.Vector3());
+    const BOUNDING_BOX = new THREE.Box3().setFromObject(object);
+    const SIZE = BOUNDING_BOX.getSize(new THREE.Vector3());
     return {
-      width: size.x,
-      length: size.z,
-      height: size.y
+      width: SIZE.x,
+      length: SIZE.z,
+      height: SIZE.y
     };
   }
   private scaleImportModel(object: THREE.Object3D, objectProportions: modelInterface) {
-    const uploadObjectSize = this.getObjectSize(object);
-    const rectangleSize = this.getObjectSize(this.rectangleMesh);
-    const sceneProportionsСoefficient = uploadObjectSize.width > uploadObjectSize.length ? rectangleSize.width / uploadObjectSize.width : rectangleSize.length / uploadObjectSize.length;
-    const realProportionsСoefficient = uploadObjectSize.width > uploadObjectSize.length ? objectProportions.width / this.roomProportions.width : objectProportions.length / this.roomProportions.length;
-    const generalСoefficient = realProportionsСoefficient * sceneProportionsСoefficient;
-    object.scale.set(generalСoefficient, generalСoefficient, generalСoefficient);
+    const UPLOAD_OBJECT_SIZE = this.getObjectSize(object);
+    const RECTANGLE_SIZE = this.getObjectSize(this.rectangleMesh);
+    const SCENE_PROPORTIONS_COEFFICIENT = UPLOAD_OBJECT_SIZE.width > UPLOAD_OBJECT_SIZE.length ? RECTANGLE_SIZE.width / UPLOAD_OBJECT_SIZE.width : RECTANGLE_SIZE.length / UPLOAD_OBJECT_SIZE.length;
+    const REAL_PROPORTIONS_COEFFICIENT = UPLOAD_OBJECT_SIZE.width > UPLOAD_OBJECT_SIZE.length ? objectProportions.width / this.roomProportions.width : objectProportions.length / this.roomProportions.length;
+    const GENERAL_COEFFICIENT = REAL_PROPORTIONS_COEFFICIENT * SCENE_PROPORTIONS_COEFFICIENT;
+    object.scale.set(GENERAL_COEFFICIENT, GENERAL_COEFFICIENT, GENERAL_COEFFICIENT);
   }
   private loadRoom(roomData: roomData) {
-    const jwt = this.userCookieService.getJwt()
-    if (!jwt) return
+    const JWT = this.accountCookieService.getJwt()
+    if (!JWT) return
     roomData.objects.forEach(object => {
       this.addModel(object.objectId, false, this.calculateMoveObjectData(object))
     })
   }
   private clearRoom() {
     for (let i = this.scene.children.length - 1; i >= 0; i--) {
-      const object = this.scene.children[i];
-      if (object.type !== 'Scene' && object.type !== 'HemisphereLight') {
-        this.scene.remove(object);
+      const OBJECT = this.scene.children[i];
+      if (OBJECT.type !== 'Scene' && OBJECT.type !== 'HemisphereLight') {
+        this.scene.remove(OBJECT);
       }
     }
   }
-
-  saveRoom() {
-    if (!this.roomData) return
-    const objectsSceneArray = this.scene.children.filter(object => {
-      if (
-        object.name !== 'roomFloorBase' &&
-        object.type !== 'Scene' &&
-        object.type !== 'HemisphereLight'
-      ) {
-        return true;
-      }
-      return false;
-    })
-      .map(object => {
-        return this.calculateObjectSaveData(object)
-      })
-    const roomDataObjects = objectsSceneArray
-    this.roomData.objects = objectsSceneArray
-    this.saveObjectsEmitter.emit(roomDataObjects)
-  }
-
   @HostListener('window:resize', ['$event'])
   private onResize(event: Event): void {
     this.renderer.setSize(window.innerWidth / this.canvasRatioOfWindow, window.innerHeight / this.canvasRatioOfWindow);
@@ -301,21 +271,21 @@ export class SceneComponent implements AfterViewInit, OnChanges {
       this.targetobject = undefined;
       return;
     }
-    const rect = (event.target as HTMLCanvasElement).getBoundingClientRect();
-    const x = (event.clientX - rect.left) / rect.width * 2 - 1;
-    const y = -(event.clientY - rect.top) / rect.height * 2 + 1;
+    const RECT = (event.target as HTMLCanvasElement).getBoundingClientRect();
+    const X = (event.clientX - RECT.left) / RECT.width * 2 - 1;
+    const Y = -(event.clientY - RECT.top) / RECT.height * 2 + 1;
 
-    this.mouse.x = x;
-    this.mouse.y = y;
+    this.mouse.x = X;
+    this.mouse.y = Y;
     this.raycaster.setFromCamera(this.mouse, this.camera);
 
-    const intersects = this.raycaster.intersectObjects(this.scene.children);
+    const INTERSECTIONS = this.raycaster.intersectObjects(this.scene.children);
 
-    const foundIntersetc = intersects.find(intersect => {
+    const FOUND_INTERSECTION = INTERSECTIONS.find(intersect => {
       return intersect.object.name !== 'roomFloorBase' && intersect.object.type !== 'Scene' && intersect.object.type !== 'HemisphereLight'
     })?.object
-    if (!foundIntersetc) return
-    this.targetobject = foundIntersetc.parent ? foundIntersetc.parent : foundIntersetc
+    if (!FOUND_INTERSECTION) return
+    this.targetobject = FOUND_INTERSECTION.parent ? FOUND_INTERSECTION.parent : FOUND_INTERSECTION
   }
   @HostListener('window:keydown', ['$event'])
   private rotateTargetObject(event: KeyboardEvent) {
@@ -336,42 +306,65 @@ export class SceneComponent implements AfterViewInit, OnChanges {
   private onMousemove(event: MouseEvent): void {
     if (!this.targetobject) return;
 
-    const rect = (event.target as HTMLCanvasElement).getBoundingClientRect();
-    const x = (event.clientX - rect.left) / rect.width * 2 - 1;
-    const y = -(event.clientY - rect.top) / rect.height * 2 + 1;
+    const RECT = (event.target as HTMLCanvasElement).getBoundingClientRect();
+    const X = (event.clientX - RECT.left) / RECT.width * 2 - 1;
+    const Y = -(event.clientY - RECT.top) / RECT.height * 2 + 1;
 
-    this.mouse.x = x;
-    this.mouse.y = y;
+    this.mouse.x = X;
+    this.mouse.y = Y;
     this.raycaster.setFromCamera(this.mouse, this.camera);
 
-    const intersects = this.raycaster.intersectObject(this.rectangleMesh);
-    if (intersects.length === 0) return;
+    const INTERSECTIONS = this.raycaster.intersectObject(this.rectangleMesh);
+    if (INTERSECTIONS.length === 0) return;
 
-    const intersectX = intersects[0].point.x;
-    const intersectZ = intersects[0].point.z;
-    const rectangleMeshSize = this.getObjectSize(this.rectangleMesh);
+    const INTERSECTIONS_X = INTERSECTIONS[0].point.x;
+    const INTERSECTION_Z = INTERSECTIONS[0].point.z;
+    const RECTANGLE_MESH_SIZE = this.getObjectSize(this.rectangleMesh);
     const objectSize = this.getObjectSize(this.targetobject);
 
-    const minX = -rectangleMeshSize.width / 2 + objectSize.width / 2;
-    const maxX = rectangleMeshSize.width / 2 - objectSize.width / 2;
+    const minX = -RECTANGLE_MESH_SIZE.width / 2 + objectSize.width / 2;
+    const maxX = RECTANGLE_MESH_SIZE.width / 2 - objectSize.width / 2;
 
-    let newXObjectPosition = intersectX;
+    let newXObjectPosition = INTERSECTIONS_X;
     if (newXObjectPosition < minX) {
       newXObjectPosition = minX;
     } else if (newXObjectPosition > maxX) {
       newXObjectPosition = maxX;
     }
 
-    const minZ = -rectangleMeshSize.length / 2 + objectSize.length / 2;
-    const maxZ = rectangleMeshSize.length / 2 - objectSize.length / 2;
+    const MIN_Z = -RECTANGLE_MESH_SIZE.length / 2 + objectSize.length / 2;
+    const MAX_Z = RECTANGLE_MESH_SIZE.length / 2 - objectSize.length / 2;
 
-    let newZObjectPosition = intersectZ;
-    if (newZObjectPosition < minZ) {
-      newZObjectPosition = minZ;
-    } else if (newZObjectPosition > maxZ) {
-      newZObjectPosition = maxZ;
+    let newZObjectPosition = INTERSECTION_Z;
+    if (newZObjectPosition < MIN_Z) {
+      newZObjectPosition = MIN_Z;
+    } else if (newZObjectPosition > MAX_Z) {
+      newZObjectPosition = MAX_Z;
     }
 
     this.targetobject.position.set(newXObjectPosition, 0, newZObjectPosition);
+  }
+  protected deleteModel() {
+    if (this.targetobject) this.scene.remove(this.targetobject)
+    this.saveRoom()
+  }
+  public saveRoom() {
+    if (!this.roomData) return
+    const OBJECTS_SCENE_ARRAY = this.scene.children.filter(object => {
+      if (
+        object.name !== 'roomFloorBase' &&
+        object.type !== 'Scene' &&
+        object.type !== 'HemisphereLight'
+      ) {
+        return true;
+      }
+      return false;
+    })
+      .map(object => {
+        return this.calculateObjectSaveData(object)
+      })
+    const ROOM_OBJECTS_DATA = OBJECTS_SCENE_ARRAY
+    this.roomData.objects = OBJECTS_SCENE_ARRAY
+    this.saveObjectsEmitter.emit(ROOM_OBJECTS_DATA)
   }
 }
