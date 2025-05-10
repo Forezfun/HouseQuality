@@ -1,4 +1,4 @@
-@import 'base.scss';
+@use 'base.scss' as *;
 button:not(.colorVariant),
 .furnitureModelInput {
     transition: all 0.3s ease-in-out;

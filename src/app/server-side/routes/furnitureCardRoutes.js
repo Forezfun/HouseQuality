@@ -6,10 +6,9 @@ const IMAGES_FURNITURE = require('../models/imagesFurniture');
 
 ROUTER.post('/', async (request, result) => {
     try {
-        console.log(request.query, request.body, request.params)
         const JWT = request.query.jwt;
         const ACCOUNT_ID = await checkUserAccess(JWT);
-        if (!ACCOUNT_ID) return res.status(404).json({ message: 'User not found' });
+        if (!ACCOUNT_ID) return result.status(404).json({ message: 'Аккаунт не найден' });
         let FURNITURE_CARD_ITEM = new FURNITURE_CARD({
             name: request.body.name,
             description: request.body.description,
@@ -19,34 +18,29 @@ ROUTER.post('/', async (request, result) => {
             additionalData: {}
         })
         request.body.colors.forEach(color => { FURNITURE_CARD_ITEM.colors.push({ color: color.color, idImages: '' }) })
-        console.log(request.body.additionalData)
         if (request.body.additionalData !== undefined) {
             const ADDITIONAL_DATA = request.body.additionalData;
-            console.log(ADDITIONAL_DATA)
 
             Object.keys(ADDITIONAL_DATA).forEach(propertyKey => {
-                console.log(propertyKey, FURNITURE_CARD.schema.paths.additionalData.schema.paths)
                 if (propertyKey in FURNITURE_CARD.schema.paths.additionalData.schema.paths) {
                     FURNITURE_CARD_ITEM.additionalData[propertyKey] = ADDITIONAL_DATA[propertyKey];
                 }
             });
         }
-        console.log(FURNITURE_CARD_ITEM)
         await FURNITURE_CARD_ITEM.save()
         result.status(201).json({ furnitureData: FURNITURE_CARD_ITEM })
-    } catch (err) {
-        result.status(400).json({ message: err.message });
+    } catch (error) {
+        result.status(400).json({ message: error.message });
     }
 });
 
 ROUTER.put('/', async (request, result) => {
     try {
-        console.log('query: ', request.query)
         const JWT = request.query.jwt;
         const ACCOUNT_ID = await checkUserAccess(JWT);
-        if (!ACCOUNT_ID) return result.status(404).json({ message: 'User not found' });
+        if (!ACCOUNT_ID) return result.status(404).json({ message: 'Аккаунт не найден' });
         let FURNITURE_CARD_ITEM = await FURNITURE_CARD.findOne({ authorId: ACCOUNT_ID })
-        if (!FURNITURE_CARD_ITEM) return result.status(404).json({ message: 'Furniture card not found' });
+        if (!FURNITURE_CARD_ITEM) return result.status(404).json({ message: 'Това не найден' });
 
         FURNITURE_CARD_ITEM.name = request.body.name;
         FURNITURE_CARD_ITEM.description = request.body.description;
@@ -65,9 +59,9 @@ ROUTER.put('/', async (request, result) => {
             });
         }
         await FURNITURE_CARD_ITEM.save()
-        result.status(201).json({ message: 'Furniture card successfully updated' })
-    } catch (err) {
-        result.status(400).json({ message: err.message });
+        result.status(201).json({ message: 'Товар успешно создан' })
+    } catch (error) {
+        result.status(400).json({ message: error.message });
     }
 });
 
@@ -76,21 +70,21 @@ ROUTER.delete('/', async (request, result) => {
         const JWT = request.query.jwt;
         const FURNITURE_CARD_ID = request.query.furnitureCardId
         const ACCOUNT_ID = await checkUserAccess(JWT);
-        if (!ACCOUNT_ID) return res.status(404).json({ message: 'User not found' });
+        if (!ACCOUNT_ID) return result.status(404).json({ message: 'Аккаунт не найден' });
         let FURNITURE_CARD_ITEM = await FURNITURE_CARD.findById(FURNITURE_CARD_ID)
-        if (!FURNITURE_CARD_ITEM) return res.status(404).json({ message: 'Furniture card not found' });
-        if (FURNITURE_CARD_ITEM.authorId !== ACCOUNT_ID) return res.status(409).json({ message: "User hasn't access" });
+        if (!FURNITURE_CARD_ITEM) return result.status(404).json({ message: 'Товар не найден' });
+        if (FURNITURE_CARD_ITEM.authorId !== ACCOUNT_ID) return result.status(409).json({ message: 'Нет доступа' });
         await FURNITURE_CARD.deleteOne({ _id: FURNITURE_CARD_ID });
-        result.status(201).json({ message: 'Furniture card successfully deleted' })
-    } catch (err) {
-        result.status(400).json({ message: err.message });
+        result.status(201).json({ message: 'Товар успешно удален' })
+    } catch (error) {
+        result.status(400).json({ message: error.message });
     }
 });
 
 ROUTER.get('/', async (request, result) => {
     try {
         let FURNITURE_CARD_ITEM = await FURNITURE_CARD.findById(request.query.furnitureCardId)
-        if (!FURNITURE_CARD_ITEM) return res.status(404).json({ message: 'Furniture card not found' });
+        if (!FURNITURE_CARD_ITEM) return result.status(404).json({ message: 'Товар не найден' });
         const JWT = request.query.jwt;
         const ACCOUNT_ID = await checkUserAccess(JWT);
         const AUTHOR_MATCHED = ACCOUNT_ID === FURNITURE_CARD_ITEM.authorId ? true : false
@@ -105,8 +99,8 @@ ROUTER.get('/', async (request, result) => {
             additionalData: FURNITURE_CARD_ITEM.additionalData
         }
         result.status(201).json({ furnitureCard: PROCESSED_FURNITURE_ITEM, authorMatched: AUTHOR_MATCHED });
-    } catch (err) {
-        result.status(400).json({ message: err.message });
+    } catch (error) {
+        result.status(400).json({ message: error.message });
     }
 })
 
@@ -133,7 +127,7 @@ async function proccessColorsData(FURNITURE_CARD_ITEM) {
                 }
             });
         } catch (error) {
-            console.error('Error processing color:', colorData.color, error);
+            console.error('Error processing color:', COLOR_DATA.color, error);
         }
     }
     return colorsFromServerData;

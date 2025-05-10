@@ -1,4 +1,4 @@
-@import 'base.scss';
+@use 'base.scss' as *;
 
 app-navigation-panel {
     margin-top: 30px;

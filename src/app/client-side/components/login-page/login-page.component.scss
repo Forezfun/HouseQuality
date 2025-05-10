@@ -1,4 +1,6 @@
-@import 'base.scss';
+@use 'base.scss' as *;
+@use 'sass:color';
+
 app-navigation-panel{
     margin-top: 30px;
 }
@@ -97,7 +99,7 @@ app-navigation-panel{
       outline: none;
       
       &:focus {
-        border-color: lighten($lightGreen, 15%);
+        border-color: color.scale($lightGreen, $lightness: 15%);
         box-shadow: 0 0 0 3px rgba($lightGreen, 0.2);
         transform: translateY(-2px);
       }
@@ -129,7 +131,7 @@ app-navigation-panel{
     margin-top: 10px;
     
     &:hover {
-        background-color: lighten($lightGreen, 10%);
+        background-color: color.scale($lightGreen, $lightness: 10%);
     }
     
     &:disabled {

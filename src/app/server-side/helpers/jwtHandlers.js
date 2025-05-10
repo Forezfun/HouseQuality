@@ -7,8 +7,8 @@ module.exports.isTokenNoneExpired = function isTokenNoneExpired(jwt) {
     try {
         jwt.verify(jwt, cryptoKey);
         return true;
-    } catch (err) {
-        if (err.name === 'TokenExpiredError') {
+    } catch (error) {
+        if (error.name === 'TokenExpiredError') {
             return false;
         }
         return true;
@@ -20,10 +20,9 @@ module.exports.checkUserAccess = async function checkUserAccess(jwt) {
     let DECODED_ACCOUNT_TOKEN;
     try {
         DECODED_ACCOUNT_TOKEN = JWT_SERVICE.verify(JWT, cryptoKey);
-    } catch (err) {
+    } catch (error) {
         return false;
     }
-    console.log(JWT,DECODED_ACCOUNT_TOKEN)
     if (!DECODED_ACCOUNT_TOKEN) return false;
     const ACCOUNT_ITEM = await ACCOUNT.findById(DECODED_ACCOUNT_TOKEN.accountId);
     if (!ACCOUNT_ITEM) return false;

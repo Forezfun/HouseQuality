@@ -70,7 +70,7 @@ ROUTER.get('/', async (request, result) => {
     try {
         const QUERY = request.query.q;
         if (!QUERY || QUERY.trim() === '') {
-            return result.status(400).json({ message: 'Search query cannot be empty' });
+            return result.status(400).json({ message: 'Строка запроса пустая' });
         }
 
         const PUBLICATIONS = await FURNITURE_CARD.find();
@@ -101,8 +101,8 @@ ROUTER.get('/', async (request, result) => {
         });
 
         result.json(PROCCESSED_PUBLICATIONS);
-    } catch (err) {
-        result.status(500).json({ message: err.message });
+    } catch (error) {
+        result.status(500).json({ message: error.message });
     }
 });
 

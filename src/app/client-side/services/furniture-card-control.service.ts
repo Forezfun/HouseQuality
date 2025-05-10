@@ -8,7 +8,7 @@ interface shopData {
   cost: number;
   url: string;
 }
-interface furnitureProportions {
+export interface furnitureProportions {
   width: number|null;
   length: number|null;
   height: number|null;

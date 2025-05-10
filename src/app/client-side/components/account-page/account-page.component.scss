@@ -1,4 +1,5 @@
-@import 'base.scss';
+@use 'base.scss' as *;
+@use 'sass:color';
 
 .account-page {
     background: black;
@@ -59,7 +60,7 @@
 
         &:hover {
             transform: scale(1.1);
-            background: lighten($darkGreen, 10%);
+            background: color.scale($darkGreen, $lightness: 10%)
         }
 
         input {
