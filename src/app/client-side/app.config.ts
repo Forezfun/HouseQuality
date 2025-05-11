@@ -8,7 +8,8 @@ import { provideServiceWorker } from '@angular/service-worker';
 import { AppComponent } from './app.component';
 import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
-import { HttpErrorInterceptorService } from "./services/http-error-interceptor.service";
+import { HttpErrorInterceptor } from "./interceptors/http-error.interceptor";
+import { ModelCacheInterceptor } from "./interceptors/service-worker.interceptor";
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -19,9 +20,14 @@ export const appConfig: ApplicationConfig = {
     provideEventPlugins(),
     {
       provide: HTTP_INTERCEPTORS,
-      useClass: HttpErrorInterceptorService,
+      useClass: HttpErrorInterceptor,
       multi: true
     },
+    // {
+    //   provide: HTTP_INTERCEPTORS,
+    //   useClass: ModelCacheInterceptor,
+    //   multi: true
+    // },
   ]
 
 };

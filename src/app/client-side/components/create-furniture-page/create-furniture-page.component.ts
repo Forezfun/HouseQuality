@@ -127,6 +127,7 @@ export class CreateFurniturePageComponent implements OnInit {
     if (!this.checkValid('update') || !JWT) return
     try {
       const FURNITURE_DATA = this.createFurnitureComponent.furnitureData;
+      console.log(FURNITURE_DATA)
       await this.furnitureCardService.PUTupdateFurnitureCard(FURNITURE_DATA, this.idPage, JWT)
 
       FURNITURE_DATA.colors.forEach(async (colorData) => {

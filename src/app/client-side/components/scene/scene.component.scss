@@ -1,5 +1,5 @@
-@import "spinner.scss";
-@import "base.scss";
+@use 'spinner.scss' as *;
+@use 'base.scss' as *;
 
 :host {
     display: block;

@@ -26,15 +26,13 @@ const FINDER_ROUTE = '/finder'
 const CATEGORY_ROUTE = '/category'
 
 const APP = EXPRESS();
-// Подключение к базе данных
+
 CONNECT_DB();
 
-// Мидлвары
 APP.use(CORS());
 APP.use(BODYPARSER.json());
 APP.use(BODYPARSER.urlencoded({ extended: true }));
 
-// Маршруты
 APP.use(PROJECT_ROUTE, PROJECT_ROUTES);
 APP.use(ACCOUNT_ROUTE, ACCOUNTS_ROUTES);
 APP.use(AUTH_ROUTE, AUTH_ROUTES);
@@ -46,16 +44,14 @@ APP.use(SHOP_ROUTE, SHOP_ROUTES);
 APP.use(CATEGORY_ROUTE, CATEGORY_ROUTES);
 APP.use(FINDER_ROUTE, FINDER_ROUTES);
 
-// Запуск сервера
-APP.listen(APP_PORT, '0.0.0.0', () => {
+
+APP.listen(APP_PORT, 'localhost', () => {
   console.log(`Server running on port ${APP_PORT}`);
 });
 APP.get('/error', (request, result) => {
   throw new Error('This is a forced error.');
 });
-
-// Middleware для обработки ошибок
-APP.use((err, request, result, next) => {
+APP.use((error, request, result, next) => {
   console.error(error.stack);
   result.status(500).send('Something broke!');
 });

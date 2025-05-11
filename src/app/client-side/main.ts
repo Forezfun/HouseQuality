@@ -5,9 +5,9 @@ import { AppComponent } from './app.component';
 bootstrapApplication(AppComponent, appConfig)
   .then(() => {
     if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('/csw.js')
-        .then(reg => console.log('Service Worker зарегистрирован:', reg))
-        .catch(error => console.error('Ошибка регистрации Service Worker:', error));
+      navigator.serviceWorker.register('/model-scw.js', { scope: '/' })
+        .then(reg => {})
+        .catch(err => {});
     }
   })
   .catch((error) => console.error(error));

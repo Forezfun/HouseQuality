@@ -9,7 +9,7 @@ import { AcountCookieService } from '../../services/account-cookie.service';
 import { FurnitureCardControlService } from '../../services/furniture-card-control.service';
 import { ActivatedRoute } from '@angular/router';
 import { ErrorHandlerService } from '../../services/error-handler.service';
-import { Location} from '@angular/common';
+import { Location } from '@angular/common';
 
 export interface modelInterface {
   width: number;
@@ -88,7 +88,6 @@ export class SceneComponent implements AfterViewInit, OnChanges {
     const FURNITURE_ID = this.route.snapshot.params['furnitureId']
     if (!FURNITURE_ID || changes['roomData'].previousValue) return
     this.fixPath()
-    this.spinner.show()
     this.addModel(FURNITURE_ID, true)
   }
 
@@ -108,6 +107,7 @@ export class SceneComponent implements AfterViewInit, OnChanges {
     if (!JWT) return
     try {
       const PROPORTIONS = (await this.furnitureCardService.GETfurnitureCard(furnitureId)).furnitureCard.proportions as modelInterface
+      console.log('addModel request')
       const MODEL = await this.furnitureModelService.GETfurnitureModel(JWT, furnitureId)
       this.loadFurnitureModel(MODEL, PROPORTIONS, furnitureId, saveRoom, moveData)
     } catch (error) {

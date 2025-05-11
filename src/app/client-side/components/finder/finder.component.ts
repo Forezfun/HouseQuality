@@ -75,6 +75,6 @@ protected checkDesktop=checkDesktop
     return this.imageService.GETmainImage(idFurniture,color)
   }
   protected getUrl(idFurniture:string,category:string){
-    return `shop/${category}/${idFurniture}`
+    return `shop/${category??'all'}/${idFurniture}`
   }
 }

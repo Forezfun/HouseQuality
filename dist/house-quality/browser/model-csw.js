@@ -1,0 +1,193 @@
+const DB_NAME = 'FurnitureModelsDB';
+const DB_VERSION = 2;
+const META_STORE = 'metaStore';
+const CHUNK_STORE = 'chunkStore';
+const MAX_CACHE_SIZE_BYTES = 2 * 1024 * 1024 * 1024; 
+
+self.addEventListener('install', event => {
+  console.log('Service Worker installing...');
+  event.waitUntil(
+    caches.open()
+  )
+});
+
+self.addEventListener('activate', event => {
+  console.log('Service Worker activated');
+  event.waitUntil(
+    clients.claim()
+    .then(() => {
+      return self.clients.matchAll();
+    })
+    .then(clients => {
+      console.log('Clients:', clients);
+    })
+  );
+});
+
+self.addEventListener('fetch', event => {
+  console.log('Intercepting request:', event.request.url);
+  const url = new URL(event.request.url);
+  if (url.pathname === '/furniture/model' && url.searchParams.has('furnitureId')) {
+    event.respondWith(handleModelRequest(event.request));
+  }
+});
+
+async function handleModelRequest(request) {
+  const url = new URL(request.url);
+  const furnitureId = url.searchParams.get('furnitureId');
+  const versionRes = await fetch(`/furniture/model/version?furnitureId=${furnitureId}`);
+
+  if (!versionRes.ok) return fetch(request);
+  const { versionModel } = await versionRes.json();
+
+  const db = await openDB();
+  const meta = await dbGetMeta(db, furnitureId);
+
+  if (meta && meta.versionModel === versionModel) {
+    await incrementRequestCount(db, furnitureId);
+    const chunks = await dbGetChunks(db, furnitureId, meta.chunkCount);
+    const blob = new Blob(chunks);
+    return new Response(blob);
+  }
+
+  
+  const modelRes = await fetch(request);
+  const blob = await modelRes.blob();
+  const chunks = await blobToChunks(blob);
+  await dbPutModel(db, furnitureId, versionModel, chunks, blob.size);
+  await enforceStorageLimit(db);
+  return new Response(blob);
+}
+
+function openDB() {
+  return new Promise((resolve, reject) => {
+    const req = indexedDB.open(DB_NAME, DB_VERSION);
+    req.onupgradeneeded = e => {
+      const db = e.target.result;
+      if (!db.objectStoreNames.contains(META_STORE)) {
+        db.createObjectStore(META_STORE, { keyPath: 'furnitureId' });
+      }
+      if (!db.objectStoreNames.contains(CHUNK_STORE)) {
+        db.createObjectStore(CHUNK_STORE, { keyPath: 'id' });
+      }
+    };
+    req.onsuccess = e => resolve(e.target.result);
+    req.onerror = e => reject(e);
+  });
+}
+
+function dbGetMeta(db, furnitureId) {
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(META_STORE, 'readonly');
+    const store = tx.objectStore(META_STORE);
+    const req = store.get(furnitureId);
+    req.onsuccess = () => resolve(req.result);
+    req.onerror = reject;
+  });
+}
+
+function dbGetChunks(db, furnitureId, count) {
+  return Promise.all(
+    Array.from({ length: count }, (_, i) => {
+      return new Promise((resolve, reject) => {
+        const tx = db.transaction(CHUNK_STORE, 'readonly');
+        const store = tx.objectStore(CHUNK_STORE);
+        const req = store.get(`${furnitureId}_${i}`);
+        req.onsuccess = () => resolve(req.result?.data);
+        req.onerror = reject;
+      });
+    })
+  );
+}
+
+function dbPutModel(db, furnitureId, versionModel, chunks, size) {
+  return new Promise((resolve, reject) => {
+    const txMeta = db.transaction(META_STORE, 'readwrite');
+    const metaStore = txMeta.objectStore(META_STORE);
+    metaStore.put({ furnitureId, versionModel, chunkCount: chunks.length, requestCount: 1, sizeInBytes: size });
+    txMeta.oncomplete = () => {
+      const txChunks = db.transaction(CHUNK_STORE, 'readwrite');
+      const chunkStore = txChunks.objectStore(CHUNK_STORE);
+      chunks.forEach((chunk, i) => {
+        chunkStore.put({ id: `${furnitureId}_${i}`, furnitureId, chunkIndex: i, data: chunk });
+      });
+      txChunks.oncomplete = resolve;
+      txChunks.onerror = reject;
+    };
+    txMeta.onerror = reject;
+  });
+}
+
+function incrementRequestCount(db, furnitureId) {
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(META_STORE, 'readwrite');
+    const store = tx.objectStore(META_STORE);
+    const req = store.get(furnitureId);
+    req.onsuccess = () => {
+      const data = req.result;
+      if (!data) return resolve();
+      data.requestCount += 1;
+      store.put(data);
+      tx.oncomplete = resolve;
+    };
+    req.onerror = reject;
+  });
+}
+
+async function enforceStorageLimit(db) {
+  const entries = await getAllMeta(db);
+  let total = entries.reduce((sum, e) => sum + e.sizeInBytes, 0);
+
+  if (total <= MAX_CACHE_SIZE_BYTES) return;
+
+  const sorted = entries.sort((a, b) => a.requestCount - b.requestCount);
+  while (total > MAX_CACHE_SIZE_BYTES && sorted.length > 0) {
+    const toDelete = sorted.shift();
+    await deleteModel(db, toDelete.furnitureId, toDelete.chunkCount);
+    total -= toDelete.sizeInBytes;
+  }
+}
+
+function getAllMeta(db) {
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(META_STORE, 'readonly');
+    const store = tx.objectStore(META_STORE);
+    const req = store.getAll();
+    req.onsuccess = () => resolve(req.result);
+    req.onerror = reject;
+  });
+}
+
+async function deleteModel(db, furnitureId, chunkCount) {
+  const tx1 = db.transaction(CHUNK_STORE, 'readwrite');
+  const chunkStore = tx1.objectStore(CHUNK_STORE);
+  for (let i = 0; i < chunkCount; i++) {
+    chunkStore.delete(`${furnitureId}_${i}`);
+  }
+  await txComplete(tx1);
+
+  const tx2 = db.transaction(META_STORE, 'readwrite');
+  const metaStore = tx2.objectStore(META_STORE);
+  metaStore.delete(furnitureId);
+  await txComplete(tx2);
+}
+
+function txComplete(tx) {
+  return new Promise((resolve, reject) => {
+    tx.oncomplete = resolve;
+    tx.onerror = reject;
+  });
+}
+
+function blobToChunks(blob, chunkSize = 5 * 1024 * 1024) {
+  return new Promise(resolve => {
+    const chunks = [];
+    let offset = 0;
+    while (offset < blob.size) {
+      const slice = blob.slice(offset, offset + chunkSize);
+      chunks.push(slice);
+      offset += chunkSize;
+    }
+    resolve(chunks);
+  });
+}

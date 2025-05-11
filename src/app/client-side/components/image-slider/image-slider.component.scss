@@ -1,4 +1,4 @@
-@import '@taiga-ui/core/styles/taiga-ui-local.scss';
+@use '@taiga-ui/core/styles/taiga-ui-local.scss' as *;
 tui-carousel{
     width:100%;
     max-width: 90vw;

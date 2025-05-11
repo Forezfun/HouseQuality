@@ -9,6 +9,11 @@ const { checkUserAccess } = require('../helpers/jwtHandlers');
 
 ROUTER.use(async (request, result, next) => {
     try {
+        console.log('model')
+        if (request.url.includes('version')) {
+            next();
+            return;
+        }
         const JWT = request.query.jwt || request.body.jwt;
         const ACCOUNT_ID = await checkUserAccess(JWT);
         if (!ACCOUNT_ID) return result.status(404).json({ message: 'Аккаунт не найден' })
@@ -79,6 +84,7 @@ ROUTER.post('/', upload.single('model'), async (request, result) => {
             });
             FURNITURE_MODEL_ITEM.originalName = request.query.fileName
         } else {
+            FURNITURE_MODEL_ITEM.__v += 1
             FURNITURE_MODEL_ITEM.filename = request.file.filename;
             FURNITURE_MODEL_ITEM.originalName = request.query.fileName
         }
@@ -118,6 +124,18 @@ ROUTER.delete('/', async (request, result) => {
         result.status(400).json({ message: error.message });
     }
 });
+
+ROUTER.get('/version', async (request, result) => {
+    try {
+        const FURNITURE_MODEL_ITEM = await FURNITURE_MODEL.findOne({ furnitureId: request.query.furnitureId });
+        if (!FURNITURE_MODEL_ITEM) {
+            return result.status(404).json({ message: 'Модель не найдена' });
+        }
+        result.status(201).json({ versionModel: FURNITURE_MODEL_ITEM.__v })
+    } catch (error) {
+        result.status(500).json({ message: error.message });
+    }
+})
 
 ROUTER.get('/', async (request, result) => {
     try {

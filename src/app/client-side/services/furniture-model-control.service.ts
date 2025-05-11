@@ -6,7 +6,7 @@ import { firstValueFrom } from 'rxjs';
   providedIn: 'root'
 })
 export class FurnitureModelControlService {
-  private baseServiceUrl = baseUrl+'furniture/model/'
+  private baseServiceUrl = baseUrl+'furniture/model'
   constructor(private httpModule: HttpClient) { }
 
   /**
@@ -47,6 +47,6 @@ export class FurnitureModelControlService {
    */
   DELETEfurnitureModel(jwt: string, furnitureId: string): Promise<any> {
     const HTTP_PARAMS = new HttpParams().set('jwt', jwt);
-    return firstValueFrom(this.httpModule.delete(this.baseServiceUrl+furnitureId, { params: HTTP_PARAMS })) as Promise<{message:string}>
+    return firstValueFrom(this.httpModule.delete(this.baseServiceUrl+'/'+furnitureId, { params: HTTP_PARAMS })) as Promise<{message:string}>
   }
 }
