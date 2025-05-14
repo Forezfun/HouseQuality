@@ -1,1 +1,2 @@
-export const baseUrl = 'http://localhost:4200/api/'
+export const baseClientUrl = 'http://localhost:4200/'
+export const baseUrl = baseClientUrl+'api/'

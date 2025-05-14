@@ -1,7 +1,7 @@
 @use 'base.scss' as *;
 .body{
     border-radius: 10px;
-    box-shadow: 0 0 10px white;
+    border: 1px solid rgba($lightGreen, 0.3);
     background-color: black;
     width:clamp(250px,30vw,350px);
     display:flex;
@@ -52,14 +52,14 @@
     margin: 0;
     border: none;
     cursor: pointer;
+    img{
+        width:30px;
+    }
 }
 .btnsSpan{
     display: flex;
     justify-self: flex-end;
     width: 26%;
-}
-.reloadPageBtn > img {
-    height: 50%;
 }
 
 @keyframes appearHandler {

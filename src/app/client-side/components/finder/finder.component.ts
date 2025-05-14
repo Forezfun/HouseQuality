@@ -3,7 +3,8 @@ import { AfterViewInit, Component, ElementRef, Renderer2 } from '@angular/core';
 import { FinderService } from '../../services/finder.service';
 import { ServerImageControlService } from '../../services/server-image-control.service';
 import { RouterLink } from '@angular/router';
-import { checkDesktop } from '../../mock-data/reusable-functions.used';
+import { checkDesktop } from '../../usable/reusable-functions.used';
+import { CostFormatPipe } from '../../pipes/cost-format.pipe';
 interface foundFurniture {
   name: string;
   cost: number;
@@ -14,7 +15,7 @@ interface foundFurniture {
 @Component({
   selector: 'app-finder',
   standalone: true,
-  imports: [NgClass,NgFor,NgIf,RouterLink],
+  imports: [NgClass,NgFor,NgIf,RouterLink,CostFormatPipe],
   templateUrl: './finder.component.html',
   styleUrl: './finder.component.scss'
 })

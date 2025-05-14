@@ -4,7 +4,7 @@ import { baseUrl } from '.';
 import { firstValueFrom } from 'rxjs';
 export interface furnitureShopData{
   name:string;
-  cost:string;
+  cost:number;
   previewUrl:string;
   furnitureId:string;
 }

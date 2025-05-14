@@ -3,12 +3,12 @@ import { NavigationPanelComponent } from '../navigation-panel/navigation-panel.c
 import { PlanHouseComponent } from '../plan-house/plan-house.component';
 import { Location, NgClass, NgFor, NgIf } from '@angular/common';
 import { accountFullData, AccountService } from '../../services/account.service';
-import { AcountCookieService } from '../../services/account-cookie.service';
+import { AccountCookieService } from '../../services/account-cookie.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { projectServerInformation, ProjectService, roomData } from '../../services/project.service';
 import { ErrorHandlerService } from '../../services/error-handler.service';
-import { checkDesktop } from '../../mock-data/reusable-functions.used';
+import { checkDesktop } from '../../usable/reusable-functions.used';
 
 @Component({
   selector: 'app-plan-house-page',
@@ -20,7 +20,7 @@ import { checkDesktop } from '../../mock-data/reusable-functions.used';
 export class PlanHousePageComponent implements AfterViewInit, OnInit, AfterViewChecked {
   constructor(
     private accountService: AccountService,
-    private accountCookieService: AcountCookieService,
+    private accountCookieService: AccountCookieService,
     private router: Router,
     private route: ActivatedRoute,
     private elemenetRef: ElementRef,
@@ -69,6 +69,7 @@ export class PlanHousePageComponent implements AfterViewInit, OnInit, AfterViewC
   private async pageInit(jwt: string) {
     try {
       this.accountData = (await this.accountService.GETaccount(jwt)).accountData
+      console.log(this.accountData)
 
       this.route.paramMap.subscribe(params => {
         if (params.get('planId') === null) return
@@ -100,6 +101,7 @@ export class PlanHousePageComponent implements AfterViewInit, OnInit, AfterViewC
       return
     }
     const JWT = this.accountCookieService.getJwt()
+    if(!JWT)return
     const PROJECT_DATA = {
       rooms: ROOM_DATA,
       name: this.accountData.projects[this.currentProjectId].name

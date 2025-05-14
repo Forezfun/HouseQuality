@@ -4,6 +4,6 @@ const USER_SCHEM = new MONGOOSE.Schema({
     jwts:[String]
   })
 
-const USER = MONGOOSE.model('User', USER_SCHEM);
+const USER = MONGOOSE.model('Account', USER_SCHEM);
 
 module.exports = USER;

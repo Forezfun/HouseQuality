@@ -46,7 +46,9 @@ export class FurnitureModelControlService {
    * @returns Promise с результатом запроса
    */
   DELETEfurnitureModel(jwt: string, furnitureId: string): Promise<any> {
-    const HTTP_PARAMS = new HttpParams().set('jwt', jwt);
-    return firstValueFrom(this.httpModule.delete(this.baseServiceUrl+'/'+furnitureId, { params: HTTP_PARAMS })) as Promise<{message:string}>
+    const HTTP_PARAMS = new HttpParams()
+    .set('jwt', jwt)
+    .set('furnitureId', furnitureId)
+    return firstValueFrom(this.httpModule.delete(this.baseServiceUrl, { params: HTTP_PARAMS })) as Promise<{message:string}>
   }
 }

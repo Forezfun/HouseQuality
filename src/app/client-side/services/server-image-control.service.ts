@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { baseUrl } from '.';
-import { firstValueFrom, Observable } from 'rxjs';
+import { firstValueFrom} from 'rxjs';
 import { imageSliderClientData } from '../components/image-slider/image-slider.component';
 @Injectable({
   providedIn: 'root'
 })
 export class ServerImageControlService {
-  private baseServiceUrl=baseUrl+'furniture/images/'
+  private baseServiceUrl = baseUrl + 'furniture/images/'
   constructor(
     private httpModule: HttpClient
   ) { }
@@ -53,8 +53,8 @@ export class ServerImageControlService {
       .set('color', color)
       .set('idMainImage', imagesData.idMainImage)
       .set('jwt', jwt)
-            
-    return firstValueFrom(this.httpModule.post(this.baseServiceUrl+'upload/images', formData, { params: HTTP_PARAMS })) as Promise<{ message: string }>
+
+    return firstValueFrom(this.httpModule.post(this.baseServiceUrl + 'upload/images', formData, { params: HTTP_PARAMS })) as Promise<{ message: string }>
   }
 
 
@@ -72,7 +72,7 @@ export class ServerImageControlService {
       .set('furnitureCardId', furnitureCardId)
       .set('color', color);
 
-    return firstValueFrom(this.httpModule.delete(this.baseServiceUrl+'delete/color', { params: HTTP_PARAMS })) as Promise<{ message: string }>
+    return firstValueFrom(this.httpModule.delete(this.baseServiceUrl + 'delete/color', { params: HTTP_PARAMS })) as Promise<{ message: string }>
   }
 
   /**
@@ -86,7 +86,7 @@ export class ServerImageControlService {
       .set('jwt', jwt)
       .set('furnitureCardId', furnitureCardId);
 
-    return firstValueFrom(this.httpModule.delete(this.baseServiceUrl+'delete/project', { params: HTTP_PARAMS })) as Promise<{ message: string }>
+    return firstValueFrom(this.httpModule.delete(this.baseServiceUrl + 'delete/project', { params: HTTP_PARAMS })) as Promise<{ message: string }>
   }
   /**
  * Получение всех изображений проекта по ID карточки мебели и цвету
@@ -99,7 +99,7 @@ export class ServerImageControlService {
       .set('furnitureCardId', furnitureCardId)
       .set('color', color);
 
-    return firstValueFrom(this.httpModule.get(this.baseServiceUrl+'all', { params: HTTP_PARAMS })) as Promise<{ imagesURLS: string[],idMainImage: number}>
+    return firstValueFrom(this.httpModule.get(this.baseServiceUrl + 'all', { params: HTTP_PARAMS })) as Promise<{ imagesURLS: string[], idMainImage: number }>
   }
 
   /**

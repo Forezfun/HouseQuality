@@ -2,9 +2,8 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { baseUrl } from '.';
 import { imageSliderClientData, imageSliderFromServerData } from '../components/image-slider/image-slider.component';
-import { categoryData } from './category.service';
 import { firstValueFrom } from 'rxjs';
-interface shopData {
+export interface shopData {
   cost: number;
   url: string;
 }
@@ -89,7 +88,7 @@ export class FurnitureCardControlService {
 
     } catch (error) {
       console.error('Error in GETfurnitureCard:', error);
-      throw error; // Пробрасываем ошибку дальше
+      throw error;
     }
   }
 

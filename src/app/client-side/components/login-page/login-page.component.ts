@@ -3,7 +3,7 @@ import { NavigationPanelComponent } from '../navigation-panel/navigation-panel.c
 import { FormGroup, FormControl, Validators, ReactiveFormsModule, FormsModule, AbstractControlOptions, ValidatorFn, AbstractControl, ValidationErrors } from '@angular/forms';
 import { NgIf, NgTemplateOutlet } from '@angular/common';
 import { AccountService, accountType, createAccountData } from '../../services/account.service';
-import { AcountCookieService } from '../../services/account-cookie.service';
+import { AccountCookieService } from '../../services/account-cookie.service';
 import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
 import { ErrorHandlerService } from '../../services/error-handler.service';
@@ -21,7 +21,7 @@ export class LoginPageComponent implements AfterViewInit {
     private authService: AuthService,
     private router: Router,
     private errorHandler: ErrorHandlerService,
-    private accountCookieService: AcountCookieService,
+    private accountCookieService: AccountCookieService,
     private cdr: ChangeDetectorRef
   ) { }
 

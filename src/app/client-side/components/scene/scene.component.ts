@@ -1,15 +1,15 @@
-import { Component, AfterViewInit, ElementRef, HostListener, Input, SimpleChanges, Output, EventEmitter, OnChanges } from '@angular/core';
+import { Component, AfterViewInit, ElementRef, HostListener, Input, SimpleChanges, Output, EventEmitter, OnChanges, OnDestroy } from '@angular/core';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { NgxSpinnerModule, NgxSpinnerService } from 'ngx-spinner';
-import { roomData as roomDataPlan } from '../../services/project.service';
+import { ProjectService, roomData as roomDataPlan } from '../../services/project.service';
 import { loadModel } from './loaders';
 import { FurnitureModelControlService } from '../../services/furniture-model-control.service';
-import { AcountCookieService } from '../../services/account-cookie.service';
+import { AccountCookieService } from '../../services/account-cookie.service';
 import { FurnitureCardControlService } from '../../services/furniture-card-control.service';
 import { ActivatedRoute } from '@angular/router';
 import { ErrorHandlerService } from '../../services/error-handler.service';
-import { Location } from '@angular/common';
+import { Location, NgIf } from '@angular/common';
 
 export interface modelInterface {
   width: number;
@@ -33,7 +33,7 @@ interface roomData extends modelInterface {
 @Component({
   selector: 'app-scene',
   standalone: true,
-  imports: [NgxSpinnerModule],
+  imports: [NgxSpinnerModule, NgIf],
   templateUrl: './scene.component.html',
   styleUrls: ['./scene.component.scss']
 })
@@ -43,7 +43,8 @@ export class SceneComponent implements AfterViewInit, OnChanges {
     private spinner: NgxSpinnerService,
     private furnitureModelService: FurnitureModelControlService,
     private furnitureCardService: FurnitureCardControlService,
-    private accountCookieService: AcountCookieService,
+    private accountCookieService: AccountCookieService,
+    private projectService: ProjectService,
     private route: ActivatedRoute,
     private errorHandler: ErrorHandlerService,
     private location: Location
@@ -63,8 +64,8 @@ export class SceneComponent implements AfterViewInit, OnChanges {
   private roomProportions!: modelInterface;
   private raycaster = new THREE.Raycaster();
   private mouse = new THREE.Vector2();
-  protected targetobject: THREE.Object3D | undefined = undefined;
   private rectangleMesh!: THREE.Mesh;
+  protected targetobject: THREE.Object3D | undefined = undefined;
 
 
   ngAfterViewInit(): void {
@@ -72,6 +73,7 @@ export class SceneComponent implements AfterViewInit, OnChanges {
   }
   ngOnChanges(changes: SimpleChanges): void {
     this.roomData = changes['roomData'].currentValue as roomDataPlan
+    console.log(this.roomData)
     if (!this.roomData || this.scene === undefined || this.roomData === changes['roomData'].previousValue) return
     if (changes['roomData'].previousValue !== undefined) { this.clearRoom() }
     this.camera.position.set(0, 5, 0)
@@ -92,25 +94,25 @@ export class SceneComponent implements AfterViewInit, OnChanges {
   }
 
   private async loadFurnitureModel(fileModel: Blob, furnitureSize: modelInterface, furnitureId: string, saveRoom: boolean, moveData?: objectLoadInterface) {
-    this.spinner.show()
     try {
       const LOAD_OBJECT = await loadModel(fileModel)
       if (moveData) { this.addObjectToScene(LOAD_OBJECT, furnitureSize, furnitureId, moveData) } else { this.addObjectToScene(LOAD_OBJECT, furnitureSize, furnitureId) }
-      this.spinner.hide()
       if (saveRoom) this.saveRoom()
     } catch (error) {
-      this.spinner.hide()
     }
   }
   private async addModel(furnitureId: string, saveRoom: boolean, moveData?: objectLoadInterface) {
     const JWT = this.accountCookieService.getJwt()
     if (!JWT) return
     try {
+      if (saveRoom) this.spinner.show()
       const PROPORTIONS = (await this.furnitureCardService.GETfurnitureCard(furnitureId)).furnitureCard.proportions as modelInterface
-      console.log('addModel request')
       const MODEL = await this.furnitureModelService.GETfurnitureModel(JWT, furnitureId)
-      this.loadFurnitureModel(MODEL, PROPORTIONS, furnitureId, saveRoom, moveData)
+      await this.loadFurnitureModel(MODEL, PROPORTIONS, furnitureId, saveRoom, moveData)
+      this.spinner.hide()
     } catch (error) {
+      this.spinner.hide()
+      this.errorHandler.setError('Ошибка загрузки модели', 5000)
       console.log(error)
     }
   }
@@ -124,7 +126,7 @@ export class SceneComponent implements AfterViewInit, OnChanges {
     this.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
     const HEMISPHERE_LIGHT = new THREE.HemisphereLight(0xaaaaaa, 0x000000, 2);
     this.scene.add(HEMISPHERE_LIGHT);
-    this.renderer = new THREE.WebGLRenderer({ alpha: true });
+    this.renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false });
     const CANVAS_CONTAINER = this.elementRef.nativeElement.querySelector('#canvasContainer');
     this.camera.position.z = 5;
     this.renderer.setSize(window.innerWidth / this.canvasRatioOfWindow, window.innerHeight / this.canvasRatioOfWindow);
@@ -243,12 +245,14 @@ export class SceneComponent implements AfterViewInit, OnChanges {
     const GENERAL_COEFFICIENT = REAL_PROPORTIONS_COEFFICIENT * SCENE_PROPORTIONS_COEFFICIENT;
     object.scale.set(GENERAL_COEFFICIENT, GENERAL_COEFFICIENT, GENERAL_COEFFICIENT);
   }
-  private loadRoom(roomData: roomData) {
+  private async loadRoom(roomData: roomData) {
     const JWT = this.accountCookieService.getJwt()
     if (!JWT) return
-    roomData.objects.forEach(object => {
-      this.addModel(object.objectId, false, this.calculateMoveObjectData(object))
-    })
+    this.spinner.show()
+    for (const object of roomData.objects) {
+      await this.addModel(object.objectId, false, this.calculateMoveObjectData(object));
+    }
+    this.spinner.hide()
   }
   private clearRoom() {
     for (let i = this.scene.children.length - 1; i >= 0; i--) {
@@ -344,9 +348,31 @@ export class SceneComponent implements AfterViewInit, OnChanges {
 
     this.targetobject.position.set(newXObjectPosition, 0, newZObjectPosition);
   }
+  protected async getReport() {
+    const JWT = this.accountCookieService.getJwt()
+    if (!JWT || !this.roomData?._id) return
+
+    const oldCameraPosition = this.camera.position.clone();
+    const oldCameraRotation = this.camera.rotation.clone();
+
+    this.camera.position.set(0, 7, 0)
+    this.camera.rotation.set(THREE.MathUtils.degToRad(-90), 0, 0)
+    this.renderer.render(this.scene, this.camera);
+    const imageDataURL = this.renderer.domElement.toDataURL('image/png')
+    const imageDataResponse = await fetch(imageDataURL)
+
+    this.camera.position.copy(oldCameraPosition);
+    this.camera.rotation.copy(oldCameraRotation);
+
+    if (!imageDataResponse.ok) {
+      this.errorHandler.setError('Ошибка при рендере', 5000)
+    }
+    const imageDataBlob = await imageDataResponse.blob()
+
+    this.projectService.GETgetReportOfRoom(JWT, this.roomData?._id, imageDataBlob)
+  }
   protected deleteModel() {
     if (this.targetobject) this.scene.remove(this.targetobject)
-    this.saveRoom()
   }
   public saveRoom() {
     if (!this.roomData) return

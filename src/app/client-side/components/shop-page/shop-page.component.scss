@@ -1,11 +1,14 @@
 @use 'base.scss' as *;
 
-.furnitureLink,.furnitureCategoryButton{
+.furnitureLink,
+.furnitureCategoryButton {
     transition: all 0.3s ease-in-out;
+
     &:hover {
         transform: translateY(-3px);
     }
 }
+
 app-navigation-panel {
     margin-top: 30px;
     z-index: 10;
@@ -27,6 +30,7 @@ app-navigation-panel {
     gap: 5px;
     width: 30%;
     justify-content: center;
+    height: fit-content;
 }
 
 .furnitureCategoryButton {
@@ -39,9 +43,10 @@ app-navigation-panel {
     color: white;
     cursor: pointer;
     border: none;
-    &.active{
+
+    &.active {
         background-color: $lightGreen;
-        color:black;
+        color: black;
     }
 }
 
@@ -116,6 +121,10 @@ app-navigation-panel {
     gap: 5px;
     width: 100%;
     justify-content: start;
+    padding-top: 5px;
+    padding-right: 5px;
+    max-height: 400px;
+    overflow-y: scroll;
 }
 
 .furnitureCategoryButton {
@@ -125,6 +134,7 @@ app-navigation-panel {
     place-content: center;
     width: 100%;
     height: 50px;
+    flex-shrink: 0;
     color: white;
     cursor: pointer;
     border: none;
@@ -292,39 +302,64 @@ app-view-furniture {
 .noProjectsBtn:hover {
     background-color: $lightGreen;
 }
+
 @media (max-width:768px) {
     .category {
         width: 100%;
     }
-    .params,.furnitureCategoriesButtonsSpan{
-        width:100%;
+
+    .params,
+    .furnitureCategoriesButtonsSpan {
+        width: 100%;
     }
-    .furnitureCategoriesButtonsSpan{
+
+    .furnitureCategoriesButtonsSpan {
         flex-direction: row;
         flex-wrap: wrap;
     }
-    .furnitureCategoryButton{
-        width:calc(20% - 5px);
+
+    .furnitureCategoryButton {
+        width: calc(20% - 5px);
     }
-    .mainArea{
+
+    .mainArea {
         flex-direction: column;
     }
 }
+
 @media (max-width: 600px) {
-    .category{
+    .category {
         max-height: 50vh;
         margin-top: 15px;
     }
-    .furnitureCategoryButton{
-        width:calc(25% - 5px);
+
+    .furnitureCategoryButton {
+        width: calc(25% - 5px);
     }
-    .furnitureItem{
-        flex:auto;
-        width:100%;
+
+    .furnitureItem {
+        flex: auto;
+        width: 100%;
         max-width: none;
     }
-    .chooseAddProjectBtn{
-        width:calc(100% - 20px);
+
+    .chooseAddProjectBtn {
+        width: calc(100% - 20px);
         max-width: 400px;
+    }
+}
+
+@media (max-width:500px) {
+    .furnitureCategoryButton {
+        width: calc(33% - 5px);
+    }
+    .furnitureCategoriesButtonsSpan{
+        max-height: 250px;
+    }
+}
+
+@media (max-width:370px) {
+    .furnitureCategoryButton {
+        width: calc(50% - 5px);
     }
 }

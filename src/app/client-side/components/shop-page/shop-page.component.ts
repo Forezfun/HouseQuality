@@ -5,15 +5,17 @@ import { Location, NgClass, NgFor, NgIf } from '@angular/common';
 import { furnitureShopData, ShopService } from '../../services/shop.service';
 import { ViewFurnitureComponent } from '../view-furniture/view-furniture.component';
 import { AccountService } from '../../services/account.service';
-import { AcountCookieService } from '../../services/account-cookie.service';
+import { AccountCookieService } from '../../services/account-cookie.service';
 import { projectInformation } from '../../services/project.service';
 import { ErrorHandlerService } from '../../services/error-handler.service';
 import { categoryData, CategoryService } from '../../services/category.service';
-import { checkDesktop } from '../../mock-data/reusable-functions.used';
+import { checkDesktop } from '../../usable/reusable-functions.used';
+import { CostFormatPipe } from '../../pipes/cost-format.pipe';
+
 @Component({
   selector: 'app-shop-page',
   standalone: true,
-  imports: [NavigationPanelComponent, NgFor, NgIf, ViewFurnitureComponent, RouterLink, NgClass, RouterLink],
+  imports: [NavigationPanelComponent, NgFor, NgIf, ViewFurnitureComponent, RouterLink, NgClass, RouterLink, CostFormatPipe],
   templateUrl: './shop-page.component.html',
   styleUrl: './shop-page.component.scss'
 })
@@ -23,7 +25,7 @@ export class ShopPageComponent implements OnInit {
     private shopService: ShopService,
     private router: Router,
     private accountService: AccountService,
-    private accountCookieService: AcountCookieService,
+    private accountCookieService: AccountCookieService,
     private errorHandler: ErrorHandlerService,
     private categoryService: CategoryService,
     private location: Location,
@@ -56,6 +58,7 @@ export class ShopPageComponent implements OnInit {
   private async furnituresInit() {
     if (this.furnitureId) {
       const JWT = this.accountCookieService.getJwt()
+      if(!JWT)return
       try {
         this.accountProjects = (await this.accountService.GETaccount(JWT)).accountData.projects
       } catch (error) {

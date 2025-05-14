@@ -5,7 +5,7 @@ import { accountType } from './account.service';
 @Injectable({
   providedIn: 'root'
 })
-export class AcountCookieService {
+export class AccountCookieService {
   constructor(
     private cookieService: CookieService
   ) { }
@@ -44,7 +44,7 @@ export class AcountCookieService {
    * Получение JWT токена из куки
    * @returns JWT токен, если он существует
    */
-  getJwt() {
+  getJwt():string|null {
     return this.cookieService.get('jwt');
   }
 
@@ -61,7 +61,7 @@ export class AcountCookieService {
    * @returns Тип пользователя (email или google)
    */
   getUserType() {
-    return this.cookieService.get('accountType');
+    return this.cookieService.get('accountType')
   }
 
   /**

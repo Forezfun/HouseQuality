@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { projectInformation, projectServerInformation } from './project.service';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { AcountCookieService } from './account-cookie.service';
+import { AccountCookieService } from './account-cookie.service';
 import { baseUrl } from '.';
 import { firstValueFrom } from 'rxjs';
 interface baseEmailAccountData {
@@ -54,7 +54,7 @@ export class AccountService {
   private baseServiceUrl = baseUrl + 'account'
   constructor(
     private httpModule: HttpClient,
-    private accountCookieService: AcountCookieService
+    private accountCookieService: AccountCookieService
   ) { }
 
   /**

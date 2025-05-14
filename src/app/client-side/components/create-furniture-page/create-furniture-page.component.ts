@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { NavigationPanelComponent } from '../navigation-panel/navigation-panel.component';
 import { CreateFurnitureComponent } from '../create-furnitre/create-furniture.component';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AcountCookieService } from '../../services/account-cookie.service';
+import { AccountCookieService } from '../../services/account-cookie.service';
 import { FurnitureCardControlService, furnitureFromServerData } from '../../services/furniture-card-control.service';
 import { ServerImageControlService } from '../../services/server-image-control.service';
 import { NgIf } from '@angular/common';
@@ -24,7 +24,7 @@ export interface clientProportions {
 export class CreateFurniturePageComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
-    private cookieService: AcountCookieService,
+    private cookieService: AccountCookieService,
     private furnitureCardService: FurnitureCardControlService,
     private serverImageControl: ServerImageControlService,
     private router: Router,
@@ -33,7 +33,7 @@ export class CreateFurniturePageComponent implements OnInit {
   ) { }
 
   protected idPage!: string
-  
+
   @ViewChild(CreateFurnitureComponent)
   private createFurnitureComponent!: CreateFurnitureComponent;
 
@@ -89,6 +89,7 @@ export class CreateFurniturePageComponent implements OnInit {
     const JWT = this.cookieService.getJwt()
     if (!JWT) return
     try {
+      await this.furnitureModelService.DELETEfurnitureModel(JWT, this.idPage)
       await this.serverImageControl.DELETEproject(JWT, this.idPage)
       await this.furnitureCardService.DELETEfurnitureCard(JWT, this.idPage)
       this.router.navigateByUrl('/account')
@@ -115,8 +116,7 @@ export class CreateFurniturePageComponent implements OnInit {
 
       const FURNITURE_MODEL_BLOB = this.createFurnitureComponent.furnitureModelInput.files![0]
       await this.furnitureModelService.POSTuploadFurnitureModel(FURNITURE_MODEL_BLOB, JWT, FURNITURE_ID)
-      this.router.navigateByUrl('/create/' + FURNITURE_ID)
-      window.location.href = window.location.href
+      this.router.navigateByUrl('/account')
     } catch (error) {
       console.log(error)
     }

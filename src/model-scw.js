@@ -20,8 +20,9 @@ self.addEventListener('activate', event => {
 
 self.addEventListener('fetch', event => {
   const url = new URL(event.request.url);
-
-  if (url.pathname === '/api/furniture/model' && url.searchParams.has('furnitureId')) {
+  if (url.pathname === '/api/furniture/model' &&
+    url.searchParams.has('furnitureId') &&
+    event.request.method === 'GET') {
     event.respondWith(
       handleModelRequest(event.request).catch(err => {
         console.error('[SW] Ошибка обработки запроса:', err);

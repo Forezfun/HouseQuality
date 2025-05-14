@@ -49,7 +49,7 @@ app-scene {
     border: none;
     border-bottom: 1px solid transparent;
     cursor: pointer;
-    color:gray;
+    color: gray;
     margin-top: -45px;
     transition: all 0.3s ease-in-out;
     position: relative;
@@ -74,6 +74,7 @@ app-scene {
         transition: width 0.3s ease-in-out;
     }
 }
+
 .dividerWithText {
     display: flex;
     align-items: center;
@@ -91,6 +92,7 @@ app-scene {
     color: #666;
     font-size: 14px;
 }
+
 .planHouseModule {
     display: grid;
     grid-template-rows: 1fr;
@@ -175,6 +177,19 @@ app-scene {
     padding: 10px;
     outline: none;
     color: white;
+
+    &.ng-invalid.ng-touched {
+        border-color: #ff6b6b;
+        background-color: rgba(255, 107, 107, 0.05);
+    }
+}
+
+.validation-error {
+    color: #ff6b6b;
+    font-size: 12px;
+    margin-top: 4px;
+    display: block;
+    height: 16px;
 }
 
 .addModuleTitle {
@@ -190,7 +205,7 @@ app-scene {
 .submitAddModuleFormBtn {
     background-color: $lightGreen;
     color: white;
-    border-radius: 15px;
+    border-radius: 10px;
     padding: 15px;
     width: 100%;
     border: none;
@@ -223,6 +238,10 @@ app-scene {
     gap: 10px;
     height: 250px;
     margin-top: 100px;
+    max-height: 400px;
+    padding: 15px;
+    overflow-y: scroll;
+    overflow-x: hidden;
     width: 30%;
 }
 
@@ -233,34 +252,45 @@ app-scene {
     place-content: center;
     width: 100%;
     height: 50px;
+    flex-shrink: 0;
     color: white;
     cursor: pointer;
     border: none;
     text-decoration: none;
     transition: all 0.3s ease-in-out;
-    &:hover{
-        transform: translateY(-5px);
+
+    &:hover {
+        transform: scale(1.05)
     }
 }
+
 @media (max-width:768px) {
-    .furnitureCategoriesButtonsSpan{
-        width:100%;
+    .furnitureCategoriesButtonsSpan {
+        width: 100%;
     }
-    .viewRoomSmallScreen{
+
+    .viewRoomSmallScreen {
         flex-direction: column;
     }
-    .furnitureCategoriesButtonsSpan{
+
+    .furnitureCategoriesButtonsSpan {
         flex-direction: row;
         flex-wrap: wrap;
     }
-    .furnitureCategoryButton{
-        width:calc(30% - 5px);
+
+    .furnitureCategoryButton {
+        width: calc(30% - 5px);
     }
-    .addModuleSpan{
+
+    .addModuleSpan {
         margin-right: 0;
         padding-right: 0;
     }
+    .workArea{
+        flex-direction: column;
+    }
 }
+
 .furnitureCategory {
     grid-area: 1/1/2/2;
     background-color: black;

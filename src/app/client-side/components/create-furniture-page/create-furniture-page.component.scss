@@ -62,9 +62,12 @@ app-create-furniture {
     display: flex;
     align-items: center;
     justify-content: center;
-    border: 3px solid black;
-    box-shadow: 0 0 5px 0 white;
-    transition: background-color 0.3s ease-in-out;
+    transition: all 0.3s ease-in-out;
+    box-shadow: 0 0 5px white;
+    img{
+        border-radius: 50%;
+        height: 50%;
+    }
 }
 
 .deleteColorBtn {
@@ -98,7 +101,7 @@ app-create-furniture {
 
     .functionalBtns {
         width: 100%;
-        margin: 20px auto;
+        // margin: 20px auto;
         max-width: 400px;
         gap: 5px;
     }

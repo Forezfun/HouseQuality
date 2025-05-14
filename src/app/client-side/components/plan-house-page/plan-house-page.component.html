@@ -17,7 +17,7 @@
         </button>
       </button>
       <button (click)="openAddModule()" class="addProjectCard projectCard">
-        <h3>Create</h3>
+        <h3>Создать</h3>
         <img src="/assets/images/addIcon.svg" alt="">
       </button>
     </span>
@@ -37,9 +37,9 @@
       <img loading="lazy" src="/assets/images/addIcon.svg" alt="">
     </button>
     <span class="addModuleFormContent">
-      <h2 class="addModuleTitle">Project name</h2>
+      <h2 class="addModuleTitle">Название плана</h2>
       <span class="addModuleInputSpan">
-        <label class="inputLabel" for="name">Name</label>
+        <label class="inputLabel" for="name">Название</label>
         <input formControlName="name" class="addModuleInput" id="name" type="text">
       </span>
       <button [disabled]="!projectNameForm.valid" class="submitAddModuleFormBtn" type="submit">Continue</button>

@@ -8,7 +8,7 @@ let transporter = nodemailer.createTransport({
     port: 465,
     secure: true,
     auth: {
-      account: 'housequalityteam@gmail.com',
+      user: 'housequalityteam@gmail.com',
       pass: CODE_PASSWORD
     }
   });
@@ -27,7 +27,6 @@ let transporter = nodemailer.createTransport({
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
             color: #333;
             margin: 0;
             padding: 0;
@@ -35,7 +34,6 @@ let transporter = nodemailer.createTransport({
         .container {
             width: 80%;
             margin: 0 auto;
-            background-color: #DAD7CD;
             padding: 20px;
             border-radius: 10px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);

@@ -2,61 +2,76 @@ const DB_NAME = 'FurnitureModelsDB';
 const DB_VERSION = 2;
 const META_STORE = 'metaStore';
 const CHUNK_STORE = 'chunkStore';
-const MAX_CACHE_SIZE_BYTES = 2 * 1024 * 1024 * 1024; 
+const MAX_CACHE_SIZE_BYTES = 2 * 1024 * 1024 * 1024;
 
 self.addEventListener('install', event => {
-  console.log('Service Worker installing...');
-  event.waitUntil(
-    caches.open()
-  )
+  event.skipWaiting()
 });
 
 self.addEventListener('activate', event => {
-  console.log('Service Worker activated');
   event.waitUntil(
-    clients.claim()
-    .then(() => {
-      return self.clients.matchAll();
-    })
-    .then(clients => {
-      console.log('Clients:', clients);
-    })
+    self.skipWaiting()
+      .then(() => clients.claim())
+      .then(() => self.clients.matchAll())
+      .then(clients => {
+      })
   );
 });
 
 self.addEventListener('fetch', event => {
-  console.log('Intercepting request:', event.request.url);
   const url = new URL(event.request.url);
-  if (url.pathname === '/furniture/model' && url.searchParams.has('furnitureId')) {
-    event.respondWith(handleModelRequest(event.request));
+  if (url.pathname === '/api/furniture/model' &&
+    url.searchParams.has('furnitureId') &&
+    event.request.method === 'GET') {
+    event.respondWith(
+      handleModelRequest(event.request).catch(err => {
+        console.error('[SW] Ошибка обработки запроса:', err);
+        return fetch(event.request);
+      })
+    );
+  } else {
+    event.respondWith(fetch(event.request));
   }
 });
 
 async function handleModelRequest(request) {
   const url = new URL(request.url);
   const furnitureId = url.searchParams.get('furnitureId');
-  const versionRes = await fetch(`/furniture/model/version?furnitureId=${furnitureId}`);
 
-  if (!versionRes.ok) return fetch(request);
-  const { versionModel } = await versionRes.json();
-
-  const db = await openDB();
-  const meta = await dbGetMeta(db, furnitureId);
-
-  if (meta && meta.versionModel === versionModel) {
-    await incrementRequestCount(db, furnitureId);
-    const chunks = await dbGetChunks(db, furnitureId, meta.chunkCount);
-    const blob = new Blob(chunks);
-    return new Response(blob);
+  const versionRes = await fetch(`/api/furniture/model/version?furnitureId=${furnitureId}`);
+  if (!versionRes.ok) {
+    return fetch(request);
   }
 
-  
+  const { versionModel } = await versionRes.json();
+  const db = await openDB();
+
+  const meta = await dbGetMeta(db, furnitureId);
+  if (meta && meta.versionModel === versionModel) {
+    const chunks = await dbGetChunks(db, furnitureId, meta.chunkCount);
+    const blob = new Blob(chunks);
+
+    return new Response(blob, {
+      headers: {
+        'Content-Type': 'model/obj',
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Credentials': 'true',
+        'Content-Disposition': 'attachment; filename="model.obj"'
+      }
+    });
+  }
+
   const modelRes = await fetch(request);
   const blob = await modelRes.blob();
-  const chunks = await blobToChunks(blob);
-  await dbPutModel(db, furnitureId, versionModel, chunks, blob.size);
-  await enforceStorageLimit(db);
-  return new Response(blob);
+
+  dbPutModel(db, furnitureId, versionModel, await blobToChunks(blob), blob.size)
+    .catch(err => console.error('[SW] Ошибка кеширования:', err));
+
+  return new Response(blob, {
+    headers: {
+      'Content-Type': 'model/obj'
+    }
+  });
 }
 
 function openDB() {

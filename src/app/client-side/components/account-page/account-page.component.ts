@@ -4,7 +4,7 @@ import { CommonModule, NgFor, NgIf } from '@angular/common';
 import { accountFullData, AccountService, accountType } from '../../services/account.service';
 import { FormGroup, ReactiveFormsModule, FormControl, Validators, AbstractControl } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
-import { AcountCookieService } from '../../services/account-cookie.service';
+import { AccountCookieService } from '../../services/account-cookie.service';
 import { ServerImageControlService } from '../../services/server-image-control.service';
 import { ClientImageControlService } from '../../services/client-image-control.service';
 import { AuthService } from '../../services/auth.service';
@@ -26,7 +26,7 @@ export class AccountPageComponent implements OnInit {
   constructor(
     private accountService: AccountService,
     private router: Router,
-    private accountCookieService: AcountCookieService,
+    private accountCookieService: AccountCookieService,
     private imageServerControlService: ServerImageControlService,
     private imageClientControlService: ClientImageControlService,
     private authService: AuthService,

@@ -13,7 +13,7 @@
         <span [ngClass]="{'variantCardDesktop': checkDesktop(),'variantCardMobile':!checkDesktop()}" class="variantCard" *ngFor="let card of foundFurniture">
             <div>
                 <h3 class="cardName">{{card.name}}</h3>
-                <a [href]="getUrl(card.id,card.category)" class="cardCost">{{card.cost}} руб</a>
+                <a [href]="getUrl(card.id,card.category)" class="cardCost">{{ card.cost | costFormat }} ₽</a>
             </div>
             <img class="cardImage" [src]="getImage(card.id,card.colorRequest)" alt="">
         </span>

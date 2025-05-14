@@ -60,7 +60,11 @@ app-finder {
     gap: 15px;
     align-items: center;
 }
-
+.createBtn{
+    img{
+        filter: sepia(4%)
+    }
+}
 .hamburger-menu {
     display: none;
     background: none;

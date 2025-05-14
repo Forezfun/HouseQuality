@@ -1,7 +1,7 @@
 import { NgClass } from '@angular/common';
 import { Component } from '@angular/core';
 import { ErrorHandlerService } from '../../services/error-handler.service';
-import { AcountCookieService } from '../../services/account-cookie.service';
+import { AccountCookieService } from '../../services/account-cookie.service';
 @Component({
   selector: 'app-error-handler',
   standalone: true,
@@ -12,7 +12,7 @@ import { AcountCookieService } from '../../services/account-cookie.service';
 export class ErrorHandlerComponent{
   constructor(
     private errorService: ErrorHandlerService,
-    private cookieService:AcountCookieService
+    private cookieService:AccountCookieService
   ){}
   
   protected errorMessage!:string

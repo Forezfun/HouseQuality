@@ -5,7 +5,7 @@ import { PlanHouseComponent } from '../plan-house/plan-house.component';
 import { NgClass, NgIf } from '@angular/common';
 import { NavigationPanelComponent } from '../navigation-panel/navigation-panel.component';
 import { Router, RouterLink } from '@angular/router';
-import { furnitureExampleData, planHouseExampleData } from '../../mock-data/main-page.mock';
+import { furnitureExampleData, planHouseExampleData } from '../../usable/main-page.mock';
 
 @Component({
   selector: 'app-main-page',

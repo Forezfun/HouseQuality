@@ -9,7 +9,6 @@ const { checkUserAccess } = require('../helpers/jwtHandlers');
 
 ROUTER.use(async (request, result, next) => {
     try {
-        console.log('model')
         if (request.url.includes('version')) {
             next();
             return;
@@ -18,7 +17,7 @@ ROUTER.use(async (request, result, next) => {
         const ACCOUNT_ID = await checkUserAccess(JWT);
         if (!ACCOUNT_ID) return result.status(404).json({ message: 'Аккаунт не найден' })
         const FURNITURE_CARD_ITEM = await FURNITURE_CARD.findOne({ authorId: ACCOUNT_ID })
-        if (!FURNITURE_CARD_ITEM || FURNITURE_CARD_ITEM.authorId !== ACCOUNT_ID) return result.status(409).json({ message: "User hasn't access" })
+        if (!FURNITURE_CARD_ITEM || FURNITURE_CARD_ITEM.authorId !== ACCOUNT_ID) return result.status(409).json({ message: "Нет доступа" })
         request.query.accountId = ACCOUNT_ID;
         next();
     } catch (error) {
@@ -97,18 +96,11 @@ ROUTER.post('/', upload.single('model'), async (request, result) => {
 
 ROUTER.delete('/', async (request, result) => {
     try {
-        const JWT = request.query.jwt;
-        const FURNITURE_CARD_ID = request.query.furnitureCardId
-        const ACCOUNT_ID = await checkUserAccess(JWT);
-        if (!ACCOUNT_ID) return result.status(404).json({ message: 'Аккаунт не найден' });
-        let FURNITURE_CARD_ITEM = await FURNITURE_CARD.findById(FURNITURE_CARD_ID)
-        if (!FURNITURE_CARD_ITEM) return result.status(404).json({ message: 'Товар не найден' });
-        if (FURNITURE_CARD_ITEM.authorId !== ACCOUNT_ID) return result.status(409).json({ message: 'Нет доступа' });
+        const FURNITURE_CARD_ID = request.query.furnitureId
         const FURNITURE_MODEL_ITEM = await FURNITURE_MODEL.findOne({ furnitureId: FURNITURE_CARD_ID });
         if (!FURNITURE_MODEL_ITEM) {
             return result.status(404).json({ message: 'Модель не найдена' });
         }
-
 
         const DIRECTORY = path.join(__dirname, '..', 'uploads', 'models');
         const FILE_PATH = path.join(DIRECTORY, FURNITURE_MODEL_ITEM.filename);

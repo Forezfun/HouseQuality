@@ -30,6 +30,7 @@ ROUTER.post('/', async (request, result) => {
         await FURNITURE_CARD_ITEM.save()
         result.status(201).json({ furnitureData: FURNITURE_CARD_ITEM })
     } catch (error) {
+        console.log(error)
         result.status(400).json({ message: error.message });
     }
 });

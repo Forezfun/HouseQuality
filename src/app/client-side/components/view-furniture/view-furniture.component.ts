@@ -5,11 +5,12 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { ClipboardService } from 'ngx-clipboard';
 import { FurnitureCardControlService, furnitureFromServerData, furnitureProportions } from '../../services/furniture-card-control.service';
 import { ErrorHandlerService } from '../../services/error-handler.service';
+import { CostFormatPipe } from '../../pipes/cost-format.pipe';
 
 @Component({
   selector: 'app-view-furniture',
   standalone: true,
-  imports: [ImageSliderComponent, NgFor, NgIf, ReactiveFormsModule],
+  imports: [ImageSliderComponent, NgFor, NgIf, ReactiveFormsModule,CostFormatPipe],
   templateUrl: './view-furniture.component.html',
   styleUrl: './view-furniture.component.scss'
 })

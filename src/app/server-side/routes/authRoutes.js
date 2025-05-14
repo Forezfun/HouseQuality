@@ -82,7 +82,7 @@ ROUTER.put('/account', async (request, result) => {
             authAccountItem.emailData.password = request.body.password
         }
         await authAccountItem.save();
-        result.status(201).json({ message: 'User successfully updated' });
+        result.status(201).json({ message: 'Аккаунт обновлен' });
     } catch (error) {
         result.status(400).json({ message: error.message });
     }

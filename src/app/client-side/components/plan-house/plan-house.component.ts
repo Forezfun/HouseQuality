@@ -6,7 +6,7 @@ import { throttle } from 'lodash';
 import { objectSceneInterface } from '../scene/scene.component'
 import { categoryData, CategoryService } from '../../services/category.service';
 import { ErrorHandlerService } from '../../services/error-handler.service';
-import { AcountCookieService } from '../../services/account-cookie.service';
+import { AccountCookieService } from '../../services/account-cookie.service';
 import { roomData } from '../../services/project.service';
 
 
@@ -33,7 +33,7 @@ export class PlanHouseComponent implements AfterViewInit, OnInit {
     private location: Location,
     private errorHandler: ErrorHandlerService,
     private cdr: ChangeDetectorRef,
-    private accountCookieService: AcountCookieService
+    private accountCookieService: AccountCookieService
   ) { }
 
   private previousGridArea!: string;
@@ -542,19 +542,28 @@ export class PlanHouseComponent implements AfterViewInit, OnInit {
     }, 0)
   }
 
-  protected roomForm = new FormGroup({
-    width: new FormControl<number | null>(
-      null,
-      [Validators.required, this.numberValidator()]
-    ),
-    height: new FormControl<number | null>(
-      null,
-      [Validators.required, this.numberValidator()]
-    ),
-    length: new FormControl<number | null>(
-      null,
-      [Validators.required, this.numberValidator()]
-    ),
-    name: new FormControl<string>('', [Validators.required]),
-  });
+protected roomForm = new FormGroup({
+  width: new FormControl<number | null>(null, [
+    Validators.required,
+    Validators.min(1),
+    Validators.max(10),
+    Validators.pattern(/^\d*\.?\d+$/)
+  ]),
+  height: new FormControl<number | null>(null, [
+    Validators.required,
+    Validators.min(1),
+    Validators.max(5),
+    Validators.pattern(/^\d*\.?\d+$/)
+  ]),
+  length: new FormControl<number | null>(null, [
+    Validators.required,
+    Validators.min(1),
+    Validators.max(10),
+    Validators.pattern(/^\d*\.?\d+$/)
+  ]),
+  name: new FormControl<string>('', [
+    Validators.required,
+    Validators.maxLength(20)
+  ]),
+});
 }
