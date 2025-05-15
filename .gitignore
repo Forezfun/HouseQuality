@@ -1,18 +1,20 @@
 # See https://docs.github.com/get-started/getting-started-with-git/ignoring-files for more about ignoring files.
 
 # Compiled output
-/tmp
-/out-tsc
-/bazel-out
+**/tmp
+**/out-tsc
+**/bazel-out
 
 # Node
-/node_modules
-src/app/server-side/node_modules
-npm-debug.log
-yarn-error.log
+**/node_modules/
+**/npm-debug.log
+**/yarn-error.log
 
 # Uploads
-src/app/server-side/uploads
+**/uploads/
+
+#Angular
+app/client-side/src/.angular
 
 # CRTs
 *.crt
@@ -29,7 +31,6 @@ src/app/server-side/uploads
 *.sublime-workspace
 
 # Visual Studio Code
-.vscode/
 .vscode/*
 !.vscode/settings.json
 !.vscode/tasks.json
