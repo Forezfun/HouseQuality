@@ -1,4 +1,4 @@
-[![House-Quality-Logo.png](https://i.postimg.cc/fy26nzFH/House-Quality-Logo.png)](https://postimg.cc/0KSt7s9m)
+[![House-Quality-Logo.png](https://i.postimg.cc/dt2jSgrR/House-Quality-Logo.png)](https://postimg.cc/ppdjmG0y)
 
 ## 📋 Содержание
 - [Требования](#-Требования)
