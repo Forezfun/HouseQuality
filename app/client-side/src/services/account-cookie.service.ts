@@ -67,7 +67,7 @@ export class AccountCookieService {
   /**
    * Удаление типа пользователя из куки
    */
-  deleteUserType() {
-    this.cookieService.delete('accountType');
+  deleteAccountType() {
+    this.cookieService.delete('accountType','/');
   }
 }

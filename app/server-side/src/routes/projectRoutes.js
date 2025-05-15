@@ -72,7 +72,6 @@ ROUTER.get('/room', async (request, result) => {
     ])
     if (ROOM_ITEMS.length == 0) return result.status(404).json({ message: 'Комната не найдена' });
     const ROOM_ITEM = ROOM_ITEMS[0].room[0]
-    console.log(ROOM_ITEM)
 
     let REPORT_OBJECT = {
       name: ROOM_ITEM.name,

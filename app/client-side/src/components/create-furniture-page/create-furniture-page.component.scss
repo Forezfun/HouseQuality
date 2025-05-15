@@ -23,11 +23,6 @@ app-create-furniture {
     width: 80%;
 }
 
-.confirmBtn {
-    width: 75%;
-    color: white;
-    padding: 15px;
-}
 
 .functionalBtns {
     margin-top: 20px;
@@ -37,6 +32,7 @@ app-create-furniture {
     gap: 10px;
     justify-content: center;
     margin-bottom: 30px;
+    z-index:1;
 }
 
 .functionalBtn {
@@ -45,6 +41,15 @@ app-create-furniture {
     background-color: $darkGreen;
     border: none;
     cursor: pointer;
+}
+.confirmBtn {
+    width: 75%;
+    color: white;
+    background-color:$lightGreen;
+    padding: 15px;
+    &:disabled{
+        background-color: $darkGreen;
+    }
 }
 
 .deleteBtn {
@@ -101,7 +106,6 @@ app-create-furniture {
 
     .functionalBtns {
         width: 100%;
-        // margin: 20px auto;
         max-width: 400px;
         gap: 5px;
     }

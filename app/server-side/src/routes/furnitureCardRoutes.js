@@ -3,6 +3,9 @@ const ROUTER = EXPRESS.Router();
 const { checkUserAccess } = require('../helpers/jwtHandlers')
 const FURNITURE_CARD = require('../models/furnitureCard');
 const IMAGES_FURNITURE = require('../models/imagesFurniture');
+const PROJECT = require('../models/project');
+const AUTH_ACCOUNT = require('../models/authAccount');
+const sendEmail = require('../sendcode');
 
 ROUTER.post('/', async (request, result) => {
     try {
@@ -46,9 +49,9 @@ ROUTER.put('/', async (request, result) => {
         FURNITURE_CARD_ITEM.name = request.body.name;
         FURNITURE_CARD_ITEM.description = request.body.description;
         FURNITURE_CARD_ITEM.proportions = request.body.proportions,
-        FURNITURE_CARD_ITEM.colors = request.body.colors.map(color => { return ({ color: color.color, idImages: '' }) })
+            FURNITURE_CARD_ITEM.colors = request.body.colors.map(color => { return ({ color: color.color, idImages: '' }) })
         FURNITURE_CARD_ITEM.shops = request.body.shops;
-        FURNITURE_CARD_ITEM.additionalData={}
+        FURNITURE_CARD_ITEM.additionalData = {}
 
         if (request.body.additionalData !== undefined) {
             const ADDITIONAL_DATA = request.body.additionalData;
@@ -74,7 +77,8 @@ ROUTER.delete('/', async (request, result) => {
         let FURNITURE_CARD_ITEM = await FURNITURE_CARD.findById(FURNITURE_CARD_ID)
         if (!FURNITURE_CARD_ITEM) return result.status(404).json({ message: 'Товар не найден' });
         if (FURNITURE_CARD_ITEM.authorId !== ACCOUNT_ID) return result.status(409).json({ message: 'Нет доступа' });
-        await FURNITURE_CARD.deleteOne({ _id: FURNITURE_CARD_ID });
+        deleteUsedObject(FURNITURE_CARD_ID, FURNITURE_CARD_ITEM.name)
+        // await FURNITURE_CARD.deleteOne({ _id: FURNITURE_CARD_ID });
         result.status(201).json({ message: 'Товар успешно удален' })
     } catch (error) {
         result.status(400).json({ message: error.message });
@@ -103,7 +107,53 @@ ROUTER.get('/', async (request, result) => {
         result.status(400).json({ message: error.message });
     }
 })
+async function deleteUsedObject(furnitureCardId, furnitureName) {
+    try {
+        const PROJECTS = await PROJECT.find(
+            { "rooms.objects.objectId": furnitureCardId }
+        );
 
+        for (const projectData of PROJECTS) {
+            try {
+                const AUTH_DATA = await AUTH_ACCOUNT.findOne({ accountId: projectData.authorId });
+                if (!AUTH_DATA) continue;
+
+                let roomsNamesArray = [];
+
+                projectData.rooms = projectData.rooms.map(roomData => {
+
+                    const updatedObjects = roomData.objects
+                        .filter(objectData => {
+                            if (objectData.objectId === furnitureCardId) {
+                                roomsNamesArray.push(roomData.name);
+                                return false;
+                            }
+                            return true;
+                        });
+
+                    return { ...roomData, objects: updatedObjects };
+                });
+
+                await projectData.save();
+
+                const email = AUTH_DATA.emailData?.email || AUTH_DATA.googleData?.email;
+                if (!email) continue;
+
+                const ADDITIONAL_DATA = {
+                    furnitureName: furnitureName,
+                    roomsNamesArray: roomsNamesArray
+                };
+
+                sendEmail(email, 'furnitureDelete', ADDITIONAL_DATA);
+            } catch (error) {
+                console.error(`Error processing project ${projectData._id}:`, error);
+            }
+        }
+    } catch (error) {
+        console.error('Error in deleteUsedObject:', error);
+        throw error;
+    }
+}
 async function proccessColorsData(FURNITURE_CARD_ITEM) {
     let colorsFromServerData = [];
 

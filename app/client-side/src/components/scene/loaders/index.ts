@@ -6,7 +6,6 @@ import { loadOBJModel } from './loaders/obj.loader';
 export async function loadModel(blob: Blob, manager?: LoadingManager): Promise<Object3D> {
     const mimeType = blob.type;
     let extension: string | undefined;
-    console.log(blob)
 
     if (mimeType.includes('gltf') || mimeType.includes('glb')) {
         extension = 'gltf';

@@ -40,7 +40,7 @@
                     <span class="shopsListSpan">
                         <button (click)="openShopsModule(index)" class="shopFunctions"
                             *ngFor="let shopData of furnitureData.shops; let index=index" title="Редактировать магазин">
-                            <div class="furnitureCost">{{shopData.cost}}</div>
+                            <div class="furnitureCost">{{shopData.cost | costFormat}}</div>
                             <div class="linkShop">
                                 <img loading="lazy" src="/assets/images/linkIcon.svg" alt="Ссылка">
                             </div>

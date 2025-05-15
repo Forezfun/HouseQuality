@@ -92,7 +92,7 @@ describe('AccountCookieService ', () => {
     });
 
     it('should delete user type cookie', () => {
-      service.deleteUserType();
+      service.deleteAccountType();
       expect(cookieServiceSpy.delete).toHaveBeenCalledWith('accountType');
     });
   });

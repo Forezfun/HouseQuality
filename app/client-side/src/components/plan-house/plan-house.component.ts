@@ -329,11 +329,9 @@ export class PlanHouseComponent implements AfterViewInit, OnInit {
   }, 100)
   @HostListener('document:keydown.Escape')
   private escapeDraggingMode() {
-    console.log('keyup', this.currentIdClickedRoom)
     this.isDragging = false
     this.currentIdClickedRoom = undefined
     const DRAGGED_ELEMENT = this.elementRef.nativeElement.querySelector('[style*="cursor: grabbing"]');
-    console.log(DRAGGED_ELEMENT)
     if (DRAGGED_ELEMENT) {
       this.renderer.removeStyle(DRAGGED_ELEMENT, 'background-color')
       this.renderer.removeStyle(DRAGGED_ELEMENT, 'cursor');

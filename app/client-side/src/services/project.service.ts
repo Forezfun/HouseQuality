@@ -99,7 +99,6 @@ export class ProjectService {
       furnitureData.previewUrl = baseUrl + furnitureData.previewUrl
       return furnitureData
     })
-    console.log(RESPONSE)
     this.reportService.createReport(RESPONSE, renderImage)
   }
 }

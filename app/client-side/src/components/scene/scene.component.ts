@@ -73,7 +73,6 @@ export class SceneComponent implements AfterViewInit, OnChanges {
   }
   ngOnChanges(changes: SimpleChanges): void {
     this.roomData = changes['roomData'].currentValue as roomDataPlan
-    console.log(this.roomData)
     if (!this.roomData || this.scene === undefined || this.roomData === changes['roomData'].previousValue) return
     if (changes['roomData'].previousValue !== undefined) { this.clearRoom() }
     this.camera.position.set(0, 5, 0)

@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, DoCheck, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { NavigationPanelComponent } from '../navigation-panel/navigation-panel.component';
 import { CreateFurnitureComponent } from '../create-furnitre/create-furniture.component';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -9,6 +9,7 @@ import { NgIf } from '@angular/common';
 import { FurnitureModelControlService } from '../../services/furniture-model-control.service';
 import { ErrorHandlerService } from '../../services/error-handler.service';
 import { imageSliderClientData } from '../image-slider/image-slider.component';
+import { Subscription } from 'rxjs';
 export interface clientProportions {
   width: number | null;
   height: number | null;
@@ -21,7 +22,7 @@ export interface clientProportions {
   templateUrl: './create-furniture-page.component.html',
   styleUrl: './create-furniture-page.component.scss'
 })
-export class CreateFurniturePageComponent implements OnInit {
+export class CreateFurniturePageComponent implements OnInit, DoCheck, OnDestroy {
   constructor(
     private route: ActivatedRoute,
     private cookieService: AccountCookieService,
@@ -32,7 +33,9 @@ export class CreateFurniturePageComponent implements OnInit {
     private errorHandler: ErrorHandlerService
   ) { }
 
+  private routeSub!: Subscription;
   protected idPage!: string
+  protected isValid = false
 
   @ViewChild(CreateFurnitureComponent)
   private createFurnitureComponent!: CreateFurnitureComponent;
@@ -57,9 +60,17 @@ export class CreateFurniturePageComponent implements OnInit {
       this.router.navigateByUrl('/login')
       return
     }
-    this.idPage = this.route.snapshot.paramMap.get('id')!;
-    if (this.idPage === 'new') return
-    this.pageInit(JWT)
+    this.routeSub = this.route.paramMap.subscribe(params => {
+      this.idPage = params.get('id') ?? 'new'
+      this.clearFurnitureCard()
+      if (this.idPage !== 'new') this.pageInit(JWT)
+    })
+  }
+  ngDoCheck() {
+    this.isValid = !this.createFurnitureComponent || !this.checkValid(this.idPage === 'new' ? 'create' : 'update') ? false : true
+  }
+  ngOnDestroy() {
+    this.routeSub.unsubscribe()
   }
 
   private async pageInit(jwt: string) {
@@ -100,7 +111,7 @@ export class CreateFurniturePageComponent implements OnInit {
   }
   protected async createFurnitureCard() {
     const JWT = this.cookieService.getJwt()
-    if (!this.checkValid('create') || !JWT) return
+    if (!this.checkValid('create', true) || !JWT) return
     try {
       const FURNITURE_DATA = this.createFurnitureComponent.furnitureData;
       const FURNITURE_ID = (await this.furnitureCardService.POSTcreateFurnitureCard(FURNITURE_DATA, JWT)).furnitureData._id
@@ -124,7 +135,7 @@ export class CreateFurniturePageComponent implements OnInit {
   }
   protected async updateFurnitureCard() {
     const JWT = this.cookieService.getJwt()
-    if (!this.checkValid('update') || !JWT) return
+    if (!this.checkValid('update', true) || !JWT) return
     try {
       const FURNITURE_DATA = this.createFurnitureComponent.furnitureData;
       console.log(FURNITURE_DATA)
@@ -145,37 +156,38 @@ export class CreateFurniturePageComponent implements OnInit {
       console.log(error)
     }
   }
-
-  private checkValid(typeRequest: 'update' | 'create') {
+  protected checkValid(typeRequest: 'update' | 'create', action: boolean = false) {
     const { colors, shops, proportions } = this.furnitureData
     const FURNITURE_MODEL_BLOB = this.createFurnitureComponent.furnitureModelInput.files![0]
     if (colors.length == 0) {
-      this.createFurnitureComponent.openColorModule()
+      if (action) this.createFurnitureComponent.openColorModule()
       return false
     }
     if (!proportions.height || !proportions.width || !proportions.length) {
-      this.createFurnitureComponent.openAdditional()
-      this.errorHandler.setError('Заполните параметры', 5000)
+      if (action) {
+        this.createFurnitureComponent.openAdditional()
+        this.errorHandler.setError('Заполните параметры', 5000)
+      }
       return false
     }
     if (!FURNITURE_MODEL_BLOB && typeRequest === 'create') {
-      this.errorHandler.setError('Загрузите 3D модель', 5000)
+      if (action) this.errorHandler.setError('Загрузите 3D модель', 5000)
       return false
     }
     if (shops.length == 0) {
-      this.errorHandler.setError('Добавьте магазины', 5000)
+      if (action) this.errorHandler.setError('Добавьте магазины', 5000)
       return false
     }
     for (let colorData of colors) {
       if (colorData.imagesData.images.length == 0 && typeRequest === 'create') {
-        this.errorHandler.setError('Загрузите изображения', 5000)
+        if (action) this.errorHandler.setError('Загрузите изображения', 5000)
         return false
       }
     }
     return true
   }
   protected clearFurnitureCard() {
-    this.createFurnitureComponent.currentColorId = undefined
+    if (this.createFurnitureComponent) this.createFurnitureComponent.currentColorId = undefined
     this.furnitureData = {
       name: '',
       description: '',
@@ -196,7 +208,10 @@ export class CreateFurniturePageComponent implements OnInit {
     return this.createFurnitureComponent.furnitureData.colors[this.createFurnitureComponent.currentColorId].color
   }
   protected deleteColor() {
-    if (this.createFurnitureComponent.furnitureData.colors.length <= 1) return
+    if (this.createFurnitureComponent.furnitureData.colors.length <= 1) {
+      this.errorHandler.setError('Добавьте еще цвет', 500)
+      return
+    }
     this.createFurnitureComponent.deleteColor()
   }
   protected getCurrentColorId() {

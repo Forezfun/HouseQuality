@@ -5,7 +5,7 @@
     <button title="Удалить выбранный цвет" [style.background-color]="deleteColorCalculate()" *ngIf="getCurrentColorId()!==undefined" (click)="deleteColor()" class="functionalBtn deleteBtn deleteColorBtn colorCircle">
         <img src="/assets/images/cancelIcon.svg" alt="x" srcset="">
     </button>
-    <button (click)="idPage==='new' ? createFurnitureCard() : updateFurnitureCard()" class="functionalBtn confirmBtn">
+    <button [disabled]="!isValid" (click)="idPage==='new' ? createFurnitureCard() : updateFurnitureCard()" class="functionalBtn confirmBtn">
       {{idPage === 'new' ? 'Создать' : 'Обновить'}}
     </button>
     <button [title]="idPage === 'new' ? 'Очистить форму' : 'Удалить карточку мебели'" class="functionalBtn deleteBtn">

@@ -1,13 +1,13 @@
-<span [ngClass]="{'appearBody': errorMessage&&errorMessage.length>0,'disappearBody':errorMessage&&errorMessage.length<1}" class="body">
+<span [attr.tab-index]="errorMessage&&errorMessage.length>0?1:-1" [ngClass]="{'appearBody': errorMessage&&errorMessage.length>0,'disappearBody':!errorMessage}" class="body">
     <span class="textSpan">
         <h2 class="title">Что-то пошло не так</h2>
         <h3 class="errorMessage">{{errorMessage}}</h3>
     </span>
     <span class="btnsSpan">
-        <button  (click)="reloadPage()" class="solutionBtn">
+        <button (click)="reloadPage()" class="solutionBtn">
             <img loading="lazy" src="/assets/images/reloadIcon.svg" alt="">
         </button>
-        <button  (click)="logout()" class="solutionBtn">
+        <button (click)="logout()" class="solutionBtn">
             <img loading="lazy" src="/assets/images/logoutIcon.svg" alt="">
         </button>
     </span>

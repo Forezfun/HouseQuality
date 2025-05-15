@@ -28,7 +28,7 @@ export class ErrorHandlerComponent{
   }
   protected logout(){
     this.cookieService.deleteJwt()
-    this.cookieService.deleteUserType()
+    this.cookieService.deleteAccountType()
     this.reloadPage()
   }
 }

@@ -191,7 +191,7 @@ export class AccountPageComponent implements OnInit {
   }
   protected logout() {
     this.accountCookieService.deleteJwt();
-    this.accountCookieService.deleteUserType();
+    this.accountCookieService.deleteAccountType();
     this.router.navigateByUrl('/');
   }
 }

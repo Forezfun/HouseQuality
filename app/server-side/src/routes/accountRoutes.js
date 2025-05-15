@@ -6,6 +6,8 @@ const PROJECT = require('../models/project')
 const FURNITURE_CARD = require('../models/furnitureCard')
 const { checkUserAccess } = require('../helpers/jwtHandlers');
 const IMAGES_FURNITURE = require('../models/imagesFurniture');
+const { encryptPassword,decryptPassword } = require('../helpers/passwordHandlers');
+
 
 ROUTER.delete('/jwt/delete', async (request, result) => {
   try {
@@ -44,7 +46,7 @@ ROUTER.post('/', async (request, result) => {
     if (request.body.accountType === 'email') {
       AUTH_ACCOUNT_ITEM.emailData = {
         email: request.body.email,
-        password: request.body.password
+        password: encryptPassword(request.body.password)
       }
     }
     if (request.body.accountType === 'google') {
@@ -75,7 +77,7 @@ ROUTER.get('/', async (request, result) => {
       nickname: ACCOUNT_ITEM.nickname
     }
     if (AUTH_ACCOUNT_ITEM.emailData.password !== undefined) {
-      RESULT_DATA_ITEM.password = AUTH_ACCOUNT_ITEM.emailData.password
+      RESULT_DATA_ITEM.password = decryptPassword(AUTH_ACCOUNT_ITEM.emailData.password)
     }
     const ACCOUNT_PROJECTS = await PROJECT.find({ authorId: ACCOUNT_ID })
 

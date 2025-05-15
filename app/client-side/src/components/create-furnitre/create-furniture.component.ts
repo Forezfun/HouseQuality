@@ -8,11 +8,12 @@ import { categoryData, CategoryService } from '../../services/category.service';
 import { AutoHeightDirective } from '../../directives/auto-height.directive';
 import { furnitureFromServerData } from '../../services/furniture-card-control.service';
 import { ErrorHandlerService } from '../../services/error-handler.service';
+import { CostFormatPipe } from '../../pipes/cost-format.pipe';
 
 @Component({
   selector: 'app-create-furniture',
   standalone: true,
-  imports: [NgClass, AutoHeightDirective, ImageSliderComponent, NgFor, NgIf, ReactiveFormsModule, NgTemplateOutlet, FormsModule],
+  imports: [NgClass, AutoHeightDirective, ImageSliderComponent, NgFor, NgIf, ReactiveFormsModule, NgTemplateOutlet, FormsModule,CostFormatPipe],
   templateUrl: './create-furniture.component.html',
   styleUrls: ['./create-furniture.component.scss']
 })

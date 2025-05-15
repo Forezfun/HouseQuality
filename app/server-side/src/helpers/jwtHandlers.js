@@ -2,7 +2,7 @@ const JWT_SERVICE = require('jsonwebtoken');
 require('dotenv').config();
 const cryptoKey = process.env.CRYPTO_KEY
 const ACCOUNT = require('../models/account')
-// Экспортируем функции
+
 module.exports.isTokenNoneExpired = function isTokenNoneExpired(jwt) {
     try {
         jwt.verify(jwt, cryptoKey);

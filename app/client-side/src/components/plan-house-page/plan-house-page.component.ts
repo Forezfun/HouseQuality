@@ -69,7 +69,6 @@ export class PlanHousePageComponent implements AfterViewInit, OnInit, AfterViewC
   private async pageInit(jwt: string) {
     try {
       this.accountData = (await this.accountService.GETaccount(jwt)).accountData
-      console.log(this.accountData)
 
       this.route.paramMap.subscribe(params => {
         if (params.get('planId') === null) return

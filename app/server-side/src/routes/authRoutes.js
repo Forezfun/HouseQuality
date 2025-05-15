@@ -3,10 +3,11 @@ const EXPRESS = require('express');
 const ROUTER = EXPRESS.Router();
 const ACCOUNT = require('../models/account');
 const cryptoKey = process.env.CRYPTO_KEY
-const sendCheckCode = require('../sendcode');
+const sendEmail = require('../sendcode');
 const AUTH_ACCOUNT = require('../models/authAccount');
 const jwtService = require('jsonwebtoken');
-const { isTokenNoneExpired, checkUserAccess } = require('../helpers/jwtHandlers')
+const { isTokenNoneExpired, checkUserAccess } = require('../helpers/jwtHandlers');
+const {encryptPassword,decryptPassword} = require('../helpers/passwordHandlers');
 
 const ACCOUNT_TYPES = ['google', 'email']
 
@@ -24,7 +25,7 @@ ROUTER.post('/jwt/long', async (request, result) => {
         });
 
         if (!AUTH_ACCOUNT_ITEM) return result.status(404).json({ message: 'Аккаунт не найден' });
-        if (request.body.accountType === 'email' && AUTH_ACCOUNT_ITEM.emailData.password !== request.body.password) {
+        if (request.body.accountType === 'email' && decryptPassword(AUTH_ACCOUNT_ITEM.emailData.password) !== request.body.password) {
             return result.status(409).json({ message: 'Неправильный пароль' });
         }
         if (request.body.accountType === 'google' && AUTH_ACCOUNT_ITEM.googleData.googleId !== request.body.googleId) {
@@ -79,7 +80,7 @@ ROUTER.put('/account', async (request, result) => {
         if (!authAccountItem) return result.status(404).json({ message: 'Аккаунт не найден' });
 
         if (request.body.accountType === 'email') {
-            authAccountItem.emailData.password = request.body.password
+            authAccountItem.emailData.password = encryptPassword(request.body.password)
         }
         await authAccountItem.save();
         result.status(201).json({ message: 'Аккаунт обновлен' });
@@ -95,7 +96,7 @@ ROUTER.get('/account/code', async (request, result) => {
             'emailData.email': ACCOUNT_EMAIL
         });
         if (!FOUND_ACCOUNT) return result.status(404).json({ message: 'Аккаунт не найден' });
-        const SENT_CODE_OBJECT = sendCheckCode(ACCOUNT_EMAIL)
+        const SENT_CODE_OBJECT = sendEmail(ACCOUNT_EMAIL,'resetCode')
         result.status(201).json(SENT_CODE_OBJECT);
     } catch (error) {
         result.status(400).json({ message: error.message });

@@ -42,7 +42,6 @@ export class ShopPageComponent implements OnInit {
 
   ngOnInit() {
     this.processRouteParams();
-    console.log('init');
   }
 
   private async initCategories() {

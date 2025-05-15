@@ -45,7 +45,7 @@ export class ServerImageControlService {
    */
   POSTuploadProjectImages(color: string, imagesData: imageSliderClientData, jwt: string, furnitureCardId: string) {
     const formData = new FormData();
-    console.log(imagesData.images)
+
     imagesData.images.forEach((file) => formData.append('images', file));
 
     const HTTP_PARAMS = new HttpParams()
