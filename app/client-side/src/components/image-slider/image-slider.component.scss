@@ -1,0 +1,37 @@
+@use '@taiga-ui/core/styles/taiga-ui-local.scss' as *;
+tui-carousel{
+    width:100%;
+    max-width: 90vw;
+}
+.item {
+    transition: box-shadow 0.3s, transform 0.3s;
+    margin: 2rem auto;
+    width:100%;
+    aspect-ratio: 1;
+    border-radius: 20px;
+    background-color: white;
+    display: grid;
+    place-items: center;
+    outline: none;
+    border: none;
+
+    img{
+        grid-area: 1/1/2/2;
+        width:90%;
+        pointer-events: none;
+    }
+    button{
+        grid-area: 1/1/2/2;
+        align-self: flex-end;
+        margin-bottom: 10px;
+        background: none;
+        outline:none;
+        border: none;
+        font-family: 'Courier New', Courier, monospace;
+        cursor: pointer;
+    }
+}
+
+
+
+

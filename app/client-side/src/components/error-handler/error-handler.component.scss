@@ -1,0 +1,84 @@
+@use 'base.scss' as *;
+.body{
+    border-radius: 10px;
+    border: 1px solid rgba($lightGreen, 0.3);
+    background-color: black;
+    width:clamp(250px,30vw,350px);
+    display:flex;
+    flex-direction: row;
+    padding: 0px 10px;
+    justify-content: space-around;
+    position: fixed;
+    bottom: 0px;
+    opacity: 0;
+    left: 50%;
+    transform: translateX(-50%); 
+    transition: all 0.5s ease-in-out;
+}
+.appearBody{
+    animation: appearHandler 0.5s forwards;
+}
+.disappearBody{
+    animation: disappearHandler 0.5s forwards;
+}
+.textSpan{
+    display: flex;
+    flex-direction: column;
+    gap:5px;
+    padding: 10px 0px;
+    font-size: 105%;
+    width:60%;
+    justify-content: center;
+}
+.title{
+    color:white;
+    margin:0;
+    font-size: 17px;
+}
+.errorMessage{
+    color:red;
+    margin:0;
+    width:100%;
+    font-weight:normal;
+    font-size: 13px;
+    white-space: nowrap; 
+    overflow: hidden; 
+    text-overflow: ellipsis;
+}
+.solutionBtn{
+    width:100%;
+    height: 100%;
+    background:none;
+    margin: 0;
+    border: none;
+    cursor: pointer;
+    img{
+        width:30px;
+    }
+}
+.btnsSpan{
+    display: flex;
+    justify-self: flex-end;
+    width: 26%;
+}
+
+@keyframes appearHandler {
+    0%{
+        opacity: 0;
+        bottom: 0px;
+    }
+    100%{
+        opacity: 1;
+        bottom: 50px;
+    }
+}
+@keyframes disappearHandler {
+    0%{
+        opacity: 1;
+        bottom: 50px;
+    }
+    100%{
+        opacity: 0;
+        bottom: -100%;
+    }
+}

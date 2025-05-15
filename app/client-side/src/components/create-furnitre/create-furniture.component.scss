@@ -1,0 +1,563 @@
+@use 'base.scss' as *;
+button:not(.colorVariant),
+.furnitureModelInput {
+    transition: all 0.3s ease-in-out;
+    &:hover {
+        transform: translateY(-3px);
+    }
+}
+
+.body {
+    background-color: black;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    margin: 0 auto;
+    margin-top: 60px;
+}
+
+.imageSlideSpan {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr;
+}
+
+.addModuleInput {
+    border-radius: 10px;
+    background-color: transparent;
+    border: #888888 1px solid;
+    padding: 10px;
+    outline: none;
+    color: white;
+}
+
+.editImagesBtn {
+    aspect-ratio: 1;
+    border: none;
+    background: none;
+    grid-area: 1/1/2/2;
+    align-self: start;
+    z-index: 4;
+    justify-self: end;
+    margin-top: -10px;
+    margin-right: -10px;
+    @media(max-width:768px){
+        margin:0;
+    }
+}
+
+.editImagesBtn>img {
+    width: 25px;
+    cursor: pointer
+}
+
+app-image-slider {
+    width: 100%;
+    display: block;
+    grid-area: 1/1/2/2;
+}
+
+.leftPiece {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.furnitureTitle {
+    color: white;
+    text-align: center;
+    margin: 0 auto;
+    width: fit-content;
+    background: none;
+    border: none;
+    outline: none;
+    font-size: 1.5vw;
+}
+
+.uploadImagesDiv {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr;
+    width: 60px;
+    place-items: center;
+    margin: 60px auto;
+}
+
+.uploadImagesInput {
+    grid-area: 1/1/2/2;
+    border: none;
+    background: none;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+    opacity: 0;
+}
+
+.uploadImagesIcon {
+    grid-area: 1/1/2/2;
+    width: 100%;
+}
+
+.colorSlider {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr;
+    place-items: center;
+    width: 30%;
+    height: 300px;
+    aspect-ratio: 1;
+    position: relative;
+    --radius: 60px;
+}
+
+.colorVariant {
+    --angle: calc(360deg / var(--total-items) * (var(--index) - 1));
+    transform: rotate(var(--angle)) translate(var(--radius)) rotate(calc(-1 * var(--angle)));
+}
+
+.colors {
+    grid-area: 1 / 1 / 2 / 2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    transition: all 0.5s ease-in-out;
+}
+
+.colorVariant {
+    cursor: pointer;
+    position: absolute;
+    width: 40px;
+    aspect-ratio: 1;
+    border: 5px solid black;
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.5s ease-in-out;
+    box-shadow: 0 0 3px 0 white;
+}
+
+
+.colors>.colorVariant {
+    @for $i from 1 through 8 {
+        &:nth-child(#{$i}) {
+            --index: #{$i};
+        }
+    }
+}
+
+.addColorBtn {
+    border-radius: 50%;
+    grid-area: 1/1/2/2;
+    width: 40px;
+    aspect-ratio: 1;
+    z-index: 3;
+    background-color: black;
+    border: none;
+    display: flex;
+    place-content: center;
+    cursor: pointer;
+    box-shadow: 0 0 10px 0px white;
+}
+
+.addColorBtn>img {
+    width: 75%;
+}
+
+.addModule {
+    z-index: 4;
+    transition: all 0.5s ease-in-out;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.75);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.addModuleSpan {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr;
+}
+
+.addModuleFormContent {
+    grid-area: 1/1/2/2;
+    width: 25vw;
+    min-width: 350px;
+    border-radius: 10px;
+    background-color: #000;
+    padding: 30px 45px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    box-shadow: 0 0 10px 0px white;
+}
+
+.addModuleInputSpan {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.inputLabel {
+    color: $light;
+    cursor:pointer;
+}
+
+.categorySelect {
+    background: none;
+    border: 1px solid #888888;
+    border-radius: 10px;
+    padding: 10px;
+    background-color: black;
+    color: white;
+    cursor:pointer;
+}
+
+.addModuleInput {
+    border-radius: 10px;
+    background-color: transparent;
+    border: #888888 1px solid;
+    padding: 10px;
+    outline: none;
+    color: white;
+}
+
+.addModuleTitle {
+    color: $lightGreen;
+    text-align: center;
+    font-size: 28px;
+}
+
+.submitAddModuleFormBtn {
+    background-color: $lightGreen;
+    color: white;
+    border-radius: 10px;
+    padding: 15px;
+    width: 100%;
+    border: none;
+    cursor: pointer;
+}
+
+.submitAddModuleFormBtn:disabled {
+    background-color: $darkGreen;
+}
+
+.disabled {
+    filter: opacity(0);
+    pointer-events: none;
+}
+
+.closeAddModuleBtn {
+    grid-area: 1/1/2/2;
+    background: none;
+    border: none;
+    z-index: 3;
+    width: 30px;
+    aspect-ratio: 1;
+    margin-right: 10px;
+    margin-top: 10px;
+    justify-self: end;
+    cursor: pointer;
+}
+
+.closeAddModuleBtn>img {
+    transform: rotate(45deg)
+}
+
+.footer {
+    width: 100%;
+    display: flex;
+    background-color: black;
+}
+
+.informationSpan {
+    display: flex;
+    gap: 5px;
+    width: 75%
+}
+
+.descriptionSpan {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 60%;
+}
+
+.descriptionTitle {
+    background-color: $darkGreen;
+    color: white;
+    border-radius: 10px 0px 0px 10px;
+    padding: 15px;
+    width: calc(100% - 30px);
+    text-align: center;
+}
+
+.descriptionInformation {
+    color: white;
+    padding: 0px 10px;
+    min-height: 300px;
+    background: none;
+    border: none;
+    outline: none;
+    resize: vertical;
+}
+
+.rightFunctionalSection {
+    width: 40%;
+    display: flex;
+    height: 100%;
+    flex-direction: column;
+    gap: 20px
+}
+
+.additionalFunctions {
+    width: 100%;
+    background-color: $lightGreen;
+    border-radius: 10px;
+    border: none;
+    color: white;
+    font-size: 115%;
+    line-height: 50px;
+    height: 50px;
+    cursor: pointer;
+}
+
+.shopsSpan {
+    width: 100%;
+    height: calc(100% - 60px);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    transition: all 0.5s ease-in-out;
+}
+
+.shopsTitle {
+    width: calc(100% - 30px);
+    text-align: center;
+    background-color: $darkGreen;
+    border-radius: 0px 10px 10px 0px;
+    padding: 15px;
+    color: white;
+}
+
+.shopFunctions {
+    width: 100%;
+    display: flex;
+    gap: 5px;
+    height: 45px;
+    background: none;
+    padding: 0;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.furnitureCost {
+    width: 75%;
+    background-color: black;
+    color: white;
+    border-radius: 10px 0px 0px 10px;
+    align-content: center;
+    text-align: center;
+    border: 2px solid rgba($lightGreen,0.3);
+}
+
+.shopsListSpan {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.linkShop {
+    width: 25%;
+    background-color: black;
+    border-radius: 0px 10px 10px 0px;
+    place-content: center;
+    display: flex;
+    border: 2px solid rgba($lightGreen,0.3);
+}
+
+.linkShop>img {
+    width: 40px;
+}
+
+.addShopButton {
+    background-color: black;
+    border: 2px solid rgba($lightGreen,0.3);
+    display: flex;
+    place-content: center;
+    border-radius: 10px;
+    height: 45px;
+    cursor: pointer;
+}
+
+.addShopButton>img {
+    width: 30px;
+}
+
+.functionShopsModuleBtns {
+    width: 100%;
+    display: flex;
+    gap: 10px;
+}
+
+.deleteItemAddModuleBtn {
+    border-radius: 10px;
+    background-color: $lightGreen;
+    height: 50px;
+    width: 20%;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.deleteItemAddModuleBtn>img {
+    height: 50%;
+}
+
+.furnitureModelInput {
+    color: white;
+    cursor: pointer;
+    border-radius: 10px;
+    box-shadow: 0 0 5px 0 white;
+    height: 30px;
+    padding: 10px;
+    align-content: center;
+    justify-content: center;
+    display: flex;
+}
+
+.furnitureModelInput::file-selector-button {
+    color: transparent;
+    border-radius: 50%;
+    height: 100%;
+    aspect-ratio: 1;
+    border: none;
+    background-color: transparent;
+    background-image: url('/assets/images/addIcon.svg');
+    background-repeat: no-repeat;
+}
+
+.furnitureModelLabel {
+    color: white
+}
+
+@media (max-width: 1200px) {
+    .furnitureTitle {
+        font-size: 2vw;
+    }
+}
+
+@media (max-width: 1000px) {
+    app-create-furniture {
+        width: calc(100% - 10px);
+    }
+
+    .leftPiece {
+        gap: 30px;
+    }
+
+    .colorSlider {
+        height: 150px;
+    }
+
+    .furnitureModelInput {
+        height: 25px;
+    }
+
+    .furnitureTitle {
+        font-size: 2.5vw;
+    }
+}
+
+@media (max-width: 600px) {
+    .rightFunctionalSection {
+        gap: 10px;
+    }
+
+    .furnitureTitle {
+        font-size: 3vw;
+    }
+
+    .leftPiece {
+        gap: 0;
+    }
+
+    .shopsTitle,
+    .descriptionTitle {
+        border-radius: 10px;
+    }
+
+    .body {
+        max-width: 400px;
+        margin-top: 30px;
+        gap: 15px;
+    }
+
+    .furnitureTitle {
+        font-size: 1.5rem;
+        width: 90%;
+    }
+
+    .footer {
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .colorSlider {
+        width: 100%;
+        height: 200px;
+        margin-bottom: 20px;
+    }
+
+    .informationSpan {
+        width: 100%;
+        flex-direction: column;
+    }
+
+    .descriptionSpan,
+    .rightFunctionalSection {
+        width: 100%;
+    }
+
+    .addModuleFormContent {
+        width: calc(85vw - 40px);
+        min-width: none;
+        padding: 20px;
+    }
+
+    .shopsSpan {
+        height: auto;
+    }
+
+    .furnitureModelInput {
+        width: calc(100% - 20px);
+        margin-top: 10px;
+    }
+}
+.error-message {
+    color: #ff4444;
+    font-size: 0.8rem;
+    margin-top: 5px;
+}
+
+.invalid {
+    border-color: #ff4444 !important;
+    box-shadow: 0 0 5px rgba(255, 68, 68, 0.5);
+}
+
+.addModuleInput {
+    &.ng-invalid.ng-touched {
+        border-color: #ff4444;
+    }
+}

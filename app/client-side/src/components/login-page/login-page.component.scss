@@ -1,0 +1,193 @@
+@use 'base.scss' as *;
+@use 'sass:color';
+
+app-navigation-panel{
+    margin-top: 30px;
+}
+.body {
+    padding: 0;
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: black;
+    background-size: cover;
+    position: relative;
+}
+
+.login-container {
+    width: 100%;
+    max-width: 500px;
+    margin: auto;
+    padding: 20px;
+}
+
+.formModule {
+    background-color: black;
+    border-radius: 10px;
+    padding: 30px;
+    width: calc(100% - 60px);
+    box-shadow: 0 0 5px white;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.addModuleTitle {
+    color: $light;
+    text-align: center;
+    font-size: 2rem;
+    margin-bottom: 30px;
+    font-weight: normal;
+}
+
+.addModuleInputSpan {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+    position: relative;
+}
+
+.inputLabel {
+    color: $light;
+    margin-bottom: 8px;
+    font-size: 0.9rem;
+}
+
+.addModuleInput {
+    background-color: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 5px;
+    padding: 12px 15px;
+    color: $light;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    
+    &:focus {
+        outline: none;
+        border-color: $lightGreen;
+        box-shadow: 0 0 0 2px rgba($lightGreen, 0.2);
+    }
+    
+    &.invalid {
+        border-color: #ff6b6b;
+        background-color: rgba(255, 107, 107, 0.1);
+    }
+}
+
+.error-message {
+    color: #ff6b6b;
+    font-size: 0.8rem;
+    margin-top: 5px;
+}
+
+.input-group {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 20px;
+    
+    input {
+      width: 40px;
+      aspect-ratio: 1;
+      text-align: center;
+      font-size: 24px;
+      font-family: 'Courier New', monospace;
+      background: rgba(255, 255, 255, 0.1);
+      border: 2px solid $lightGreen;
+      border-radius: 12px;
+      color: $light;
+      transition: all 0.3s ease;
+      outline: none;
+      
+      &:focus {
+        border-color: color.scale($lightGreen, $lightness: 15%);
+        box-shadow: 0 0 0 3px rgba($lightGreen, 0.2);
+        transform: translateY(-2px);
+      }
+      
+      &.invalid {
+        border-color: #ff6b6b;
+        background: rgba(255, 107, 107, 0.1);
+        animation: shake 0.5s ease;
+      }
+    }
+  }
+  
+  @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    20%, 60% { transform: translateX(-5px); }
+    40%, 80% { transform: translateX(5px); }
+  }
+
+.submitAddModuleFormBtn {
+    width: 100%;
+    padding: 15px;
+    background-color: $lightGreen;
+    color: #000;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 10px;
+    
+    &:hover {
+        background-color: color.scale($lightGreen, $lightness: 10%);
+    }
+    
+    &:disabled {
+        background-color: rgba($lightGreen, 0.5);
+        cursor: not-allowed;
+    }
+}
+
+.additionalFuntions {
+    display: flex;
+    justify-content: space-between;
+    margin: 20px 0;
+    
+    button {
+        background: none;
+        border: none;
+        color: $light;
+        cursor: pointer;
+        font-size: 0.9rem;
+        padding: 5px 0;
+        position: relative;
+        
+        &::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background: $light;
+            transition: width 0.3s;
+        }
+        
+        &:hover::after {
+            width: 100%;
+        }
+    }
+}
+
+@media (max-width: 768px) {
+    .formModule {
+        padding: 20px;
+    }
+    
+    .addModuleTitle {
+        font-size: 1.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .login-container {
+        padding: 10px;
+    }
+    
+    .additionalFuntions {
+        flex-direction: column;
+        gap: 10px;
+    }
+}

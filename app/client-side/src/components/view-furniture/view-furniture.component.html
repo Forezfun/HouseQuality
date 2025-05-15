@@ -1,0 +1,37 @@
+<span *ngIf="furnitureData" class="body">
+    <h1 class="furnitureTitle" title="Название мебели">{{furnitureData.name}}</h1>
+    <app-image-slider *ngIf="furnitureData.colors[currentColorId].imagesData"
+        [imagesData]="furnitureData.colors[currentColorId].imagesData"></app-image-slider>
+    <div class="uploadImagesDiv" *ngIf="!furnitureData.colors[currentColorId].imagesData">
+        <input class="uploadImagesInput" type="file" accept=".png,.jpeg" title="Загрузите изображения">
+        <img loading="lazy" class="uploadImagesIcon" src="assets/images/uploadIcon.png" alt="Загрузить">
+    </div>
+    <span class="footer">
+        <span class="colorSlider">
+            <img loading="lazy" src="assets/images/paletteIcon.svg" class="addColorBtn" alt="Добавить цвет" title="Добавить цвет">
+            <span [style.--total-items]="furnitureData.colors.length.toString()" class="colors">
+                <button (click)="openFurnitureVariant($event.target!)"
+                    *ngFor="let colorVariant of furnitureData.colors; let index = index" [attr.data-idColor]="index"
+                    [style.background-color]="colorVariant.color" class="colorVariant" title="Выбрать цвет"></button>
+            </span>
+        </span>
+        <span class="informationSpan">
+            <span class="descriptionSpan">
+                <div class="descriptionTitle" title="Описание">Описание</div>
+                <div class="descriptionInformation" title="Описание мебели">{{proccessDescription(furnitureData.description,furnitureData.proportions)}}</div>
+            </span>
+            <span class="shopsSpan">
+                <div class="shopsTitle" title="Магазины">Магазины</div>
+                <span class="shopsListSpan">
+                    <span class="shopFunctions"
+                        *ngFor="let shopData of furnitureData.shops; let index = index">
+                        <a [href]="shopData.url" class="furnitureCost" title="Цена">{{shopData.cost | costFormat}}</a>
+                        <button [title]="'Скопировать ссылку: ' + shopData.url" (click)="copyShopLink(shopData.url)" class="linkShop">
+                            <img loading="lazy" src="assets/images/linkIcon.svg" alt="Скопировать ссылку">
+                        </button>
+                    </span>
+                </span>
+            </span>
+        </span>
+    </span>
+</span>

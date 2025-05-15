@@ -1,0 +1,140 @@
+/* navigation.component.scss */
+@use 'base.scss' as *;
+
+.desktop-content{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 80%;
+    height: 100%;
+}
+.navigationBtn > img, svg {
+    height: 100%;
+}
+
+app-finder {
+    height: 80%;
+    width: 60%;
+}
+
+.homeBtn {
+    color: $light;
+    font-family: 'Gloock';
+    font-size: 27.5px;
+    text-decoration: none;
+    align-content: center;
+}
+
+.navigationSpan {
+    display: flex;
+    background-color: black;
+    border-radius: 10px;
+    gap: 5px;
+    justify-content: space-around;
+    width: calc(90vw - 30px);
+    min-width: 550px;
+    margin: 0 auto;
+    height: 60px;
+    align-items: center;
+    border: 1px solid rgba($lightGreen, 0.3);
+    position: relative;
+    
+    @media (max-width: 750px) {
+        justify-content: space-between;
+        padding: 0 15px;
+        width: calc(90vw - 30px);
+        min-width: auto;
+    }
+}
+
+.navigationBtn {
+    height: 80%;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.mainBtns {
+    height: 75%;
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}
+.createBtn{
+    img{
+        filter: sepia(4%)
+    }
+}
+.hamburger-menu {
+    display: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    height: 30px;
+    width: 30px;
+    transition: all 0.5s ease-in-out;
+    
+    img {
+        width: 100%;
+        height: 100%;
+    }
+    &.active img {
+        filter: brightness(0) saturate(100%) invert(64%) sepia(11%) saturate(1233%) hue-rotate(71deg) brightness(92%) contrast(86%);
+    }
+    
+    @media (max-width: 750px) {
+        display: block;
+    }
+}
+
+.mobile-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    margin-top: 10px;
+    left: 0;
+    right: 0;
+    background-color: black;
+    border-radius: 10px;
+    padding: 15px;
+    flex-direction: column;
+    gap: 15px;
+    z-index: 100;
+    border: 1px solid rgba($lightGreen, 0.3);
+    
+    app-finder {
+        width: calc(100% - 20px);
+        margin-bottom: 10px;
+        height: 40px;
+    }
+}
+
+.mobile-menu-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: $light;
+    text-decoration: none;
+    padding: 8px;
+    
+    img, svg {
+        width: 24px;
+        height: 24px;
+    }
+    
+    span {
+        font-size: 16px;
+    }
+}
+
+/* Адаптивные стили */
+@media (max-width: 750px) {
+    .desktop-content {
+        display: none;
+    }
+    
+    .mobile-menu {
+        display: flex;
+    }
+}

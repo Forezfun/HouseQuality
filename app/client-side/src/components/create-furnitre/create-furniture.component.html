@@ -1,0 +1,142 @@
+<span class="body" (click)="currentColorId ?? openColorModule($event)">
+    <input class="furnitureTitle" [(ngModel)]="furnitureData.name" placeholder="Название" title="Введите название мебели">
+    <span class="imageSlideSpan">
+        <button *ngIf="currentColorId!==undefined&&furnitureData.colors[currentColorId].imagesData.images.length>0"
+            (click)="removeImages()" class="editImagesBtn">
+            <img loading="lazy" alt="edit" src="/assets/images/editIcon.svg" alt=""></button>
+        <app-image-slider
+            *ngIf="currentColorId!==undefined&&furnitureData.colors[currentColorId].imagesData.images.length>0"
+            [imagesData]="furnitureData.colors[currentColorId].imagesData" [changeModeSlider]="true">
+        </app-image-slider>
+    </span>
+    <div class="uploadImagesDiv"
+        *ngIf="currentColorId===undefined||(currentColorId!==undefined&&furnitureData.colors[currentColorId].imagesData.images.length<=0)">
+        <input (input)="onInputImages($event)" class="uploadImagesInput" multiple type="file" accept=".png,.jpeg,.jpg" title="Загрузите изображения">
+        <img loading="lazy" class="uploadImagesIcon" src="/assets/images/uploadIcon.png" alt="Загрузить">
+    </div>
+    <span class="footer">
+        <span class="leftPiece">
+            <span class="colorSlider">
+                <button (click)="openColorModule($event)" class="addColorBtn" title="Добавить новый цвет">
+                    <img loading="lazy" src="/assets/images/addIcon.svg" alt="Добавить">
+                </button>
+                <span *ngIf="furnitureData.colors!==undefined" class="colors" [style.--total-items]="furnitureData.colors.length.toString()">
+                    <button (click)="openFurnitureVariant(index)"
+                        *ngFor="let colorVariant of furnitureData.colors;let index=index" [attr.data-idColor]="index"
+                        [style.background-color]="colorVariant.color" class="colorVariant" title="Выбрать цвет"></button>
+                </span>
+            </span>
+            <input type="file" accept=".obj" id="furnitureModel" class="furnitureModelInput" title="Загрузить 3D модель">
+        </span>
+        <span class="informationSpan">
+            <span class="descriptionSpan">
+                <div class="descriptionTitle">Описание</div>
+                <textarea appAutoHeight [mobileView]="isMobileView" placeholder="Введите описание..." [(ngModel)]="furnitureData.description"
+                    class="descriptionInformation" title="Введите описание мебели"></textarea>
+            </span>
+            <span class="rightFunctionalSection">
+                <div class="shopsTitle">Магазины</div>
+                <span class="shopsSpan">
+                    <span class="shopsListSpan">
+                        <button (click)="openShopsModule(index)" class="shopFunctions"
+                            *ngFor="let shopData of furnitureData.shops; let index=index" title="Редактировать магазин">
+                            <div class="furnitureCost">{{shopData.cost}}</div>
+                            <div class="linkShop">
+                                <img loading="lazy" src="/assets/images/linkIcon.svg" alt="Ссылка">
+                            </div>
+                        </button>
+                    </span>
+                    <button (click)="openShopsModule()" class="addShopButton" title="Добавить магазин"><img loading="lazy"
+                            src="/assets/images/addIcon.svg" alt="Добавить"></button>
+                </span>
+                <button (click)="openAdditional()" class="additionalFunctions" title="Дополнительная информация">
+                    Информация
+                </button>
+            </span>
+        </span>
+    </span>
+</span>
+
+<div class="addModule disabled">
+    <ng-container *ngTemplateOutlet="addModuleTemplate"></ng-container>
+</div>
+<ng-template #colorModule>
+    <form class="addModuleSpan" [formGroup]="colorForm" (ngSubmit)="addColor()">
+        <button (click)="closeAddModule()" class="closeAddModuleBtn" type="button">
+            <img loading="lazy" src="/assets/images/addIcon.svg" alt="Закрыть">
+        </button>
+        <span class="addModuleFormContent">
+            <h2 class="addModuleTitle">Вариант мебели</h2>
+            <span class="addModuleInputSpan">
+                <label class="inputLabel" for="colorVariant">Цвет</label>
+                <input formControlName="color" placeholder="На английском или #hex" class="addModuleInput" id="colorVariant" type="text" title="Введите цвет в формате #hex или на английском">
+                <span *ngIf="colorForm.get('color')?.invalid && (colorForm.get('color')?.dirty || colorForm.get('color')?.touched)" class="error-message">
+                    Пожалуйста, укажите цвет
+                </span>
+            </span>
+            <button [disabled]="!colorForm.valid" class="submitAddModuleFormBtn" type="submit" title="Сохранить цвет">Продолжить</button>
+        </span>
+    </form>
+</ng-template>
+<ng-template #shopsModule>
+    <form class="addModuleSpan" [formGroup]="shopForm" (ngSubmit)="addShop()">
+        <button (click)="closeAddModule()" class="closeAddModuleBtn" type="button">
+            <img loading="lazy" src="/assets/images/addIcon.svg" alt="Закрыть">
+        </button>
+        <span class="addModuleFormContent">
+            <h2 class="addModuleTitle">Вариант магазина</h2>
+            <span class="addModuleInputSpan">
+                <label class="inputLabel" for="cost">Цена</label>
+                <input formControlName="cost" class="addModuleInput" id="cost" type="text" title="Введите цену">
+                <span *ngIf="shopForm.get('cost')?.invalid && (shopForm.get('cost')?.dirty || shopForm.get('cost')?.touched)" class="error-message">
+                    Пожалуйста, укажите корректную цену
+                </span>
+            </span>
+            <span class="addModuleInputSpan">
+                <label class="inputLabel" for="url">Ссылка</label>
+                <input formControlName="url" class="addModuleInput" id="url" type="text" title="Введите ссылку на магазин">
+                <span *ngIf="shopForm.get('url')?.invalid && (shopForm.get('url')?.dirty || shopForm.get('url')?.touched)" class="error-message">
+                    Пожалуйста, укажите ссылку
+                </span>
+            </span>
+            <span class="functionShopsModuleBtns">
+                <button [disabled]="!shopForm.valid" class="submitAddModuleFormBtn" type="submit" title="Сохранить магазин">Продолжить</button>
+                <button (click)="deleteShop()" class="deleteItemAddModuleBtn" *ngIf="lastClickedShop!==undefined" title="Удалить магазин"><img
+                        loading="lazy" src="/assets/images/deleteIcon.svg" alt="Удалить"></button>
+            </span>
+        </span>
+    </form>
+</ng-template>
+<ng-template #additionalModule>
+    <form class="addModuleSpan" [formGroup]="proportionsForm" (ngSubmit)="saveAdditional()">
+        <button (click)="closeAddModule()" class="closeAddModuleBtn" type="button">
+            <img loading="lazy" src="/assets/images/addIcon.svg" alt="Закрыть">
+        </button>
+        <span class="addModuleFormContent">
+            <h2 class="addModuleTitle">Информация</h2>
+            <span *ngIf="categoriesArray!==undefined" class="addModuleInputSpan">
+                <label class="inputLabel" for="category">Категория</label>
+                <select aria-placeholder="Диван" [ngModelOptions]="{standalone: true}" [(ngModel)]="furnitureData.additionalData.category" class="categorySelect"
+                    name="category" id="category" title="Выберите категорию">
+                    <option [value]="category.name" *ngFor="let category of categoriesArray">{{category.translateOne}}</option>
+                </select>
+                <label class="inputLabel" for="width">Ширина</label>
+                <input formControlName="width" class="addModuleInput" [ngClass]="{'invalid': proportionsForm.get('width')?.invalid && (proportionsForm.get('width')?.dirty || proportionsForm.get('width')?.touched)}" placeholder="1.7" id="width" type="number" min="0" step="0.01" title="Введите ширину">
+                <span *ngIf="proportionsForm.get('width')?.invalid && (proportionsForm.get('width')?.dirty || proportionsForm.get('width')?.touched)" class="error-message">
+                    Пожалуйста, укажите ширину
+                </span>
+                <label class="inputLabel" for="length">Длина</label>
+                <input formControlName="length" class="addModuleInput" [ngClass]="{'invalid': proportionsForm.get('length')?.invalid && (proportionsForm.get('length')?.dirty || proportionsForm.get('length')?.touched)}" placeholder="1.5" id="length" type="number" min="0" step="0.01" title="Введите длину">
+                <span *ngIf="proportionsForm.get('length')?.invalid && (proportionsForm.get('length')?.dirty || proportionsForm.get('length')?.touched)" class="error-message">
+                    Пожалуйста, укажите длину
+                </span>
+                <label class="inputLabel" for="height">Высота</label>
+                <input formControlName="height" class="addModuleInput" [ngClass]="{'invalid': proportionsForm.get('height')?.invalid && (proportionsForm.get('height')?.dirty || proportionsForm.get('height')?.touched)}" placeholder="1" id="height" type="number" min="0" step="0.01" title="Введите высоту">
+                <span *ngIf="proportionsForm.get('height')?.invalid && (proportionsForm.get('height')?.dirty || proportionsForm.get('height')?.touched)" class="error-message">
+                    Пожалуйста, укажите высоту
+                </span>
+            </span>
+            <button [disabled]="proportionsForm.invalid" class="submitAddModuleFormBtn additionalBtn" type="submit" title="Сохранить информацию">Сохранить</button>
+        </span>
+    </form>
+</ng-template>

@@ -1,0 +1,21 @@
+<span class="finder">
+    <span class="finderSpan">
+        <button routerLink="/shop" title="Поиск" class="finderBtn btn">
+            <img loading="lazy" src="/assets/images/searchIcon.svg" alt="search">
+        </button>
+        <input placeholder="Введите название мебели" (input)="inputProcess()" type="text" class="finderInput">
+        <button class="closeBtn btn" title="Очистить поле" (click)="clearInput()">
+            <img src="/assets/images/cancelIcon.svg" alt="">
+        </button>
+    </span>
+    <span class="variantsSpan">
+        <h3 *ngIf="foundFurniture!==undefined&&foundFurniture.length===0">Ничего не найдено :(</h3>
+        <span [ngClass]="{'variantCardDesktop': checkDesktop(),'variantCardMobile':!checkDesktop()}" class="variantCard" *ngFor="let card of foundFurniture">
+            <div>
+                <h3 class="cardName">{{card.name}}</h3>
+                <a [href]="getUrl(card.id,card.category)" class="cardCost">{{ card.cost | costFormat }} ₽</a>
+            </div>
+            <img class="cardImage" [src]="getImage(card.id,card.colorRequest)" alt="">
+        </span>
+    </span>
+</span>
