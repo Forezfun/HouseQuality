@@ -31,7 +31,10 @@ app/client-side/src/.angular
 *.sublime-workspace
 
 # Visual Studio Code
-.vscode/*
+/.vscode/*
+# **/extensions.json
+# **/launch.json
+# **/tasks.json
 !.vscode/settings.json
 !.vscode/tasks.json
 !.vscode/launch.json
