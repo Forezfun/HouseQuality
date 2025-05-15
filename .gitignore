@@ -32,9 +32,6 @@ app/client-side/src/.angular
 
 # Visual Studio Code
 /.vscode/*
-# **/extensions.json
-# **/launch.json
-# **/tasks.json
 !.vscode/settings.json
 !.vscode/tasks.json
 !.vscode/launch.json
