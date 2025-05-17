@@ -238,7 +238,7 @@ export class ReportService {
         }
     </style>
 </head>
-<h1 class="title">Отчет по комнате<br>first</h1>
+<h1 class="title">Отчет по комнате<br>${roomData.name}</h1>
 <h2 class="renderTitle">Вид сверху</h2>
 <img src="${renderUrl}"
     alt="Room render">

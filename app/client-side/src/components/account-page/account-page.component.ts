@@ -8,7 +8,7 @@ import { AccountCookieService } from '../../services/account-cookie.service';
 import { ServerImageControlService } from '../../services/server-image-control.service';
 import { ClientImageControlService } from '../../services/client-image-control.service';
 import { AuthService } from '../../services/auth.service';
-import { ErrorHandlerService } from '../../services/error-handler.service';
+import { NotificationService } from '../../services/notification.service';
 
 interface editForm {
   nickname: FormControl<string | null | undefined>;
@@ -30,7 +30,7 @@ export class AccountPageComponent implements OnInit {
     private imageServerControlService: ServerImageControlService,
     private imageClientControlService: ClientImageControlService,
     private authService: AuthService,
-    private errorHandler: ErrorHandlerService
+    private notification: NotificationService
   ) { }
 
   protected accountData?: accountFullData;
@@ -53,22 +53,23 @@ export class AccountPageComponent implements OnInit {
     try {
       await this.accountService.PUTupdateSecondaryAccountData(CHANGE_DATA);
       this.accountData.nickname = this.editForm.value.nickname!;
+      this.notification.setSuccess('Данные обновлены',5000)
     } catch (error) {
-      this.errorHandler.setError('Ошибка обновления никнейма', 5000);
+      this.notification.setError('Ошибка обновления никнейма', 5000);
       console.error(error);
       throw error;
     }
   }
   protected async saveChanges() {
     if (!this.accountData || !this.editForm.valid) {
-      this.errorHandler.setError('Некорректные данные формы', 5000);
+      this.notification.setError('Некорректные данные формы', 5000);
       return;
     }
 
     const JWT = this.accountCookieService.getJwt();
     const ACCOUNT_TYPE = this.accountCookieService.getUserType() as accountType;
     if (!JWT || !ACCOUNT_TYPE) {
-      this.errorHandler.setError('Ошибка аутентификации', 5000);
+      this.notification.setError('Ошибка аутентификации', 5000);
       return;
     }
 
@@ -76,8 +77,9 @@ export class AccountPageComponent implements OnInit {
       await this.updateSecondaryAccountData(JWT);
       await this.updateBaseDataIfNeeded(JWT, ACCOUNT_TYPE);
       this.closeEditForm();
+      this.notification.setSuccess('Данные обновлены',5000)
     } catch (error) {
-      this.errorHandler.setError('Ошибка сохранения данных', 5000);
+      this.notification.setError('Ошибка сохранения данных', 5000);
       console.error(error);
     }
   }
@@ -94,7 +96,7 @@ export class AccountPageComponent implements OnInit {
       await this.authService.PUTupdateBaseData(CHANGE_DATA);
       this.accountData.password = this.editForm.value.password;
     } catch (error) {
-      this.errorHandler.setError('Ошибка обновления пароля', 5000);
+      this.notification.setError('Ошибка обновления пароля', 5000);
       console.error(error);
       throw error;
     }
@@ -126,21 +128,22 @@ export class AccountPageComponent implements OnInit {
     const TARGET = event.target as HTMLInputElement;
     const FILE = TARGET.files?.[0];
     if (!FILE) {
-      this.errorHandler.setError('Файл не выбран', 5000);
+      this.notification.setError('Файл не выбран', 5000);
       return;
     }
 
     try {
       const COMPRESSED_IMAGE = await this.imageClientControlService.compressImage(FILE);
       if (!COMPRESSED_IMAGE) {
-        this.errorHandler.setError('Ошибка сжатия изображения', 5000);
+        this.notification.setError('Ошибка сжатия изображения', 5000);
         return;
       }
 
       await this.imageServerControlService.POSTuploadUserAvatar(COMPRESSED_IMAGE, JWT);
       this.accountData.avatarUrl = URL.createObjectURL(COMPRESSED_IMAGE);
+      this.notification.setSuccess('Аватар обновлен',5000)
     } catch (error) {
-      this.errorHandler.setError('Ошибка загрузки аватара', 5000);
+      this.notification.setError('Ошибка загрузки аватара', 5000);
       console.error(error);
     }
   }
@@ -171,7 +174,7 @@ export class AccountPageComponent implements OnInit {
   }
   protected openEditForm() {
     if (!this.accountData) {
-      this.errorHandler.setError('Данные пользователя не загружены', 5000);
+      this.notification.setError('Данные пользователя не загружены', 5000);
       return;
     }
     this.isEditFormOpen = true;

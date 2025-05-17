@@ -1,19 +1,19 @@
-import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, HostListener, Input, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, HostListener, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ImageSliderComponent } from '../image-slider/image-slider.component';
 import { NgClass, NgFor, NgIf, NgTemplateOutlet } from '@angular/common';
 import { FormGroup, FormControl, Validators, ReactiveFormsModule, FormsModule, AbstractControl, ValidationErrors } from '@angular/forms';
 import { TemplateRef } from '@angular/core';
 import { ClientImageControlService } from '../../services/client-image-control.service';
-import { categoryData, CategoryService } from '../../services/category.service';
+import { categoryData, CategoryService, filter, option } from '../../services/category.service';
 import { AutoHeightDirective } from '../../directives/auto-height.directive';
 import { furnitureFromServerData } from '../../services/furniture-card-control.service';
-import { ErrorHandlerService } from '../../services/error-handler.service';
+import { NotificationService } from '../../services/notification.service';
 import { CostFormatPipe } from '../../pipes/cost-format.pipe';
 
 @Component({
   selector: 'app-create-furniture',
   standalone: true,
-  imports: [NgClass, AutoHeightDirective, ImageSliderComponent, NgFor, NgIf, ReactiveFormsModule, NgTemplateOutlet, FormsModule,CostFormatPipe],
+  imports: [ReactiveFormsModule, NgClass, AutoHeightDirective, ImageSliderComponent, NgFor, NgIf, ReactiveFormsModule, NgTemplateOutlet, FormsModule, CostFormatPipe],
   templateUrl: './create-furniture.component.html',
   styleUrls: ['./create-furniture.component.scss']
 })
@@ -23,7 +23,7 @@ export class CreateFurnitureComponent implements OnInit, AfterViewInit {
     private changeDetectorRef: ChangeDetectorRef,
     private clientImageControl: ClientImageControlService,
     private categoryService: CategoryService,
-    private errorHandler: ErrorHandlerService
+    private notification: NotificationService
   ) { }
 
   private addModule!: HTMLDivElement;
@@ -32,7 +32,7 @@ export class CreateFurnitureComponent implements OnInit, AfterViewInit {
   protected lastClickedColor: number | undefined = undefined;
   protected addModuleTemplate!: TemplateRef<any>;
   protected addColorVisible: boolean = false;
-  protected categoriesArray: categoryData[] = [];
+  protected categoryArray: categoryData[] = [];
   public currentColorId: number | undefined = undefined;
   public furnitureModelInput!: HTMLInputElement;
 
@@ -41,7 +41,6 @@ export class CreateFurnitureComponent implements OnInit, AfterViewInit {
   @ViewChild('colorModule') private colorModuleTemplate!: TemplateRef<any>;
   @ViewChild('shopsModule') private shopsModuleTemplate!: TemplateRef<any>;
   @ViewChild('additionalModule') private additionalModuleTemplate!: TemplateRef<any>;
-  @HostListener('window:resize', ['$event'])
 
   ngOnInit() {
     this.initCategories();
@@ -54,9 +53,10 @@ export class CreateFurnitureComponent implements OnInit, AfterViewInit {
 
   private async initCategories() {
     try {
-      this.categoriesArray = (await this.categoryService.GETgetAllCategories()).categoryArray;
+      this.categoryArray = (await this.categoryService.GETgetAllCategories()).categoryArray;
+      console.log(this.categoryArray)
     } catch (error) {
-      this.errorHandler.setError('Ошибка загрузки категорий', 5000);
+      this.notification.setError('Ошибка загрузки категорий', 5000);
     }
   }
   protected async onInputImages(event: Event) {
@@ -72,10 +72,11 @@ export class CreateFurnitureComponent implements OnInit, AfterViewInit {
       }
       this.furnitureData.colors[this.currentColorId].imagesData.images = compressedImages;
     } catch (error) {
-      this.errorHandler.setError('Ошибка загрузки изображений', 5000);
+      this.notification.setError('Ошибка загрузки изображений', 5000);
     }
   }
 
+  @HostListener('window:resize', ['$event'])
   private checkViewport() {
     this.isMobileView = window.innerWidth <= 600;
   }
@@ -93,7 +94,7 @@ export class CreateFurnitureComponent implements OnInit, AfterViewInit {
   protected saveAdditional() {
     if (this.proportionsForm.invalid) {
       this.proportionsForm.markAllAsTouched();
-      this.errorHandler.setError('Заполните все параметры', 5000);
+      this.notification.setError('Заполните все параметры', 5000);
       return;
     }
     const { width, length, height } = this.proportionsForm.value;
@@ -131,11 +132,24 @@ export class CreateFurnitureComponent implements OnInit, AfterViewInit {
       COLOR_BUTTON_ELEMENT.style.setProperty('margin-right', '0');
     }, 1250);
   }
+  protected getfilterData(): filter[] {
+    if (!this.furnitureData.additionalData.category) return []
+    const INDEX = this.categoryArray.findIndex(categoryData => categoryData.name === this.furnitureData.additionalData.category)
+    console.log(INDEX)
+    return this.categoryArray[INDEX].filters ?? []
+  }
   protected addColor() {
     const PUSH_COLOR = this.colorForm.value.color;
     if (!PUSH_COLOR) {
-      this.errorHandler.setError('Укажите цвет', 5000);
+      this.notification.setError('Укажите цвет', 5000);
       return;
+    }
+    for (let colorItem of this.furnitureData.colors) {
+      if (colorItem.color === PUSH_COLOR) {
+        this.closeAddModule()
+        this.notification.setError('Такой цвет уже есть', 5000)
+        return
+      }
     }
     const colorItem = {
       color: PUSH_COLOR,
@@ -179,7 +193,6 @@ export class CreateFurnitureComponent implements OnInit, AfterViewInit {
       this.lastClickedShop = undefined;
     }
   }
-
   public openColorModule(event?: Event) {
     if (event) event.preventDefault();
     this.addModuleTemplate = this.colorModuleTemplate;

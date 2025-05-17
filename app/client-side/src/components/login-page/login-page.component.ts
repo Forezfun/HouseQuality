@@ -6,7 +6,7 @@ import { AccountService, accountType, createAccountData } from '../../services/a
 import { AccountCookieService } from '../../services/account-cookie.service';
 import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
-import { ErrorHandlerService } from '../../services/error-handler.service';
+import { NotificationService } from '../../services/notification.service';
 
 @Component({
   selector: 'app-login-page',
@@ -20,7 +20,7 @@ export class LoginPageComponent implements AfterViewInit {
     private accountService: AccountService,
     private authService: AuthService,
     private router: Router,
-    private errorHandler: ErrorHandlerService,
+    private notification: NotificationService,
     private accountCookieService: AccountCookieService,
     private cdr: ChangeDetectorRef
   ) { }
@@ -109,7 +109,7 @@ export class LoginPageComponent implements AfterViewInit {
         console.log(error)
       }
     } else {
-      this.errorHandler.setError('Неверный код', 2500)
+      this.notification.setError('Неверный код', 2500)
     }
   }
 

@@ -9,12 +9,14 @@
     flex-direction: row;
     padding: 0px 10px;
     justify-content: space-around;
+    align-items: center;
     position: fixed;
     bottom: -100px;
     opacity: 0;
     left: 50%;
     transform: translateX(-50%);
     transition: all 0.5s ease-in-out;
+    z-index: 10;
 }
 
 .appearBody {
@@ -23,7 +25,7 @@
 
 .disappearBody {
     animation: disappearHandler 0.5s forwards;
-    z-index:-10;
+    z-index: -10;
 }
 
 .textSpan {
@@ -43,7 +45,6 @@
 }
 
 .errorMessage {
-    color: red;
     margin: 0;
     width: 100%;
     font-weight: normal;

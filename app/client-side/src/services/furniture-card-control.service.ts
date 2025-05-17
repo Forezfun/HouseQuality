@@ -22,6 +22,7 @@ export interface colorFromServerData {
 }
 export interface additionalData {
   category?: string
+  [key: string]: string | undefined
 }
 interface furnitureBaseData {
   name: string;

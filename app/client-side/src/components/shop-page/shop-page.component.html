@@ -1,6 +1,7 @@
 <span class="body">
   <app-navigation-panel></app-navigation-panel>
-  <h1 *ngIf="!furnitureId" class="categoryTitle" title="Категория">{{currentCategoryId!==undefined?categoryArray[currentCategoryId].translateMany:'Все'}}</h1>
+  <h1 *ngIf="!furnitureId" class="categoryTitle" title="Категория">
+    {{currentCategoryId!==undefined?categoryArray[currentCategoryId].translateMany:'Все'}}</h1>
   <span *ngIf="furnituresArray" class="shopModule">
     <span *ngIf="furnitureId" class="viewFurnitureSpan">
       <button (click)="closeFurniture()" class="closeFurniture" title="Закрыть">
@@ -13,37 +14,102 @@
     </span>
     <span *ngIf="!furnitureId" class="mainArea">
       <span class="params">
+        <app-finder *ngIf="checkViewport()"></app-finder>
+        <strong class="paramsChapterTitle">Категория</strong>
         <span class="furnitureCategoriesButtonsSpan">
-          <button [class.active]="currentCategoryId===index" (click)="changeCategory(index)" class="furnitureCategoryButton" *ngFor="let categoryData of categoryArray; let index = index" title="Выбрать категорию">
+          <button [class.active]="currentCategoryId===index" (click)="changeCategory(index)"
+            class="furnitureCategoryButton" *ngFor="let categoryData of categoryArray; let index = index"
+            title="Выбрать категорию">
             {{categoryData.translateOne}}
           </button>
-          <button [class.active]="currentCategoryId==undefined" (click)="changeCategory(undefined)" class="furnitureCategoryButton" title="Все категории">
+          <button [class.active]="currentCategoryId==undefined" (click)="changeCategory(undefined)"
+            class="furnitureCategoryButton" title="Все категории">
             Все
           </button>
         </span>
+        <strong class="paramsChapterTitle">Стоимость</strong>
+        <form class="rangeInputsSpan" [formGroup]="costForm">
+            <input [placeholder]="'от '+clientFiltersObject.minCost" formControlName="minCost" type="text" class="rangeInput">
+            <hr>
+            <input [placeholder]="'до '+clientFiltersObject.maxCost" formControlName="maxCost" type="text" class="rangeInput">
+        </form>
+        <strong *ngIf="!costForm.valid" class="paramsError">Введите числа</strong>
+        <strong class="paramsChapterTitle">Цвет</strong>
+        <span class="colorsChooseSpan">
+          <button (click)="selectedColors.includes(color)?deleteSelectedColor(color):addSelectedColor(color)"
+            [style.background-color]="color" *ngFor="let color of clientFiltersObject.colors" class="colorItem">
+            <img *ngIf="selectedColors.includes(color)" src="/assets/images/cancelIcon.svg" alt="x" srcset="">
+          </button>
+        </span>
+        <ng-container *ngIf="currentCategoryId!==undefined">
+          <span class="categoryFilter" *ngFor="let filterData of categoryArray[currentCategoryId].filters">
+            <strong class="paramsChapterTitle">{{filterData.name}}</strong>
+            <ng-container *ngTemplateOutlet="
+      filterData.type === 'select' ? selectFilter : rangeFilter;
+      context: { fieldData: filterData }
+    ">
+            </ng-container>
+          </span>
+        </ng-container>
+        <button *ngIf="currentCategoryId!==undefined" (click)="requestWithFilters()" class="useFiltersBtn">
+          Применить фильтры
+        </button>
       </span>
+
       <span class="category">
-        <div *ngFor="let furnitureData of furnituresArray;trackBy: trackByFn" class="furnitureItem">
+        <div *ngFor="let furnitureData of getClientFilteredFurnitures();trackBy: trackByFn" class="furnitureItem">
           <h2 class="furnitureTitle" title="Название мебели">{{furnitureData.name}}</h2>
-          <img loading="lazy" class="furniturePreview" [src]="furnitureData.previewUrl" alt="Превью мебели" title="Превью мебели">
-          <a class="furnitureLink" [routerLink]="checkDesktop()?'/shop/'+(categoryName ?? 'all')+'/'+furnitureData.furnitureId:'/plan'" title="Цена мебели">{{furnitureData.cost | costFormat}}</a>
+          <img loading="lazy" class="furniturePreview" [src]="furnitureData.previewUrl" alt="Превью мебели"
+            title="Превью мебели">
+          <a class="furnitureLink"
+            [routerLink]="checkDesktop()?'/shop/'+(categoryName ?? 'all')+'/'+furnitureData.furnitureId:'/plan'"
+            title="Цена мебели">{{furnitureData.cost | costFormat}}</a>
         </div>
+        <span *ngIf="getClientFilteredFurnitures().length===0" class="noItemsMsgSpan">
+          <strong>Мебель не найдена</strong>
+          <img src="/assets/images/furnitureIcon.svg" alt="" srcset="">
+        </span>
       </span>
     </span>
   </span>
 </span>
 <span [ngClass]="{'disabled': !openAddModuleToggle}" class="addModule">
   <span class="addModuleSpan">
-      <button (click)="closeAddModule()" class="closeAddModuleBtn" type="button" title="Закрыть">
-          <img loading="lazy" src="/assets/images/addIcon.svg" alt="Закрыть">
-      </button>
-      <span *ngIf="accountProjects" class="addModuleFormContent">
-        <h2 class="addModuleTitle" title="Проекты">Проекты</h2>
-        <span *ngFor="let projectsData of accountProjects; let planId = index">
-          <h3 title="Название проекта">{{projectsData.name}}</h3>
-          <a *ngFor="let roomData of projectsData.rooms; let roomId = index" [routerLink]="getPlanUrl(planId, roomId)" title="Название комнаты">{{roomData.name}}</a>
-        </span>
-        <a routerLink="/plan" *ngIf="accountProjects!.length == 0" class="noProjectsBtn" title="Создать план">Создать план</a>
+    <button (click)="closeAddModule()" class="closeAddModuleBtn" type="button" title="Закрыть">
+      <img loading="lazy" src="/assets/images/addIcon.svg" alt="Закрыть">
+    </button>
+    <span *ngIf="accountProjects" class="addModuleFormContent">
+      <h2 class="addModuleTitle" title="Проекты">Проекты</h2>
+      <span *ngFor="let projectsData of accountProjects; let planId = index">
+        <h3 title="Название проекта">{{projectsData.name}}</h3>
+        <a *ngFor="let roomData of projectsData.rooms; let roomId = index" [routerLink]="getPlanUrl(planId, roomId)"
+          title="Название комнаты">{{roomData.name}}</a>
       </span>
+      <a routerLink="/plan" *ngIf="accountProjects!.length == 0" class="noProjectsBtn" title="Создать план">Создать
+        план</a>
+    </span>
   </span>
 </span>
+
+<ng-template #selectFilter let-fieldData="fieldData">
+  <ng-container *ngIf="queryGroup[fieldData.field]">
+    <span class="selectFilterOptionsSpan">
+      <button
+        (click)="queryGroup[fieldData.field].includes(option.queryValue)?deleteSelectedOption(option.queryValue,fieldData.field):addSelectedOption(option.queryValue,fieldData.field)"
+        *ngFor="let option of fieldData.options" class="selectFilterOption">
+        <img *ngIf="queryGroup[fieldData.field].includes(option.queryValue)" src="/assets/images/cancelIcon.svg" alt="x"
+          srcset="">
+        <p>{{option.name}}</p>
+      </button>
+    </span>
+  </ng-container>
+</ng-template>
+<ng-template #rangeFilter let-fieldData="fieldData">
+  <ng-container *ngIf="queryGroup[fieldData.field]">
+    <form class="rangeInputsSpan" [formGroup]="queryGroup[fieldData.field]">
+      <input placeholder="от" formControlName="min" type="text" class="rangeInput">
+      <hr>
+      <input placeholder="до" formControlName="max" type="text" class="rangeInput">
+    </form>
+  </ng-container>
+</ng-template>

@@ -8,8 +8,9 @@ import { FurnitureModelControlService } from '../../services/furniture-model-con
 import { AccountCookieService } from '../../services/account-cookie.service';
 import { FurnitureCardControlService } from '../../services/furniture-card-control.service';
 import { ActivatedRoute } from '@angular/router';
-import { ErrorHandlerService } from '../../services/error-handler.service';
+import { NotificationService } from '../../services/notification.service';
 import { Location, NgIf } from '@angular/common';
+import { PlanHouseComponent } from '../plan-house/plan-house.component';
 
 export interface modelInterface {
   width: number;
@@ -46,8 +47,9 @@ export class SceneComponent implements AfterViewInit, OnChanges {
     private accountCookieService: AccountCookieService,
     private projectService: ProjectService,
     private route: ActivatedRoute,
-    private errorHandler: ErrorHandlerService,
-    private location: Location
+    private notification: NotificationService,
+    private location: Location,
+    private planHouseComponent: PlanHouseComponent
   ) { }
 
   @Input()
@@ -80,12 +82,11 @@ export class SceneComponent implements AfterViewInit, OnChanges {
     this.roomProportions = this.roomData.roomProportions
     this.createRoom();
     this.rectangleMesh.rotation.x = THREE.MathUtils.degToRad(-90)
-    const LOAD_OBJECT: roomData = {
-      objects: this.roomData.objects,
-      ...this.roomData.roomProportions
-    }
+
     if (this.getObjectSize(this.rectangleMesh).width === 0) return
-    this.loadRoom(LOAD_OBJECT)
+    if (!this.planHouseComponent.sceneOpenToggle) return
+
+    this.loadRoom()
     const FURNITURE_ID = this.route.snapshot.params['furnitureId']
     if (!FURNITURE_ID || changes['roomData'].previousValue) return
     this.fixPath()
@@ -111,7 +112,7 @@ export class SceneComponent implements AfterViewInit, OnChanges {
       this.spinner.hide()
     } catch (error) {
       this.spinner.hide()
-      this.errorHandler.setError('Ошибка загрузки модели', 5000)
+      this.notification.setError('Ошибка загрузки модели', 5000)
       console.log(error)
     }
   }
@@ -237,16 +238,25 @@ export class SceneComponent implements AfterViewInit, OnChanges {
     };
   }
   private scaleImportModel(object: THREE.Object3D, objectProportions: modelInterface) {
+    let { width, length } = objectProportions
+    width = width / 100
+    length = length / 100
+    
     const UPLOAD_OBJECT_SIZE = this.getObjectSize(object);
     const RECTANGLE_SIZE = this.getObjectSize(this.rectangleMesh);
     const SCENE_PROPORTIONS_COEFFICIENT = UPLOAD_OBJECT_SIZE.width > UPLOAD_OBJECT_SIZE.length ? RECTANGLE_SIZE.width / UPLOAD_OBJECT_SIZE.width : RECTANGLE_SIZE.length / UPLOAD_OBJECT_SIZE.length;
-    const REAL_PROPORTIONS_COEFFICIENT = UPLOAD_OBJECT_SIZE.width > UPLOAD_OBJECT_SIZE.length ? objectProportions.width / this.roomProportions.width : objectProportions.length / this.roomProportions.length;
+    const REAL_PROPORTIONS_COEFFICIENT = UPLOAD_OBJECT_SIZE.width > UPLOAD_OBJECT_SIZE.length ? width / this.roomProportions.width : length / length;
     const GENERAL_COEFFICIENT = REAL_PROPORTIONS_COEFFICIENT * SCENE_PROPORTIONS_COEFFICIENT;
     object.scale.set(GENERAL_COEFFICIENT, GENERAL_COEFFICIENT, GENERAL_COEFFICIENT);
   }
-  private async loadRoom(roomData: roomData) {
+  public async loadRoom() {
     const JWT = this.accountCookieService.getJwt()
-    if (!JWT) return
+    if (!JWT || !this.roomData) return
+    const roomData: roomData = {
+      objects: this.roomData.objects,
+      ...this.roomData.roomProportions
+    }
+
     this.spinner.show()
     for (const object of roomData.objects) {
       await this.addModel(object.objectId, false, this.calculateMoveObjectData(object));
@@ -364,14 +374,16 @@ export class SceneComponent implements AfterViewInit, OnChanges {
     this.camera.rotation.copy(oldCameraRotation);
 
     if (!imageDataResponse.ok) {
-      this.errorHandler.setError('Ошибка при рендере', 5000)
+      this.notification.setError('Ошибка при рендере', 5000)
     }
     const imageDataBlob = await imageDataResponse.blob()
 
     this.projectService.GETgetReportOfRoom(JWT, this.roomData?._id, imageDataBlob)
   }
   protected deleteModel() {
-    if (this.targetobject) this.scene.remove(this.targetobject)
+    if (!this.targetobject) return
+    this.scene.remove(this.targetobject)
+    this.saveRoom()
   }
   public saveRoom() {
     if (!this.roomData) return

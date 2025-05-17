@@ -4,7 +4,7 @@ import { NgFor, NgIf } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ClipboardService } from 'ngx-clipboard';
 import { FurnitureCardControlService, furnitureFromServerData, furnitureProportions } from '../../services/furniture-card-control.service';
-import { ErrorHandlerService } from '../../services/error-handler.service';
+import { NotificationService } from '../../services/notification.service';
 import { CostFormatPipe } from '../../pipes/cost-format.pipe';
 
 @Component({
@@ -19,7 +19,7 @@ export class ViewFurnitureComponent implements OnChanges {
     private elementRef: ElementRef,
     private clipboardService: ClipboardService,
     private furnitureCardService: FurnitureCardControlService,
-    private errorHandler: ErrorHandlerService
+    private notification: NotificationService
   ) { }
 
   protected currentColorId: number = 0
@@ -65,7 +65,7 @@ export class ViewFurnitureComponent implements OnChanges {
     }, 1250)
   }
   protected proccessDescription(description: string, proportions: furnitureProportions) {
-    return `Ширина: ${proportions.width}м\nДлина: ${proportions.length}м\nВысота: ${proportions.height}м\n${description}`;
+    return `Ширина: ${proportions.width} см\nДлина: ${proportions.length} см\nВысота: ${proportions.height} см\n${description}`;
   }
   protected copyShopLink(furnitureUrl: string) {
     this.clipboardService.copyFromContent(furnitureUrl)

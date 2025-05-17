@@ -25,16 +25,24 @@ function calculateZFunction(string, pattern) {
 
 function transliterateQuery(query) {
     const transliterationMap = {
-        'а': 'f', 'б': ',', 'в': 'd', 'г': 'u', 'д': 'l', 'е': 't', 'ё': '`', 'ж': ';', 'з': 'p', 'и': 'b', 'й': 'q',
-        'к': 'r', 'л': 'k', 'м': 'v', 'н': 'y', 'о': 'j', 'п': 'g', 'р': 'h', 'с': 'c', 'т': 'n', 'у': 'e',
-        'ф': 'a', 'х': '[', 'ц': 'w', 'ч': 'x', 'ш': 'i', 'щ': 'o', 'ъ': ']', 'ы': 's', 'ь': 'm', 'э': '\'',
-        'ю': '.', 'я': 'z'
+        'а': 'f', 'б': ',', 'в': 'd', 'г': 'u', 'д': 'l', 'е': 't', 'ё': '`', 'ж': ';', 'з': 'p',
+        'и': 'b', 'й': 'q', 'к': 'r', 'л': 'k', 'м': 'v', 'н': 'y', 'о': 'j', 'п': 'g', 'р': 'h',
+        'с': 'c', 'т': 'n', 'у': 'e', 'ф': 'a', 'х': '[', 'ц': 'w', 'ч': 'x', 'ш': 'i', 'щ': 'o',
+        'ъ': ']', 'ы': 's', 'ь': 'm', 'э': '\'', 'ю': '.', 'я': 'z'
     };
 
-    return query.split('').map(char => transliterationMap[char] || char).join('');
+    const reverseMap = Object.fromEntries(
+        Object.entries(transliterationMap).map(([ru, en]) => [en, ru])
+    );
+
+    return query.split('').map(char =>
+        transliterationMap[char] || reverseMap[char] || char
+    ).join('');
 }
 
-function searchPublications(publications, query) {
+
+
+function searchPublications(publications, query,getTenItems=false) {
     let results = [];
 
     for (const PUBLICATION of publications) {
@@ -60,7 +68,7 @@ function searchPublications(publications, query) {
         if (matchFound) {
             results.push(PUBLICATION);
         }
-        if (results.length >= 10) break;
+        if (getTenItems&&results.length >= 10) break;
     }
 
     return results;
@@ -68,17 +76,20 @@ function searchPublications(publications, query) {
 
 ROUTER.get('/', async (request, result) => {
     try {
-        const QUERY = request.query.q;
-        if (!QUERY || QUERY.trim() === '') {
+        let query = request.query.q;
+        if (!query || query.trim() === '') {
             return result.status(400).json({ message: 'Строка запроса пустая' });
         }
+        query = query.toLowerCase()
 
         const PUBLICATIONS = await FURNITURE_CARD.find();
-        let filteredPublications = searchPublications(PUBLICATIONS, QUERY);
+        let filteredPublications = searchPublications(PUBLICATIONS, query,true);
+
 
         if (filteredPublications.length < 10) {
-            const TRANSLITERED_QUERY = transliterateQuery(QUERY);
-            const ADDITIONAL_RESULTS = searchPublications(PUBLICATIONS, TRANSLITERED_QUERY);
+            const TRANSLITERED_QUERY = transliterateQuery(query);
+            console.log(TRANSLITERED_QUERY)
+            const ADDITIONAL_RESULTS = searchPublications(PUBLICATIONS, TRANSLITERED_QUERY,true);
             const UNIQUE_RESULTS = new Map();
 
             [...filteredPublications, ...ADDITIONAL_RESULTS].forEach(pub => {
@@ -107,3 +118,5 @@ ROUTER.get('/', async (request, result) => {
 });
 
 module.exports = ROUTER;
+module.exports.searchPublications = searchPublications;
+module.exports.transliterateQuery = transliterateQuery;

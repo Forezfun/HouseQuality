@@ -7,7 +7,7 @@ import { FurnitureCardControlService, furnitureFromServerData } from '../../serv
 import { ServerImageControlService } from '../../services/server-image-control.service';
 import { NgIf } from '@angular/common';
 import { FurnitureModelControlService } from '../../services/furniture-model-control.service';
-import { ErrorHandlerService } from '../../services/error-handler.service';
+import { NotificationService } from '../../services/notification.service';
 import { imageSliderClientData } from '../image-slider/image-slider.component';
 import { Subscription } from 'rxjs';
 export interface clientProportions {
@@ -30,7 +30,7 @@ export class CreateFurniturePageComponent implements OnInit, DoCheck, OnDestroy 
     private serverImageControl: ServerImageControlService,
     private router: Router,
     private furnitureModelService: FurnitureModelControlService,
-    private errorHandler: ErrorHandlerService
+    private notification: NotificationService
   ) { }
 
   private routeSub!: Subscription;
@@ -111,6 +111,7 @@ export class CreateFurniturePageComponent implements OnInit, DoCheck, OnDestroy 
   }
   protected async createFurnitureCard() {
     const JWT = this.cookieService.getJwt()
+    console.log(this.createFurnitureComponent.furnitureData)
     if (!this.checkValid('create', true) || !JWT) return
     try {
       const FURNITURE_DATA = this.createFurnitureComponent.furnitureData;
@@ -127,6 +128,7 @@ export class CreateFurniturePageComponent implements OnInit, DoCheck, OnDestroy 
 
       const FURNITURE_MODEL_BLOB = this.createFurnitureComponent.furnitureModelInput.files![0]
       await this.furnitureModelService.POSTuploadFurnitureModel(FURNITURE_MODEL_BLOB, JWT, FURNITURE_ID)
+      this.notification.setSuccess('Мебель добавлена', 5000)
       this.router.navigateByUrl('/account')
     } catch (error) {
       console.log(error)
@@ -152,6 +154,7 @@ export class CreateFurniturePageComponent implements OnInit, DoCheck, OnDestroy 
       })
       const FURNITURE_MODEL_BLOB = this.createFurnitureComponent.furnitureModelInput.files!
       if (FURNITURE_MODEL_BLOB[0]) await this.furnitureModelService.POSTuploadFurnitureModel(FURNITURE_MODEL_BLOB[0], JWT, this.idPage)
+      this.notification.setSuccess('Мебель обновлена', 5000)
     } catch (error) {
       console.log(error)
     }
@@ -166,21 +169,21 @@ export class CreateFurniturePageComponent implements OnInit, DoCheck, OnDestroy 
     if (!proportions.height || !proportions.width || !proportions.length) {
       if (action) {
         this.createFurnitureComponent.openAdditional()
-        this.errorHandler.setError('Заполните параметры', 5000)
+        this.notification.setError('Заполните параметры', 5000)
       }
       return false
     }
     if (!FURNITURE_MODEL_BLOB && typeRequest === 'create') {
-      if (action) this.errorHandler.setError('Загрузите 3D модель', 5000)
+      if (action) this.notification.setError('Загрузите 3D модель', 5000)
       return false
     }
     if (shops.length == 0) {
-      if (action) this.errorHandler.setError('Добавьте магазины', 5000)
+      if (action) this.notification.setError('Добавьте магазины', 5000)
       return false
     }
     for (let colorData of colors) {
       if (colorData.imagesData.images.length == 0 && typeRequest === 'create') {
-        if (action) this.errorHandler.setError('Загрузите изображения', 5000)
+        if (action) this.notification.setError('Загрузите изображения', 5000)
         return false
       }
     }
@@ -197,19 +200,20 @@ export class CreateFurniturePageComponent implements OnInit, DoCheck, OnDestroy 
 
       },
       proportions: {
-        width: 0,
-        height: 0,
-        length: 0
+        width: null,
+        height: null,
+        length: null
       }
     }
   }
   protected deleteColorCalculate() {
     if (!this.createFurnitureComponent || this.createFurnitureComponent.currentColorId === undefined) return
+    console.log('color: ',this.createFurnitureComponent.furnitureData.colors[this.createFurnitureComponent.currentColorId].color)
     return this.createFurnitureComponent.furnitureData.colors[this.createFurnitureComponent.currentColorId].color
   }
   protected deleteColor() {
     if (this.createFurnitureComponent.furnitureData.colors.length <= 1) {
-      this.errorHandler.setError('Добавьте еще цвет', 500)
+      this.notification.setError('Добавьте еще цвет', 500)
       return
     }
     this.createFurnitureComponent.deleteColor()

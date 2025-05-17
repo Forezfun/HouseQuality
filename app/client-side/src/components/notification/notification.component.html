@@ -1,0 +1,18 @@
+<span [attr.tab-index]="errorMessage||successMessage?1:-1"
+    [ngClass]="{'appearBody': errorMessage||successMessage,'disappearBody':!errorMessage&&!successMessage}"
+    class="body">
+    <img loading="lazy" style="width: 30px; height: 30px" src="/assets/images/successIcon.svg"
+        alt="" *ngIf="successMessage">
+    <span class="textSpan">
+        <h2 class="title">{{errorMessage?'Что-то пошло не так':'Успешно'}}</h2>
+        <h3 [style.color]="errorMessage?'red':'green'" class="errorMessage">{{errorMessage||successMessage}}</h3>
+    </span>
+    <span *ngIf="errorMessage" class="btnsSpan">
+        <button (click)="reloadPage()" class="solutionBtn">
+            <img loading="lazy" src="/assets/images/reloadIcon.svg" alt="">
+        </button>
+        <button (click)="logout()" class="solutionBtn">
+            <img loading="lazy" src="/assets/images/logoutIcon.svg" alt="">
+        </button>
+    </span>
+</span>

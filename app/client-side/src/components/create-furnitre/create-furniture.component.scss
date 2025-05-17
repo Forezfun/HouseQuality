@@ -1,7 +1,9 @@
 @use 'base.scss' as *;
+
 button:not(.colorVariant),
 .furnitureModelInput {
     transition: all 0.3s ease-in-out;
+
     &:hover {
         transform: translateY(-3px);
     }
@@ -41,8 +43,9 @@ button:not(.colorVariant),
     justify-self: end;
     margin-top: -10px;
     margin-right: -10px;
-    @media(max-width:768px){
-        margin:0;
+
+    @media(max-width:768px) {
+        margin: 0;
     }
 }
 
@@ -198,30 +201,41 @@ app-image-slider {
     flex-direction: column;
     gap: 15px;
     box-shadow: 0 0 10px 0px white;
+
+    .params {
+        max-height: 40vh;
+        overflow-y: scroll;
+        overflow-x: hidden;
+    }
 }
 
 .addModuleInputSpan {
     display: flex;
     flex-direction: column;
     gap: 5px;
+
+    padding-right: 5px;
 }
 
 .inputLabel {
     color: $light;
-    cursor:pointer;
+    cursor: pointer;
+    width: 100%;
 }
 
 .categorySelect {
+    width: 100%;
     background: none;
     border: 1px solid #888888;
     border-radius: 10px;
     padding: 10px;
     background-color: black;
     color: white;
-    cursor:pointer;
+    cursor: pointer;
 }
 
 .addModuleInput {
+    width: calc(100% - 20px);
     border-radius: 10px;
     background-color: transparent;
     border: #888888 1px solid;
@@ -367,7 +381,7 @@ app-image-slider {
     border-radius: 10px 0px 0px 10px;
     align-content: center;
     text-align: center;
-    border: 2px solid rgba($lightGreen,0.3);
+    border: 2px solid rgba($lightGreen, 0.3);
 }
 
 .shopsListSpan {
@@ -382,7 +396,7 @@ app-image-slider {
     border-radius: 0px 10px 10px 0px;
     place-content: center;
     display: flex;
-    border: 2px solid rgba($lightGreen,0.3);
+    border: 2px solid rgba($lightGreen, 0.3);
 }
 
 .linkShop>img {
@@ -391,7 +405,7 @@ app-image-slider {
 
 .addShopButton {
     background-color: black;
-    border: 2px solid rgba($lightGreen,0.3);
+    border: 2px solid rgba($lightGreen, 0.3);
     display: flex;
     place-content: center;
     border-radius: 10px;
@@ -545,6 +559,7 @@ app-image-slider {
         margin-top: 10px;
     }
 }
+
 .error-message {
     color: #ff4444;
     font-size: 0.8rem;

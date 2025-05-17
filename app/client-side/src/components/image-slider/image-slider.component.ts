@@ -38,4 +38,8 @@ export class ImageSliderComponent implements OnInit{
   protected changeMainImage(index:number) {
     this.imagesData.idMainImage=index
   }
+  protected getItemsCount(){
+    if(this.imagesData.images.length<3)return this.imagesData.images.length
+    return this.isMobileView?1:3
+  }
 }

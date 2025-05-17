@@ -2,7 +2,7 @@ import { Component} from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { SceneComponent } from './components/scene/scene.component';
 import { PlanHouseComponent } from './components/plan-house/plan-house.component';
-import { ErrorHandlerComponent } from './components/error-handler/error-handler.component';
+import { NotificationComponent } from './components/notification/notification.component';
 import { AccountService } from './services/account.service';
 import { AuthService } from './services/auth.service';
 import { AccountCookieService } from './services/account-cookie.service';
@@ -18,8 +18,8 @@ import { AutoHeightDirective } from './directives/auto-height.directive';
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet,ErrorHandlerComponent],
-  providers:[AutoHeightDirective,ErrorHandlerComponent,AccountService,AuthService,AccountCookieService,ServerImageControlService,ProjectService,PlanHouseComponent,SceneComponent,FurnitureCardControlService,FurnitureModelControlService,ShopService,FinderService,Location],
+  imports: [RouterOutlet,NotificationComponent],
+  providers:[AutoHeightDirective,NotificationComponent,AccountService,AuthService,AccountCookieService,ServerImageControlService,ProjectService,PlanHouseComponent,SceneComponent,FurnitureCardControlService,FurnitureModelControlService,ShopService,FinderService,Location],
   templateUrl: './app.component.html'
 })
 export class AppComponent {

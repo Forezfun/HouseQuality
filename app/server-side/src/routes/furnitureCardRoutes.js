@@ -23,11 +23,10 @@ ROUTER.post('/', async (request, result) => {
         request.body.colors.forEach(color => { FURNITURE_CARD_ITEM.colors.push({ color: color.color, idImages: '' }) })
         if (request.body.additionalData !== undefined) {
             const ADDITIONAL_DATA = request.body.additionalData;
+            console.log(ADDITIONAL_DATA)
 
             Object.keys(ADDITIONAL_DATA).forEach(propertyKey => {
-                if (propertyKey in FURNITURE_CARD.schema.paths.additionalData.schema.paths) {
-                    FURNITURE_CARD_ITEM.additionalData[propertyKey] = ADDITIONAL_DATA[propertyKey];
-                }
+                FURNITURE_CARD_ITEM.additionalData[propertyKey] = ADDITIONAL_DATA[propertyKey];
             });
         }
         await FURNITURE_CARD_ITEM.save()
@@ -55,13 +54,19 @@ ROUTER.put('/', async (request, result) => {
 
         if (request.body.additionalData !== undefined) {
             const ADDITIONAL_DATA = request.body.additionalData;
+            console.log(ADDITIONAL_DATA)
+
             Object.keys(ADDITIONAL_DATA).forEach(propertyKey => {
-                if (propertyKey in FURNITURE_CARD.schema.paths.additionalData.schema.paths) {
-                    FURNITURE_CARD_ITEM.additionalData[propertyKey] = ADDITIONAL_DATA[propertyKey] || FURNITURE_CARD_ITEM.additionalData[propertyKey]
-                }
+                FURNITURE_CARD_ITEM.additionalData[propertyKey] = ADDITIONAL_DATA[propertyKey]
+                console.log(FURNITURE_CARD_ITEM.additionalData[propertyKey])
             });
+
+            await FURNITURE_CARD_ITEM.save()
+
         }
+        FURNITURE_CARD_ITEM.markModified('additionalData');
         await FURNITURE_CARD_ITEM.save()
+        console.log(FURNITURE_CARD_ITEM)
         result.status(201).json({ message: 'Товар успешно создан' })
     } catch (error) {
         result.status(400).json({ message: error.message });
@@ -78,7 +83,7 @@ ROUTER.delete('/', async (request, result) => {
         if (!FURNITURE_CARD_ITEM) return result.status(404).json({ message: 'Товар не найден' });
         if (FURNITURE_CARD_ITEM.authorId !== ACCOUNT_ID) return result.status(409).json({ message: 'Нет доступа' });
         deleteUsedObject(FURNITURE_CARD_ID, FURNITURE_CARD_ITEM.name)
-        // await FURNITURE_CARD.deleteOne({ _id: FURNITURE_CARD_ID });
+        await FURNITURE_CARD.deleteOne({ _id: FURNITURE_CARD_ID });
         result.status(201).json({ message: 'Товар успешно удален' })
     } catch (error) {
         result.status(400).json({ message: error.message });

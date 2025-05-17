@@ -39,7 +39,7 @@ app-finder {
     border: 1px solid rgba($lightGreen, 0.3);
     position: relative;
     
-    @media (max-width: 750px) {
+    @media (max-width: 768px) {
         justify-content: space-between;
         padding: 0 15px;
         width: calc(90vw - 30px);
@@ -83,7 +83,7 @@ app-finder {
         filter: brightness(0) saturate(100%) invert(64%) sepia(11%) saturate(1233%) hue-rotate(71deg) brightness(92%) contrast(86%);
     }
     
-    @media (max-width: 750px) {
+    @media (max-width: 768px) {
         display: block;
     }
 }
@@ -129,7 +129,7 @@ app-finder {
 }
 
 /* Адаптивные стили */
-@media (max-width: 750px) {
+@media (max-width: 768px) {
     .desktop-content {
         display: none;
     }

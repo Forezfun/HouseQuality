@@ -7,7 +7,7 @@ import { AccountCookieService } from '../../services/account-cookie.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { projectServerInformation, ProjectService, roomData } from '../../services/project.service';
-import { ErrorHandlerService } from '../../services/error-handler.service';
+import { NotificationService } from '../../services/notification.service';
 import { checkDesktop } from '../../usable/reusable-functions.used';
 
 @Component({
@@ -26,7 +26,7 @@ export class PlanHousePageComponent implements AfterViewInit, OnInit, AfterViewC
     private elemenetRef: ElementRef,
     private renderer: Renderer2,
     private projectService: ProjectService,
-    private errorHandler: ErrorHandlerService,
+    private notification: NotificationService,
     private location: Location
   ) { }
 
@@ -87,6 +87,7 @@ export class PlanHousePageComponent implements AfterViewInit, OnInit, AfterViewC
     if (!this.projectNameForm.value || !this.projectNameForm.value.name || !JWT) return
     try {
       this.accountData.projects = [...this.accountData.projects, (await this.projectService.POSTcreateProject(JWT, this.projectNameForm.value.name)).projectData]
+      this.notification.setSuccess('Проект создан',5000)
     } catch (error) {
       console.log(error)
     }
@@ -107,6 +108,7 @@ export class PlanHousePageComponent implements AfterViewInit, OnInit, AfterViewC
     }
     try {
       await this.projectService.PUTupdateProject(JWT, CURRENT_PROJECT_ID, PROJECT_DATA)
+      this.notification.setSuccess('Проект обновлен',5000)
     } catch (error) {
       console.log(error)
     }
@@ -117,6 +119,7 @@ export class PlanHousePageComponent implements AfterViewInit, OnInit, AfterViewC
     if (!JWT || !CURRENT_PROJECT_ID) return
 
     await this.projectService.DELETEdeleteProject(JWT, CURRENT_PROJECT_ID)
+    this.notification.setSuccess('Проект удален',5000)
     this.accountData.projects.splice(indexProject, 1);
   }
 

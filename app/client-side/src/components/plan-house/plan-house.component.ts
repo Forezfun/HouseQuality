@@ -5,7 +5,7 @@ import { FormGroup, FormControl, ReactiveFormsModule, Validators, ValidatorFn, A
 import { throttle } from 'lodash';
 import { objectSceneInterface } from '../scene/scene.component'
 import { categoryData, CategoryService } from '../../services/category.service';
-import { ErrorHandlerService } from '../../services/error-handler.service';
+import { NotificationService } from '../../services/notification.service';
 import { AccountCookieService } from '../../services/account-cookie.service';
 import { roomData } from '../../services/project.service';
 
@@ -31,7 +31,7 @@ export class PlanHouseComponent implements AfterViewInit, OnInit {
     private elementRef: ElementRef,
     private categoryService: CategoryService,
     private location: Location,
-    private errorHandler: ErrorHandlerService,
+    private notification: NotificationService,
     private cdr: ChangeDetectorRef,
     private accountCookieService: AccountCookieService
   ) { }
@@ -154,7 +154,7 @@ export class PlanHouseComponent implements AfterViewInit, OnInit {
         }
       }
     }
-    this.errorHandler.setError('Нет места', 15000)
+    this.notification.setError('Нет места', 15000)
     return false;
   }
   private calculateRoomSpanSettings() {
@@ -396,6 +396,7 @@ export class PlanHouseComponent implements AfterViewInit, OnInit {
     const NEW_URL = this.location.path() + '/' + this.currentViewRoom
     this.location.replaceState(NEW_URL)
     this.sceneOpenToggle = true
+    this.sceneComponent.loadRoom()
   }
   protected closeScene() {
     const NEW_URL = this.location.path().split('/').slice(0, -1).join('/')
@@ -418,7 +419,7 @@ export class PlanHouseComponent implements AfterViewInit, OnInit {
     setTimeout(() => {
       this.renderer.removeStyle(ROOM_ELEMENT, 'width');
       this.renderer.removeStyle(ROOM_ELEMENT, 'height');
-    }, 750);
+    }, 768);
   }
   protected updateRoom() {
     if (this.currentIdClickedRoom === undefined || !this.roomForm.value.name) return
