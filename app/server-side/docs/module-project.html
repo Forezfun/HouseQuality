@@ -1,0 +1,1890 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Module: project</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+        <nav class="navbar">
+        <a href="index.html" class="navbar-brand">HouseQuality</a>
+        <p style="margin-top: -20px;">документация бэкенда</p>
+        <div class="nav-links">
+            <a href="module-category.html" class="nav-link">Категории</a>
+            <a href="module-furnitureCard.html" class="nav-link">Мебель</a>
+            <a href="module-project.html" class="nav-link active-nav-link">Проекты</a>
+            <a href="module-account.html" class="nav-link">Аккаунт</a>
+            <a href="module-find.html" class="nav-link">Поиск</a>
+        </div>
+    </nav>
+
+    
+
+
+
+
+<section>
+
+<header>
+    
+        
+            
+        
+    
+</header>
+
+<article>
+    <div class="container-overview">
+    
+        
+            <div class="description">Маршруты для работы с проектами пользователей.
+<p>Используется модель: <a href="module-project.html#.Project">Project</a></p></div>
+        
+
+        
+            
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="routes_projectRoutes.js.html">routes/projectRoutes.js</a>, <a href="routes_projectRoutes.js.html#line8">line 8</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+    
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <h3 class="subsection-title">Methods</h3>
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="DELETE/project"><span class="type-signature"></span>DELETE /project<span class="signature">(jwt, projectId)</span><span class="type-signature"> &rarr; {object}</span></h4>
+    
+
+    
+    <p class="summary">Удаление проекта</p>
+    
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>jwt</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">JWT токен</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>projectId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">ID проекта для удаления</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="routes_projectRoutes.js.html">routes/projectRoutes.js</a>, <a href="routes_projectRoutes.js.html#line13">line 13</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    JSON с сообщением о результате операции
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">object</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+    <h5>Examples</h5>
+    
+    <pre class="prettyprint"><code>response - 201 - Успех
+{
+  "message": "Проект удален"
+}</code></pre>
+
+    <pre class="prettyprint"><code>response - 404 - Проект не найден
+{
+  "message": "Проект не найден"
+}</code></pre>
+
+    <pre class="prettyprint"><code>response - 500 - Ошибка сервера
+{
+  "message": error
+}</code></pre>
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="GET/project"><span class="type-signature"></span>GET /project<span class="signature">(jwt, projectId)</span><span class="type-signature"> &rarr; {object}</span></h4>
+    
+
+    
+    <p class="summary">Получение данных проекта</p>
+    
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>jwt</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">JWT токен</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>projectId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">ID проекта</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="routes_projectRoutes.js.html">routes/projectRoutes.js</a>, <a href="routes_projectRoutes.js.html#line88">line 88</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li>При успешном запросе возвращает { projectData: <a href="module-project.html#.Project">Project</a> }</li>
+        
+            <li>При неуспешном запросе возвращает { message: string }</li>
+        </ul>
+    </dd>
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    JSON объект с данными проекта
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">object</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+    <h5>Examples</h5>
+    
+    <pre class="prettyprint"><code>response - 201 - Успех
+{
+  "projectData": {
+    "_id": "664a328ab1a2b5d52a458f2f",
+    "name": "Проект кухни",
+    "rooms": [],
+    "authorId": "6641e6b9ce33a302f92f7c11"
+  }
+}</code></pre>
+
+    <pre class="prettyprint"><code>response - 404 - Проект не найден
+{
+  "message": "Проект не найден"
+}</code></pre>
+
+    <pre class="prettyprint"><code>response - 500 - Ошибка сервера
+{
+  "message": error
+}</code></pre>
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="GET/project/room"><span class="type-signature"></span>GET /project/room<span class="signature">(jwt, roomId)</span><span class="type-signature"> &rarr; {object}</span></h4>
+    
+
+    
+    <p class="summary">Получение данных комнаты по ID</p>
+    
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>jwt</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">JWT токен</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>roomId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">ID комнаты</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="routes_projectRoutes.js.html">routes/projectRoutes.js</a>, <a href="routes_projectRoutes.js.html#line128">line 128</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    JSON объект с данными комнаты проекта
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">object</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+    <h5>Examples</h5>
+    
+    <pre class="prettyprint"><code>response - 201 - Успех
+{
+  "roomData": {
+    "_id": "664a42a9d1f04561fce4e998",
+    "name": "Гостиная",
+    "objects": [
+      {
+        "objectId": "6634f1129f6f7cba29cd12f9",
+        "position": { "x": 1, "y": 1, "z": 1 },
+        "rotation": { "x": 0, "y": 180, "z": 0 }
+      }
+    ]
+  }
+}</code></pre>
+
+    <pre class="prettyprint"><code>response - 404 - Комната не найдена
+{
+  "message": "Аккаунт не найден"
+}</code></pre>
+
+    <pre class="prettyprint"><code>response - 500 - Ошибка сервера
+{
+  "message": error
+}</code></pre>
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="POST/project"><span class="type-signature"></span>POST /project<span class="signature">(jwt, body)</span><span class="type-signature"> &rarr; {object}</span></h4>
+    
+
+    
+    <p class="summary">Создание нового проекта</p>
+    
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>jwt</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">JWT токен</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>body</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="module-project.html#.Project">module:project.Project</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Объект с данными проекта</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="routes_projectRoutes.js.html">routes/projectRoutes.js</a>, <a href="routes_projectRoutes.js.html#line48">line 48</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li>При успешном запросе возвращает { projectData: <a href="module-project.html#.Project">Project</a> }</li>
+        
+            <li>При неуспешном запросе возвращает { message: string }</li>
+        </ul>
+    </dd>
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    JSON объект с данными проекта
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">object</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+    <h5>Examples</h5>
+    
+    <pre class="prettyprint"><code>response - 201 - Успех
+{
+  "projectData": {
+    "_id": "664a328ab1a2b5d52a458f2f",
+    "name": "Проект кухни",
+    "rooms": [],
+    "authorId": "6641e6b9ce33a302f92f7c11"
+  }
+}</code></pre>
+
+    <pre class="prettyprint"><code>response - 500 - Ошибка сервера
+{
+  "message": error
+}</code></pre>
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="PUT/project"><span class="type-signature"></span>PUT /project<span class="signature">(jwt, body)</span><span class="type-signature"></span></h4>
+    
+
+    
+    <p class="summary">Обновление проекта пользователя</p>
+    
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>jwt</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">JWT токен</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>body</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="module-project.html#.Project">module:project.Project</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Объект с данными проекта</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="routes_projectRoutes.js.html">routes/projectRoutes.js</a>, <a href="routes_projectRoutes.js.html#line219">line 219</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Examples</h5>
+    
+    <pre class="prettyprint"><code>response - 201 - Успех
+{
+  "message": "Проект удален"
+}</code></pre>
+
+    <pre class="prettyprint"><code>response - 404 - Проект или аккаунт не найден
+{
+  "message": "Аккаунт не найден"|"Проект не найден"
+}</code></pre>
+
+    <pre class="prettyprint"><code>response - 500 - Ошибка сервера
+{
+  "message": "Ошибка"
+}</code></pre>
+
+
+
+        
+    
+
+    
+        <h3 class="subsection-title">Type Definitions</h3>
+
+        
+                
+<h4 class="name" id=".ObjectInRoom">ObjectInRoom</h4>
+
+
+
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">Object</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+    <h5 class="subsection-title">Properties:</h5>
+
+    
+
+<table class="props">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>objectId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">ID объекта (мебели или другого элемента).</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>xMetersDistance</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Смещение по оси X в метрах.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>zMetersDistance</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Смещение по оси Z в метрах.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>yRotate</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Вращение объекта по оси Y в градусах.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="models_project.js.html">models/project.js</a>, <a href="models_project.js.html#line3">line 3</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+            
+                
+<h4 class="name" id=".Project">Project</h4>
+
+
+
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">Object</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+    <h5 class="subsection-title">Properties:</h5>
+
+    
+
+<table class="props">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>name</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Название проекта.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>rooms</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;<a href="module-project.html#.Room">module:project.Room</a>></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Список комнат в проекте.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>authorId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">ID пользователя, создавшего проект.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="models_project.js.html">models/project.js</a>, <a href="models_project.js.html#line29">line 29</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+            
+                
+<h4 class="name" id=".Room">Room</h4>
+
+
+
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">Object</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+    <h5 class="subsection-title">Properties:</h5>
+
+    
+
+<table class="props">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>name</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Название комнаты.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>gridArea</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Строка, описывающая позицию комнаты в сетке (например 'grid-area:1/1/2/2').</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>roomProportions</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="module-project.html#.RoomProportions">module:project.RoomProportions</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Габариты комнаты.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>objects</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;<a href="module-project.html#.ObjectInRoom">module:project.ObjectInRoom</a>></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Список объектов, размещённых в комнате.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="models_project.js.html">models/project.js</a>, <a href="models_project.js.html#line20">line 20</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+            
+                
+<h4 class="name" id=".RoomProportions">RoomProportions</h4>
+
+
+
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">Object</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+    <h5 class="subsection-title">Properties:</h5>
+
+    
+
+<table class="props">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>width</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Ширина комнаты(м).</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>height</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Высота комнаты(м).</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>length</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Длина комнаты(м).ищвн</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="models_project.js.html">models/project.js</a>, <a href="models_project.js.html#line12">line 12</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+            
+    
+
+    
+</article>
+
+</section>
+
+
+
+
+</div>
+
+
+<br class="clear">
+
+
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

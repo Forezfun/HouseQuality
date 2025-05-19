@@ -1,0 +1,1044 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Module: find</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+        <nav class="navbar">
+        <a href="index.html" class="navbar-brand">HouseQuality</a>
+        <p style="margin-top: -20px;">документация бэкенда</p>
+        <div class="nav-links">
+            <a href="module-category.html" class="nav-link">Категории</a>
+            <a href="module-furnitureCard.html" class="nav-link">Мебель</a>
+            <a href="module-project.html" class="nav-link">Проекты</a>
+            <a href="module-account.html" class="nav-link">Аккаунт</a>
+            <a href="module-find.html" class="nav-link active-nav-link">Поиск</a>
+        </div>
+    </nav>
+
+    
+
+
+
+
+<section>
+
+<header>
+    
+        
+            
+        
+    
+</header>
+
+<article>
+    <div class="container-overview">
+    
+        
+            <div class="description"><p>Получение карточек товаров</p>
+<h3>Операции, выполняемые при работе</h3>
+<h4>/find</h4>
+<p>Поиск z-функцией по сложенным в один текст описанию и названию мебели с параметрами:</p>
+<p>-Переданный запрос</p>
+<p>-Переведенный по раскладке (a-ф,d-в) переданный запрос</p>
+<h4>/shop</h4>
+<p>Игнорирование уже полученных данных</p>
+<p>Поиск по параметрам(query)</p>
+<p>Поиск z-функцией по сложенным в один текст описанию и названию мебели с параметрами:</p>
+<p>-Переданный запрос</p>
+<p>-Переведенный по раскладке (a-ф,d-в) переданный запрос</p>
+<h3>Для чего что подходит</h3>
+<h4>/find</h4>
+<p>Быстрое получение малоточных данных</p>
+<h4>/shop</h4>
+<p>Средней скорости получение точных фильтрованных данных</p></div>
+        
+
+        
+            
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="routes_shopRoutes.js.html">routes/shopRoutes.js</a>, <a href="routes_shopRoutes.js.html#line7">line 7</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+    
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <h3 class="subsection-title">Methods</h3>
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="GET/find"><span class="type-signature"></span>GET /find<span class="signature">(q)</span><span class="type-signature"> &rarr; {Array.&lt;<a href="module-furnitureCard.html#.ToClientFurnitureCardShortData">module:furnitureCard.ToClientFurnitureCardShortData</a>>}</span></h4>
+    
+
+    
+    <p class="summary">Получение списка карточек мебели до 50 штук по строке поиска.</p>
+    
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>q</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Название или описание мебели.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="routes_findRoutes.js.html">routes/findRoutes.js</a>, <a href="routes_findRoutes.js.html#line5">line 5</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li>Посмотрите <a href="module-category.html">Category</a> для возможности получения списка категорий.</li>
+        </ul>
+    </dd>
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    furnitures - Список подходящих карточек.
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Array.&lt;<a href="module-furnitureCard.html#.ToClientFurnitureCardShortData">module:furnitureCard.ToClientFurnitureCardShortData</a>></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+    <h5>Examples</h5>
+    
+    <pre class="prettyprint"><code>response - 200 - Успешно
+{
+  "resultsArray": [
+    {
+      "name": "Кресло",
+      "cost": 5999,
+      "furnitureCardId": "6641e6b9ce33a302f92f7c11",
+      "previewUrl": "furniture/images/simple?furnitureCardId=...&amp;color=%23abc&amp;idImage=0",
+      "colors": ["#abc", "#def"],
+      "proportions": { "width": 100, "length": 90, "height": 120 }
+    }
+  ]
+}</code></pre>
+
+    <pre class="prettyprint"><code>response - 400 - Ошибка типа диапазона
+{
+  "message": "Диапазон должен быть числом"
+}</code></pre>
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="GET/shop"><span class="type-signature"></span>GET /shop<span class="signature">(categoryName, startRange, query)</span><span class="type-signature"> &rarr; {Array.&lt;<a href="module-furnitureCard.html#.ToClientFurnitureCardShortData">module:furnitureCard.ToClientFurnitureCardShortData</a>>}</span></h4>
+    
+
+    
+    <p class="summary">Получение списка карточек мебели до 10 штук с фильтрами поиска.</p>
+    
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>categoryName</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Название категории (поле name).</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>startRange</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Количество элементов, пропускаемых в начале (для пагинации).</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>query</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="module-find.html#.FilterQueryObject">module:find.FilterQueryObject</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Взятый в JSON.stringify(Объект фильтров).</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="routes_shopRoutes.js.html">routes/shopRoutes.js</a>, <a href="routes_shopRoutes.js.html#line95">line 95</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li>Посмотрите <a href="module-category.html">Category</a> для возможности получения списка категорий.</li>
+        </ul>
+    </dd>
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    furnitures - Список подходящих карточек.
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Array.&lt;<a href="module-furnitureCard.html#.ToClientFurnitureCardShortData">module:furnitureCard.ToClientFurnitureCardShortData</a>></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+    <h5>Examples</h5>
+    
+    <pre class="prettyprint"><code>response - 200 - Успешно
+{
+  "resultsArray": [
+    {
+      "name": "Кресло",
+      "cost": 5999,
+      "furnitureCardId": "6641e6b9ce33a302f92f7c11",
+      "previewUrl": "furniture/images/simple?furnitureCardId=...&amp;color=%23abc&amp;idImage=0",
+      "colors": ["#abc", "#def"],
+      "proportions": { "width": 100, "length": 90, "height": 120 }
+    }
+  ]
+}</code></pre>
+
+    <pre class="prettyprint"><code>response - 400 - Ошибка типа диапазона
+{
+  "message": "Диапазон должен быть числом"
+}</code></pre>
+
+
+
+        
+    
+
+    
+        <h3 class="subsection-title">Type Definitions</h3>
+
+        
+                
+<h4 class="name" id=".FilterQueryObject">FilterQueryObject</h4>
+
+
+
+
+<div class="description">
+    <table>
+  <thead>
+    <tr>
+      <th>Ключ</th>
+      <th>Тип фильтра</th>
+      <th>Тип значения</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><a href="module-category.html#.Filter">Filter</a> ключ field</td>
+      <td>select</td>
+      <td><a href="module-find.html#.OptionSelectQuery">OptionSelectQuery</a></td>
+    </tr>
+    <tr>
+      <td><a href="module-category.html#.Filter">Filter</a> ключ field</td>
+      <td>range</td>
+      <td><a href="module-find.html#.OptionRangeQuery">OptionRangeQuery</a></td>
+    </tr>
+    <tr>
+      <td>'name'</td>
+      <td>-</td>
+      <td>string</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">Object.&lt;string, (<a href="module-find.html#.OptionRangeQuery">module:find.OptionRangeQuery</a>|<a href="module-find.html#.OptionSelectQuery">module:find.OptionSelectQuery</a>)></span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="routes_shopRoutes.js.html">routes/shopRoutes.js</a>, <a href="routes_shopRoutes.js.html#line46">line 46</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+    <h5>Examples</h5>
+    
+    <pre class="prettyprint"><code>Пример объекта фильтрации
+const filters = {
+  material: {
+    type: 'select',
+    value: ['ткань', 'велюр']
+  },
+  height: {
+    type: 'range',
+    min: 50,
+    max: 120
+  }
+};</code></pre>
+
+    <pre class="prettyprint"><code>Что передаётся в запрос — JSON.stringify(query)
+"{\"material\":{\"type\":\"select\",\"value\":[\"ткань\",\"велюр\"]},\"height\":{\"type\":\"range\",\"min\":50,\"max\":120}}"</code></pre>
+
+
+
+            
+                
+<h4 class="name" id=".OptionRangeQuery">OptionRangeQuery</h4>
+
+
+
+
+<div class="description">
+    Данные параметра фильтрации по диапазону.
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">Object</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+    <h5 class="subsection-title">Properties:</h5>
+
+    
+
+<table class="props">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>type</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">'range'</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Тип параметра.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>min</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Минимальное значение диапазона.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>max</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Максимальное значение диапазона.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="routes_shopRoutes.js.html">routes/shopRoutes.js</a>, <a href="routes_shopRoutes.js.html#line37">line 37</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+            
+                
+<h4 class="name" id=".OptionSelectQuery">OptionSelectQuery</h4>
+
+
+
+
+<div class="description">
+    Данные параметра фильтрации по нескольким вариантам.
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">Object</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+    <h5 class="subsection-title">Properties:</h5>
+
+    
+
+<table class="props">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>type</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">'select'</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Тип параметра.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>value</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;string></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Массив выбранных значений (options[i].queryValue).</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="routes_shopRoutes.js.html">routes/shopRoutes.js</a>, <a href="routes_shopRoutes.js.html#line29">line 29</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+            
+    
+
+    
+</article>
+
+</section>
+
+
+
+
+</div>
+
+
+<br class="clear">
+
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

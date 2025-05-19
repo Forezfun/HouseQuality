@@ -98,19 +98,13 @@ export class PlanHouseComponent implements AfterViewInit, OnInit {
   }
   private checkGuideInclude() {
     this.isGuideIncluded = this.accountCookieService.getGuideRule() === 'false' ? false : true
+    this.isGuideVisible = this.isGuideIncluded
   }
   private emitPlanHouse() {
     this.planHouseEmitter.emit(this.planHouse)
   }
   private saveHouse() {
     this.callSaveEmitter.emit()
-  }
-  private numberValidator(): ValidatorFn {
-    return (control: AbstractControl): ValidationErrors | null => {
-      const VALUE = control.value;
-      const IS_NUMBER = !isNaN(parseFloat(VALUE)) && isFinite(VALUE);
-      return IS_NUMBER ? null : { notANumber: { value: control.value } };
-    };
   }
   private findFreeSpace(roomProportions: modelInterface): string | false {
     const GRID_SIZE = 10;
@@ -541,28 +535,28 @@ export class PlanHouseComponent implements AfterViewInit, OnInit {
     }, 0)
   }
 
-protected roomForm = new FormGroup({
-  width: new FormControl<number | null>(null, [
-    Validators.required,
-    Validators.min(1),
-    Validators.max(10),
-    Validators.pattern(/^\d*\.?\d+$/)
-  ]),
-  height: new FormControl<number | null>(null, [
-    Validators.required,
-    Validators.min(1),
-    Validators.max(5),
-    Validators.pattern(/^\d*\.?\d+$/)
-  ]),
-  length: new FormControl<number | null>(null, [
-    Validators.required,
-    Validators.min(1),
-    Validators.max(10),
-    Validators.pattern(/^\d*\.?\d+$/)
-  ]),
-  name: new FormControl<string>('', [
-    Validators.required,
-    Validators.maxLength(20)
-  ]),
-});
+  protected roomForm = new FormGroup({
+    width: new FormControl<number | null>(null, [
+      Validators.required,
+      Validators.min(0.1),
+      Validators.max(10),
+      Validators.pattern(/^\d*\.?\d+$/)
+    ]),
+    height: new FormControl<number | null>(null, [
+      Validators.required,
+      Validators.min(0.1),
+      Validators.max(10),
+      Validators.pattern(/^\d*\.?\d+$/)
+    ]),
+    length: new FormControl<number | null>(null, [
+      Validators.required,
+      Validators.min(0.1),
+      Validators.max(10),
+      Validators.pattern(/^\d*\.?\d+$/)
+    ]),
+    name: new FormControl<string>('', [
+      Validators.required,
+      Validators.maxLength(20)
+    ]),
+  });
 }

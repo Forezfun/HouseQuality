@@ -2,8 +2,131 @@ const EXPRESS = require('express');
 const ROUTER = EXPRESS.Router();
 const FURNITURE_CARD = require('../models/furnitureCard')
 const IMAGES_FURNITURE = require('../models/imagesFurniture');
-const { searchPublications,transliterateQuery } = require('./finderRoutes');
+const { searchPublications, transliterateQuery } = require('../helpers/findPublicationsHelpers');
 
+/**
+ * @module find
+ * @description
+ * <p>Получение карточек товаров</p>
+ * <h3>Операции, выполняемые при работе</h3>
+ * <h4>/find</h4>
+ * <p>Поиск z-функцией по сложенным в один текст описанию и названию мебели с параметрами:</p>
+ * <p>-Переданный запрос</p>
+ * <p>-Переведенный по раскладке (a-ф,d-в) переданный запрос</p>
+ * <h4>/shop</h4>
+ * <p>Игнорирование уже полученных данных</p>
+ * <p>Поиск по параметрам(query)</p>
+ * <p>Поиск z-функцией по сложенным в один текст описанию и названию мебели с параметрами:</p>
+ * <p>-Переданный запрос</p>
+ * <p>-Переведенный по раскладке (a-ф,d-в) переданный запрос</p>
+ * <h3>Для чего что подходит</h3>
+ * <h4>/find</h4>
+ * <p>Быстрое получение малоточных данных</p>
+ * <h4>/shop</h4>
+ * <p>Средней скорости получение точных фильтрованных данных</p>
+ */
+
+/**
+ * @typedef {Object} OptionSelectQuery
+ * @memberof module:find
+ * @description Данные параметра фильтрации по нескольким вариантам.
+ * @property {'select'} type - Тип параметра.
+ * @property {string[]} value - Массив выбранных значений (options[i].queryValue).
+ */
+
+/**
+ * @typedef {Object} OptionRangeQuery
+ * @memberof module:find
+ * @description Данные параметра фильтрации по диапазону.
+ * @property {'range'} type - Тип параметра.
+ * @property {number} min - Минимальное значение диапазона.
+ * @property {number} max - Максимальное значение диапазона.
+ */
+
+/**
+ * @typedef {Object<string, module:find.OptionRangeQuery|module:find.OptionSelectQuery>} FilterQueryObject
+ * @memberof module:find
+ * @description 
+ * <table>
+ *   <thead>
+ *     <tr>
+ *       <th>Ключ</th>
+ *       <th>Тип фильтра</th>
+ *       <th>Тип значения</th>
+ *     </tr>
+ *   </thead>
+ *   <tbody>
+ *     <tr>
+ *       <td>{@link module:category.Filter | Filter} ключ field</td>
+ *       <td>select</td>
+ *       <td>{@link module:find.OptionSelectQuery | OptionSelectQuery}</td>
+ *     </tr>
+ *     <tr>
+ *       <td>{@link module:category.Filter | Filter} ключ field</td>
+ *       <td>range</td>
+ *       <td>{@link module:find.OptionRangeQuery | OptionRangeQuery}</td>
+ *     </tr>
+ *     <tr>
+ *       <td>'name'</td>
+ *       <td>-</td>
+ *       <td>string</td>
+ *     </tr>
+ *   </tbody>
+ * </table>
+ * @example 
+ * Пример объекта фильтрации
+ * const filters = {
+ *   material: {
+ *     type: 'select',
+ *     value: ['ткань', 'велюр']
+ *   },
+ *   height: {
+ *     type: 'range',
+ *     min: 50,
+ *     max: 120
+ *   }
+ * };
+ *
+ * @example 
+ * Что передаётся в запрос — JSON.stringify(query)
+ * "{\"material\":{\"type\":\"select\",\"value\":[\"ткань\",\"велюр\"]},\"height\":{\"type\":\"range\",\"min\":50,\"max\":120}}"
+ */
+
+/**
+ * @function GET /shop
+ * @instance
+ * @memberof module:find
+ * @summary Получение списка карточек мебели до 10 штук с фильтрами поиска.
+ *
+ * @param {string} categoryName - Название категории (поле name).
+ * @param {number} startRange - Количество элементов, пропускаемых в начале (для пагинации).
+ * @param {module:find.FilterQueryObject} query - Взятый в JSON.stringify(Объект фильтров).
+ *
+ * @returns {module:furnitureCard.ToClientFurnitureCardShortData[]} furnitures - Список подходящих карточек.
+ *
+ * @example
+ * response - 200 - Успешно
+ * {
+ *   "resultsArray": [
+ *     {
+ *       "name": "Кресло",
+ *       "cost": 5999,
+ *       "furnitureCardId": "6641e6b9ce33a302f92f7c11",
+ *       "previewUrl": "furniture/images/simple?furnitureCardId=...&color=%23abc&idImage=0",
+ *       "colors": ["#abc", "#def"],
+ *       "proportions": { "width": 100, "length": 90, "height": 120 }
+ *     }
+ *   ]
+ * }
+ *
+ * @example 
+ * response - 400 - Ошибка типа диапазона
+ * {
+ *   "message": "Диапазон должен быть числом"
+ * }
+ *
+ * @see Посмотрите {@link module:category | Category} для возможности получения списка категорий.
+ */
 ROUTER.get('/category', async (request, result) => {
     try {
         let START_RANGE = Number(request.query.startRange);
@@ -64,7 +187,7 @@ ROUTER.get('/category', async (request, result) => {
                 const minCost = furnitureData.shops.sort((a, b) => a.cost - b.cost)[0].cost;
 
                 const IMAGES_FURNITURE_ITEM = await IMAGES_FURNITURE.findOne({
-                    furnitureId: furnitureData._id
+                    furnitureCardId: furnitureData._id
                 });
 
                 if (!IMAGES_FURNITURE_ITEM) return undefined;
@@ -72,7 +195,7 @@ ROUTER.get('/category', async (request, result) => {
                 return {
                     name: furnitureData.name,
                     cost: minCost,
-                    furnitureId: furnitureData._id,
+                    furnitureCardId: furnitureData._id,
                     previewUrl: `furniture/images/simple?furnitureCardId=${furnitureData._id}&color=${IMAGES_FURNITURE_ITEM.color}&idImage=${IMAGES_FURNITURE_ITEM.idMainImage}`,
                     colors: furnitureData.colors?.map(colorData => colorData.color) || [],
                     proportions: furnitureData.proportions || null

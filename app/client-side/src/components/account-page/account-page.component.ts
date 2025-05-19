@@ -193,6 +193,8 @@ export class AccountPageComponent implements OnInit {
     this.router.navigateByUrl('/plan/' + projectId);
   }
   protected logout() {
+    const JWT = this.accountCookieService.getJwt()
+    if(JWT)this.accountService.DELETEaccountJwt(JWT)
     this.accountCookieService.deleteJwt();
     this.accountCookieService.deleteAccountType();
     this.router.navigateByUrl('/');

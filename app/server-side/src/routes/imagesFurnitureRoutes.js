@@ -7,11 +7,10 @@ const IMAGES_FURNITURE = require('../models/imagesFurniture');
 const FURNITURE_CARD = require('../models/furnitureCard')
 const { checkUserAccess } = require('../helpers/jwtHandlers');
 
-
 ROUTER.use(async (request, result, next) => {
     try {
         if (request.method !== 'GET') {
-            const jwt = request.query.jwt || request.body.jwt;
+            const jwt = request.query.jwt;
             const accountId = await checkUserAccess(jwt);
             if (!accountId) return result.status(404).json({ message: 'Аккаунт не найден' });
             request.query.accountId = accountId;
@@ -75,10 +74,34 @@ const storage = multer.diskStorage({
 
 
 const upload = multer({ storage: storage }).array('images', 10);
+
+/**
+ * @function GET /furniture/images/main
+ * @instance
+ * @memberof module:furnitureCard
+ * @summary Получение главного изображения по цвету карточки мебели
+ * @param {string} furnitureCardId - ID карточки мебели
+ * @param {string} color - Цвет мебели
+ * @returns {File} Главное изображение
+ * @example
+ * response - 200 - Главное изображение отправлено
+ * response - 400 - Неверные или неполные параметры запроса
+ * {
+ *   "message": "Отсутствуют требуемые данные"
+ * }
+ * response - 404 - Изображение не найдено
+ * {
+ *   "message": "Товар не найден" | "Цвет не найден" | "Изображения не найдены" | "Файл не найден"
+ * }
+ * response - 500 - Внутренняя ошибка сервера
+ * {
+ *   "message": "Ошибка при получении"
+ * }
+ */
 ROUTER.get('/main', async (request, result) => {
     try {
         const { furnitureCardId, color } = request.query;
-        
+
         if (!furnitureCardId || !color) {
             return result.status(400).json({ message: 'Отсутствуют требуемые данные' });
         }
@@ -107,10 +130,30 @@ ROUTER.get('/main', async (request, result) => {
         result.status(500).json({ message: 'Ошибка при получении: ' + error.message });
     }
 });
+/**
+ * @function GET /furniture/images/simple
+ * @instance
+ * @memberof module:furnitureCard
+ * @summary Получение изображения по ID из массива изображений
+ * @param {string} furnitureCardId - ID карточки мебели
+ * @param {string} color - Цвет мебели
+ * @param {string} idImage - Индекс изображения в массиве
+ * @returns {File} Изображение
+ * @example
+ * response - 200 - Изображение отправлено
+ * response - 404 - Изображение не найдено
+ * {
+ *   "message": "Изображения не найдены" | "Файл не найден на сервере"
+ * }
+ * response - 500 - Внутренняя ошибка сервера
+ * {
+ *   "message": "Ошибка при получении: <текст ошибки>"
+ * }
+ */
 ROUTER.get('/simple', async (request, result) => {
     try {
         const { furnitureCardId, color, idImage } = request.query;
-        const IMAGES_FURNITURE_ITEM = await IMAGES_FURNITURE.findOne({ furnitureId: furnitureCardId })
+        const IMAGES_FURNITURE_ITEM = await IMAGES_FURNITURE.findOne({ furnitureCardId: furnitureCardId })
         if (!IMAGES_FURNITURE_ITEM) return result.status(404).json({ message: 'Изображения не найдены' })
 
         const IMAGE_NAME = IMAGES_FURNITURE_ITEM.images[idImage].filename
@@ -125,16 +168,43 @@ ROUTER.get('/simple', async (request, result) => {
         result.status(500).json({ message: 'Ошибка при получении: ' + error.message });
     }
 });
+/**
+ * @function GET /furniture/images/all
+ * @instance
+ * @memberof module:furnitureCard
+ * @summary Получение всех изображений и главного изображения по карточке и цвету
+ * @param {string} furnitureCardId - ID карточки мебели
+ * @param {string} color - Цвет мебели
+ * @returns {object} Объект с путями к изображениям и ID главного изображения
+ * @example
+ * response - 200 - Успешное получение изображений
+ * {
+ *   "imagesURLS": ["uploads/cards/123/red/img1.jpg", ...],
+ *   "idMainImage": 0
+ * }
+ * response - 400 - Неверные или неполные параметры запроса
+ * {
+ *   "message": "Отсутствуют требуемые данные"
+ * }
+ * response - 404 - Изображения не найдены
+ * {
+ *   "message": "Товар не найден" | "Цвет не найден" | "Изображения не найдены"
+ * }
+ * response - 500 - Внутренняя ошибка сервера
+ * {
+ *   "message": "Ошибка при получении: <текст ошибки>"
+ * }
+ */
 ROUTER.get('/all', async (request, result) => {
     try {
         const { furnitureCardId, color } = request.query;
 
-        
+
         if (!furnitureCardId || !color) {
             return result.status(400).json({ message: 'Отсутствуют требуемые данные' });
         }
 
-        
+
         const FURNITURE_CARD_ITEM = await FURNITURE_CARD.findById(furnitureCardId)
 
         if (!FURNITURE_CARD_ITEM) {
@@ -158,8 +228,31 @@ ROUTER.get('/all', async (request, result) => {
         result.status(500).json({ message: 'Ошибка при получении: ' + error.message });
     }
 });
-
-
+/**
+ * @function POST /furniture/images/upload
+ * @instance
+ * @memberof module:furnitureCard
+ * @summary Загрузка изображений и установка главного изображения
+ * @param {string} jwt - JWT токен
+ * @param {string} furnitureCardId - ID карточки мебели
+ * @param {string} color - Цвет мебели
+ * @param {string} idMainImage - Индекс главного изображения
+ * @param {array} images - Массив изображений (multipart/form-data)
+ * @returns {object} Сообщение о результате загрузки
+ * @example
+ * response - 200 - Изображения успешно загружены
+ * {
+ *   "message": "Изображения обновлены"
+ * }
+ * response - 400 - Ошибка в параметрах или отсутствуют изображения
+ * {
+ *   "message": "Изображений не загружено" | "Отсутствуют требуемые данные"
+ * }
+ * response - 500 - Внутренняя ошибка сервера при загрузке
+ * {
+ *   "message": error
+ * }
+ */
 ROUTER.post('/upload/images', (request, result) => {
     upload(request, result, async (error) => {
         if (error) {
@@ -179,13 +272,13 @@ ROUTER.post('/upload/images', (request, result) => {
 
             const UPLOADED_FILES = request.files.map(file => ({ filename: file.filename }));
 
-            let FIND_FURNITURE_IMAGES = await IMAGES_FURNITURE.findOne({ furnitureId:furnitureCardId, color:color });
+            let FIND_FURNITURE_IMAGES = await IMAGES_FURNITURE.findOne({ furnitureCardId: furnitureCardId, color: color });
             if (FIND_FURNITURE_IMAGES) {
-                FIND_FURNITURE_IMAGES.images=UPLOADED_FILES;
-                FIND_FURNITURE_IMAGES.idMainImage=idMainImage
+                FIND_FURNITURE_IMAGES.images = UPLOADED_FILES;
+                FIND_FURNITURE_IMAGES.idMainImage = idMainImage
             } else {
                 FIND_FURNITURE_IMAGES = new IMAGES_FURNITURE({
-                    furnitureId: furnitureCardId,
+                    furnitureCardId: furnitureCardId,
                     color: color,
                     images: UPLOADED_FILES,
                     idMainImage: idMainImage
@@ -201,15 +294,38 @@ ROUTER.post('/upload/images', (request, result) => {
             await FIND_FURNITURE_IMAGES.save();
             result.status(200).json({ message: 'Изображения обновлены' });
         } catch (error) {
-            result.status(500).json({ message: 'Ошибка при загрузке: ' + error.message });
+            result.status(500).json({ message: error.message });
         }
     });
 });
-
-
+/**
+ * @function DELETE /furniture/images/delete/color
+ * @instance
+ * @memberof module:furnitureCard
+ * @summary Удаление изображений, привязанных к цвету мебели
+ * @param {string} jwt - JWT токен
+ * @param {string} furnitureCardId - ID карточки мебели 
+ * @param {string} color - Цвет удаляемой версии мебели
+ * @returns {object} Объект с соообщением о результате удаления
+ * @example
+ * response - 200 - Цвет удален
+ * {
+ *   "message": "Цвет удален"
+ * }
+ * @example
+ * response - 404 - Товар или аккаунт не найден
+ * {
+ *   "message": "Товар не найден" | "Аккаунт не найден"
+ * }
+ * @example
+ * response - 500 - Ошибка при удалении
+ * {
+ *   "message": "Ошибка при удалении"
+ * }
+ */
 ROUTER.delete('/delete/color', async (request, result) => {
     try {
-        const { furnitureCardId, color } = request.body;
+        const { furnitureCardId, color } = request.query;
 
         const PROJECT_DIR = path.join(__dirname, '..', 'uploads', 'cards', furnitureCardId);
         const COLOR_DIR = path.join(PROJECT_DIR, color);
@@ -224,7 +340,28 @@ ROUTER.delete('/delete/color', async (request, result) => {
         result.status(500).json({ message: 'Ошибка при удалении: ' + error.message });
     }
 });
-
+/**
+ * @function DELETE /furniture/images/delete/project
+ * @instance
+ * @memberof module:furnitureCard
+ * @summary Удаление всех изображений, связанных с карточкой мебели
+ * @param {string} jwt - JWT токен
+ * @param {string} furnitureCardId - ID карточки мебели
+ * @returns {object} Сообщение о результате удаления
+ * @example
+ * response - 200 - Изображения успешно удалены
+ * {
+ *   "message": "Изображения удалены"
+ * }
+ * response - 404 - Пользователь не найден
+ * {
+ *   "message": "Аккаунт не найден"
+ * }
+ * response - 409 - Недостаточно прав для выполнения операции
+ * {
+ *   "message": "Нет доступа"
+ * }
+ */
 
 ROUTER.delete('/delete/project', async (request, result) => {
     try {
@@ -241,7 +378,7 @@ ROUTER.delete('/delete/project', async (request, result) => {
             fs.rmSync(PROJECT_DIR, { recursive: true });
         }
 
-        await IMAGES_FURNITURE.deleteMany({ furnitureId: furnitureCardId });
+        await IMAGES_FURNITURE.deleteMany({ furnitureCardId: furnitureCardId });
         result.status(200).json({ message: `Изображения удалены` });
     } catch (error) {
         result.status(500).json({ message: 'Ошибка при удалении: ' + error.message });

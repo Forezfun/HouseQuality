@@ -2,6 +2,7 @@ const EXPRESS = require('express');
 const ROUTER = EXPRESS.Router();
 const multer = require('multer');
 const path = require('path');
+const mime = require('mime-types');
 const fs = require('fs');
 const FURNITURE_MODEL = require('../models/furnitureModel');
 const FURNITURE_CARD = require('../models/furnitureCard')
@@ -13,7 +14,7 @@ ROUTER.use(async (request, result, next) => {
             next();
             return;
         }
-        const JWT = request.query.jwt || request.body.jwt;
+        const JWT = request.query.jwt;
         const ACCOUNT_ID = await checkUserAccess(JWT);
         if (!ACCOUNT_ID) return result.status(404).json({ message: 'Аккаунт не найден' })
         const FURNITURE_CARD_ITEM = await FURNITURE_CARD.findOne({ authorId: ACCOUNT_ID })
@@ -25,10 +26,10 @@ ROUTER.use(async (request, result, next) => {
     }
 });
 
-function removeOldModelIfExists(furnitureId, uploadDir) {
+function removeOldModelIfExists(furnitureCardId, uploadDir) {
     const EXTENSIONS = ['.obj', '.fbx', '.stl'];
     for (const EXTENSION of EXTENSIONS) {
-        const FILE_PATH = path.join(uploadDir, `${furnitureId}${EXTENSION}`);
+        const FILE_PATH = path.join(uploadDir, `${furnitureCardId}${EXTENSION}`);
         if (fs.existsSync(FILE_PATH)) {
             fs.unlinkSync(FILE_PATH);
         }
@@ -41,21 +42,21 @@ const storage = multer.diskStorage({
         if (!fs.existsSync(uploadDir)) {
             fs.mkdirSync(uploadDir);
         }
-        removeOldModelIfExists(request.query.furnitureId, uploadDir);
+        removeOldModelIfExists(request.query.furnitureCardId, uploadDir);
         cb(null, uploadDir);
     },
     filename: (request, file, cb) => {
         let extension = path.extname(file.originalname).toLowerCase();
         if (!extension || !['.obj', '.fbx', '.stl'].includes(extension)) return
 
-        const fileName = request.query.furnitureId + extension;
-        saveModel(fileName, request.query.furnitureId);
+        const fileName = request.query.furnitureCardId + extension;
+        saveModel(fileName, request.query.furnitureCardId);
         cb(null, fileName);
     }
 });
 
-async function saveModel(fileName, furnitureId) {
-    let FURNITURE_MODEL_ITEM = await FURNITURE_MODEL.findOne({ furnitureId: furnitureId });
+async function saveModel(fileName, furnitureCardId) {
+    let FURNITURE_MODEL_ITEM = await FURNITURE_MODEL.findOne({ furnitureCardId: furnitureCardId });
     if (FURNITURE_MODEL_ITEM) {
 
         FURNITURE_MODEL_ITEM.filename = fileName;
@@ -64,21 +65,40 @@ async function saveModel(fileName, furnitureId) {
 
         const FURNITURE_MODEL_NEW_ITEM = new FURNITURE_MODEL({
             filename: fileName,
-            furnitureId: furnitureId
+            furnitureCardId: furnitureCardId
         });
         await FURNITURE_MODEL_NEW_ITEM.save();
     }
 }
 
 const upload = multer({ storage: storage });
-
+/**
+ * @function POST /furniture/model
+ * @instance
+ * @memberof module:furnitureCard
+ * @summary Загрузка или обновление модели
+ * @param {string} jwt - JWT токен
+ * @param {string} furnitureCardId - ID карточки мебели 
+ * @param {file} model - Файл модели (multipart/form-data)
+ * @returns {object} JSON с сообщением об успехе или ошибке
+ * @example
+ * response - 200 - Модель добавлена
+ * {
+ *   "message": "Модель добавлена"
+ * }
+ * @example
+ * response - 400 - Ошибка при загрузке файла
+ * {
+ *   "message": error
+ * }
+ */
 ROUTER.post('/', upload.single('model'), async (request, result) => {
     try {
-        let FURNITURE_MODEL_ITEM = await FURNITURE_MODEL.findOne({ furnitureId: request.query.furnitureId })
+        let FURNITURE_MODEL_ITEM = await FURNITURE_MODEL.findOne({ furnitureCardId: request.query.furnitureCardId })
         if (!FURNITURE_MODEL_ITEM) {
             FURNITURE_MODEL_ITEM = new FURNITURE_MODEL({
                 filename: request.file.filename,
-                furnitureId: request.query.furnitureId,
+                furnitureCardId: request.query.furnitureCardId,
                 originalName: request.query.fileName
             });
             FURNITURE_MODEL_ITEM.originalName = request.query.fileName
@@ -93,11 +113,34 @@ ROUTER.post('/', upload.single('model'), async (request, result) => {
         result.status(400).json({ message: error.message });
     }
 });
-
+/**
+ * @function DELETE /furniture/model
+ * @instance
+ * @memberof module:furnitureCard
+ * @summary Удаление модели
+ * @param {string} jwt - JWT токен
+ * @param {string} furnitureCardId - ID карточки мебели 
+ * @returns {object} JSON с сообщением об успехе или ошибке
+ * @example
+ * response - 200 - Модель удалена
+ * {
+ *   "message": "Модель удалена"
+ * }
+ * @example
+ * response - 404 - Модель не найдена
+ * {
+ *   "message": "Модель не найдена"
+ * }
+ * @example
+ * response - 400 - Ошибка при удалении модели
+ * {
+ *   "message": "Ошибка при удалении модели"
+ * }
+ */
 ROUTER.delete('/', async (request, result) => {
     try {
-        const FURNITURE_CARD_ID = request.query.furnitureId
-        const FURNITURE_MODEL_ITEM = await FURNITURE_MODEL.findOne({ furnitureId: FURNITURE_CARD_ID });
+        const FURNITURE_CARD_ID = request.query.furnitureCardId
+        const FURNITURE_MODEL_ITEM = await FURNITURE_MODEL.findOne({ furnitureCardId: FURNITURE_CARD_ID });
         if (!FURNITURE_MODEL_ITEM) {
             return result.status(404).json({ message: 'Модель не найдена' });
         }
@@ -116,10 +159,32 @@ ROUTER.delete('/', async (request, result) => {
         result.status(400).json({ message: error.message });
     }
 });
-
+/**
+ * @function GET /furniture/model/version
+ * @instance
+ * @memberof module:furnitureCard
+ * @summary Получение версии модели
+ * @param {string} furnitureCardId - ID карточки мебели 
+ * @returns {object} JSON с номером версии модели или ошибкой
+ * @example
+ * response - 201 - Версия модели найдена
+ * {
+ *   "versionModel": 3
+ * }
+ * @example
+ * response - 404 - Модель не найдена
+ * {
+ *   "message": "Модель не найдена"
+ * }
+ * @example
+ * response - 500 - Ошибка сервера
+ * {
+ *   "message": "Ошибка сервера"
+ * }
+ */
 ROUTER.get('/version', async (request, result) => {
     try {
-        const FURNITURE_MODEL_ITEM = await FURNITURE_MODEL.findOne({ furnitureId: request.query.furnitureId });
+        const FURNITURE_MODEL_ITEM = await FURNITURE_MODEL.findOne({ furnitureCardId: request.query.furnitureCardId });
         if (!FURNITURE_MODEL_ITEM) {
             return result.status(404).json({ message: 'Модель не найдена' });
         }
@@ -128,10 +193,35 @@ ROUTER.get('/version', async (request, result) => {
         result.status(500).json({ message: error.message });
     }
 })
-
+/**
+ * @function GET /furniture/model
+ * @instance
+ * @memberof module:furnitureCard
+ * @summary Получение модели
+ * @param {string} furnitureCardId - ID карточки мебели 
+ * @returns {File} Файл модели с корректным MIME-типом или JSON с ошибкой
+ * @example
+ * response - 200 - Успешная отправка файла модели
+ * Content-Type: model/obj (или другой в зависимости от расширения)
+ * @example
+ * response - 404 - Модель не найдена в базе
+ * {
+ *   "message": "Модель не найдена"
+ * }
+ * @example
+ * response - 404 - Файл модели отсутствует на сервере
+ * {
+ *   "message": "Модель не найдена"
+ * }
+ * @example
+ * response - 500 - Ошибка сервера
+ * {
+ *   "message": error
+ * }
+ */
 ROUTER.get('/', async (request, result) => {
     try {
-        const FURNITURE_MODEL_ITEM = await FURNITURE_MODEL.findOne({ furnitureId: request.query.furnitureId });
+        const FURNITURE_MODEL_ITEM = await FURNITURE_MODEL.findOne({ furnitureCardId: request.query.furnitureCardId });
         if (!FURNITURE_MODEL_ITEM) {
             return result.status(404).json({ message: 'Модель не найдена' });
         }
@@ -144,24 +234,9 @@ ROUTER.get('/', async (request, result) => {
         }
 
 
-        const EXTENSION = path.extname(FURNITURE_MODEL_ITEM.filename).toLowerCase();
-        let mimeType = 'application/octet-stream';
+        const MIME_TYPE = mime.lookup(FILE_PATH)||'application/octet-stream'
 
-        switch (EXTENSION) {
-            case '.obj':
-                mimeType = 'model/obj';
-                break;
-            case '.fbx':
-                mimeType = 'model/fbx';
-                break;
-            case '.stl':
-                mimeType = 'model/stl';
-                break;
-            default:
-                mimeType = 'application/octet-stream';
-        }
-
-        result.setHeader('Content-Type', mimeType);
+        result.setHeader('Content-Type', MIME_TYPE);
         result.setHeader('Content-Disposition', `attachment; filename="${FURNITURE_MODEL_ITEM.filename}"`);
 
 

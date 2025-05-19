@@ -9,7 +9,7 @@ export interface reportResponse {
   proportions: modelInterface,
   furnitures: {
     name: string;
-    furnitureId: string;
+    furnitureCardId: string;
     previewUrl: string;
     proportions: modelInterface;
     shops: shopData[];
@@ -271,7 +271,7 @@ ${roomData.furnitures.map(furniture => `
       }
     </span>
     </span>
-    <a class= "openLink furnitureLink" href = "${baseClientUrl}shop/${furniture.category}/${furniture.furnitureId}"> Посмотреть мебель </a>
+    <a class= "openLink furnitureLink" href = "${baseClientUrl}shop/${furniture.category}/${furniture.furnitureCardId}"> Посмотреть мебель </a>
     </span>
     `).join('')}
 <a class="openLink planLink" href="${baseClientUrl}plan">Посмотреть проект</a>

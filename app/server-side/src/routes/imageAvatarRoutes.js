@@ -3,19 +3,20 @@ const ROUTER = EXPRESS.Router();
 const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
+const mime = require('mime-types');
 const IMAGE_AVATAR = require('../models/imageAvatar');
 const { checkUserAccess } = require('../helpers/jwtHandlers');
 
 ROUTER.use(async (request, result, next) => {
     try {
-        const JWT = request.query.jwt || request.body.jwt;
+        const JWT = request.query.jwt;
         const ACCOUNT_ID = await checkUserAccess(JWT);
         if (!ACCOUNT_ID) return result.status(404).json({ message: 'Аккаунт не найден' });
         request.query = {};
         request.query.accountId = ACCOUNT_ID;
         next();
     } catch (error) {
-        result.status(500).json({ message: 'Ошибка при валидации: ' + error.message });
+        result.status(500).json({ message: error.message });
     }
 });
 
@@ -69,8 +70,29 @@ async function saveAvatar(fileName, accountId) {
 }
 
 const upload = multer({ storage: storage });
-
-ROUTER.post('/upload', upload.single('image'), async (request, result) => {
+/**
+ * @function POST /account/avatar
+ * @instance
+ * @memberof module:account
+ * @summary Обновление или загрузка аватара пользователя
+ * @param {string} jwt - JWT токен
+ * @param {File} File - Файл автара
+ * @example
+ * {
+ *   "message": "Изображение обновлено"
+ * }
+ * @example
+ * response - 404 - Аккаунт не найден
+ * {
+ *   "message": "Аккаунт не найден"
+ * }
+ * @example
+ * response - 500 - Ошибка сервера
+ * {
+ *   "message": error
+ * }
+ */
+ROUTER.post('/', upload.single('image'), async (request, result) => {
     try {
         let IMAGE_AVATAR_ITEM = await IMAGE_AVATAR.findOne({ accountId: request.query.accountId })
         if (!IMAGE_AVATAR_ITEM) {
@@ -80,13 +102,33 @@ ROUTER.post('/upload', upload.single('image'), async (request, result) => {
             });
         }
         await IMAGE_AVATAR_ITEM.save();
-        result.status(200).json({ message: 'Изображение удалено' });
+        result.status(200).json({ message: 'Изображение обновлено' });
     } catch (error) {
-        result.status(400).json({ message: error.message });
+        result.status(500).json({ message: error.message });
     }
 });
-
-ROUTER.get('', async (request, result) => {
+/**
+ * @function GET /account/avatar
+ * @instance
+ * @memberof module:account
+ * @summary Получение аватара пользователя
+ * @param {string} jwt - JWT токен
+ * @returns {File} Файл аватара MIME-типом или JSON с ошибкой
+ * @example
+ * response - 200 - Успешная отправка файла модели
+ * Content-Type: image/jpeg (или другой в зависимости от расширения)
+ * @example
+ * response - 404 - Аккаунт не найден
+ * {
+ *   "message": "Аккаунт не найден"
+ * }
+ * @example
+ * response - 500 - Ошибка сервера
+ * {
+ *   "message": error
+ * }
+*/
+ROUTER.get('/', async (request, result) => {
     try {
         let filePath
         const DIRECTORY = path.join(__dirname, '..', 'uploads', 'avatars');
@@ -94,14 +136,19 @@ ROUTER.get('', async (request, result) => {
         if (!IMAGE_AVATAR_ITEM) {
             filePath = path.join(DIRECTORY, 'default.png')
         }
-
+        
         if (IMAGE_AVATAR_ITEM) {
             filePath = path.join(DIRECTORY, IMAGE_AVATAR_ITEM.filename);
-
+            
             if (!fs.existsSync(filePath)) {
                 filePath = path.join(DIRECTORY, 'default.png')
             }
         }
+        
+        const MIME_TYPE = mime.lookup(filePath) || 'application/octet-stream'
+        
+        result.setHeader('Content-Type', MIME_TYPE);
+        
         result.sendFile(filePath);
     } catch (error) {
         result.status(500).json({ message: error.message });

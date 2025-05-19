@@ -4,12 +4,11 @@ import { baseUrl } from '.';
 import { firstValueFrom } from 'rxjs';
 import { modelInterface } from '../components/scene/scene.component';
 export interface queryData {
-  name?: string;
-  [key: string]: string | undefined | optionSelectQueryData | optionRangeQueryData;
+  [key: string]: optionSelectQueryData | optionRangeQueryData;
 }
 interface optionSelectQueryData {
   type: 'select';
-  value: string;
+  value: string[];
 }
 interface optionRangeQueryData {
   type: 'range';
@@ -20,7 +19,7 @@ export interface furnitureShopData {
   name: string;
   cost: number;
   previewUrl: string;
-  furnitureId: string;
+  furnitureCardId: string;
   colors: string[];
   proportions: modelInterface;
 }
@@ -33,7 +32,7 @@ export interface clientFilters {
   providedIn: 'root'
 })
 export class ShopService {
-  private baseServiceUrl = baseUrl + 'shop/'
+  private baseServiceUrl = baseUrl + 'shop'
   constructor(
     private httpModule: HttpClient
   ) { }
@@ -47,7 +46,7 @@ export class ShopService {
     this.abortController = new AbortController();
 
     try {
-      let requestUrl = `${this.baseServiceUrl}category?category=${categoryName}&startRange=${startRange}`
+      let requestUrl = `${this.baseServiceUrl}?category=${categoryName}&startRange=${startRange}`
 
       if (queryData && Object.keys(queryData).length > 0) {
         const params = new URLSearchParams();

@@ -5,6 +5,32 @@ const PROJECT = require('../models/project.js');
 const { checkUserAccess } = require('../helpers/jwtHandlers');
 const FURNITURE_CARD = require('../models/furnitureCard.js');
 
+/**
+ * @module project
+ * @description Маршруты для работы с проектами пользователей.
+ * <p>Используется модель: {@link module:project.Project | Project}</p>
+ */
+/**
+ * @function DELETE /project
+ * @instance
+ * @summary Удаление проекта
+ * @param {string} jwt - JWT токен
+ * @param {string} projectId - ID проекта для удаления
+ * @returns {object} JSON с сообщением о результате операции
+ *
+ * @example response - 201 - Успех
+ * {
+ *   "message": "Проект удален"
+ * }
+ * @example response - 404 - Проект не найден
+ * {
+ *   "message": "Проект не найден"
+ * }
+ * @example response - 500 - Ошибка сервера
+ * {
+ *   "message": error
+ * }
+ */
 ROUTER.delete('/', async (request, result) => {
   try {
     const JWT = request.query.jwt
@@ -16,10 +42,33 @@ ROUTER.delete('/', async (request, result) => {
     }
     result.status(201).json({ message: 'Проект удален' });
   } catch (error) {
-    result.status(400).json({ message: error.message });
+    result.status(500).json({ message: error.message });
   }
 });
-
+/**
+ * @function POST /project
+ * @instance
+ * @summary Создание нового проекта
+ * @param {string} jwt - JWT токен
+ * @param {module:project.Project} body - Объект с данными проекта
+ * @returns {object} JSON объект с данными проекта
+ * @see При успешном запросе возвращает { projectData: {@link module:project.Project | Project} }
+ * @see При неуспешном запросе возвращает { message: string }
+ *
+ * @example response - 201 - Успех
+ * {
+ *   "projectData": {
+ *     "_id": "664a328ab1a2b5d52a458f2f",
+ *     "name": "Проект кухни",
+ *     "rooms": [],
+ *     "authorId": "6641e6b9ce33a302f92f7c11"
+ *   }
+ * }
+ * @example response - 500 - Ошибка сервера
+ * {
+ *   "message": error
+ * }
+ */
 ROUTER.post('/', async (request, result) => {
   try {
     const JWT = request.body.jwt
@@ -33,10 +82,37 @@ ROUTER.post('/', async (request, result) => {
     await NEW_PROJECT_ITEM.save()
     result.status(201).json({ projectData: NEW_PROJECT_ITEM });
   } catch (error) {
-    result.status(400).json({ message: error.message });
+    result.status(500).json({ message: error.message });
   }
 });
-
+/**
+ * @function GET /project
+ * @instance
+ * @summary Получение данных проекта
+ * @param {string} jwt - JWT токен
+ * @param {string} projectId - ID проекта
+ * @returns {object} JSON объект с данными проекта
+ * @see При успешном запросе возвращает { projectData: {@link module:project.Project | Project} }
+ * @see При неуспешном запросе возвращает { message: string }
+ *
+ * @example response - 201 - Успех
+ * {
+ *   "projectData": {
+ *     "_id": "664a328ab1a2b5d52a458f2f",
+ *     "name": "Проект кухни",
+ *     "rooms": [],
+ *     "authorId": "6641e6b9ce33a302f92f7c11"
+ *   }
+ * }
+ * @example response - 404 - Проект не найден
+ * {
+ *   "message": "Проект не найден"
+ * }
+ * @example response - 500 - Ошибка сервера
+ * {
+ *   "message": error
+ * }
+ */
 ROUTER.get('/', async (request, result) => {
   try {
     const JWT = request.query.jwt
@@ -46,10 +122,40 @@ ROUTER.get('/', async (request, result) => {
     if (!PROJECT_ITEM) return result.status(404).json({ message: 'Аккаунт не найден' });
     result.status(201).json({ projectData: PROJECT_ITEM });
   } catch (error) {
-    result.status(400).json({ message: error.message });
+    result.status(500).json({ message: error.message });
   }
 })
-
+/**
+ * @function GET /project/room
+ * @instance
+ * @summary Получение данных комнаты по ID
+ * @param {string} jwt - JWT токен
+ * @param {string} roomId - ID комнаты
+ * @returns {object} JSON объект с данными комнаты проекта
+ *
+ * @example response - 201 - Успех
+ * {
+ *   "roomData": {
+ *     "_id": "664a42a9d1f04561fce4e998",
+ *     "name": "Гостиная",
+ *     "objects": [
+ *       {
+ *         "objectId": "6634f1129f6f7cba29cd12f9",
+ *         "position": { "x": 1, "y": 1, "z": 1 },
+ *         "rotation": { "x": 0, "y": 180, "z": 0 }
+ *       }
+ *     ]
+ *   }
+ * }
+ * @example response - 404 - Комната не найдена
+ * {
+ *   "message": "Аккаунт не найден"
+ * }
+ * @example response - 500 - Ошибка сервера
+ * {
+ *   "message": error
+ * }
+ */
 ROUTER.get('/room', async (request, result) => {
   try {
     const { jwt: JWT, roomId: ROOM_ID } = request.query
@@ -88,7 +194,7 @@ ROUTER.get('/room', async (request, result) => {
 
     result.status(201).json(REPORT_OBJECT);
   } catch (error) {
-    result.status(400).json({ message: error.message });
+    result.status(500).json({ message: error.message });
   }
 })
 
@@ -99,7 +205,7 @@ async function proccessFunriture(funritureId) {
   let result = {
     name: FURNITURE_ITEM.name,
     proportions: FURNITURE_ITEM.proportions,
-    furnitureId: FURNITURE_ITEM._id,
+    furnitureCardId: FURNITURE_ITEM._id,
     category: FURNITURE_ITEM.additionalData.category || 'all'
   }
   result.shops = FURNITURE_ITEM.shops.sort((a, b) => a - b).slice(0, 5)
@@ -110,20 +216,42 @@ async function proccessFunriture(funritureId) {
 
   return result
 }
-
+/**
+ * @function PUT /project
+ * @instance
+ * @summary Обновление проекта пользователя
+ * @param {string} jwt - JWT токен
+ * @param {module:project.Project} body - Объект с данными проекта
+ * 
+ * @example response - 201 - Успех
+ * {
+ *   "message": "Проект удален"
+ * }
+ * 
+ * @example response - 404 - Проект или аккаунт не найден
+ * {
+ *   "message": "Аккаунт не найден"|"Проект не найден"
+ * }
+ * 
+ * @example response - 500 - Ошибка сервера
+ * {
+ *   "message": "Ошибка"
+ * }
+ */
 ROUTER.put('/', async (request, result) => {
   try {
-    const JWT = request.body.jwt
+    const JWT = request.query.jwt
+    const PROJECT_ID = request.query.projectId
     const ACCOUNT_ID = await checkUserAccess(JWT)
     if (!ACCOUNT_ID) return result.status(404).json({ message: 'Аккаунт не найден' });
-    const PROJECT_ITEM = await PROJECT.findOne({ authorId: ACCOUNT_ID })
+    const PROJECT_ITEM = await PROJECT.findById(PROJECT_ID)
     if (!PROJECT_ITEM) return result.status(404).json({ message: 'Проект не найден' });
     PROJECT_ITEM.name = request.body.name
-    PROJECT_ITEM.rooms = JSON.parse(request.body.rooms)
+    PROJECT_ITEM.rooms = request.body.rooms
     await PROJECT_ITEM.save()
     result.status(201).json({ message: 'Проект удален' });
   } catch (error) {
-    result.status(400).json({ message: error.message });
+    result.status(500).json({ message: error.message });
   }
 })
 

@@ -43,7 +43,7 @@ export class ShopPageComponent implements OnInit, OnDestroy {
   private furnitureNameSubscription!: Subscription
   private funritureName: string = ''
   protected queryGroup: any = {}
-  protected furnitureId: undefined | string
+  protected furnitureCardId: undefined | string
   protected categoryName: undefined | string
   protected accountProjects: projectInformation[] | undefined
   protected currentCategoryId: number | undefined
@@ -136,7 +136,7 @@ export class ShopPageComponent implements OnInit, OnDestroy {
   private processRouteParams() {
     const PARAMS = this.route.snapshot.params;
 
-    this.furnitureId = PARAMS['furnitureId'];
+    this.furnitureCardId = PARAMS['furnitureCardId'];
     this.categoryName = PARAMS['category'];
 
     console.log('route')
@@ -245,7 +245,7 @@ export class ShopPageComponent implements OnInit, OnDestroy {
     this.router.navigateByUrl('/shop' + (this.categoryName === 'all' ? '' : ('/' + this.categoryName)))
   }
   protected getPlanUrl(planId: number, roomId: number) {
-    return `/plan/${planId}/${roomId}/${this.furnitureId}`
+    return `/plan/${planId}/${roomId}/${this.furnitureCardId}`
   }
   protected trackByFn(index: number, item: any): number {
     return item.id;
@@ -253,11 +253,16 @@ export class ShopPageComponent implements OnInit, OnDestroy {
   protected getClientFilteredFurnitures() {
     if (!this.costForm.valid) return []
     return this.furnituresArray.filter(furnitureData => {
-      if (furnitureData.colors.some(color => this.selectedColors.includes(color))) return true;
-      const { minCost, maxCost } = this.costForm.value
-      if (+(minCost || -Infinity) <= furnitureData.cost && furnitureData.cost <= +(maxCost || Infinity)) return true;
-      return false
-    })
+      const hasColorMatch = this.selectedColors.length === 0 ||
+        [...new Set([...furnitureData.colors, ...this.selectedColors])].length
+        < furnitureData.colors.length + this.selectedColors.length;
+
+      const { minCost, maxCost } = this.costForm.value;
+      const isInPriceRange = +(minCost || -Infinity) <= furnitureData.cost &&
+        furnitureData.cost <= +(maxCost || Infinity);
+
+      return hasColorMatch && isInPriceRange;
+    });
   }
 
   protected costForm = new FormGroup({

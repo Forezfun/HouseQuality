@@ -8,7 +8,7 @@ import { BehaviorSubject, firstValueFrom } from 'rxjs';
 export class FinderService {
   constructor(private httpModule: HttpClient) { }
   private inputFurnitureNameSubject = new BehaviorSubject<string>('');
-  private baseServiceUrl = baseUrl + 'finder?q=';
+  private baseServiceUrl = baseUrl + 'find?q=';
 
   furnitureName$ = this.inputFurnitureNameSubject.asObservable();
 
@@ -17,9 +17,9 @@ export class FinderService {
   }
   /**
    * Получение 10-ти или меньше найденых публикаций по строке
-   * @param findString Запрос пользователя
+   * @param query Запрос пользователя
    */
-  GETfindFurnitures(findString: string) {
-    return firstValueFrom(this.httpModule.get(this.baseServiceUrl + findString));
+  GETfindFurnitures(query: string) {
+    return firstValueFrom(this.httpModule.get(this.baseServiceUrl + query));
   }
 }

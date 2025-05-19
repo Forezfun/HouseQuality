@@ -1,0 +1,4412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Module: furnitureCard</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+        <nav class="navbar">
+        <a href="index.html" class="navbar-brand">HouseQuality</a>
+        <p style="margin-top: -20px;">документация бэкенда</p>
+        <div class="nav-links">
+            <a href="module-category.html" class="nav-link">Категории</a>
+            <a href="module-furnitureCard.html" class="nav-link active-nav-link">Мебель</a>
+            <a href="module-project.html" class="nav-link">Проекты</a>
+            <a href="module-account.html" class="nav-link">Аккаунт</a>
+            <a href="module-find.html" class="nav-link">Поиск</a>
+        </div>
+    </nav>
+
+    
+
+
+
+
+<section>
+
+<header>
+    
+        
+            
+        
+    
+</header>
+
+<article>
+    <div class="container-overview">
+    
+        
+            <div class="description">Маршруты для работы с карточками мебели.</div>
+        
+
+        
+            
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="routes_furnitureCardRoutes.js.html">routes/furnitureCardRoutes.js</a>, <a href="routes_furnitureCardRoutes.js.html#line10">line 10</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+    
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <h3 class="subsection-title">Methods</h3>
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="DELETE/furniture/card"><span class="type-signature"></span>DELETE /furniture/card<span class="signature">(jwt, furnitureCardId)</span><span class="type-signature"></span></h4>
+    
+
+    
+    <p class="summary">Удаление карточки мебели и связанных данных</p>
+    
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>jwt</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">JWT токен</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>furnitureCardId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">ID карточки мебели</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="routes_furnitureCardRoutes.js.html">routes/furnitureCardRoutes.js</a>, <a href="routes_furnitureCardRoutes.js.html#line128">line 128</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Examples</h5>
+    
+    <pre class="prettyprint"><code>response - 201 - Успех
+{
+  "message": "Товар успешно удален"
+}</code></pre>
+
+    <pre class="prettyprint"><code>response - 404 - Аккаунт или товар не найден
+{
+  "message": "Аккаунт не найден"
+}</code></pre>
+
+    <pre class="prettyprint"><code>response - 409 - Нет доступа
+{
+  "message": "Нет доступа"
+}</code></pre>
+
+    <pre class="prettyprint"><code>response - 400 - Ошибка сервера
+{
+  "message": error
+}</code></pre>
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="DELETE/furniture/images/delete/color"><span class="type-signature"></span>DELETE /furniture/images/delete/color<span class="signature">(jwt, furnitureCardId, color)</span><span class="type-signature"> &rarr; {object}</span></h4>
+    
+
+    
+    <p class="summary">Удаление изображений, привязанных к цвету мебели</p>
+    
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>jwt</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">JWT токен</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>furnitureCardId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">ID карточки мебели</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>color</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Цвет удаляемой версии мебели</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="routes_imagesFurnitureRoutes.js.html">routes/imagesFurnitureRoutes.js</a>, <a href="routes_imagesFurnitureRoutes.js.html#line301">line 301</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    Объект с соообщением о результате удаления
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">object</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+    <h5>Examples</h5>
+    
+    <pre class="prettyprint"><code>response - 200 - Цвет удален
+{
+  "message": "Цвет удален"
+}</code></pre>
+
+    <pre class="prettyprint"><code>response - 404 - Товар или аккаунт не найден
+{
+  "message": "Товар не найден" | "Аккаунт не найден"
+}</code></pre>
+
+    <pre class="prettyprint"><code>response - 500 - Ошибка при удалении
+{
+  "message": "Ошибка при удалении"
+}</code></pre>
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="DELETE/furniture/images/delete/project"><span class="type-signature"></span>DELETE /furniture/images/delete/project<span class="signature">(jwt, furnitureCardId)</span><span class="type-signature"> &rarr; {object}</span></h4>
+    
+
+    
+    <p class="summary">Удаление всех изображений, связанных с карточкой мебели</p>
+    
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>jwt</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">JWT токен</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>furnitureCardId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">ID карточки мебели</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="routes_imagesFurnitureRoutes.js.html">routes/imagesFurnitureRoutes.js</a>, <a href="routes_imagesFurnitureRoutes.js.html#line343">line 343</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    Сообщение о результате удаления
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">object</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>response - 200 - Изображения успешно удалены
+{
+  "message": "Изображения удалены"
+}
+response - 404 - Пользователь не найден
+{
+  "message": "Аккаунт не найден"
+}
+response - 409 - Недостаточно прав для выполнения операции
+{
+  "message": "Нет доступа"
+}</code></pre>
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="DELETE/furniture/model"><span class="type-signature"></span>DELETE /furniture/model<span class="signature">(jwt, furnitureCardId)</span><span class="type-signature"> &rarr; {object}</span></h4>
+    
+
+    
+    <p class="summary">Удаление модели</p>
+    
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>jwt</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">JWT токен</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>furnitureCardId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">ID карточки мебели</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="routes_furnitureModelRoutes.js.html">routes/furnitureModelRoutes.js</a>, <a href="routes_furnitureModelRoutes.js.html#line116">line 116</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    JSON с сообщением об успехе или ошибке
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">object</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+    <h5>Examples</h5>
+    
+    <pre class="prettyprint"><code>response - 200 - Модель удалена
+{
+  "message": "Модель удалена"
+}</code></pre>
+
+    <pre class="prettyprint"><code>response - 404 - Модель не найдена
+{
+  "message": "Модель не найдена"
+}</code></pre>
+
+    <pre class="prettyprint"><code>response - 400 - Ошибка при удалении модели
+{
+  "message": "Ошибка при удалении модели"
+}</code></pre>
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="GET/furniture/card"><span class="type-signature"></span>GET /furniture/card<span class="signature">(jwt, furnitureCardId)</span><span class="type-signature"></span></h4>
+    
+
+    
+    <p class="summary">Получение карточки мебели с изображениями</p>
+    
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>jwt</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">JWT токен</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>furnitureCardId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">ID карточки мебели</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="routes_furnitureCardRoutes.js.html">routes/furnitureCardRoutes.js</a>, <a href="routes_furnitureCardRoutes.js.html#line168">line 168</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li>При успешном запросе возвращает { furnitureCard: <a href="module-furnitureCard.html#.FurnitureCard">FunritureCard</a>,authorMacthed:true|false }</li>
+        
+            <li>При неуспешном запросе возвращает { message:string }</li>
+        </ul>
+    </dd>
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Examples</h5>
+    
+    <pre class="prettyprint"><code>response - 201 - Успех
+{
+  "furnitureCard": {
+    "name": "Кресло",
+    "description": "Мягкое кресло",
+    "colors": [{
+      "color": "#abc",
+      "imagesData": {
+        "images": [
+          "furniture/images/simple?furnitureCardId=123&amp;color=%23abc&amp;idImage=0"
+        ],
+        "idMainImage": 0
+      }
+    }],
+    "shops": [{ "cost": 5999, "url": "https://example.com" }],
+    "authorId": "6641e6b9ce33a302f92f7c11",
+    "proportions": { "width": 100, "length": 90, "height": 120 },
+    "additionalData": { "material": "ткань" }
+  },
+  "authorMatched": true
+}</code></pre>
+
+    <pre class="prettyprint"><code>response - 404 - Товар не найден
+{
+  message:"Товар не найден"
+}</code></pre>
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="GET/furniture/images/all"><span class="type-signature"></span>GET /furniture/images/all<span class="signature">(furnitureCardId, color)</span><span class="type-signature"> &rarr; {object}</span></h4>
+    
+
+    
+    <p class="summary">Получение всех изображений и главного изображения по карточке и цвету</p>
+    
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>furnitureCardId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">ID карточки мебели</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>color</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Цвет мебели</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="routes_imagesFurnitureRoutes.js.html">routes/imagesFurnitureRoutes.js</a>, <a href="routes_imagesFurnitureRoutes.js.html#line171">line 171</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    Объект с путями к изображениям и ID главного изображения
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">object</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>response - 200 - Успешное получение изображений
+{
+  "imagesURLS": ["uploads/cards/123/red/img1.jpg", ...],
+  "idMainImage": 0
+}
+response - 400 - Неверные или неполные параметры запроса
+{
+  "message": "Отсутствуют требуемые данные"
+}
+response - 404 - Изображения не найдены
+{
+  "message": "Товар не найден" | "Цвет не найден" | "Изображения не найдены"
+}
+response - 500 - Внутренняя ошибка сервера
+{
+  "message": "Ошибка при получении: &lt;текст ошибки>"
+}</code></pre>
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="GET/furniture/images/main"><span class="type-signature"></span>GET /furniture/images/main<span class="signature">(furnitureCardId, color)</span><span class="type-signature"> &rarr; {File}</span></h4>
+    
+
+    
+    <p class="summary">Получение главного изображения по цвету карточки мебели</p>
+    
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>furnitureCardId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">ID карточки мебели</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>color</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Цвет мебели</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="routes_imagesFurnitureRoutes.js.html">routes/imagesFurnitureRoutes.js</a>, <a href="routes_imagesFurnitureRoutes.js.html#line78">line 78</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    Главное изображение
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">File</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>response - 200 - Главное изображение отправлено
+response - 400 - Неверные или неполные параметры запроса
+{
+  "message": "Отсутствуют требуемые данные"
+}
+response - 404 - Изображение не найдено
+{
+  "message": "Товар не найден" | "Цвет не найден" | "Изображения не найдены" | "Файл не найден"
+}
+response - 500 - Внутренняя ошибка сервера
+{
+  "message": "Ошибка при получении"
+}</code></pre>
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="GET/furniture/images/simple"><span class="type-signature"></span>GET /furniture/images/simple<span class="signature">(furnitureCardId, color, idImage)</span><span class="type-signature"> &rarr; {File}</span></h4>
+    
+
+    
+    <p class="summary">Получение изображения по ID из массива изображений</p>
+    
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>furnitureCardId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">ID карточки мебели</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>color</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Цвет мебели</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>idImage</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Индекс изображения в массиве</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="routes_imagesFurnitureRoutes.js.html">routes/imagesFurnitureRoutes.js</a>, <a href="routes_imagesFurnitureRoutes.js.html#line133">line 133</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    Изображение
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">File</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>response - 200 - Изображение отправлено
+response - 404 - Изображение не найдено
+{
+  "message": "Изображения не найдены" | "Файл не найден на сервере"
+}
+response - 500 - Внутренняя ошибка сервера
+{
+  "message": "Ошибка при получении: &lt;текст ошибки>"
+}</code></pre>
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="GET/furniture/model"><span class="type-signature"></span>GET /furniture/model<span class="signature">(furnitureCardId)</span><span class="type-signature"> &rarr; {File}</span></h4>
+    
+
+    
+    <p class="summary">Получение модели</p>
+    
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>furnitureCardId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">ID карточки мебели</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="routes_furnitureModelRoutes.js.html">routes/furnitureModelRoutes.js</a>, <a href="routes_furnitureModelRoutes.js.html#line196">line 196</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    Файл модели с корректным MIME-типом или JSON с ошибкой
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">File</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+    <h5>Examples</h5>
+    
+    <pre class="prettyprint"><code>response - 200 - Успешная отправка файла модели
+Content-Type: model/obj (или другой в зависимости от расширения)</code></pre>
+
+    <pre class="prettyprint"><code>response - 404 - Модель не найдена в базе
+{
+  "message": "Модель не найдена"
+}</code></pre>
+
+    <pre class="prettyprint"><code>response - 404 - Файл модели отсутствует на сервере
+{
+  "message": "Модель не найдена"
+}</code></pre>
+
+    <pre class="prettyprint"><code>response - 500 - Ошибка сервера
+{
+  "message": error
+}</code></pre>
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="GET/furniture/model/version"><span class="type-signature"></span>GET /furniture/model/version<span class="signature">(furnitureCardId)</span><span class="type-signature"> &rarr; {object}</span></h4>
+    
+
+    
+    <p class="summary">Получение версии модели</p>
+    
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>furnitureCardId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">ID карточки мебели</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="routes_furnitureModelRoutes.js.html">routes/furnitureModelRoutes.js</a>, <a href="routes_furnitureModelRoutes.js.html#line162">line 162</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    JSON с номером версии модели или ошибкой
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">object</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+    <h5>Examples</h5>
+    
+    <pre class="prettyprint"><code>response - 201 - Версия модели найдена
+{
+  "versionModel": 3
+}</code></pre>
+
+    <pre class="prettyprint"><code>response - 404 - Модель не найдена
+{
+  "message": "Модель не найдена"
+}</code></pre>
+
+    <pre class="prettyprint"><code>response - 500 - Ошибка сервера
+{
+  "message": "Ошибка сервера"
+}</code></pre>
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="POST/furniture/card"><span class="type-signature"></span>POST /furniture/card<span class="signature">(jwt, body)</span><span class="type-signature"></span></h4>
+    
+
+    
+    <p class="summary">Создание новой карточки мебели</p>
+    
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>jwt</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">JWT токен</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>body</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="module-furnitureCard.html#.FurnitureCard">module:furnitureCard.FurnitureCard</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Данные карточки мебели</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="routes_furnitureCardRoutes.js.html">routes/furnitureCardRoutes.js</a>, <a href="routes_furnitureCardRoutes.js.html#line15">line 15</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li>При успешном запросе возвращает { furnitureData: <a href="module-furnitureCard.html#.FurnitureCard">module:furnitureCard.FurnitureCard</a> }</li>
+        
+            <li>При неуспешном запросе возвращает { message: string }</li>
+        </ul>
+    </dd>
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Examples</h5>
+    
+    <pre class="prettyprint"><code>response - 201 - Успех
+{
+  "furnitureData": {
+    "_id": "6634f1129f6f7cba29cd12f9",
+    "name": "Диван",
+    "description": "Угловой диван",
+    "colors": [{ "color": "#fff", "idImages": "" }],
+    "shops": [{ "cost": 12999, "url": "https://example.com" }],
+    "authorId": "6641e6b9ce33a302f92f7c11",
+    "proportions": { "width": 200, "length": 300, "height": 90 },
+    "additionalData": {}
+  }
+}</code></pre>
+
+    <pre class="prettyprint"><code>response - 400 - Ошибка валидации или сервера
+{
+  "message": error
+}</code></pre>
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="POST/furniture/images/upload"><span class="type-signature"></span>POST /furniture/images/upload<span class="signature">(jwt, furnitureCardId, color, idMainImage, images)</span><span class="type-signature"> &rarr; {object}</span></h4>
+    
+
+    
+    <p class="summary">Загрузка изображений и установка главного изображения</p>
+    
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>jwt</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">JWT токен</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>furnitureCardId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">ID карточки мебели</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>color</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Цвет мебели</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>idMainImage</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Индекс главного изображения</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>images</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">array</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Массив изображений (multipart/form-data)</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="routes_imagesFurnitureRoutes.js.html">routes/imagesFurnitureRoutes.js</a>, <a href="routes_imagesFurnitureRoutes.js.html#line231">line 231</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    Сообщение о результате загрузки
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">object</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>response - 200 - Изображения успешно загружены
+{
+  "message": "Изображения обновлены"
+}
+response - 400 - Ошибка в параметрах или отсутствуют изображения
+{
+  "message": "Изображений не загружено" | "Отсутствуют требуемые данные"
+}
+response - 500 - Внутренняя ошибка сервера при загрузке
+{
+  "message": error
+}</code></pre>
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="POST/furniture/model"><span class="type-signature"></span>POST /furniture/model<span class="signature">(jwt, furnitureCardId, model)</span><span class="type-signature"> &rarr; {object}</span></h4>
+    
+
+    
+    <p class="summary">Загрузка или обновление модели</p>
+    
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>jwt</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">JWT токен</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>furnitureCardId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">ID карточки мебели</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>model</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">file</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Файл модели (multipart/form-data)</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="routes_furnitureModelRoutes.js.html">routes/furnitureModelRoutes.js</a>, <a href="routes_furnitureModelRoutes.js.html#line75">line 75</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    JSON с сообщением об успехе или ошибке
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">object</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+    <h5>Examples</h5>
+    
+    <pre class="prettyprint"><code>response - 200 - Модель добавлена
+{
+  "message": "Модель добавлена"
+}</code></pre>
+
+    <pre class="prettyprint"><code>response - 400 - Ошибка при загрузке файла
+{
+  "message": error
+}</code></pre>
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="PUT/furniture/card"><span class="type-signature"></span>PUT /furniture/card<span class="signature">(jwt, furnitureCardId, body)</span><span class="type-signature"></span></h4>
+    
+
+    
+    <p class="summary">Обновление карточки мебели пользователя</p>
+    
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>jwt</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">JWT токен</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>furnitureCardId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">ID карточки мебели товара</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>body</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="module-furnitureCard.html#.FurnitureCard">module:furnitureCard.FurnitureCard</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Новые данные карточки</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="routes_furnitureCardRoutes.js.html">routes/furnitureCardRoutes.js</a>, <a href="routes_furnitureCardRoutes.js.html#line71">line 71</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Examples</h5>
+    
+    <pre class="prettyprint"><code>response - 201 - Успех
+{
+  "message": "Товар успешно обновлен"
+}</code></pre>
+
+    <pre class="prettyprint"><code>response - 404 - Товар не найден
+{
+  "message": "Товар не найден"
+}</code></pre>
+
+    <pre class="prettyprint"><code>response - 400 - Ошибка сервера
+{
+  "message": error
+}</code></pre>
+
+
+
+        
+    
+
+    
+        <h3 class="subsection-title">Type Definitions</h3>
+
+        
+                
+<h4 class="name" id=".ColorInfo">ColorInfo</h4>
+
+
+
+
+<div class="description">
+    Данные для цвета мебели.
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">Object</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+    <h5 class="subsection-title">Properties:</h5>
+
+    
+
+<table class="props">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>imagesData</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;<a href="module-furnitureCard.html#.ImagesData">module:furnitureCard.ImagesData</a>></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Объект с данными изображений.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>color</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Цвет.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="models_furnitureCard.js.html">models/furnitureCard.js</a>, <a href="models_furnitureCard.js.html#line40">line 40</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+            
+                
+<h4 class="name" id=".FurnitureCard">FurnitureCard</h4>
+
+
+
+
+<div class="description">
+    Данные для создания/обновления/получения полной информации карточки мебели.
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">Object</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+    <h5 class="subsection-title">Properties:</h5>
+
+    
+
+<table class="props">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>name</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Название предмета мебели.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>description</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Описание товара.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>colors</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;<a href="module-furnitureCard.html#.ColorInfo">module:furnitureCard.ColorInfo</a>></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Варианты цветов.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>shops</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;<a href="module-furnitureCard.html#.ShopInfo">module:furnitureCard.ShopInfo</a>></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Список магазинов с ценами и ссылками.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>authorId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">ID автора (пользователя).</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>proportions</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="module-furnitureCard.html#.Proportions">module:furnitureCard.Proportions</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Габариты мебели.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>additionalData</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="module-furnitureCard.html#.additionalData">module:furnitureCard.additionalData</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Дополнительные данные.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="models_furnitureCard.js.html">models/furnitureCard.js</a>, <a href="models_furnitureCard.js.html#line2">line 2</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+            
+                
+<h4 class="name" id=".FurnitureModel">FurnitureModel</h4>
+
+
+
+
+<div class="description">
+    Данные модели мебели.
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">Object</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+    <h5 class="subsection-title">Properties:</h5>
+
+    
+
+<table class="props">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>filename</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Имя файла модели, сохранённое на сервере.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>furnitureCardId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">ID карточки мебели, к которой относится модель.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>originalName</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Оригинальное имя файла, загруженного пользователем.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="models_furnitureModel.js.html">models/furnitureModel.js</a>, <a href="models_furnitureModel.js.html#line3">line 3</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+            
+                
+<h4 class="name" id=".ImagesData">ImagesData</h4>
+
+
+
+
+<div class="description">
+    Данные изображений для цвета мебели.
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">Object</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+    <h5 class="subsection-title">Properties:</h5>
+
+    
+
+<table class="props">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>idMainImage</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Индекс основного изображения карточки мебели.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>images</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;string></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">неполные url изображений, связанных с цветом.
+Нужно вначало добавить базовый url сервера.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="models_furnitureCard.js.html">models/furnitureCard.js</a>, <a href="models_furnitureCard.js.html#line48">line 48</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+            
+                
+<h4 class="name" id=".Proportions">Proportions</h4>
+
+
+
+
+<div class="description">
+    Параметры мебели.
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">Object</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+    <h5 class="subsection-title">Properties:</h5>
+
+    
+
+<table class="props">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>width</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Ширина предмета мебели.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>length</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Длина предмета мебели.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>height</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Высота предмета мебели.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="models_furnitureCard.js.html">models/furnitureCard.js</a>, <a href="models_furnitureCard.js.html#line31">line 31</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+            
+                
+<h4 class="name" id=".ShopInfo">ShopInfo</h4>
+
+
+
+
+<div class="description">
+    Данные магазина.
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">Object</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+    <h5 class="subsection-title">Properties:</h5>
+
+    
+
+<table class="props">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>cost</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Стоимость в магазине.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>url</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">URL магазина или страницы товара.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="models_furnitureCard.js.html">models/furnitureCard.js</a>, <a href="models_furnitureCard.js.html#line57">line 57</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+            
+                
+<h4 class="name" id=".ToClientFurnitureCardShortData">ToClientFurnitureCardShortData</h4>
+
+
+
+
+<div class="description">
+    Данные карточки мебели для получения на страницах магазина/поиска/аккаунта.
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">Object</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+    <h5 class="subsection-title">Properties:</h5>
+
+    
+
+<table class="props">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>name</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Название предмета мебелия.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>cost</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Минимальная стоимость мебели.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>furnitureCardId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">ID карточки мебели.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>previewUrl</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">неполный url основного изображения первого цвета карточки мебели.
+Нужно вначало добавить базовый url сервера.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="models_furnitureCard.js.html">models/furnitureCard.js</a>, <a href="models_furnitureCard.js.html#line21">line 21</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+            
+                
+<h4 class="name" id=".additionalData">additionalData</h4>
+
+
+
+
+<div class="description">
+    Дополнительные данные карточки мебели(для лучшего поиска).
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">Object</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+    <h5 class="subsection-title">Properties:</h5>
+
+    
+
+<table class="props">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>category</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Поле name выбранной категории.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>key:string</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+|
+
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Любая дополнительная информация.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="models_furnitureCard.js.html">models/furnitureCard.js</a>, <a href="models_furnitureCard.js.html#line14">line 14</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+            
+    
+
+    
+</article>
+
+</section>
+
+
+
+
+</div>
+
+
+<br class="clear">
+
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

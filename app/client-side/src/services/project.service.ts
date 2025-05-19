@@ -28,7 +28,7 @@ export interface projectServerInformation extends projectInformation {
   providedIn: 'root'
 })
 export class ProjectService {
-  private baseServiceUrl = baseUrl + 'projects/';
+  private baseServiceUrl = baseUrl + 'project/';
   constructor(
     private httpModule: HttpClient,
     private reportService:ReportService
@@ -37,7 +37,7 @@ export class ProjectService {
 
   /**
    * Создание нового проекта
-   * @param jwt JWT токен пользователя
+   * @param jwt JWT токен
    * @param name Название проекта
    * @returns Observable с результатом создания проекта
    */
@@ -50,7 +50,7 @@ export class ProjectService {
 
   /**
    * Удаление проекта
-   * @param jwt JWT токен пользователя
+   * @param jwt JWT токен
    * @param projectId ID проекта
    * @returns Observable с результатом удаления проекта
    */
@@ -63,7 +63,7 @@ export class ProjectService {
 
   /**
    * Получение проекта по ID
-   * @param jwt JWT токен пользователя
+   * @param jwt JWT токен
    * @param projectId ID проекта
    * @returns Observable с данными проекта
    */
@@ -76,7 +76,7 @@ export class ProjectService {
 
   /**
    * Обновление информации о проекте
-   * @param jwt JWT токен пользователя
+   * @param jwt JWT токен
    * @param projectId ID проекта
    * @param projectInformation Новые данные проекта (название, комнаты и т.д.)
    * @returns Observable с результатом обновления проекта
@@ -85,9 +85,7 @@ export class ProjectService {
     const HTTP_PARAMS = new HttpParams()
       .set('jwt', jwt)
       .set('projectId', projectId)
-      .set('name', projectInformation.name)
-      .set('rooms', JSON.stringify(projectInformation.rooms));
-    return firstValueFrom(this.httpModule.put(this.baseServiceUrl, HTTP_PARAMS)) as Promise<{ message: string }>
+    return firstValueFrom(this.httpModule.put(this.baseServiceUrl, projectInformation ,{ params: HTTP_PARAMS })) as Promise<{ message: string }>
   }
 
   async GETgetReportOfRoom(jwt: string, roomId: string, renderImage: Blob) {

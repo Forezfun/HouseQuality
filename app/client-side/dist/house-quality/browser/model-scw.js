@@ -21,7 +21,7 @@ self.addEventListener('activate', event => {
 self.addEventListener('fetch', event => {
   const url = new URL(event.request.url);
   if (url.pathname === '/api/furniture/model' &&
-    url.searchParams.has('furnitureId') &&
+    url.searchParams.has('furnitureCardId') &&
     event.request.method === 'GET') {
     event.respondWith(
       handleModelRequest(event.request).catch(err => {
@@ -36,9 +36,9 @@ self.addEventListener('fetch', event => {
 
 async function handleModelRequest(request) {
   const url = new URL(request.url);
-  const furnitureId = url.searchParams.get('furnitureId');
+  const furnitureCardId = url.searchParams.get('furnitureCardId');
 
-  const versionRes = await fetch(`/api/furniture/model/version?furnitureId=${furnitureId}`);
+  const versionRes = await fetch(`/api/furniture/model/version?furnitureCardId=${furnitureCardId}`);
   if (!versionRes.ok) {
     return fetch(request);
   }
@@ -46,9 +46,9 @@ async function handleModelRequest(request) {
   const { versionModel } = await versionRes.json();
   const db = await openDB();
 
-  const meta = await dbGetMeta(db, furnitureId);
+  const meta = await dbGetMeta(db, furnitureCardId);
   if (meta && meta.versionModel === versionModel) {
-    const chunks = await dbGetChunks(db, furnitureId, meta.chunkCount);
+    const chunks = await dbGetChunks(db, furnitureCardId, meta.chunkCount);
     const blob = new Blob(chunks);
 
     return new Response(blob, {
@@ -64,7 +64,7 @@ async function handleModelRequest(request) {
   const modelRes = await fetch(request);
   const blob = await modelRes.blob();
 
-  dbPutModel(db, furnitureId, versionModel, await blobToChunks(blob), blob.size)
+  dbPutModel(db, furnitureCardId, versionModel, await blobToChunks(blob), blob.size)
     .catch(err => console.error('[SW] Ошибка кеширования:', err));
 
   return new Response(blob, {
@@ -80,7 +80,7 @@ function openDB() {
     req.onupgradeneeded = e => {
       const db = e.target.result;
       if (!db.objectStoreNames.contains(META_STORE)) {
-        db.createObjectStore(META_STORE, { keyPath: 'furnitureId' });
+        db.createObjectStore(META_STORE, { keyPath: 'furnitureCardId' });
       }
       if (!db.objectStoreNames.contains(CHUNK_STORE)) {
         db.createObjectStore(CHUNK_STORE, { keyPath: 'id' });
@@ -91,23 +91,23 @@ function openDB() {
   });
 }
 
-function dbGetMeta(db, furnitureId) {
+function dbGetMeta(db, furnitureCardId) {
   return new Promise((resolve, reject) => {
     const tx = db.transaction(META_STORE, 'readonly');
     const store = tx.objectStore(META_STORE);
-    const req = store.get(furnitureId);
+    const req = store.get(furnitureCardId);
     req.onsuccess = () => resolve(req.result);
     req.onerror = reject;
   });
 }
 
-function dbGetChunks(db, furnitureId, count) {
+function dbGetChunks(db, furnitureCardId, count) {
   return Promise.all(
     Array.from({ length: count }, (_, i) => {
       return new Promise((resolve, reject) => {
         const tx = db.transaction(CHUNK_STORE, 'readonly');
         const store = tx.objectStore(CHUNK_STORE);
-        const req = store.get(`${furnitureId}_${i}`);
+        const req = store.get(`${furnitureCardId}_${i}`);
         req.onsuccess = () => resolve(req.result?.data);
         req.onerror = reject;
       });
@@ -115,16 +115,16 @@ function dbGetChunks(db, furnitureId, count) {
   );
 }
 
-function dbPutModel(db, furnitureId, versionModel, chunks, size) {
+function dbPutModel(db, furnitureCardId, versionModel, chunks, size) {
   return new Promise((resolve, reject) => {
     const txMeta = db.transaction(META_STORE, 'readwrite');
     const metaStore = txMeta.objectStore(META_STORE);
-    metaStore.put({ furnitureId, versionModel, chunkCount: chunks.length, requestCount: 1, sizeInBytes: size });
+    metaStore.put({ furnitureCardId, versionModel, chunkCount: chunks.length, requestCount: 1, sizeInBytes: size });
     txMeta.oncomplete = () => {
       const txChunks = db.transaction(CHUNK_STORE, 'readwrite');
       const chunkStore = txChunks.objectStore(CHUNK_STORE);
       chunks.forEach((chunk, i) => {
-        chunkStore.put({ id: `${furnitureId}_${i}`, furnitureId, chunkIndex: i, data: chunk });
+        chunkStore.put({ id: `${furnitureCardId}_${i}`, furnitureCardId, chunkIndex: i, data: chunk });
       });
       txChunks.oncomplete = resolve;
       txChunks.onerror = reject;
@@ -133,11 +133,11 @@ function dbPutModel(db, furnitureId, versionModel, chunks, size) {
   });
 }
 
-function incrementRequestCount(db, furnitureId) {
+function incrementRequestCount(db, furnitureCardId) {
   return new Promise((resolve, reject) => {
     const tx = db.transaction(META_STORE, 'readwrite');
     const store = tx.objectStore(META_STORE);
-    const req = store.get(furnitureId);
+    const req = store.get(furnitureCardId);
     req.onsuccess = () => {
       const data = req.result;
       if (!data) return resolve();
@@ -158,7 +158,7 @@ async function enforceStorageLimit(db) {
   const sorted = entries.sort((a, b) => a.requestCount - b.requestCount);
   while (total > MAX_CACHE_SIZE_BYTES && sorted.length > 0) {
     const toDelete = sorted.shift();
-    await deleteModel(db, toDelete.furnitureId, toDelete.chunkCount);
+    await deleteModel(db, toDelete.furnitureCardId, toDelete.chunkCount);
     total -= toDelete.sizeInBytes;
   }
 }
@@ -173,17 +173,17 @@ function getAllMeta(db) {
   });
 }
 
-async function deleteModel(db, furnitureId, chunkCount) {
+async function deleteModel(db, furnitureCardId, chunkCount) {
   const tx1 = db.transaction(CHUNK_STORE, 'readwrite');
   const chunkStore = tx1.objectStore(CHUNK_STORE);
   for (let i = 0; i < chunkCount; i++) {
-    chunkStore.delete(`${furnitureId}_${i}`);
+    chunkStore.delete(`${furnitureCardId}_${i}`);
   }
   await txComplete(tx1);
 
   const tx2 = db.transaction(META_STORE, 'readwrite');
   const metaStore = tx2.objectStore(META_STORE);
-  metaStore.delete(furnitureId);
+  metaStore.delete(furnitureCardId);
   await txComplete(tx2);
 }
 

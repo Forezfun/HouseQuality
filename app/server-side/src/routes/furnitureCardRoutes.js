@@ -7,6 +7,38 @@ const PROJECT = require('../models/project');
 const AUTH_ACCOUNT = require('../models/authAccount');
 const sendEmail = require('../sendcode');
 
+/**
+ * @module furnitureCard
+ * @description Маршруты для работы с карточками мебели.
+ */
+
+/**
+ * @function POST /furniture/card
+ * @instance
+ * @summary Создание новой карточки мебели
+ * @param {string} jwt - JWT токен
+ * @param {module:furnitureCard.FurnitureCard} body - Данные карточки мебели
+ * @see При успешном запросе возвращает { furnitureData: {@link module:furnitureCard.FurnitureCard} }
+ * @see При неуспешном запросе возвращает { message: string }
+ * 
+ * @example response - 201 - Успех
+ * {
+ *   "furnitureData": {
+ *     "_id": "6634f1129f6f7cba29cd12f9",
+ *     "name": "Диван",
+ *     "description": "Угловой диван",
+ *     "colors": [{ "color": "#fff", "idImages": "" }],
+ *     "shops": [{ "cost": 12999, "url": "https://example.com" }],
+ *     "authorId": "6641e6b9ce33a302f92f7c11",
+ *     "proportions": { "width": 200, "length": 300, "height": 90 },
+ *     "additionalData": {}
+ *   }
+ * }
+ * @example response - 400 - Ошибка валидации или сервера
+ * {
+ *   "message": error
+ * }
+ */
 ROUTER.post('/', async (request, result) => {
     try {
         const JWT = request.query.jwt;
@@ -36,13 +68,34 @@ ROUTER.post('/', async (request, result) => {
         result.status(400).json({ message: error.message });
     }
 });
-
+/**
+ * @function PUT /furniture/card
+ * @instance
+ * @summary Обновление карточки мебели пользователя
+ * @param {string} jwt - JWT токен
+ * @param {string} furnitureCardId - ID карточки мебели товара
+ * @param {module:furnitureCard.FurnitureCard} body - Новые данные карточки
+ * 
+ * @example response - 201 - Успех
+ * {
+ *   "message": "Товар успешно обновлен"
+ * }
+ * @example response - 404 - Товар не найден
+ * {
+ *   "message": "Товар не найден"
+ * }
+ * @example response - 400 - Ошибка сервера
+ * {
+ *   "message": error
+ * }
+ */
 ROUTER.put('/', async (request, result) => {
     try {
         const JWT = request.query.jwt;
+        const FURNITURE_CARD_ID = request.query.furnitureCardId
         const ACCOUNT_ID = await checkUserAccess(JWT);
-        if (!ACCOUNT_ID) return result.status(404).json({ message: 'Аккаунт не найден' });
-        let FURNITURE_CARD_ITEM = await FURNITURE_CARD.findOne({ authorId: ACCOUNT_ID })
+        if (!ACCOUNT_ID||!FURNITURE_CARD_ID) return result.status(404).json({ message: 'Аккаунт не найден' });
+        let FURNITURE_CARD_ITEM = await FURNITURE_CARD.findById(FURNITURE_CARD_ID)
         if (!FURNITURE_CARD_ITEM) return result.status(404).json({ message: 'Това не найден' });
 
         FURNITURE_CARD_ITEM.name = request.body.name;
@@ -67,12 +120,35 @@ ROUTER.put('/', async (request, result) => {
         FURNITURE_CARD_ITEM.markModified('additionalData');
         await FURNITURE_CARD_ITEM.save()
         console.log(FURNITURE_CARD_ITEM)
-        result.status(201).json({ message: 'Товар успешно создан' })
+        result.status(201).json({ message: 'Товар успешно обновлен' })
     } catch (error) {
         result.status(400).json({ message: error.message });
     }
 });
-
+/**
+ * @function DELETE /furniture/card
+ * @instance
+ * @summary Удаление карточки мебели и связанных данных
+ * @param {string} jwt - JWT токен
+ * @param {string} furnitureCardId - ID карточки мебели
+ * 
+ * @example response - 201 - Успех
+ * {
+ *   "message": "Товар успешно удален"
+ * }
+ * @example response - 404 - Аккаунт или товар не найден
+ * {
+ *   "message": "Аккаунт не найден"
+ * }
+ * @example response - 409 - Нет доступа
+ * {
+ *   "message": "Нет доступа"
+ * }
+ * @example response - 400 - Ошибка сервера
+ * {
+ *   "message": error
+ * }
+ */
 ROUTER.delete('/', async (request, result) => {
     try {
         const JWT = request.query.jwt;
@@ -89,7 +165,42 @@ ROUTER.delete('/', async (request, result) => {
         result.status(400).json({ message: error.message });
     }
 });
-
+/**
+ * @function GET /furniture/card
+ * @instance
+ * @summary Получение карточки мебели с изображениями
+ * @param {string} jwt - JWT токен
+ * @param {string} furnitureCardId - ID карточки мебели
+ * @see При успешном запросе возвращает { furnitureCard: {@link module:furnitureCard.FurnitureCard | FunritureCard},authorMacthed:true|false }
+ * @see При неуспешном запросе возвращает { message:string }
+ * 
+ * @example response - 201 - Успех
+ * {
+ *   "furnitureCard": {
+ *     "name": "Кресло",
+ *     "description": "Мягкое кресло",
+ *     "colors": [{
+ *       "color": "#abc",
+ *       "imagesData": {
+ *         "images": [
+ *           "furniture/images/simple?furnitureCardId=123&color=%23abc&idImage=0"
+ *         ],
+ *         "idMainImage": 0
+ *       }
+ *     }],
+ *     "shops": [{ "cost": 5999, "url": "https://example.com" }],
+ *     "authorId": "6641e6b9ce33a302f92f7c11",
+ *     "proportions": { "width": 100, "length": 90, "height": 120 },
+ *     "additionalData": { "material": "ткань" }
+ *   },
+ *   "authorMatched": true
+ * }
+ * @example response - 404 - Товар не найден
+ * {
+ *   message:"Товар не найден"
+ * }
+ * 
+ */
 ROUTER.get('/', async (request, result) => {
     try {
         let FURNITURE_CARD_ITEM = await FURNITURE_CARD.findById(request.query.furnitureCardId)
@@ -165,7 +276,7 @@ async function proccessColorsData(FURNITURE_CARD_ITEM) {
     for (const COLOR_DATA of FURNITURE_CARD_ITEM.colors) {
         try {
             const IMAGES_FURNITURE_ITEM = await IMAGES_FURNITURE.findOne({
-                furnitureId: FURNITURE_CARD_ITEM._id
+                furnitureCardId: FURNITURE_CARD_ITEM._id
             });
 
             if (!IMAGES_FURNITURE_ITEM) continue;

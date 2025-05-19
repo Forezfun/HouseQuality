@@ -4,14 +4,6 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { AccountCookieService } from './account-cookie.service';
 import { baseUrl } from '.';
 import { firstValueFrom } from 'rxjs';
-interface baseEmailAccountData {
-  email: string;
-  password: string;
-}
-interface changePasswordData {
-  jwt: string;
-  password: string;
-}
 export interface changeAccountDataEmail {
   jwt: string;
   accountType: 'email';
@@ -34,7 +26,6 @@ export interface furnitureAccountData {
   name: string;
   previewUrl: string;
 }
-type jwtType = 'long' | 'temporary';
 export type accountType = 'google' | 'email';
 export type changeAccountData = changeAccountDataEmail
 interface createEmailAccountData {
@@ -78,7 +69,7 @@ export class AccountService {
 
   /**
    * Удаление JWT токена пользователя
-   * @param jwt JWT токен пользователя
+   * @param jwt JWT токен
    * @return firstValueFrom(s Promise с результатом удаления токена
    */
   DELETEaccountJwt(jwt: string) {
@@ -90,11 +81,11 @@ export class AccountService {
     let HTTP_PARAMS = new HttpParams()
       .set('nickname', changeData.nickname)
       .set('jwt', changeData.jwt)
-    return firstValueFrom(this.httpModule.put(this.baseServiceUrl, HTTP_PARAMS)) as Promise<{ message: string }>
+    return firstValueFrom(this.httpModule.put(this.baseServiceUrl, {params:HTTP_PARAMS})) as Promise<{ message: string }>
   }
   /**
    * Удаление пользователя
-   * @param jwt JWT токен пользователя
+   * @param jwt JWT токен
    * @return firstValueFrom(s Promise с результатом удаления пользователя
    */
   DELETEaccount(jwt: string) {
@@ -105,7 +96,7 @@ export class AccountService {
 
   /**
    * Получение информации о пользователе
-   * @param jwt JWT токен пользователя
+   * @param jwt JWT токен
    * @return firstValueFrom(s Promise с данными пользователя
    */
   async GETaccount(jwt: string) {

@@ -16,7 +16,7 @@ export class ModelCacheInterceptor implements HttpInterceptor {
   constructor(@Inject(DOCUMENT) private document: Document) {}
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    if (req.url.startsWith('/furniture/model/') && req.params.has('furnitureId')) {
+    if (req.url.startsWith('/furniture/model/') && req.params.has('furnitureCardId')) {
       if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
 
         const url = new URL(req.url, this.document.location.origin);

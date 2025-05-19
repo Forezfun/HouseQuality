@@ -111,10 +111,10 @@ export class FurnitureCardControlService {
    * @param furnitureCard Данные карточки мебели для обновления
    * @returns Promise с результатом обновления карточки
    */
-  PUTupdateFurnitureCard(furnitureCardUpdateData: furnitureFromServerData, furnitureId: string, jwt: string) {
+  PUTupdateFurnitureCard(furnitureCardUpdateData: furnitureFromServerData, furnitureCardId: string, jwt: string) {
     let HTTP_PARAMS = new HttpParams()
       .set('jwt', jwt)
-      .set('furnitureId', furnitureId);
+      .set('furnitureCardId', furnitureCardId);
     return firstValueFrom(this.httpModule.put(this.baseServiceUrl, furnitureCardUpdateData, { params: HTTP_PARAMS })) as Promise<{ message: string }>
   }
 

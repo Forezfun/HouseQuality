@@ -25,14 +25,14 @@ export class ViewFurnitureComponent implements OnChanges {
   protected currentColorId: number = 0
 
   @Input()
-  furnitureId?: string
+  furnitureCardId?: string
   @Input()
   furnitureData?: furnitureFromServerData;
 
   async ngOnChanges(changes: SimpleChanges) {
-    if (this.furnitureId === undefined) return
+    if (this.furnitureCardId === undefined) return
     try {
-      this.furnitureData = (await this.furnitureCardService.GETfurnitureCard(this.furnitureId)).furnitureCard
+      this.furnitureData = (await this.furnitureCardService.GETfurnitureCard(this.furnitureCardId)).furnitureCard
     } catch (error) {
       console.log(error)
     }

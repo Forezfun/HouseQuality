@@ -49,12 +49,12 @@ export class AuthService {
   POSTcreateShortJWT(email: string) {
     let HTTP_PARAMS = new HttpParams()
       .set('email', email)
-    return firstValueFrom(this.httpModule.post(this.baseServiceUrl + 'jwt/temporary', HTTP_PARAMS)) as Promise<{ jwt: string }>
+    return firstValueFrom(this.httpModule.post(this.baseServiceUrl + 'jwt/temporary', {params:HTTP_PARAMS})) as Promise<{ jwt: string }>
   }
 
   /**
    * Обновление базовой информации о пользователе
-   * @param jwt JWT токен пользователя
+   * @param jwt JWT токен
    * @param changeData Новые данные для обновления
    * @param typeJwt Тип JWT токена (короткий или длинный)
    * @param accountType Тип пользователя (email или google)
@@ -68,7 +68,7 @@ export class AuthService {
       HTTP_PARAMS = HTTP_PARAMS
         .set('password', changeData.password);
     }
-    return firstValueFrom(this.httpModule.put(this.baseServiceUrl + 'account', HTTP_PARAMS)) as Promise<{message:string}>
+    return firstValueFrom(this.httpModule.put(this.baseServiceUrl + 'account', {params:HTTP_PARAMS})) as Promise<{message:string}>
   }
   GETrequestPasswordCode(email: string) {
     let HTTP_PARAMS = new HttpParams()

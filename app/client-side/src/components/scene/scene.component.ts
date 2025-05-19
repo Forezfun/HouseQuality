@@ -87,28 +87,28 @@ export class SceneComponent implements AfterViewInit, OnChanges {
     if (!this.planHouseComponent.sceneOpenToggle) return
 
     this.loadRoom()
-    const FURNITURE_ID = this.route.snapshot.params['furnitureId']
+    const FURNITURE_ID = this.route.snapshot.params['furnitureCardId']
     if (!FURNITURE_ID || changes['roomData'].previousValue) return
     this.fixPath()
     this.addModel(FURNITURE_ID, true)
   }
 
-  private async loadFurnitureModel(fileModel: Blob, furnitureSize: modelInterface, furnitureId: string, saveRoom: boolean, moveData?: objectLoadInterface) {
+  private async loadFurnitureModel(fileModel: Blob, furnitureSize: modelInterface, furnitureCardId: string, saveRoom: boolean, moveData?: objectLoadInterface) {
     try {
       const LOAD_OBJECT = await loadModel(fileModel)
-      if (moveData) { this.addObjectToScene(LOAD_OBJECT, furnitureSize, furnitureId, moveData) } else { this.addObjectToScene(LOAD_OBJECT, furnitureSize, furnitureId) }
+      if (moveData) { this.addObjectToScene(LOAD_OBJECT, furnitureSize, furnitureCardId, moveData) } else { this.addObjectToScene(LOAD_OBJECT, furnitureSize, furnitureCardId) }
       if (saveRoom) this.saveRoom()
     } catch (error) {
     }
   }
-  private async addModel(furnitureId: string, saveRoom: boolean, moveData?: objectLoadInterface) {
+  private async addModel(furnitureCardId: string, saveRoom: boolean, moveData?: objectLoadInterface) {
     const JWT = this.accountCookieService.getJwt()
     if (!JWT) return
     try {
       if (saveRoom) this.spinner.show()
-      const PROPORTIONS = (await this.furnitureCardService.GETfurnitureCard(furnitureId)).furnitureCard.proportions as modelInterface
-      const MODEL = await this.furnitureModelService.GETfurnitureModel(JWT, furnitureId)
-      await this.loadFurnitureModel(MODEL, PROPORTIONS, furnitureId, saveRoom, moveData)
+      const PROPORTIONS = (await this.furnitureCardService.GETfurnitureCard(furnitureCardId)).furnitureCard.proportions as modelInterface
+      const MODEL = await this.furnitureModelService.GETfurnitureModel(JWT, furnitureCardId)
+      await this.loadFurnitureModel(MODEL, PROPORTIONS, furnitureCardId, saveRoom, moveData)
       this.spinner.hide()
     } catch (error) {
       this.spinner.hide()
@@ -218,8 +218,8 @@ export class SceneComponent implements AfterViewInit, OnChanges {
 
     return { width: FRUSTUM_WIDTH, height: FRUSTUM_HEIGHT };
   }
-  private addObjectToScene(object: THREE.Object3D, objectProportions: modelInterface, furnitureId: string, moveData?: objectLoadInterface) {
-    object.userData = { id: furnitureId }
+  private addObjectToScene(object: THREE.Object3D, objectProportions: modelInterface, furnitureCardId: string, moveData?: objectLoadInterface) {
+    object.userData = { id: furnitureCardId }
     this.scaleImportModel(object, objectProportions);
     this.scene.add(object)
     this.renderer.render(this.scene, this.camera);

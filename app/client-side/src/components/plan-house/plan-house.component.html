@@ -15,21 +15,21 @@
       <h2 class="addModuleTitle">Параметры комнаты</h2>
       <span class="addModuleInputSpan">
         <label class="inputLabel" for="width">Ширина(м)</label>
-        <input placeholder="5" formControlName="width" max="10" min="0.1" class="addModuleInput" id="width" type="number" step="0.1">
+        <input placeholder="5" formControlName="width" max="10" min="0.1" class="addModuleInput" id="width" type="number" step="0.01">
         <span class="validation-error" *ngIf="roomForm.get('width')?.invalid && roomForm.get('width')?.touched">
           Введите число от 0.1 до 10
         </span>
       </span>
       <span class="addModuleInputSpan">
         <label class="inputLabel" for="length">Длина(м)</label>
-        <input placeholder="3" formControlName="length" max="10" min="0.1" class="addModuleInput" id="length" type="number" step="0.1">
+        <input placeholder="3" formControlName="length" max="10" min="0.1" class="addModuleInput" id="length" type="number" step="0.01">
         <span class="validation-error" *ngIf="roomForm.get('length')?.invalid && roomForm.get('length')?.touched">
           Введите число от 0.1 до 10
         </span>
       </span>
       <span class="addModuleInputSpan">
         <label class="inputLabel" for="height">Высота(м)</label>
-        <input placeholder="2.5" formControlName="height" max="10" min="0.1" class="addModuleInput" id="height" type="number" step="0.1">
+        <input placeholder="2.5" formControlName="height" max="10" min="0.1" class="addModuleInput" id="height" type="number" step="0.01">
         <span class="validation-error" *ngIf="roomForm.get('height')?.invalid && roomForm.get('height')?.touched">
           Введите число от 0.1 до 10
         </span>
@@ -132,7 +132,7 @@
 <ng-template #roomGuideTemplate>
   <div class="guideContainer">
     <div class="guideSection">
-      <p class="guideText">Нажмите ЛКМ на мебели для перетаскивания и нажмите еще раз для сохранения</p>
+      <p class="guideText">Нажмите ЛКМ на мебели для перетаскивания и нажмите еще раз для отмены</p>
       <div class="animationContainer" style="display:flex;justify-content: center;">
         <img src="assets/images/mouse.svg" alt="Mouse" class="mouse pressMouse">
       </div>

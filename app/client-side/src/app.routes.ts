@@ -13,9 +13,9 @@ export const routes: Routes = [
     {component:PlanHousePageComponent,path:'plan'},
     {component:PlanHousePageComponent,path:'plan/:planId'},
     {component:PlanHousePageComponent,path:'plan/:planId/:roomId'},
-    {component:PlanHousePageComponent,path:'plan/:planId/:roomId/:furnitureId'},
+    {component:PlanHousePageComponent,path:'plan/:planId/:roomId/:furnitureCardId'},
     {component:CreateFurniturePageComponent,path:'create/:id'},
     { component: ShopPageComponent, path: 'shop'},
     { component: ShopPageComponent, path: 'shop/:category'},
-    { component: ShopPageComponent, path: 'shop/:category/:furnitureId'},
+    { component: ShopPageComponent, path: 'shop/:category/:furnitureCardId'},
 ];

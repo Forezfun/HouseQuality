@@ -15,30 +15,30 @@ export class ServerImageControlService {
 
   /**
    * Получение аватара пользователя
-   * @param jwt JWT токен пользователя
+   * @param jwt JWT токен
    * @returns URL для получения аватара пользователя
    */
   GETaccountAvatar(jwt: string) {
-    return `${baseUrl}avatar?jwt=${jwt}`;
+    return `${baseUrl}/account/avatar?jwt=${jwt}`;
   }
 
   /**
    * Загрузка аватара пользователя
    * @param imageFile Файл изображения
-   * @param jwt JWT токен пользователя
+   * @param jwt JWT токен
    * @returns Observable с результатом загрузки аватара
    */
   POSTuploadUserAvatar(imageFile: Blob, jwt: string) {
     const formData = new FormData();
     formData.append('image', imageFile);
     const HTTP_PARAMS = new HttpParams().set('jwt', jwt);
-    return firstValueFrom(this.httpModule.post(`${baseUrl}avatar/upload`, formData, { params: HTTP_PARAMS })) as Promise<{ message: string }>
+    return firstValueFrom(this.httpModule.post(`${baseUrl}/account/avatar`, formData, { params: HTTP_PARAMS })) as Promise<{ message: string }>
   }
 
   /**
    * Загрузка изображений проекта
    * @param imageFiles Файлы изображений
-   * @param jwt JWT токен пользователя
+   * @param jwt JWT токен
    * @param furnitureCardId ID карточки мебели
    * @param color Цвет мебели
    * @returns Observable с результатом загрузки изображений
@@ -54,14 +54,14 @@ export class ServerImageControlService {
       .set('idMainImage', imagesData.idMainImage)
       .set('jwt', jwt)
 
-    return firstValueFrom(this.httpModule.post(this.baseServiceUrl + 'upload/images', formData, { params: HTTP_PARAMS })) as Promise<{ message: string }>
+    return firstValueFrom(this.httpModule.post(this.baseServiceUrl + 'upload', formData, { params: HTTP_PARAMS })) as Promise<{ message: string }>
   }
 
 
 
   /**
    * Удаление цвета мебели
-   * @param jwt JWT токен пользователя
+   * @param jwt JWT токен
    * @param furnitureCardId ID карточки мебели
    * @param color Цвет мебели для удаления
    * @returns Observable с результатом удаления цвета мебели
@@ -77,7 +77,7 @@ export class ServerImageControlService {
 
   /**
    * Удаление проекта
-   * @param jwt JWT токен пользователя
+   * @param jwt JWT токен
    * @param furnitureCardId ID карточки мебели
    * @returns Observable с результатом удаления проекта
    */
