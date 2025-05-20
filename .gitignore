@@ -14,7 +14,7 @@
 **/uploads/
 
 #Angular
-app/client-side/src/.angular
+**/.angular/
 
 # CRTs
 *.crt
@@ -31,15 +31,10 @@ app/client-side/src/.angular
 *.sublime-workspace
 
 # Visual Studio Code
-/.vscode/*
-!.vscode/settings.json
-!.vscode/tasks.json
-!.vscode/launch.json
-!.vscode/extensions.json
+.vscode/
 .history/*
 
 # Miscellaneous
-/.angular/cache
 .sass-cache/
 /connect.lock
 /coverage

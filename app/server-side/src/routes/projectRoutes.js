@@ -8,7 +8,6 @@ const FURNITURE_CARD = require('../models/furnitureCard.js');
 /**
  * @module project
  * @description Маршруты для работы с проектами пользователей.
- * <p>Используется модель: {@link module:project.Project | Project}</p>
  */
 /**
  * @function DELETE /project

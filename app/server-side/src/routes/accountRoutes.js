@@ -10,6 +10,7 @@ const { encryptPassword, decryptPassword } = require('../helpers/passwordHandler
 
 /**
  * @module account
+ * @description Маршруты для работы с аккаунтом пользователя.
  */
 
 /**
@@ -66,7 +67,7 @@ ROUTER.delete('/jwt/delete', async (request, result) => {
  */
 
 /**
- * @function POST /account/
+ * @function POST /account
  * @instance
  * @summary Создание нового аккаунта
  * @param {module:account.createAccountGoogleData |module:account.createAccountEmailData} - body запроса, в зависимости от типа пользователя.
@@ -130,7 +131,7 @@ ROUTER.post('/', async (request, result) => {
 });
 
 /**
- * @function GET /account/
+ * @function GET /account
  * @instance
  * @summary Получение данных аккаунта по JWT
  * @param {string} jwt - JWT токен
@@ -141,8 +142,18 @@ ROUTER.post('/', async (request, result) => {
  *     "email": "user@example.com",
  *     "nickname": "Account",
  *     "password": "123456",
- *     "projects": [...], //TODO Доделать 
- *     "furnitures": [...] //TODO Доделать
+ *     "furnitures": [{
+ *       "name": "Project 1",
+ *       "cost": 127350,
+ *       "previewUrl": "/images/image.jpg",
+ *       "furnitureCardId": "0987654321",
+ *     }]
+ *     "projects": [{
+ *       "_id": "664a328ab1a2b5d52a458f2f",
+ *       "name": "Проект кухни",
+ *       "rooms": [],
+ *       "authorId": "6641e6b9ce33a302f92f7c11"
+ *      }]
  *   }
  * }
  * @example
@@ -195,7 +206,7 @@ async function proccessFurnitures(ACCOUNT_ID) {
     const ACCOUNT_FURNITURE_CARDS = await FURNITURE_CARD.find({ authorId: ACCOUNT_ID });
     for (const FURNITURE_DATA of ACCOUNT_FURNITURE_CARDS) {
       const IMAGES_FURNITURE_ITEM = await IMAGES_FURNITURE.findOne({ furnitureCardId: FURNITURE_DATA._id });
-      if(!IMAGES_FURNITURE_ITEM)continue
+      if (!IMAGES_FURNITURE_ITEM) continue
       furnitures.push({
         _id: FURNITURE_DATA._id,
         name: FURNITURE_DATA.name,
@@ -210,7 +221,7 @@ async function proccessFurnitures(ACCOUNT_ID) {
 }
 
 /**
- * @function DELETE /account/
+ * @function DELETE /account
  * @instance
  * @summary Удаление аккаунта по JWT
  * @param {string} jwt - JWT токен
@@ -253,7 +264,7 @@ ROUTER.delete('/', async (request, result) => {
 });
 
 /**
- * @function PUT /account/
+ * @function PUT /account
  * @instance
  * @summary Обновление никнейма аккаунта по JWT
  * @param {string} jwt - JWT токен

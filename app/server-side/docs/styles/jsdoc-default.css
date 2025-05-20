@@ -355,6 +355,7 @@ body {
     text-decoration: none;
     transition: color 0.3s;
 }
+
 .navbar-brand:hover {
     color: #A3B18A;
 }
@@ -364,11 +365,13 @@ body {
     gap: 1.5rem;
     margin-top: 1rem;
 }
-a{
+
+a {
     text-decoration: none;
-    color:blue;
+    color: blue;
     font-weight: 400;
 }
+
 .nav-link {
     color: gray;
     text-decoration: none;
@@ -377,6 +380,7 @@ a{
     padding: 0.5rem 0;
     position: relative;
 }
+
 .nav-link:hover {
     color: #A3B18A;
 }
@@ -395,18 +399,25 @@ a{
 .nav-link:hover::after {
     width: 100%;
 }
+
 .active-nav-link {
     color: #344E41;
     font-weight: 600;
+
     &::after {
         height: 0;
     }
-    &:hover{
+
+    &:hover {
         color: #344E41;
     }
 }
 
-#main{
-    width:100%;
+#main {
+    width: 100%;
+}
+
+body {
     padding-left: 50px;
+    padding-top: 50px;
 }

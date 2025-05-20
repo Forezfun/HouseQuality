@@ -6,8 +6,8 @@ const { searchPublications, transliterateQuery } = require('../helpers/findPubli
 
 /**
  * @module find
- * @description
- * <p>Получение карточек товаров</p>
+ * @description Маршруты для работы с карточками мебели.
+ * 
  * <h3>Операции, выполняемые при работе</h3>
  * <h4>/find</h4>
  * <p>Поиск z-функцией по сложенным в один текст описанию и названию мебели с параметрами:</p>

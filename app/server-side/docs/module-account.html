@@ -19,7 +19,6 @@
 
         <nav class="navbar">
         <a href="index.html" class="navbar-brand">HouseQuality</a>
-        <p style="margin-top: -20px;">документация бэкенда</p>
         <div class="nav-links">
             <a href="module-category.html" class="nav-link">Категории</a>
             <a href="module-furnitureCard.html" class="nav-link">Мебель</a>
@@ -39,6 +38,8 @@
 <header>
     
         
+            
+        
     
 </header>
 
@@ -46,6 +47,84 @@
     <div class="container-overview">
     
         
+            <div class="description">Маршруты для работы с аккаунтом пользователя.</div>
+        
+
+        
+            
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="routes_accountRoutes.js.html">routes/accountRoutes.js</a>, <a href="routes_accountRoutes.js.html#line11">line 11</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         
     
@@ -74,7 +153,7 @@
     
 
     
-    <h4 class="name" id="DELETE/account/"><span class="type-signature"></span>DELETE /account/<span class="signature">(jwt)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="DELETE/account"><span class="type-signature"></span>DELETE /account<span class="signature">(jwt)</span><span class="type-signature"></span></h4>
     
 
     
@@ -173,7 +252,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="routes_accountRoutes.js.html">routes/accountRoutes.js</a>, <a href="routes_accountRoutes.js.html#line212">line 212</a>
+        <a href="routes_accountRoutes.js.html">routes/accountRoutes.js</a>, <a href="routes_accountRoutes.js.html#line223">line 223</a>
     </li></ul></dd>
     
 
@@ -326,7 +405,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="routes_accountRoutes.js.html">routes/accountRoutes.js</a>, <a href="routes_accountRoutes.js.html#line15">line 15</a>
+        <a href="routes_accountRoutes.js.html">routes/accountRoutes.js</a>, <a href="routes_accountRoutes.js.html#line16">line 16</a>
     </li></ul></dd>
     
 
@@ -380,7 +459,7 @@
     
 
     
-    <h4 class="name" id="GET/account/"><span class="type-signature"></span>GET /account/<span class="signature">(jwt)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="GET/account"><span class="type-signature"></span>GET /account<span class="signature">(jwt)</span><span class="type-signature"></span></h4>
     
 
     
@@ -479,7 +558,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="routes_accountRoutes.js.html">routes/accountRoutes.js</a>, <a href="routes_accountRoutes.js.html#line132">line 132</a>
+        <a href="routes_accountRoutes.js.html">routes/accountRoutes.js</a>, <a href="routes_accountRoutes.js.html#line133">line 133</a>
     </li></ul></dd>
     
 
@@ -516,8 +595,18 @@
     "email": "user@example.com",
     "nickname": "Account",
     "password": "123456",
-    "projects": [...], //TODO Доделать 
-    "furnitures": [...] //TODO Доделать
+    "furnitures": [{
+      "name": "Project 1",
+      "cost": 127350,
+      "previewUrl": "/images/image.jpg",
+      "furnitureCardId": "0987654321",
+    }]
+    "projects": [{
+      "_id": "664a328ab1a2b5d52a458f2f",
+      "name": "Проект кухни",
+      "rooms": [],
+      "authorId": "6641e6b9ce33a302f92f7c11"
+     }]
   }
 }</code></pre>
 
@@ -712,7 +801,7 @@ Content-Type: image/jpeg (или другой в зависимости от р�
     
 
     
-    <h4 class="name" id="POST/account/"><span class="type-signature"></span>POST /account/<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="POST/account"><span class="type-signature"></span>POST /account<span class="signature">()</span><span class="type-signature"></span></h4>
     
 
     
@@ -810,7 +899,7 @@ Content-Type: image/jpeg (или другой в зависимости от р�
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="routes_accountRoutes.js.html">routes/accountRoutes.js</a>, <a href="routes_accountRoutes.js.html#line68">line 68</a>
+        <a href="routes_accountRoutes.js.html">routes/accountRoutes.js</a>, <a href="routes_accountRoutes.js.html#line69">line 69</a>
     </li></ul></dd>
     
 
@@ -1349,7 +1438,7 @@ Content-Type: image/jpeg (или другой в зависимости от р�
     
 
     
-    <h4 class="name" id="PUT/account/"><span class="type-signature"></span>PUT /account/<span class="signature">(jwt, nickname)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="PUT/account"><span class="type-signature"></span>PUT /account<span class="signature">(jwt, nickname)</span><span class="type-signature"></span></h4>
     
 
     
@@ -1471,7 +1560,7 @@ Content-Type: image/jpeg (или другой в зависимости от р�
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="routes_accountRoutes.js.html">routes/accountRoutes.js</a>, <a href="routes_accountRoutes.js.html#line255">line 255</a>
+        <a href="routes_accountRoutes.js.html">routes/accountRoutes.js</a>, <a href="routes_accountRoutes.js.html#line266">line 266</a>
     </li></ul></dd>
     
 
@@ -2856,7 +2945,7 @@ Content-Type: image/jpeg (или другой в зависимости от р�
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="routes_accountRoutes.js.html">routes/accountRoutes.js</a>, <a href="routes_accountRoutes.js.html#line51">line 51</a>
+        <a href="routes_accountRoutes.js.html">routes/accountRoutes.js</a>, <a href="routes_accountRoutes.js.html#line52">line 52</a>
     </li></ul></dd>
     
 
@@ -3026,7 +3115,7 @@ Content-Type: image/jpeg (или другой в зависимости от р�
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="routes_accountRoutes.js.html">routes/accountRoutes.js</a>, <a href="routes_accountRoutes.js.html#line59">line 59</a>
+        <a href="routes_accountRoutes.js.html">routes/accountRoutes.js</a>, <a href="routes_accountRoutes.js.html#line60">line 60</a>
     </li></ul></dd>
     
 
@@ -3054,7 +3143,6 @@ Content-Type: image/jpeg (или другой в зависимости от р�
 
 
 </div>
-
 
 
 <br class="clear">
