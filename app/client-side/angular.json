@@ -23,7 +23,7 @@
             "polyfills": [
               "zone.js"
             ],
-            "tsConfig": "src/tsconfig.app.json",
+            "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "scss",
             "assets": [
               {
@@ -97,7 +97,7 @@
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
             "include": [
-              "**/*.spec.ts"
+              "tests/**/*.spec.ts"
             ],
             "polyfills": [
               "zone.js",

@@ -1,8 +1,8 @@
 import { inject, TestBed } from '@angular/core/testing';
 import { provideHttpClientTesting, HttpTestingController } from '@angular/common/http/testing';
 import { HttpParams, provideHttpClient } from '@angular/common/http';
-import { AccountService } from '../../services/account.service';
-import { AccountCookieService } from '../../services/account-cookie.service';
+import { AccountService } from '../../src/services/account.service';
+import { AccountCookieService } from '../../src/services/account-cookie.service';
 
 import {
   BASE_URL,

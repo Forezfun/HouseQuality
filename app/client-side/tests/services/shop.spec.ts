@@ -1,5 +1,5 @@
 import { provideHttpClient } from '@angular/common/http';
-import { ShopService, furnitureShopData } from '../../services/shop.service';
+import { ShopService, furnitureShopData } from '../../src/services/shop.service';
 import { TestBed } from '@angular/core/testing';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { BASE_URL } from './mock-data';

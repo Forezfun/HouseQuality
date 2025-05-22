@@ -1,7 +1,7 @@
 import { TestBed, inject } from '@angular/core/testing';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideHttpClient } from '@angular/common/http';
-import { FurnitureModelControlService } from '../../services/furniture-model-control.service';
+import { FurnitureModelControlService } from '../../src/services/furniture-model-control.service';
 import { BASE_URL,FURNITURE_ID,JWT, MODEL_BLOB } from './mock-data';
 
 

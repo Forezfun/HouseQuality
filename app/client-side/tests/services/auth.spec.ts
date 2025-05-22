@@ -2,7 +2,7 @@ import { inject, TestBed } from '@angular/core/testing';
 import { provideHttpClient, HttpParams } from '@angular/common/http';
 import { provideHttpClientTesting, HttpTestingController } from '@angular/common/http/testing';
 
-import { AuthService } from '../../services/auth.service';
+import { AuthService } from '../../src/services/auth.service';
 import {
   BASE_URL,
   EMAIL_AUTH_DATA,

@@ -1,5 +1,5 @@
 import { TestBed } from "@angular/core/testing";
-import { CategoryService } from "../../services/category.service";
+import { CategoryService } from "../../src/services/category.service";
 import { BASE_URL, CATEGORY_RESPONSE } from "./mock-data";
 import { HttpClient } from '@angular/common/http';
 import { of, throwError } from 'rxjs';

@@ -1,5 +1,5 @@
-import { categoryData } from '../../services/category.service';
-import { furnitureFromServerData, furnitureClientData } from '../../services/furniture-card-control.service';
+import { categoryData } from '../../src/services/category.service';
+import { furnitureFromServerData, furnitureClientData } from '../../src/services/furniture-card-control.service';
 
 export const BASE_URL = 'http://localhost:4200/api/';
 export const JWT = 'test.jwt.token';

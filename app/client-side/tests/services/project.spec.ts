@@ -1,9 +1,9 @@
 import { TestBed } from '@angular/core/testing';
-import { ProjectService } from '../../services/project.service';
+import { ProjectService } from '../../src/services/project.service';
 import { provideHttpClient, HttpParams } from '@angular/common/http';
 import { provideHttpClientTesting, HttpTestingController } from '@angular/common/http/testing';
 import { BASE_URL, PROJECT_ID, PROJECT_NAME, JWT } from './mock-data';
-import { ReportService } from '../../services/report.service';
+import { ReportService } from '../../src/services/report.service';
 
 const BASE_SERVICE_URL = BASE_URL + 'project';
 

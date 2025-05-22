@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
-import { FinderService } from '../../services/finder.service';
+import { FinderService } from '../../src/services/finder.service';
 import { BASE_URL, QUERY, NON_EXISTENT_QUERY, MOCK_FURNITURE_RESPONSE, EMPTY_FURNITURE_RESPONSE} from './mock-data';
 import { provideHttpClient } from '@angular/common/http';
 
