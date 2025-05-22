@@ -24,7 +24,7 @@ ROUTER.use(async (request, result, next) => {
             const colorDir = path.join(projectDir, color);
             if (fs.existsSync(colorDir)) {
                 fs.rmSync(colorDir, { recursive: true });
-                fs.mkdirSync(colorDir);
+                fs.mkdirSync(colorDir, { recursive: true });
             }
         }
         next();
@@ -47,7 +47,7 @@ function ensureProjectAndColorDirectories(furnitureCardId, color) {
     }
 
     if (!fs.existsSync(COLOR_DIR)) {
-        fs.mkdirSync(COLOR_DIR);
+        fs.mkdirSync(COLOR_DIR, { recursive: true });
     }
 
     return COLOR_DIR;

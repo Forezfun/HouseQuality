@@ -35,7 +35,7 @@ const storage = multer.diskStorage({
     destination: (request, file, cb) => {
         const UPLOAD_DIR = path.join(__dirname, '..', 'uploads', 'avatars');
         if (!fs.existsSync(UPLOAD_DIR)) {
-            fs.mkdirSync(UPLOAD_DIR);
+            fs.mkdirSync(UPLOAD_DIR, { recursive: true });
         }
 
         removeOldAvatarIfExists(request.query.accountId, UPLOAD_DIR);

@@ -40,7 +40,7 @@ const storage = multer.diskStorage({
     destination: (request, file, cb) => {
         const uploadDir = path.join(__dirname, '..', 'uploads', 'models');
         if (!fs.existsSync(uploadDir)) {
-            fs.mkdirSync(uploadDir);
+            fs.mkdirSync(uploadDir, { recursive: true });
         }
         removeOldModelIfExists(request.query.furnitureCardId, uploadDir);
         cb(null, uploadDir);
