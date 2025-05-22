@@ -48,8 +48,8 @@ describe('AccountService ', () => {
       expect(req.request.method).toBe('POST');
       assertParams(req.request.body as HttpParams, ACCOUNT_DATA);
 
-      req.flush({message:SUCCESS_RESPONSE});
-      expect(await promise).toEqual({message:SUCCESS_RESPONSE});
+      req.flush({ message: SUCCESS_RESPONSE });
+      expect(await promise).toEqual({ message: SUCCESS_RESPONSE });
     });
 
     it('should delete jwt token with correct params', async () => {
@@ -58,20 +58,25 @@ describe('AccountService ', () => {
       const req = httpMock.expectOne(`${BASE_URL}account/jwt/delete?jwt=${JWT}`);
       expect(req.request.method).toBe('DELETE');
 
-      req.flush({message:SUCCESS_RESPONSE});
-      expect(await promise).toEqual({message:SUCCESS_RESPONSE});
+      req.flush({ message: SUCCESS_RESPONSE });
+      expect(await promise).toEqual({ message: SUCCESS_RESPONSE });
     });
 
     it('should update account data with correct params', async () => {
       const promise = service.PUTupdateSecondaryAccountData(UPDATE_DATA);
 
-      const req = httpMock.expectOne(`${BASE_URL}account`);
-      expect(req.request.method).toBe('PUT');
-      assertParams(req.request.body as HttpParams, UPDATE_DATA);
+      const req = httpMock.expectOne(request =>
+        request.method === 'PUT' &&
+        request.url === `${BASE_URL}account` &&
+        request.params.get('nickname') === UPDATE_DATA.nickname &&
+        request.params.has('jwt')
+      );
 
-      req.flush({message:SUCCESS_RESPONSE});
-      expect(await promise).toEqual({message:SUCCESS_RESPONSE});
+
+      req.flush({ message: SUCCESS_RESPONSE });
+      expect(await promise).toEqual({ message: SUCCESS_RESPONSE });
     });
+
 
     it('should delete account with correct params', async () => {
       const promise = service.DELETEaccount(JWT);
@@ -79,8 +84,8 @@ describe('AccountService ', () => {
       const req = httpMock.expectOne(`${BASE_URL}account?jwt=${JWT}`);
       expect(req.request.method).toBe('DELETE');
 
-      req.flush({message:SUCCESS_RESPONSE});
-      expect(await promise).toEqual({message:SUCCESS_RESPONSE});
+      req.flush({ message: SUCCESS_RESPONSE });
+      expect(await promise).toEqual({ message: SUCCESS_RESPONSE });
     });
 
     it('should get account data and transform furniture previewUrls', async () => {
@@ -116,9 +121,10 @@ describe('AccountService ', () => {
     });
 
     it('should return false when jwt does not exist', () => {
-      cookieServiceMock.getJwt.and.returnValue(null);
+      cookieServiceMock.getJwt.and.returnValue(undefined as unknown as string);
       expect(service.checkJwt()).toBeFalse();
     });
+
   });
 
   function assertParams(params: HttpParams, expected: Record<string, any>) {

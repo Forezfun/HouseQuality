@@ -70,12 +70,11 @@ describe('AuthService ', () => {
     it('should create short JWT by email', async () => {
       const promise = service.POSTcreateShortJWT(EMAIL);
 
-      const req = httpMock.expectOne(BASE + 'jwt/temporary');
-      expect(req.request.method).toBe('POST');
-
-      assertParams(req.request.body as HttpParams, {
-        email: EMAIL
-      });
+      const req = httpMock.expectOne(req =>
+        req.method === 'POST' &&
+        req.url === BASE + 'jwt/temporary' &&
+        req.params.get('email') === EMAIL
+      );
 
       req.flush(JWT_RESPONSE);
       expect(await promise).toEqual(JWT_RESPONSE);
@@ -89,16 +88,18 @@ describe('AuthService ', () => {
       const req = httpMock.expectOne(BASE + 'account');
       expect(req.request.method).toBe('PUT');
 
-      assertParams(req.request.body as HttpParams, {
+      expect(req.request.body).toEqual({
         accountType: 'email',
         jwt: CHANGE_DATA_EMAIL.jwt,
-        password: CHANGE_DATA_EMAIL.password
+        password: CHANGE_DATA_EMAIL.password,
+        email:EMAIL
       });
-
-      req.flush({message:SUCCESS_RESPONSE});
-      expect(await promise).toEqual({message:SUCCESS_RESPONSE});
+      
+      req.flush({ message: SUCCESS_RESPONSE });
+      expect(await promise).toEqual({ message: SUCCESS_RESPONSE });
     });
   });
+
 
   describe('Password reset code', () => {
     it('should request password reset code', async () => {

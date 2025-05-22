@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { ServerImageControlService } from '../../services/server-image-control.service';
-import { BASE_URL,JWT,FURNITURE_ID,COLOR,MOCK_IMAGE_FILE } from './mock-data';
+import { BASE_URL, JWT, FURNITURE_ID, COLOR, MOCK_IMAGE_FILE } from './mock-data';
 import { provideHttpClient } from '@angular/common/http';
 
 const mockImages = [MOCK_IMAGE_FILE, MOCK_IMAGE_FILE];
@@ -21,7 +21,7 @@ describe('ServerImageControlService', () => {
         ServerImageControlService,
         provideHttpClient(),
         provideHttpClientTesting()
-    ]
+      ]
     });
     service = TestBed.inject(ServerImageControlService);
     httpMock = TestBed.inject(HttpTestingController);
@@ -34,7 +34,7 @@ describe('ServerImageControlService', () => {
   it('should upload user avatar', async () => {
     const promise = service.POSTuploadUserAvatar(MOCK_IMAGE_FILE, JWT);
 
-    const req = httpMock.expectOne(`${BASE_URL}avatar/upload?jwt=${JWT}`);
+    const req = httpMock.expectOne(`${BASE_URL}account/avatar?jwt=${JWT}`);
     expect(req.request.method).toBe('POST');
     expect(req.request.body.has('image')).toBeTrue();
 
@@ -46,7 +46,7 @@ describe('ServerImageControlService', () => {
   it('should upload project images', async () => {
     const promise = service.POSTuploadProjectImages(COLOR, IMAGE_DATA, JWT, FURNITURE_ID);
 
-    const req = httpMock.expectOne(`${BASE_URL}furniture/images/upload/images?furnitureCardId=${FURNITURE_ID}&color=${COLOR}&idMainImage=1&jwt=${JWT}`);
+    const req = httpMock.expectOne(`${BASE_URL}furniture/images/upload?furnitureCardId=${FURNITURE_ID}&color=${COLOR}&idMainImage=1&jwt=${JWT}`);
     expect(req.request.method).toBe('POST');
     expect(req.request.body.getAll('images').length).toBe(2);
 
@@ -54,6 +54,7 @@ describe('ServerImageControlService', () => {
 
     await expectAsync(promise).toBeResolvedTo({ message: 'uploaded' });
   });
+
 
   it('should delete project color', async () => {
     const promise = service.DELETEprojectColor(JWT, FURNITURE_ID, COLOR);
@@ -92,13 +93,13 @@ describe('ServerImageControlService', () => {
     const avatarUrl = service.GETaccountAvatar(JWT);
     const mainImageUrl = service.GETmainImage(FURNITURE_ID, COLOR);
 
-    expect(avatarUrl).toBe(`${BASE_URL}avatar?jwt=${JWT}`);
+    expect(avatarUrl).toBe(`${BASE_URL}account/avatar?jwt=${JWT}`);
     expect(mainImageUrl).toBe(`${BASE_URL}furniture/images/main?furnitureCardId=${FURNITURE_ID}&color=${COLOR}`);
   });
 
   it('should handle POSTuploadUserAvatar error', async () => {
     const promise = service.POSTuploadUserAvatar(MOCK_IMAGE_FILE, JWT);
-    const req = httpMock.expectOne(`${BASE_URL}avatar/upload?jwt=${JWT}`);
+    const req = httpMock.expectOne(`${BASE_URL}account/avatar?jwt=${JWT}`);
     req.flush('upload error', { status: 500, statusText: 'Server Error' });
     await expectAsync(promise).toBeRejected();
   });

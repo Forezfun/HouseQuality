@@ -2,10 +2,10 @@ import { TestBed } from '@angular/core/testing';
 import { ProjectService } from '../../services/project.service';
 import { provideHttpClient, HttpParams } from '@angular/common/http';
 import { provideHttpClientTesting, HttpTestingController } from '@angular/common/http/testing';
-import { BASE_URL, PROJECT_ID, PROJECT_NAME,JWT } from './mock-data';
+import { BASE_URL, PROJECT_ID, PROJECT_NAME, JWT } from './mock-data';
 import { ReportService } from '../../services/report.service';
 
-const BASE_SERVICE_URL = BASE_URL + 'projects/';
+const BASE_SERVICE_URL = BASE_URL + 'project';
 
 describe('ProjectService', () => {
     let service: ProjectService;
@@ -83,23 +83,26 @@ describe('ProjectService', () => {
         };
         const promise = service.PUTupdateProject(JWT, PROJECT_ID, projectData);
 
-        const req = httpMock.expectOne(BASE_SERVICE_URL);
-        expect(req.request.method).toBe('PUT');
+        const req = httpMock.expectOne(req =>
+            req.method === 'PUT' &&
+            req.url === BASE_SERVICE_URL &&
+            req.params.get('jwt') === JWT &&
+            req.params.get('projectId') === PROJECT_ID
+        );
 
-        const params = req.request.body as HttpParams;
-        expect(params.get('jwt')).toBe(JWT);
-        expect(params.get('projectId')).toBe(PROJECT_ID);
-        expect(params.get('name')).toBe(PROJECT_NAME);
-        expect(params.get('rooms')).toBe(JSON.stringify([]));
+        expect(req.request.body).toEqual(projectData);
 
         req.flush({ message: 'Updated successfully' });
         expect(await promise).toEqual({ message: 'Updated successfully' });
     });
 
+
     it('should handle GETgetProject error', async () => {
         const promise = service.GETgetProject(JWT, PROJECT_ID);
 
-        const req = httpMock.expectOne(`${BASE_SERVICE_URL}?jwt=${JWT}&projectId=${PROJECT_ID}`);
+        const expectedUrl = `${BASE_SERVICE_URL}?jwt=${JWT}&projectId=${PROJECT_ID}`;
+
+        const req = httpMock.expectOne(expectedUrl);
         expect(req.request.method).toBe('GET');
 
         req.error(new ProgressEvent('Network error'));

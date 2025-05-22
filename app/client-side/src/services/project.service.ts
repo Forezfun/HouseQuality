@@ -50,7 +50,7 @@ export interface projectServerInformation extends projectInformation {
 })
 export class ProjectService {
   /** Базовый URL для API запросов к проектам */
-  private baseServiceUrl = baseUrl + 'project/';
+  private baseServiceUrl = baseUrl + 'project';
 
   constructor(
     private httpModule: HttpClient,
@@ -122,7 +122,7 @@ export class ProjectService {
       .set('jwt', jwt)
       .set('roomId', roomId);
 
-    const RESPONSE = await firstValueFrom(this.httpModule.get(this.baseServiceUrl + 'room', { params: HTTP_PARAMS })) as reportResponse;
+    const RESPONSE = await firstValueFrom(this.httpModule.get(this.baseServiceUrl + '/room', { params: HTTP_PARAMS })) as reportResponse;
 
     RESPONSE.furnitures = RESPONSE.furnitures.map(furnitureData => {
       furnitureData.previewUrl = baseUrl + furnitureData.previewUrl;

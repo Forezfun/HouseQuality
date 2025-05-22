@@ -68,7 +68,7 @@ export class AuthService {
     let HTTP_PARAMS = new HttpParams()
       .set('email', email);
 
-    return firstValueFrom(this.httpModule.post(this.baseServiceUrl + 'jwt/temporary', { params: HTTP_PARAMS })) as Promise<{ jwt: string }>;
+    return firstValueFrom(this.httpModule.post(this.baseServiceUrl + 'jwt/temporary',null, { params: HTTP_PARAMS })) as Promise<{ jwt: string }>;
   }
 
   /**

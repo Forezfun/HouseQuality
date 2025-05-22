@@ -7,7 +7,7 @@ import { provideHttpClient } from '@angular/common/http';
 describe('FinderService', () => {
     let service: FinderService;
     let httpMock: HttpTestingController;
-    const BASE_URL_WITH_QUERY = BASE_URL + 'finder?q=';
+    const BASE_URL_WITH_QUERY = BASE_URL + 'find?q=';
 
     beforeEach(() => {
         TestBed.configureTestingModule({
