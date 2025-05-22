@@ -9,15 +9,22 @@ import { NotificationService } from '../../services/notification.service';
 import { AccountCookieService } from '../../services/account-cookie.service';
 import { roomData } from '../../services/project.service';
 
-
-
+/**
+ * Интерфейс для настроек сетки комнаты.
+ */
 interface roomSpanSettings {
+  /** Начальная координата X */
   startX: number;
+  /** Начальная координата Y */
   startY: number;
+  /** Конечная координата X */
   endX: number;
+  /** Конечная координата Y */
   endY: number;
+  /** Расстояние между элементами */
   gap: number;
 }
+
 @Component({
   selector: 'app-plan-house',
   standalone: true,
@@ -36,76 +43,154 @@ export class PlanHouseComponent implements AfterViewInit, OnInit {
     private accountCookieService: AccountCookieService
   ) { }
 
+  /** Предыдущее значение grid-area для комнаты */
   private previousGridArea!: string;
+
+  /** HTML-элемент для отображения комнаты */
   private roomSpan!: HTMLSpanElement;
+
+  /** Настройки сетки комнаты */
   private roomSpanSettings!: roomSpanSettings;
+
+  /** Флаг для отслеживания состояния перетаскивания */
   private isDragging = false;
+
+  /** Флаг для отслеживания одиночного клика */
   private isClick = false;
+
+  /** Таймер для обработки кликов */
   private clickTimer: any;
+
+  /** Флаг для отслеживания двойного клика */
   private isDoubleClick = false;
-  private toggleModuleButton!: HTMLButtonElement
+
+  /** Кнопка для переключения модуля */
+  private toggleModuleButton!: HTMLButtonElement;
+
+  /** HTML-форма для ввода данных комнаты */
   private formElement!: HTMLFormElement;
+
+  /** Старый размер комнаты при просмотре */
   private oldSizeViewRoom: {
     height: number;
     width: number;
-  } | undefined = undefined
-  protected lastPlanHouse: roomData | undefined = undefined
-  protected categoryArray: categoryData[] = []
-  protected isGuideIncluded: boolean = false
+  } | undefined = undefined;
+
+  /** Последний план дома */
+  protected lastPlanHouse: roomData | undefined = undefined;
+
+  /** Массив категорий */
+  protected categoryArray: categoryData[] = [];
+
+  /** Флаг для включения руководства */
+  protected isGuideIncluded: boolean = false;
+
+  /** Флаг для отображения руководства */
   protected isGuideVisible: boolean = true;
-  public currentViewRoom: undefined | number = undefined
-  public sceneOpenToggle: boolean = false
-  public currentIdClickedRoom: number | undefined = undefined
-  public guideTemplate!: TemplateRef<any>
+
+  /** Текущая комната для просмотра */
+  public currentViewRoom: undefined | number = undefined;
+
+  /** Флаг для переключения сцены */
+  public sceneOpenToggle: boolean = false;
+
+  /** ID текущей выбранной комнаты */
+  public currentIdClickedRoom: number | undefined = undefined;
+
+  /** Шаблон для руководства */
+  public guideTemplate!: TemplateRef<any>;
 
   @Input()
-  planHouse!: roomData[]
-  @ViewChild('scene') sceneComponent!: SceneComponent;
-  @Output() initialized = new EventEmitter<void>();
+  /** План дома */
+  planHouse!: roomData[];
+
+  @ViewChild('scene') 
+  /** Компонент сцены */
+  sceneComponent!: SceneComponent;
+
+  @Output() 
+  /** Событие инициализации */
+  initialized = new EventEmitter<void>();
+
   @Output()
-  planHouseEmitter = new EventEmitter<roomData[]>()
+  /** Событие для передачи плана дома */
+  planHouseEmitter = new EventEmitter<roomData[]>();
+
   @Output()
-  callSaveEmitter = new EventEmitter()
+  /** Событие для сохранения */
+  callSaveEmitter = new EventEmitter();
+
   @ViewChild('roomsGuideTemplate1', { static: true })
+  /** Шаблон руководства для комнат (1) */
   roomsGuideTemplate1!: TemplateRef<any>;
+
   @ViewChild('roomsGuideTemplate2', { static: true })
+  /** Шаблон руководства для комнат (2) */
   roomsGuideTemplate2!: TemplateRef<any>;
+
   @ViewChild('roomGuideTemplate', { static: true })
+  /** Шаблон руководства для комнаты */
   roomGuideTemplate!: TemplateRef<any>;
 
   ngOnInit(): void {
-    this.checkGuideInclude()
-    this.initCategories()
+    this.checkGuideInclude();
+    this.initCategories();
   }
+
   ngAfterViewInit(): void {
     const PARENT_ELEMENT = this.elementRef.nativeElement.parentElement;
-    if (PARENT_ELEMENT.classList.contains('projectPreviewSpan')) this.isGuideIncluded = false
+    if (PARENT_ELEMENT.classList.contains('projectPreviewSpan')) this.isGuideIncluded = false;
 
-    this.guideTemplate = this.roomsGuideTemplate1
-    this.cdr.detectChanges()
+    this.guideTemplate = this.roomsGuideTemplate1;
+    this.cdr.detectChanges();
     this.roomSpan = this.elementRef.nativeElement.querySelector('.roomSpan') as HTMLSpanElement;
     this.calculateRoomSpanSettings();
     this.formElement = this.elementRef.nativeElement.querySelector('form') as HTMLFormElement;
-    this.toggleModuleButton = this.elementRef.nativeElement.querySelector('.addModuleBtn')
+    this.toggleModuleButton = this.elementRef.nativeElement.querySelector('.addModuleBtn');
     this.initialized.emit();
   }
 
+  /**
+   * Инициализация категорий.
+   */
   private async initCategories() {
-    this.categoryArray = (await this.categoryService.GETgetAllCategories()).categoryArray
+    this.categoryArray = (await this.categoryService.GETgetAllCategories()).categoryArray;
   }
+
+  /**
+   * Отображение руководства.
+   */
   private showGuide() {
     this.isGuideVisible = true;
   }
+
+  /**
+   * Проверка включения руководства.
+   */
   private checkGuideInclude() {
-    this.isGuideIncluded = this.accountCookieService.getGuideRule() === 'false' ? false : true
-    this.isGuideVisible = this.isGuideIncluded
+    this.isGuideIncluded = this.accountCookieService.getGuideRule() === 'false' ? false : true;
+    this.isGuideVisible = this.isGuideIncluded;
   }
+
+  /**
+   * Эмитирует текущее состояние плана дома.
+   */
   private emitPlanHouse() {
-    this.planHouseEmitter.emit(this.planHouse)
+    this.planHouseEmitter.emit(this.planHouse);
   }
+
+  /**
+   * Сохраняет текущий план дома.
+   */
   private saveHouse() {
-    this.callSaveEmitter.emit()
+    this.callSaveEmitter.emit();
   }
+
+  /**
+   * Находит свободное место для комнаты.
+   * @param roomProportions Пропорции комнаты.
+   * @returns Строка grid-area или false, если места нет.
+   */
   private findFreeSpace(roomProportions: modelInterface): string | false {
     const GRID_SIZE = 10;
     const GRID_OCCUPIED: boolean[][] = Array.from({ length: GRID_SIZE }, () => Array(GRID_SIZE).fill(false));
@@ -151,6 +236,9 @@ export class PlanHouseComponent implements AfterViewInit, OnInit {
     this.notification.setError('Нет места', 15000)
     return false;
   }
+  /**
+   * Рассчитывает настройки сетки для комнаты.
+   */
   private calculateRoomSpanSettings() {
     const ROOM_SPAN_ELEMENT = this.roomSpan.getBoundingClientRect();
     this.roomSpanSettings = {
@@ -161,6 +249,12 @@ export class PlanHouseComponent implements AfterViewInit, OnInit {
       gap: +window.getComputedStyle(this.roomSpan).getPropertyValue('gap').slice(0, -2),
     };
   }
+  /**
+   * Проверяет, занята ли указанная область.
+   * @param gridArea Область сетки.
+   * @param currentRoomIndex Индекс текущей комнаты.
+   * @returns true, если область занята.
+   */
   private isAreaOccupied(gridArea: string, currentRoomIndex: number): boolean {
     const [startRow, startColumn, endRow, endColumn] = gridArea.split('/').map(Number);
 
@@ -180,6 +274,12 @@ export class PlanHouseComponent implements AfterViewInit, OnInit {
 
     return false;
   }
+  /**
+   * Рассчитывает область сетки для объекта.
+   * @param objectX Координата X объекта.
+   * @param objectY Координата Y объекта.
+   * @returns Строка grid-area или undefined.
+   */
   private calculateGridArea(objectX: number, objectY: number): string | undefined {
     if (this.currentIdClickedRoom === undefined) return;
     const ROOM_PROPORTIONS = this.planHouse[this.currentIdClickedRoom].roomProportions;
@@ -198,6 +298,11 @@ export class PlanHouseComponent implements AfterViewInit, OnInit {
 
     return `${START_ROW} / ${START_COLUMN} / ${END_ROW + 1} / ${END_COLUMN + 1}`;
   }
+  /**
+   * Сбрасывает позицию комнаты.
+   * @param clientX Координата X.
+   * @param clientY Координата Y.
+   */
   private resetRoomPosition(clientX: number, clientY: number) {
     const TARGET_ELEMENT = this.roomSpan.querySelector(`[data-index="${this.currentIdClickedRoom}"]`) as HTMLDivElement;
     if (TARGET_ELEMENT) {
@@ -258,8 +363,12 @@ export class PlanHouseComponent implements AfterViewInit, OnInit {
     }, 250)
 
   }
-  @HostListener('document:touchmove', ['$event'])
+  /**
+   * Обрабатывает событие перемещения мыши.
+   * @param event Событие мыши или касания.
+   */
   @HostListener('document:mousemove', ['$event'])
+  @HostListener('document:touchmove', ['$event'])
   private onMouseMove(event: MouseEvent | TouchEvent) {
     event.preventDefault();
     if (this.isDragging && this.currentIdClickedRoom !== undefined) {
@@ -534,7 +643,9 @@ export class PlanHouseComponent implements AfterViewInit, OnInit {
       this.renderer.setStyle(this.roomSpan, 'display', 'flex')
     }, 0)
   }
-
+  /**
+   * Форма для ввода данных комнаты.
+   */
   protected roomForm = new FormGroup({
     width: new FormControl<number | null>(null, [
       Validators.required,

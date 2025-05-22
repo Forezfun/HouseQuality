@@ -12,13 +12,13 @@ const { searchPublications, transliterateQuery } = require('../helpers/findPubli
  * <h4>/find</h4>
  * <p>Поиск z-функцией по сложенным в один текст описанию и названию мебели с параметрами:</p>
  * <p>-Переданный запрос</p>
- * <p>-Переведенный по раскладке (a-ф,d-в) переданный запрос</p>
+ * <p>-Переведенный транслитом переданный запрос</p>
  * <h4>/shop</h4>
  * <p>Игнорирование уже полученных данных</p>
  * <p>Поиск по параметрам(query)</p>
  * <p>Поиск z-функцией по сложенным в один текст описанию и названию мебели с параметрами:</p>
  * <p>-Переданный запрос</p>
- * <p>-Переведенный по раскладке (a-ф,d-в) переданный запрос</p>
+ * <p>-Переведенный транслитом переданный запрос</p>
  * <h3>Для чего что подходит</h3>
  * <h4>/find</h4>
  * <p>Быстрое получение малоточных данных</p>
@@ -127,7 +127,7 @@ const { searchPublications, transliterateQuery } = require('../helpers/findPubli
  *
  * @see Посмотрите {@link module:category | Category} для возможности получения списка категорий.
  */
-ROUTER.get('/category', async (request, result) => {
+ROUTER.get('/', async (request, result) => {
     try {
         let START_RANGE = Number(request.query.startRange);
         const CATEGORY_NAME = request.query.category;
@@ -140,6 +140,7 @@ ROUTER.get('/category', async (request, result) => {
         }
 
         const FIND_PARAMS = getFindParams(CATEGORY_NAME, filtersObject);
+        const TOTAL_COUNT = await FURNITURE_CARD.countDocuments(FIND_PARAMS);
         let furnitureCardsArray = await FURNITURE_CARD.find(FIND_PARAMS)
             .skip(START_RANGE)
             .limit(10);
@@ -147,26 +148,31 @@ ROUTER.get('/category', async (request, result) => {
         START_RANGE += 10;
 
         if (furnitureCardsArray.length < 10) {
-            const TOTAL_COUNT = await FURNITURE_CARD.countDocuments(FIND_PARAMS);
-
             while (START_RANGE < TOTAL_COUNT && furnitureCardsArray.length < 10) {
                 const nextBatch = await FURNITURE_CARD.find(FIND_PARAMS)
                     .skip(START_RANGE)
-                    .limit(10);
+                    .limit(10)
+                    .exec();
 
                 furnitureCardsArray.push(...nextBatch);
                 START_RANGE += 10;
             }
         }
 
-        if (filtersObject?.name) {
-            let searchResults = searchPublications(furnitureCardsArray, filtersObject.name, true);
+        const ADD_FIND_PARAMS = {
+            threshold: 0.5,
+            getTenItems: false
+        }
 
-            if (searchResults.length < 10) {
+        if (filtersObject?.name) {
+            let searchResults = searchPublications(furnitureCardsArray, filtersObject.name, ADD_FIND_PARAMS);
+
+            if (searchResults.length < 10 && TOTAL_COUNT > 10) {
+                ADD_FIND_PARAMS.threshold = 0.7;
                 const additionalResults = searchPublications(
                     furnitureCardsArray,
                     transliterateQuery(filtersObject.name),
-                    true
+                    ADD_FIND_PARAMS
                 );
 
                 const existingIds = new Set(searchResults.map(doc => doc._id.toString()));

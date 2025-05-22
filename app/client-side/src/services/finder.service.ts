@@ -2,24 +2,46 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { baseUrl } from '.';
 import { BehaviorSubject, firstValueFrom } from 'rxjs';
+
+/**
+ * Сервис для поиска мебели по названию
+ * @class FinderService
+ * @injectable
+ */
 @Injectable({
   providedIn: 'root'
 })
 export class FinderService {
-  constructor(private httpModule: HttpClient) { }
-  private inputFurnitureNameSubject = new BehaviorSubject<string>('');
+
+  /** Базовый URL для запросов поиска */
   private baseServiceUrl = baseUrl + 'find?q=';
 
+  /** BehaviorSubject для хранения текущего названия мебели для поиска */
+  private inputFurnitureNameSubject = new BehaviorSubject<string>('');
+
+  /** Observable для подписки на изменения названия мебели */
   furnitureName$ = this.inputFurnitureNameSubject.asObservable();
 
-  setFurnitureName(name:string){
+  /**
+   * Конструктор сервиса
+   * @param httpModule - HTTP клиент для выполнения запросов
+   */
+  constructor(private httpModule: HttpClient) { }
+
+  /**
+   * Устанавливает текущее название мебели для поиска
+   * @param name - Название мебели
+   */
+  setFurnitureName(name: string): void {
     this.inputFurnitureNameSubject.next(name);
   }
+
   /**
-   * Получение 10-ти или меньше найденых публикаций по строке
-   * @param query Запрос пользователя
+   * Выполняет поиск мебели по названию, возвращая до 10 найденных публикаций
+   * @param query - Строка запроса поиска
+   * @returns Promise с результатами поиска (массив публикаций или любая структура, возвращаемая сервером)
    */
-  GETfindFurnitures(query: string) {
+  GETfindFurnitures(query: string): Promise<any> {
     return firstValueFrom(this.httpModule.get(this.baseServiceUrl + query));
   }
 }

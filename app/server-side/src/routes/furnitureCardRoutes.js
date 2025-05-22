@@ -5,7 +5,7 @@ const FURNITURE_CARD = require('../models/furnitureCard');
 const IMAGES_FURNITURE = require('../models/imagesFurniture');
 const PROJECT = require('../models/project');
 const AUTH_ACCOUNT = require('../models/authAccount');
-const sendEmail = require('../sendcode');
+const sendEmail = require('../helpers/sendcode');
 
 /**
  * @module furnitureCard
@@ -55,7 +55,6 @@ ROUTER.post('/', async (request, result) => {
         request.body.colors.forEach(color => { FURNITURE_CARD_ITEM.colors.push({ color: color.color, idImages: '' }) })
         if (request.body.additionalData !== undefined) {
             const ADDITIONAL_DATA = request.body.additionalData;
-            console.log(ADDITIONAL_DATA)
 
             Object.keys(ADDITIONAL_DATA).forEach(propertyKey => {
                 FURNITURE_CARD_ITEM.additionalData[propertyKey] = ADDITIONAL_DATA[propertyKey];
@@ -64,7 +63,6 @@ ROUTER.post('/', async (request, result) => {
         await FURNITURE_CARD_ITEM.save()
         result.status(201).json({ furnitureData: FURNITURE_CARD_ITEM })
     } catch (error) {
-        console.log(error)
         result.status(400).json({ message: error.message });
     }
 });
@@ -94,32 +92,30 @@ ROUTER.put('/', async (request, result) => {
         const JWT = request.query.jwt;
         const FURNITURE_CARD_ID = request.query.furnitureCardId
         const ACCOUNT_ID = await checkUserAccess(JWT);
-        if (!ACCOUNT_ID||!FURNITURE_CARD_ID) return result.status(404).json({ message: 'Аккаунт не найден' });
+        if (!ACCOUNT_ID || !FURNITURE_CARD_ID) return result.status(404).json({ message: 'Аккаунт не найден' });
         let FURNITURE_CARD_ITEM = await FURNITURE_CARD.findById(FURNITURE_CARD_ID)
-        if (!FURNITURE_CARD_ITEM) return result.status(404).json({ message: 'Това не найден' });
+        if (!FURNITURE_CARD_ITEM) return result.status(404).json({ message: 'Товар не найден' });
 
         FURNITURE_CARD_ITEM.name = request.body.name;
         FURNITURE_CARD_ITEM.description = request.body.description;
         FURNITURE_CARD_ITEM.proportions = request.body.proportions,
-            FURNITURE_CARD_ITEM.colors = request.body.colors.map(color => { return ({ color: color.color, idImages: '' }) })
+        FURNITURE_CARD_ITEM.colors = request.body.colors.map(color => { return ({ color: color.color, idImages: '' }) })
         FURNITURE_CARD_ITEM.shops = request.body.shops;
         FURNITURE_CARD_ITEM.additionalData = {}
 
         if (request.body.additionalData !== undefined) {
             const ADDITIONAL_DATA = request.body.additionalData;
-            console.log(ADDITIONAL_DATA)
 
             Object.keys(ADDITIONAL_DATA).forEach(propertyKey => {
                 FURNITURE_CARD_ITEM.additionalData[propertyKey] = ADDITIONAL_DATA[propertyKey]
-                console.log(FURNITURE_CARD_ITEM.additionalData[propertyKey])
             });
 
             await FURNITURE_CARD_ITEM.save()
 
         }
-        FURNITURE_CARD_ITEM.markModified('additionalData');
+
         await FURNITURE_CARD_ITEM.save()
-        console.log(FURNITURE_CARD_ITEM)
+
         result.status(201).json({ message: 'Товар успешно обновлен' })
     } catch (error) {
         result.status(400).json({ message: error.message });
@@ -228,7 +224,6 @@ async function deleteUsedObject(furnitureCardId, furnitureName) {
         const PROJECTS = await PROJECT.find(
             { "rooms.objects.objectId": furnitureCardId }
         );
-
         for (const projectData of PROJECTS) {
             try {
                 const AUTH_DATA = await AUTH_ACCOUNT.findOne({ accountId: projectData.authorId });

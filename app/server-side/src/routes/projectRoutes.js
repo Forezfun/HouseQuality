@@ -224,7 +224,7 @@ async function proccessFunriture(funritureId) {
  * 
  * @example response - 201 - Успех
  * {
- *   "message": "Проект удален"
+ *   "message": "Проект обновлен"
  * }
  * 
  * @example response - 404 - Проект или аккаунт не найден
@@ -248,7 +248,7 @@ ROUTER.put('/', async (request, result) => {
     PROJECT_ITEM.name = request.body.name
     PROJECT_ITEM.rooms = request.body.rooms
     await PROJECT_ITEM.save()
-    result.status(201).json({ message: 'Проект удален' });
+    result.status(201).json({ message: 'Проект обновлен' });
   } catch (error) {
     result.status(500).json({ message: error.message });
   }

@@ -1,0 +1,3395 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>house-quality documentation</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+	   <link rel="stylesheet" href="../styles/style.css">
+        <link rel="stylesheet" href="../styles/dark.css">
+    </head>
+    <body>
+          <script>
+               // Blocking script to avoid flickering dark mode
+               // Dark mode toggle button
+               var useDark = window.matchMedia('(prefers-color-scheme: dark)');
+               var darkModeState = useDark.matches;
+               var $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               var $darkModeToggles = document.querySelectorAll('.dark-mode-switch');
+               var darkModeStateLocal = localStorage.getItem('compodoc_darkmode-state');
+
+               function checkToggle(check) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].checked = check;
+                    }
+               }
+
+               function toggleDarkMode(state) {
+                    if (window.localStorage) {
+                         localStorage.setItem('compodoc_darkmode-state', state);
+                    }
+
+                    checkToggle(state);
+
+                    const hasClass = document.body.classList.contains('dark');
+
+                    if (state) {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.add('dark');
+                         }
+                         if (!hasClass) {
+                              document.body.classList.add('dark');
+                         }
+                    } else {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.remove('dark');
+                         }
+                         if (hasClass) {
+                              document.body.classList.remove('dark');
+                         }
+                    }
+               }
+
+               useDark.addEventListener('change', function (evt) {
+                    toggleDarkMode(evt.matches);
+               });
+               if (darkModeStateLocal) {
+                    darkModeState = darkModeStateLocal === 'true';
+               }
+               toggleDarkMode(darkModeState);
+          </script>
+
+        <div class="navbar navbar-default navbar-fixed-top d-md-none p-0">
+               <div class="d-flex">
+                    <a href="../" class="navbar-brand">house-quality documentation</a>
+                    <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+               </div>
+        </div>
+
+        <div class="xs-menu menu" id="mobile-menu">
+                <div id="book-search-input" role="search"><input type="text" placeholder="Type to search"></div>            <compodoc-menu></compodoc-menu>
+        </div>
+
+        <div class="container-fluid main">
+           <div class="row main">
+               <div class="d-none d-md-block menu">
+                   <compodoc-menu mode="normal"></compodoc-menu>
+               </div>
+               <!-- START CONTENT -->
+               <div class="content component">
+                   <div class="content-data">
+
+
+
+
+<ol class="breadcrumb">
+  <li class="breadcrumb-item">Components</li>
+  <li class="breadcrumb-item"
+  >
+  CreateFurnitureComponent</li>
+</ol>
+
+<ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item">
+            <a href="#info" class="nav-link active"
+                role="tab" id="info-tab" data-bs-toggle="tab" data-link="info">Info</a>
+        </li>
+        <li class="nav-item">
+            <a href="#source" class="nav-link"
+                role="tab" id="source-tab" data-bs-toggle="tab" data-link="source">Source</a>
+        </li>
+        <li class="nav-item">
+            <a href="#templateData" class="nav-link"
+                role="tab" id="templateData-tab" data-bs-toggle="tab" data-link="template">Template</a>
+        </li>
+        <li class="nav-item">
+            <a href="#styleData" class="nav-link"
+                role="tab" id="styleData-tab" data-bs-toggle="tab" data-link="style">Styles</a>
+        </li>
+        <li class="nav-item">
+            <a href="#tree" class="nav-link"
+                role="tab" id="tree-tab" data-bs-toggle="tab" data-link="dom-tree">DOM Tree</a>
+        </li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane fade active in" id="info"><p class="comment">
+    <h3>File</h3>
+</p>
+<p class="comment">
+    <code>src/components/create-furnitre/create-furniture.component.ts</code>
+</p>
+
+
+
+
+    <p class="comment">
+        <h3>Implements</h3>
+    </p>
+    <p class="comment">
+                <code>OnInit</code>
+                <code>AfterViewInit</code>
+    </p>
+
+
+<section data-compodoc="block-metadata">
+    <h3>Metadata</h3>
+    <table class="table table-sm table-hover metadata">
+        <tbody>
+
+
+
+
+
+
+
+
+
+
+
+
+            <tr>
+                <td class="col-md-3">selector</td>
+                <td class="col-md-9"><code>app-create-furniture</code></td>
+            </tr>
+
+            <tr>
+                <td class="col-md-3">standalone</td>
+                <td class="col-md-9"><code>true</code></td>
+            </tr>
+
+            <tr>
+                <td class="col-md-3">imports</td>
+                <td class="col-md-9">
+                            <code>ReactiveFormsModule</code>
+                            <code>NgClass</code>
+                                <code><a href="../directives/AutoHeightDirective.html" target="_self" >AutoHeightDirective</a></code>
+                                <code><a href="../components/ImageSliderComponent.html" target="_self" >ImageSliderComponent</a></code>
+                            <code>NgFor</code>
+                            <code>NgIf</code>
+                            <code>ReactiveFormsModule</code>
+                            <code>NgTemplateOutlet</code>
+                            <code>FormsModule</code>
+                            <code>CostFormatPipe</code>
+                </td>
+            </tr>
+
+            <tr>
+                <td class="col-md-3">styleUrls</td>
+                <td class="col-md-9"><code>./create-furniture.component.scss</code></td>
+            </tr>
+
+
+
+            <tr>
+                <td class="col-md-3">templateUrl</td>
+                <td class="col-md-9"><code>./create-furniture.component.html</code></td>
+            </tr>
+
+
+
+
+
+
+
+
+        </tbody>
+    </table>
+</section>
+
+    <section data-compodoc="block-index">
+    <h3 id="index">Index</h3>
+    <table class="table table-sm table-bordered index-table">
+        <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Properties</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                    <span class="modifier">Protected</span>
+                                <a href="#addColorVisible" >addColorVisible</a>
+                            </li>
+                            <li>
+                                    <span class="modifier"></span>
+                                    <span class="modifier">Private</span>
+                                <a href="#additionalModuleTemplate" >additionalModuleTemplate</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#addModule" >addModule</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Protected</span>
+                                <a href="#addModuleTemplate" >addModuleTemplate</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Protected</span>
+                                <a href="#categoryArray" >categoryArray</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Protected</span>
+                                <a href="#colorForm" >colorForm</a>
+                            </li>
+                            <li>
+                                    <span class="modifier"></span>
+                                    <span class="modifier">Private</span>
+                                <a href="#colorModuleTemplate" >colorModuleTemplate</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#currentColorId" >currentColorId</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#furnitureModelInput" >furnitureModelInput</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Protected</span>
+                                <a href="#isMobileView" >isMobileView</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Protected</span>
+                                <a href="#lastClickedColor" >lastClickedColor</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Protected</span>
+                                <a href="#lastClickedShop" >lastClickedShop</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Protected</span>
+                                <a href="#proportionsForm" >proportionsForm</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Protected</span>
+                                <a href="#shopForm" >shopForm</a>
+                            </li>
+                            <li>
+                                    <span class="modifier"></span>
+                                    <span class="modifier">Private</span>
+                                <a href="#shopsModuleTemplate" >shopsModuleTemplate</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Methods</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                    <span class="modifier">Protected</span>
+                                <a href="#addColor" >addColor</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Protected</span>
+                                <a href="#addShop" >addShop</a>
+                            </li>
+                            <li>
+                                    <span class="modifier"></span>
+                                    <span class="modifier">Private</span>
+                                <a href="#checkViewport" >checkViewport</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Protected</span>
+                                <a href="#closeAddModule" >closeAddModule</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#deleteColor" >deleteColor</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Protected</span>
+                                <a href="#deleteShop" >deleteShop</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Protected</span>
+                                <a href="#getfilterData" >getfilterData</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                    <span class="modifier">Async</span>
+                                <a href="#initCategories" >initCategories</a>
+                            </li>
+                            <li>
+                                <a href="#ngAfterViewInit" >ngAfterViewInit</a>
+                            </li>
+                            <li>
+                                <a href="#ngOnInit" >ngOnInit</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#numberValidator" >numberValidator</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Protected</span>
+                                    <span class="modifier">Async</span>
+                                <a href="#onInputImages" >onInputImages</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#openAdditional" >openAdditional</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#openColorModule" >openColorModule</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Protected</span>
+                                <a href="#openFurnitureVariant" >openFurnitureVariant</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#openShopsModule" >openShopsModule</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Protected</span>
+                                <a href="#removeImages" >removeImages</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Protected</span>
+                                <a href="#saveAdditional" >saveAdditional</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Inputs</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                <a href="#furnitureData" >furnitureData</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+
+
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>HostListeners</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                <a href="#window:resize" >window:resize</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+        </tbody>
+    </table>
+</section>
+
+    <section data-compodoc="block-constructor">
+    <h3 id="constructor">Constructor</h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+<code>constructor(elementRef: ElementRef, changeDetectorRef: ChangeDetectorRef, clientImageControl: <a href="../injectables/ClientImageControlService.html" target="_self">ClientImageControlService</a>, categoryService: <a href="../injectables/CategoryService.html" target="_self">CategoryService</a>, notification: <a href="../injectables/NotificationService.html" target="_self">NotificationService</a>)</code>
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="20" class="link-to-prism">src/components/create-furnitre/create-furniture.component.ts:20</a></div>
+                            </td>
+                        </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                            <div class="io-description"><p>Конструктор компонента CreateFurnitureComponent</p>
+</div>
+                            <div>
+                                    <b>Parameters :</b>
+                                    <table class="params">
+                                        <thead>
+                                            <tr>
+                                                <td>Name</td>
+                                                    <td>Type</td>
+                                                <td>Optional</td>
+                                                    <td>Description</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                                <tr>
+                                                        <td>elementRef</td>
+                                                  
+                                                        <td>
+                                                                    <code>ElementRef</code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                        <td>
+                                                                <ul>
+<li>ссылка на DOM-элемент компонента</li>
+</ul>
+
+                                                        </td>
+                                                </tr>
+                                                <tr>
+                                                        <td>changeDetectorRef</td>
+                                                  
+                                                        <td>
+                                                                    <code>ChangeDetectorRef</code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                        <td>
+                                                                <ul>
+<li>сервис для ручного обнаружения изменений</li>
+</ul>
+
+                                                        </td>
+                                                </tr>
+                                                <tr>
+                                                        <td>clientImageControl</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/ClientImageControlService.html" target="_self" >ClientImageControlService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                        <td>
+                                                                <ul>
+<li>сервис для работы с изображениями клиента</li>
+</ul>
+
+                                                        </td>
+                                                </tr>
+                                                <tr>
+                                                        <td>categoryService</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/CategoryService.html" target="_self" >CategoryService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                        <td>
+                                                                <ul>
+<li>сервис для работы с категориями мебели</li>
+</ul>
+
+                                                        </td>
+                                                </tr>
+                                                <tr>
+                                                        <td>notification</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/NotificationService.html" target="_self" >NotificationService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                        <td>
+                                                                <ul>
+<li>сервис для отображения уведомлений</li>
+</ul>
+
+                                                        </td>
+                                                </tr>
+                                        </tbody>
+                                    </table>
+                            </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+</section>
+
+    <section data-compodoc="block-inputs">
+    <h3 id="inputs">Inputs</h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="furnitureData"></a>
+                        <b>furnitureData</b>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="../interfaces/furnitureFromServerData.html" target="_self" >furnitureFromServerData</a></code>
+
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-2" colspan="2">
+                                    <div class="io-line">Defined in <a href="" data-line="66" class="link-to-prism">src/components/create-furnitre/create-furniture.component.ts:66</a></div>
+                            </td>
+                        </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <div class="io-description"><p>Входные данные мебели</p>
+</div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+</section>
+
+
+    <section data-compodoc="block-methods">
+    <h3>HostListeners</h3>    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="window:resize"></a>
+                    <span class="name">
+                        <span ><b>window:resize</b></span>
+                        <a href="#window:resize"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <i>Arguments : </i><code>'$event' </code>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>window:resize()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="130"
+                                    class="link-to-prism">src/components/create-furnitre/create-furniture.component.ts:130</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Обработчик изменения размера окна, определяет мобильный вид</p>
+</div>
+
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>
+    <section data-compodoc="block-methods">
+    
+    <h3 id="methods">
+        Methods
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="addColor"></a>
+                    <span class="name">
+                            <span class="modifier">Protected</span>
+                        <span ><b>addColor</b></span>
+                        <a href="#addColor"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>addColor()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="219"
+                                    class="link-to-prism">src/components/create-furnitre/create-furniture.component.ts:219</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Добавление нового цвета в мебель</p>
+</div>
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="addShop"></a>
+                    <span class="name">
+                            <span class="modifier">Protected</span>
+                        <span ><b>addShop</b></span>
+                        <a href="#addShop"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>addShop()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="261"
+                                    class="link-to-prism">src/components/create-furnitre/create-furniture.component.ts:261</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Добавить или обновить магазин с ценой и ссылкой</p>
+</div>
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="checkViewport"></a>
+                    <span class="name">
+                            <span class="modifier"></span>
+                            <span class="modifier">Private</span>
+                        <span ><b>checkViewport</b></span>
+                        <a href="#checkViewport"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>checkViewport()</code>
+                </td>
+            </tr>
+
+            <tr>
+                <td class="col-md-4">
+                    <b>Decorators : </b>
+                    <br />
+                    <code>@HostListener(&#x27;window:resize&#x27;, [&#x27;$event&#x27;])<br /></code>
+                </td>
+            </tr>
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="130"
+                                    class="link-to-prism">src/components/create-furnitre/create-furniture.component.ts:130</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Обработчик изменения размера окна, определяет мобильный вид</p>
+</div>
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="closeAddModule"></a>
+                    <span class="name">
+                            <span class="modifier">Protected</span>
+                        <span ><b>closeAddModule</b></span>
+                        <a href="#closeAddModule"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>closeAddModule()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="254"
+                                    class="link-to-prism">src/components/create-furnitre/create-furniture.component.ts:254</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Закрыть дополнительный модуль</p>
+</div>
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="deleteColor"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>deleteColor</b></span>
+                        <a href="#deleteColor"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>deleteColor()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="304"
+                                    class="link-to-prism">src/components/create-furnitre/create-furniture.component.ts:304</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Удалить текущий цвет</p>
+</div>
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="deleteShop"></a>
+                    <span class="name">
+                            <span class="modifier">Protected</span>
+                        <span ><b>deleteShop</b></span>
+                        <a href="#deleteShop"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>deleteShop()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="279"
+                                    class="link-to-prism">src/components/create-furnitre/create-furniture.component.ts:279</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Удалить магазин по индексу</p>
+</div>
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getfilterData"></a>
+                    <span class="name">
+                            <span class="modifier">Protected</span>
+                        <span ><b>getfilterData</b></span>
+                        <a href="#getfilterData"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>getfilterData()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="209"
+                                    class="link-to-prism">src/components/create-furnitre/create-furniture.component.ts:209</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Получить фильтры для выбранной категории</p>
+</div>
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="../miscellaneous/typealiases.html#filter" target="_self" >filter[]</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                <p>массив фильтров</p>
+
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="initCategories"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                            <span class="modifier">Async</span>
+                        <span ><b>initCategories</b></span>
+                        <a href="#initCategories"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>initCategories()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="96"
+                                    class="link-to-prism">src/components/create-furnitre/create-furniture.component.ts:96</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Загрузка и инициализация списка категорий</p>
+</div>
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="ngAfterViewInit"></a>
+                    <span class="name">
+                        <span ><b>ngAfterViewInit</b></span>
+                        <a href="#ngAfterViewInit"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>ngAfterViewInit()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="88"
+                                    class="link-to-prism">src/components/create-furnitre/create-furniture.component.ts:88</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Инициализация после отображения представления</p>
+</div>
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="ngOnInit"></a>
+                    <span class="name">
+                        <span ><b>ngOnInit</b></span>
+                        <a href="#ngOnInit"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>ngOnInit()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="80"
+                                    class="link-to-prism">src/components/create-furnitre/create-furniture.component.ts:80</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Инициализация компонента</p>
+</div>
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="numberValidator"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>numberValidator</b></span>
+                        <a href="#numberValidator"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>numberValidator(control: AbstractControl)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="139"
+                                    class="link-to-prism">src/components/create-furnitre/create-furniture.component.ts:139</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Валидация, проверяющая, что значение является числом</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                                <td>Description</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>control</td>
+                                            <td>
+                                                        <code>AbstractControl</code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                            <td>
+                                                    <ul>
+<li>форма управления</li>
+</ul>
+
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>ValidationErrors | null</code>
+
+                        </div>
+                            <div class="io-description">
+                                <p>объект ошибки или null</p>
+
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="onInputImages"></a>
+                    <span class="name">
+                            <span class="modifier">Protected</span>
+                            <span class="modifier">Async</span>
+                        <span ><b>onInputImages</b></span>
+                        <a href="#onInputImages"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>onInputImages(event: Event)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="109"
+                                    class="link-to-prism">src/components/create-furnitre/create-furniture.component.ts:109</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Обработчик события выбора изображений</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                                <td>Description</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>event</td>
+                                            <td>
+                                                        <code>Event</code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                            <td>
+                                                    <ul>
+<li>событие выбора файлов</li>
+</ul>
+
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="openAdditional"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>openAdditional</b></span>
+                        <a href="#openAdditional"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>openAdditional()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="335"
+                                    class="link-to-prism">src/components/create-furnitre/create-furniture.component.ts:335</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Открыть модуль дополнительных параметров и заполнить форму значениями</p>
+</div>
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="openColorModule"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>openColorModule</b></span>
+                        <a href="#openColorModule"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>openColorModule(event?: Event)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="291"
+                                    class="link-to-prism">src/components/create-furnitre/create-furniture.component.ts:291</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Открыть модуль добавления цвета</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                                <td>Description</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>event</td>
+                                            <td>
+                                                        <code>Event</code>
+                                            </td>
+
+                                            <td>
+                                                    Yes
+                                            </td>
+
+
+                                            <td>
+                                                    <ul>
+<li>событие клика (опционально)</li>
+</ul>
+
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="openFurnitureVariant"></a>
+                    <span class="name">
+                            <span class="modifier">Protected</span>
+                        <span ><b>openFurnitureVariant</b></span>
+                        <a href="#openFurnitureVariant"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>openFurnitureVariant(idColor: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="177"
+                                    class="link-to-prism">src/components/create-furnitre/create-furniture.component.ts:177</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Открытие варианта мебели по цвету</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                                <td>Description</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>idColor</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                            <td>
+                                                    <ul>
+<li>индекс цвета</li>
+</ul>
+
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="openShopsModule"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>openShopsModule</b></span>
+                        <a href="#openShopsModule"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>openShopsModule(idShop?: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="314"
+                                    class="link-to-prism">src/components/create-furnitre/create-furniture.component.ts:314</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Открыть модуль магазинов, если передан id, загружает данные магазина</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                                <td>Description</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>idShop</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                            </td>
+
+                                            <td>
+                                                    Yes
+                                            </td>
+
+
+                                            <td>
+                                                    <ul>
+<li>индекс магазина (опционально)</li>
+</ul>
+
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="removeImages"></a>
+                    <span class="name">
+                            <span class="modifier">Protected</span>
+                        <span ><b>removeImages</b></span>
+                        <a href="#removeImages"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>removeImages()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="150"
+                                    class="link-to-prism">src/components/create-furnitre/create-furniture.component.ts:150</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Удаление изображений для текущего цвета</p>
+</div>
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="saveAdditional"></a>
+                    <span class="name">
+                            <span class="modifier">Protected</span>
+                        <span ><b>saveAdditional</b></span>
+                        <a href="#saveAdditional"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>saveAdditional()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="158"
+                                    class="link-to-prism">src/components/create-furnitre/create-furniture.component.ts:158</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Сохранение дополнительных параметров (пропорций)</p>
+</div>
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>
+    <section data-compodoc="block-properties">
+    
+    <h3 id="inputs">
+        Properties
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="addColorVisible"></a>
+                    <span class="name">
+                            <span class="modifier">Protected</span>
+                        <span ><b>addColorVisible</b></span>
+                        <a href="#addColorVisible"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>false</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="53" class="link-to-prism">src/components/create-furnitre/create-furniture.component.ts:53</a></div>
+                        </td>
+                    </tr>
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Флаг видимости добавления цвета</p>
+</div>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="additionalModuleTemplate"></a>
+                    <span class="name">
+                            <span class="modifier"></span>
+                            <span class="modifier">Private</span>
+                        <span ><b>additionalModuleTemplate</b></span>
+                        <a href="#additionalModuleTemplate"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>TemplateRef&lt;any&gt;</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <b>Decorators : </b>
+                        <br />
+                        <code>
+                            @ViewChild(&#x27;additionalModule&#x27;)<br />
+                        </code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="75" class="link-to-prism">src/components/create-furnitre/create-furniture.component.ts:75</a></div>
+                        </td>
+                    </tr>
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Шаблон для дополнительных параметров</p>
+</div>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="addModule"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>addModule</b></span>
+                        <a href="#addModule"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>HTMLDivElement</code>
+
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="38" class="link-to-prism">src/components/create-furnitre/create-furniture.component.ts:38</a></div>
+                        </td>
+                    </tr>
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Контейнер дополнительного модуля</p>
+</div>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="addModuleTemplate"></a>
+                    <span class="name">
+                            <span class="modifier">Protected</span>
+                        <span ><b>addModuleTemplate</b></span>
+                        <a href="#addModuleTemplate"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>TemplateRef&lt;any&gt;</code>
+
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="50" class="link-to-prism">src/components/create-furnitre/create-furniture.component.ts:50</a></div>
+                        </td>
+                    </tr>
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Шаблон дополнительного модуля</p>
+</div>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="categoryArray"></a>
+                    <span class="name">
+                            <span class="modifier">Protected</span>
+                        <span ><b>categoryArray</b></span>
+                        <a href="#categoryArray"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="../interfaces/categoryData.html" target="_self" >categoryData[]</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>[]</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="56" class="link-to-prism">src/components/create-furnitre/create-furniture.component.ts:56</a></div>
+                        </td>
+                    </tr>
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Массив категорий</p>
+</div>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="colorForm"></a>
+                    <span class="name">
+                            <span class="modifier">Protected</span>
+                        <span ><b>colorForm</b></span>
+                        <a href="#colorForm"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>new FormGroup({
+    color: new FormControl(&#x27;&#x27;, [Validators.required])
+  })</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="356" class="link-to-prism">src/components/create-furnitre/create-furniture.component.ts:356</a></div>
+                        </td>
+                    </tr>
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Форма для добавления цвета</p>
+</div>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="colorModuleTemplate"></a>
+                    <span class="name">
+                            <span class="modifier"></span>
+                            <span class="modifier">Private</span>
+                        <span ><b>colorModuleTemplate</b></span>
+                        <a href="#colorModuleTemplate"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>TemplateRef&lt;any&gt;</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <b>Decorators : </b>
+                        <br />
+                        <code>
+                            @ViewChild(&#x27;colorModule&#x27;)<br />
+                        </code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="69" class="link-to-prism">src/components/create-furnitre/create-furniture.component.ts:69</a></div>
+                        </td>
+                    </tr>
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Шаблон для выбора цвета</p>
+</div>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="currentColorId"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>currentColorId</b></span>
+                        <a href="#currentColorId"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>number | undefined</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>undefined</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="59" class="link-to-prism">src/components/create-furnitre/create-furniture.component.ts:59</a></div>
+                        </td>
+                    </tr>
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Текущий выбранный цвет (индекс)</p>
+</div>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="furnitureModelInput"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>furnitureModelInput</b></span>
+                        <a href="#furnitureModelInput"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>HTMLInputElement</code>
+
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="62" class="link-to-prism">src/components/create-furnitre/create-furniture.component.ts:62</a></div>
+                        </td>
+                    </tr>
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Поле ввода модели мебели</p>
+</div>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="isMobileView"></a>
+                    <span class="name">
+                            <span class="modifier">Protected</span>
+                        <span ><b>isMobileView</b></span>
+                        <a href="#isMobileView"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>false</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="41" class="link-to-prism">src/components/create-furnitre/create-furniture.component.ts:41</a></div>
+                        </td>
+                    </tr>
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Флаг мобильного просмотра</p>
+</div>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="lastClickedColor"></a>
+                    <span class="name">
+                            <span class="modifier">Protected</span>
+                        <span ><b>lastClickedColor</b></span>
+                        <a href="#lastClickedColor"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>number | undefined</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>undefined</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="47" class="link-to-prism">src/components/create-furnitre/create-furniture.component.ts:47</a></div>
+                        </td>
+                    </tr>
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Индекс последнего выбранного цвета</p>
+</div>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="lastClickedShop"></a>
+                    <span class="name">
+                            <span class="modifier">Protected</span>
+                        <span ><b>lastClickedShop</b></span>
+                        <a href="#lastClickedShop"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>number | undefined</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>undefined</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="44" class="link-to-prism">src/components/create-furnitre/create-furniture.component.ts:44</a></div>
+                        </td>
+                    </tr>
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Индекс последнего выбранного магазина</p>
+</div>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="proportionsForm"></a>
+                    <span class="name">
+                            <span class="modifier">Protected</span>
+                        <span ><b>proportionsForm</b></span>
+                        <a href="#proportionsForm"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>new FormGroup({
+    width: new FormControl&lt;number | null&gt;(null, [Validators.required, Validators.min(0)]),
+    length: new FormControl&lt;number | null&gt;(null, [Validators.required, Validators.min(0)]),
+    height: new FormControl&lt;number | null&gt;(null, [Validators.required, Validators.min(0)])
+  })</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="367" class="link-to-prism">src/components/create-furnitre/create-furniture.component.ts:367</a></div>
+                        </td>
+                    </tr>
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Форма для дополнительных параметров (пропорций)</p>
+</div>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="shopForm"></a>
+                    <span class="name">
+                            <span class="modifier">Protected</span>
+                        <span ><b>shopForm</b></span>
+                        <a href="#shopForm"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>new FormGroup({
+    cost: new FormControl&lt;number | null&gt;(null, [Validators.required, this.numberValidator]),
+    url: new FormControl(&#x27;&#x27;, [Validators.required])
+  })</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="361" class="link-to-prism">src/components/create-furnitre/create-furniture.component.ts:361</a></div>
+                        </td>
+                    </tr>
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Форма для добавления/редактирования магазина</p>
+</div>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="shopsModuleTemplate"></a>
+                    <span class="name">
+                            <span class="modifier"></span>
+                            <span class="modifier">Private</span>
+                        <span ><b>shopsModuleTemplate</b></span>
+                        <a href="#shopsModuleTemplate"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>TemplateRef&lt;any&gt;</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <b>Decorators : </b>
+                        <br />
+                        <code>
+                            @ViewChild(&#x27;shopsModule&#x27;)<br />
+                        </code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="72" class="link-to-prism">src/components/create-furnitre/create-furniture.component.ts:72</a></div>
+                        </td>
+                    </tr>
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Шаблон для магазинов</p>
+</div>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+</section>
+
+</div>
+
+
+    <div class="tab-pane fade  tab-source-code" id="source">
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, HostListener, Input, OnDestroy, OnInit, ViewChild } from &#x27;@angular/core&#x27;;
+import { ImageSliderComponent } from &#x27;../image-slider/image-slider.component&#x27;;
+import { NgClass, NgFor, NgIf, NgTemplateOutlet } from &#x27;@angular/common&#x27;;
+import { FormGroup, FormControl, Validators, ReactiveFormsModule, FormsModule, AbstractControl, ValidationErrors } from &#x27;@angular/forms&#x27;;
+import { TemplateRef } from &#x27;@angular/core&#x27;;
+import { ClientImageControlService } from &#x27;../../services/client-image-control.service&#x27;;
+import { categoryData, CategoryService, filter, option } from &#x27;../../services/category.service&#x27;;
+import { AutoHeightDirective } from &#x27;../../directives/auto-height.directive&#x27;;
+import { furnitureFromServerData } from &#x27;../../services/furniture-card-control.service&#x27;;
+import { NotificationService } from &#x27;../../services/notification.service&#x27;;
+import { CostFormatPipe } from &#x27;../../pipes/cost-format.pipe&#x27;;
+
+@Component({
+  selector: &#x27;app-create-furniture&#x27;,
+  standalone: true,
+  imports: [ReactiveFormsModule, NgClass, AutoHeightDirective, ImageSliderComponent, NgFor, NgIf, ReactiveFormsModule, NgTemplateOutlet, FormsModule, CostFormatPipe],
+  templateUrl: &#x27;./create-furniture.component.html&#x27;,
+  styleUrls: [&#x27;./create-furniture.component.scss&#x27;]
+})
+export class CreateFurnitureComponent implements OnInit, AfterViewInit {
+  /**
+   * Конструктор компонента CreateFurnitureComponent
+   * @param elementRef - ссылка на DOM-элемент компонента
+   * @param changeDetectorRef - сервис для ручного обнаружения изменений
+   * @param clientImageControl - сервис для работы с изображениями клиента
+   * @param categoryService - сервис для работы с категориями мебели
+   * @param notification - сервис для отображения уведомлений
+   */
+  constructor(
+    private elementRef: ElementRef,
+    private changeDetectorRef: ChangeDetectorRef,
+    private clientImageControl: ClientImageControlService,
+    private categoryService: CategoryService,
+    private notification: NotificationService
+  ) { }
+
+  /** Контейнер дополнительного модуля */
+  private addModule!: HTMLDivElement;
+
+  /** Флаг мобильного просмотра */
+  protected isMobileView &#x3D; false;
+
+  /** Индекс последнего выбранного магазина */
+  protected lastClickedShop: number | undefined &#x3D; undefined;
+
+  /** Индекс последнего выбранного цвета */
+  protected lastClickedColor: number | undefined &#x3D; undefined;
+
+  /** Шаблон дополнительного модуля */
+  protected addModuleTemplate!: TemplateRef&lt;any&gt;;
+
+  /** Флаг видимости добавления цвета */
+  protected addColorVisible: boolean &#x3D; false;
+
+  /** Массив категорий */
+  protected categoryArray: categoryData[] &#x3D; [];
+
+  /** Текущий выбранный цвет (индекс) */
+  public currentColorId: number | undefined &#x3D; undefined;
+
+  /** Поле ввода модели мебели */
+  public furnitureModelInput!: HTMLInputElement;
+
+  /** Входные данные мебели */
+  @Input()
+  furnitureData!: furnitureFromServerData;
+
+  /** Шаблон для выбора цвета */
+  @ViewChild(&#x27;colorModule&#x27;) private colorModuleTemplate!: TemplateRef&lt;any&gt;;
+
+  /** Шаблон для магазинов */
+  @ViewChild(&#x27;shopsModule&#x27;) private shopsModuleTemplate!: TemplateRef&lt;any&gt;;
+
+  /** Шаблон для дополнительных параметров */
+  @ViewChild(&#x27;additionalModule&#x27;) private additionalModuleTemplate!: TemplateRef&lt;any&gt;;
+
+  /**
+   * Инициализация компонента
+   */
+  ngOnInit() {
+    this.initCategories();
+    this.checkViewport();
+  }
+
+  /**
+   * Инициализация после отображения представления
+   */
+  ngAfterViewInit(): void {
+    this.addModule &#x3D; this.elementRef.nativeElement.querySelector(&#x27;.addModule&#x27;);
+    this.furnitureModelInput &#x3D; this.elementRef.nativeElement.querySelector(&#x27;.furnitureModelInput&#x27;);
+  }
+
+  /**
+   * Загрузка и инициализация списка категорий
+   */
+  private async initCategories() {
+    try {
+      this.categoryArray &#x3D; (await this.categoryService.GETgetAllCategories()).categoryArray;
+      console.log(this.categoryArray)
+    } catch (error) {
+      this.notification.setError(&#x27;Ошибка загрузки категорий&#x27;, 5000);
+    }
+  }
+
+  /**
+   * Обработчик события выбора изображений
+   * @param event - событие выбора файлов
+   */
+  protected async onInputImages(event: Event) {
+    const INPUT_ELEMENT &#x3D; event.target as HTMLInputElement;
+    const FILES &#x3D; INPUT_ELEMENT.files;
+    if (!FILES || this.currentColorId &#x3D;&#x3D;&#x3D; undefined) return;
+
+    try {
+      let compressedImages: string[] &#x3D; [];
+      for (let i &#x3D; 0; i &lt; FILES.length; i++) {
+        const COMPRESSED_IMAGE &#x3D; await this.clientImageControl.compressImage(FILES[i]);
+        if (COMPRESSED_IMAGE) compressedImages.push(URL.createObjectURL(COMPRESSED_IMAGE));
+      }
+      this.furnitureData.colors[this.currentColorId].imagesData.images &#x3D; compressedImages;
+    } catch (error) {
+      this.notification.setError(&#x27;Ошибка загрузки изображений&#x27;, 5000);
+    }
+  }
+
+  /**
+   * Обработчик изменения размера окна, определяет мобильный вид
+   */
+  @HostListener(&#x27;window:resize&#x27;, [&#x27;$event&#x27;])
+  private checkViewport() {
+    this.isMobileView &#x3D; window.innerWidth &lt;&#x3D; 600;
+  }
+
+  /**
+   * Валидация, проверяющая, что значение является числом
+   * @param control - форма управления
+   * @returns объект ошибки или null
+   */
+  private numberValidator(control: AbstractControl): ValidationErrors | null {
+    const VALUE &#x3D; control.value;
+    if (VALUE !&#x3D;&#x3D; null &amp;&amp; isNaN(VALUE)) {
+      return { notANumber: true };
+    }
+    return null;
+  }
+
+  /**
+   * Удаление изображений для текущего цвета
+   */
+  protected removeImages() {
+    if (this.currentColorId &#x3D;&#x3D;&#x3D; undefined || !this.furnitureData.colors[this.currentColorId].imagesData.images) return;
+    this.furnitureData.colors[this.currentColorId].imagesData.images.length &#x3D; 0;
+  }
+
+  /**
+   * Сохранение дополнительных параметров (пропорций)
+   */
+  protected saveAdditional() {
+    if (this.proportionsForm.invalid) {
+      this.proportionsForm.markAllAsTouched();
+      this.notification.setError(&#x27;Заполните все параметры&#x27;, 5000);
+      return;
+    }
+    const { width, length, height } &#x3D; this.proportionsForm.value;
+    if (width &amp;&amp; length &amp;&amp; height) {
+      this.furnitureData.proportions &#x3D; {
+        width, length, height
+      };
+    }
+    this.closeAddModule();
+  }
+
+  /**
+   * Открытие варианта мебели по цвету
+   * @param idColor - индекс цвета
+   */
+  protected openFurnitureVariant(idColor: number) {
+    const COLORS_ELEMENT &#x3D; this.elementRef.nativeElement.querySelector(&#x27;.colors&#x27;) as HTMLSpanElement;
+    const COLOR_BUTTON_ELEMENT &#x3D; COLORS_ELEMENT.querySelector(&#x60;[data-idColor&#x3D;&quot;${idColor}&quot;]&#x60;) as HTMLButtonElement;
+    const COLORS_VARIANTS &#x3D; COLORS_ELEMENT.querySelectorAll(&#x27;.colorVariant&#x27;);
+    let beforeColors: HTMLButtonElement[] &#x3D; [], afterColors: HTMLButtonElement[] &#x3D; [];
+
+    COLORS_VARIANTS.forEach((colorVariant, indexVariant) &#x3D;&gt; {
+      if (indexVariant &gt; +idColor) {
+        afterColors &#x3D; [...afterColors, colorVariant as HTMLButtonElement];
+      } else if (indexVariant &lt; +idColor) {
+        beforeColors &#x3D; [...beforeColors, colorVariant as HTMLButtonElement];
+      }
+    });
+
+    [COLOR_BUTTON_ELEMENT, ...afterColors, ...beforeColors].forEach((colorVariant, newIndex) &#x3D;&gt; {
+      (colorVariant as HTMLButtonElement).style.setProperty(&#x27;--index&#x27;, (newIndex + 1).toString());
+    });
+
+    setTimeout(() &#x3D;&gt; {
+      COLOR_BUTTON_ELEMENT.style.setProperty(&#x27;margin-right&#x27;, &#x27;115px&#x27;);
+    }, 500);
+
+    setTimeout(() &#x3D;&gt; {
+      this.currentColorId &#x3D; +idColor;
+      COLOR_BUTTON_ELEMENT.style.setProperty(&#x27;margin-right&#x27;, &#x27;0&#x27;);
+    }, 1250);
+  }
+
+  /**
+   * Получить фильтры для выбранной категории
+   * @returns массив фильтров
+   */
+  protected getfilterData(): filter[] {
+    if (!this.furnitureData.additionalData.category) return []
+    const INDEX &#x3D; this.categoryArray.findIndex(categoryData &#x3D;&gt; categoryData.name &#x3D;&#x3D;&#x3D; this.furnitureData.additionalData.category)
+    console.log(INDEX)
+    return this.categoryArray[INDEX].filters ?? []
+  }
+
+  /**
+   * Добавление нового цвета в мебель
+   */
+  protected addColor() {
+    const PUSH_COLOR &#x3D; this.colorForm.value.color;
+    if (!PUSH_COLOR) {
+      this.notification.setError(&#x27;Укажите цвет&#x27;, 5000);
+      return;
+    }
+    for (let colorItem of this.furnitureData.colors) {
+      if (colorItem.color &#x3D;&#x3D;&#x3D; PUSH_COLOR) {
+        this.closeAddModule()
+        this.notification.setError(&#x27;Такой цвет уже есть&#x27;, 5000)
+        return
+      }
+    }
+    const colorItem &#x3D; {
+      color: PUSH_COLOR,
+      imagesData: {
+        images: [],
+        idMainImage: 0
+      }
+    };
+    this.furnitureData.colors.push(colorItem);
+    this.colorForm.patchValue({
+      color: &#x27;&#x27;
+    });
+    this.currentColorId &#x3D; this.furnitureData.colors.length - 1;
+
+    setTimeout(() &#x3D;&gt; {
+      this.closeAddModule();
+      this.openFurnitureVariant(this.currentColorId!);
+    }, 0);
+  }
+
+  /**
+   * Закрыть дополнительный модуль
+   */
+  protected closeAddModule() {
+    this.addModule.classList.add(&#x27;disabled&#x27;);
+  }
+
+  /**
+   * Добавить или обновить магазин с ценой и ссылкой
+   */
+  protected addShop() {
+    if (this.lastClickedShop !&#x3D;&#x3D; undefined) {
+      this.furnitureData.shops[this.lastClickedShop] &#x3D; {
+        cost: this.shopForm.value.cost!,
+        url: this.shopForm.value.url!
+      };
+      return;
+    }
+    this.furnitureData.shops.push({
+      cost: this.shopForm.value.cost!,
+      url: this.shopForm.value.url!
+    });
+    this.closeAddModule();
+  }
+
+  /**
+   * Удалить магазин по индексу
+   */
+  protected deleteShop() {
+    if (this.lastClickedShop !&#x3D; null &amp;&amp; this.lastClickedShop &gt;&#x3D; 0 &amp;&amp; this.lastClickedShop &lt; this.furnitureData.shops.length) {
+      this.furnitureData.shops.splice(this.lastClickedShop, 1);
+      this.changeDetectorRef.detectChanges();
+      this.lastClickedShop &#x3D; undefined;
+    }
+  }
+
+  /**
+   * Открыть модуль добавления цвета
+   * @param event - событие клика (опционально)
+   */
+  public openColorModule(event?: Event) {
+    if (event) event.preventDefault();
+    this.addModuleTemplate &#x3D; this.colorModuleTemplate;
+    this.addModule.classList.remove(&#x27;disabled&#x27;);
+    setTimeout(() &#x3D;&gt; {
+      const INPUT_COLOR_ELEMENT &#x3D; this.elementRef.nativeElement.querySelector(&#x27;.addModuleInput&#x27;) as HTMLInputElement;
+      INPUT_COLOR_ELEMENT.focus();
+    }, 10);
+  }
+
+  /**
+   * Удалить текущий цвет
+   */
+  public deleteColor() {
+    const DELETE_COLOR_ID &#x3D; this.currentColorId;
+    this.currentColorId &#x3D; 0;
+    this.furnitureData.colors &#x3D; this.furnitureData.colors.filter((colorData, index) &#x3D;&gt; index !&#x3D;&#x3D; DELETE_COLOR_ID);
+  }
+
+  /**
+   * Открыть модуль магазинов, если передан id, загружает данные магазина
+   * @param idShop - индекс магазина (опционально)
+   */
+  public openShopsModule(idShop?: number) {
+    if (idShop !&#x3D;&#x3D; undefined) {
+      this.lastClickedShop &#x3D; idShop;
+      this.shopForm.patchValue({
+        cost: this.furnitureData.shops[idShop].cost,
+        url: this.furnitureData.shops[idShop].url
+      });
+    } else {
+      this.lastClickedShop &#x3D; undefined;
+      this.shopForm.patchValue({
+        cost: null,
+        url: &#x27;&#x27;
+      });
+    }
+    this.addModuleTemplate &#x3D; this.shopsModuleTemplate;
+    this.addModule.classList.remove(&#x27;disabled&#x27;);
+  }
+
+  /**
+   * Открыть модуль дополнительных параметров и заполнить форму значениями
+   */
+  public openAdditional() {
+    this.proportionsForm.patchValue({
+      width: this.furnitureData.proportions.width,
+      length: this.furnitureData.proportions.length,
+      height: this.furnitureData.proportions.height
+    });
+    if (this.furnitureData.proportions.width &#x3D;&#x3D;&#x3D; null) {
+      this.proportionsForm.get(&#x27;width&#x27;)?.markAsTouched();
+    }
+    if (this.furnitureData.proportions.length &#x3D;&#x3D;&#x3D; null) {
+      this.proportionsForm.get(&#x27;length&#x27;)?.markAsTouched();
+    }
+    if (this.furnitureData.proportions.height &#x3D;&#x3D;&#x3D; null) {
+      this.proportionsForm.get(&#x27;height&#x27;)?.markAsTouched();
+    }
+
+    this.addModuleTemplate &#x3D; this.additionalModuleTemplate;
+    this.addModule.classList.remove(&#x27;disabled&#x27;);
+  }
+
+  /** Форма для добавления цвета */
+  protected colorForm &#x3D; new FormGroup({
+    color: new FormControl(&#x27;&#x27;, [Validators.required])
+  });
+
+  /** Форма для добавления/редактирования магазина */
+  protected shopForm &#x3D; new FormGroup({
+    cost: new FormControl&lt;number | null&gt;(null, [Validators.required, this.numberValidator]),
+    url: new FormControl(&#x27;&#x27;, [Validators.required])
+  });
+
+  /** Форма для дополнительных параметров (пропорций) */
+  protected proportionsForm &#x3D; new FormGroup({
+    width: new FormControl&lt;number | null&gt;(null, [Validators.required, Validators.min(0)]),
+    length: new FormControl&lt;number | null&gt;(null, [Validators.required, Validators.min(0)]),
+    height: new FormControl&lt;number | null&gt;(null, [Validators.required, Validators.min(0)])
+  });
+}
+</code></pre>
+    </div>
+
+    <div class="tab-pane fade " id="templateData">
+        <pre class="line-numbers"><code class="language-html">&lt;span class&#x3D;&quot;body&quot; (click)&#x3D;&quot;currentColorId ?? openColorModule($event)&quot;&gt;
+    &lt;input class&#x3D;&quot;furnitureTitle&quot; [(ngModel)]&#x3D;&quot;furnitureData.name&quot; placeholder&#x3D;&quot;Название&quot;
+        title&#x3D;&quot;Введите название мебели&quot;&gt;
+    &lt;span class&#x3D;&quot;imageSlideSpan&quot;&gt;
+        &lt;button *ngIf&#x3D;&quot;currentColorId!&#x3D;&#x3D;undefined&amp;&amp;furnitureData.colors[currentColorId].imagesData.images.length&gt;0&quot;
+            (click)&#x3D;&quot;removeImages()&quot; class&#x3D;&quot;editImagesBtn&quot;&gt;
+            &lt;img loading&#x3D;&quot;lazy&quot; alt&#x3D;&quot;edit&quot; src&#x3D;&quot;/assets/images/editIcon.svg&quot; alt&#x3D;&quot;&quot;&gt;&lt;/button&gt;
+        &lt;app-image-slider
+            *ngIf&#x3D;&quot;currentColorId!&#x3D;&#x3D;undefined&amp;&amp;furnitureData.colors[currentColorId].imagesData.images.length&gt;0&quot;
+            [imagesData]&#x3D;&quot;furnitureData.colors[currentColorId].imagesData&quot; [changeModeSlider]&#x3D;&quot;true&quot;&gt;
+        &lt;/app-image-slider&gt;
+    &lt;/span&gt;
+    &lt;div class&#x3D;&quot;uploadImagesDiv&quot;
+        *ngIf&#x3D;&quot;currentColorId&#x3D;&#x3D;&#x3D;undefined||(currentColorId!&#x3D;&#x3D;undefined&amp;&amp;furnitureData.colors[currentColorId].imagesData.images.length&lt;&#x3D;0)&quot;&gt;
+        &lt;input (input)&#x3D;&quot;onInputImages($event)&quot; class&#x3D;&quot;uploadImagesInput&quot; multiple type&#x3D;&quot;file&quot; accept&#x3D;&quot;.png,.jpeg,.jpg&quot;
+            title&#x3D;&quot;Загрузите изображения&quot;&gt;
+        &lt;img loading&#x3D;&quot;lazy&quot; class&#x3D;&quot;uploadImagesIcon&quot; src&#x3D;&quot;/assets/images/uploadIcon.png&quot; alt&#x3D;&quot;Загрузить&quot;&gt;
+    &lt;/div&gt;
+    &lt;span class&#x3D;&quot;footer&quot;&gt;
+        &lt;span class&#x3D;&quot;leftPiece&quot;&gt;
+            &lt;span class&#x3D;&quot;colorSlider&quot;&gt;
+                &lt;button (click)&#x3D;&quot;openColorModule($event)&quot; class&#x3D;&quot;addColorBtn&quot; title&#x3D;&quot;Добавить новый цвет&quot;&gt;
+                    &lt;img loading&#x3D;&quot;lazy&quot; src&#x3D;&quot;/assets/images/addIcon.svg&quot; alt&#x3D;&quot;Добавить&quot;&gt;
+                &lt;/button&gt;
+                &lt;span *ngIf&#x3D;&quot;furnitureData.colors!&#x3D;&#x3D;undefined&quot; class&#x3D;&quot;colors&quot;
+                    [style.--total-items]&#x3D;&quot;furnitureData.colors.length.toString()&quot;&gt;
+                    &lt;button (click)&#x3D;&quot;openFurnitureVariant(index)&quot;
+                        *ngFor&#x3D;&quot;let colorVariant of furnitureData.colors;let index&#x3D;index&quot; [attr.data-idColor]&#x3D;&quot;index&quot;
+                        [style.background-color]&#x3D;&quot;colorVariant.color&quot; class&#x3D;&quot;colorVariant&quot;
+                        title&#x3D;&quot;Выбрать цвет&quot;&gt;&lt;/button&gt;
+                &lt;/span&gt;
+            &lt;/span&gt;
+            &lt;input type&#x3D;&quot;file&quot; accept&#x3D;&quot;.obj&quot; id&#x3D;&quot;furnitureModel&quot; class&#x3D;&quot;furnitureModelInput&quot;
+                title&#x3D;&quot;Загрузить 3D модель&quot;&gt;
+        &lt;/span&gt;
+        &lt;span class&#x3D;&quot;informationSpan&quot;&gt;
+            &lt;span class&#x3D;&quot;descriptionSpan&quot;&gt;
+                &lt;div class&#x3D;&quot;descriptionTitle&quot;&gt;Описание&lt;/div&gt;
+                &lt;textarea appAutoHeight [mobileView]&#x3D;&quot;isMobileView&quot; placeholder&#x3D;&quot;Введите описание...&quot;
+                    [(ngModel)]&#x3D;&quot;furnitureData.description&quot; class&#x3D;&quot;descriptionInformation&quot;
+                    title&#x3D;&quot;Введите описание мебели&quot;&gt;&lt;/textarea&gt;
+            &lt;/span&gt;
+            &lt;span class&#x3D;&quot;rightFunctionalSection&quot;&gt;
+                &lt;div class&#x3D;&quot;shopsTitle&quot;&gt;Магазины&lt;/div&gt;
+                &lt;span class&#x3D;&quot;shopsSpan&quot;&gt;
+                    &lt;span class&#x3D;&quot;shopsListSpan&quot;&gt;
+                        &lt;button (click)&#x3D;&quot;openShopsModule(index)&quot; class&#x3D;&quot;shopFunctions&quot;
+                            *ngFor&#x3D;&quot;let shopData of furnitureData.shops; let index&#x3D;index&quot; title&#x3D;&quot;Редактировать магазин&quot;&gt;
+                            &lt;div class&#x3D;&quot;furnitureCost&quot;&gt;{{shopData.cost | costFormat}}&lt;/div&gt;
+                            &lt;div class&#x3D;&quot;linkShop&quot;&gt;
+                                &lt;img loading&#x3D;&quot;lazy&quot; src&#x3D;&quot;/assets/images/linkIcon.svg&quot; alt&#x3D;&quot;Ссылка&quot;&gt;
+                            &lt;/div&gt;
+                        &lt;/button&gt;
+                    &lt;/span&gt;
+                    &lt;button (click)&#x3D;&quot;openShopsModule()&quot; class&#x3D;&quot;addShopButton&quot; title&#x3D;&quot;Добавить магазин&quot;&gt;&lt;img
+                            loading&#x3D;&quot;lazy&quot; src&#x3D;&quot;/assets/images/addIcon.svg&quot; alt&#x3D;&quot;Добавить&quot;&gt;&lt;/button&gt;
+                &lt;/span&gt;
+                &lt;button (click)&#x3D;&quot;openAdditional()&quot; class&#x3D;&quot;additionalFunctions&quot; title&#x3D;&quot;Дополнительная информация&quot;&gt;
+                    Информация
+                &lt;/button&gt;
+            &lt;/span&gt;
+        &lt;/span&gt;
+    &lt;/span&gt;
+&lt;/span&gt;
+
+&lt;div class&#x3D;&quot;addModule disabled&quot;&gt;
+    &lt;ng-container *ngTemplateOutlet&#x3D;&quot;addModuleTemplate&quot;&gt;&lt;/ng-container&gt;
+&lt;/div&gt;
+
+&lt;ng-template #colorModule&gt;
+    &lt;form class&#x3D;&quot;addModuleSpan&quot; [formGroup]&#x3D;&quot;colorForm&quot; (ngSubmit)&#x3D;&quot;addColor()&quot;&gt;
+        &lt;button (click)&#x3D;&quot;closeAddModule()&quot; class&#x3D;&quot;closeAddModuleBtn&quot; type&#x3D;&quot;button&quot;&gt;
+            &lt;img loading&#x3D;&quot;lazy&quot; src&#x3D;&quot;/assets/images/addIcon.svg&quot; alt&#x3D;&quot;Закрыть&quot;&gt;
+        &lt;/button&gt;
+        &lt;span class&#x3D;&quot;addModuleFormContent&quot;&gt;
+            &lt;h2 class&#x3D;&quot;addModuleTitle&quot;&gt;Вариант мебели&lt;/h2&gt;
+            &lt;span class&#x3D;&quot;addModuleInputSpan&quot;&gt;
+                &lt;label class&#x3D;&quot;inputLabel&quot; for&#x3D;&quot;colorVariant&quot;&gt;Цвет&lt;/label&gt;
+                &lt;input formControlName&#x3D;&quot;color&quot; placeholder&#x3D;&quot;На английском или #hex&quot; class&#x3D;&quot;addModuleInput&quot;
+                    id&#x3D;&quot;colorVariant&quot; type&#x3D;&quot;text&quot; title&#x3D;&quot;Введите цвет в формате #hex или на английском&quot;&gt;
+                &lt;span
+                    *ngIf&#x3D;&quot;colorForm.get(&#x27;color&#x27;)?.invalid &amp;&amp; (colorForm.get(&#x27;color&#x27;)?.dirty || colorForm.get(&#x27;color&#x27;)?.touched)&quot;
+                    class&#x3D;&quot;error-message&quot;&gt;
+                    Пожалуйста, укажите цвет
+                &lt;/span&gt;
+            &lt;/span&gt;
+            &lt;button [disabled]&#x3D;&quot;!colorForm.valid&quot; class&#x3D;&quot;submitAddModuleFormBtn&quot; type&#x3D;&quot;submit&quot;
+                title&#x3D;&quot;Сохранить цвет&quot;&gt;Продолжить&lt;/button&gt;
+        &lt;/span&gt;
+    &lt;/form&gt;
+&lt;/ng-template&gt;
+&lt;ng-template #shopsModule&gt;
+    &lt;form class&#x3D;&quot;addModuleSpan&quot; [formGroup]&#x3D;&quot;shopForm&quot; (ngSubmit)&#x3D;&quot;addShop()&quot;&gt;
+        &lt;button (click)&#x3D;&quot;closeAddModule()&quot; class&#x3D;&quot;closeAddModuleBtn&quot; type&#x3D;&quot;button&quot;&gt;
+            &lt;img loading&#x3D;&quot;lazy&quot; src&#x3D;&quot;/assets/images/addIcon.svg&quot; alt&#x3D;&quot;Закрыть&quot;&gt;
+        &lt;/button&gt;
+        &lt;span class&#x3D;&quot;addModuleFormContent&quot;&gt;
+            &lt;h2 class&#x3D;&quot;addModuleTitle&quot;&gt;Вариант магазина&lt;/h2&gt;
+            &lt;span class&#x3D;&quot;addModuleInputSpan&quot;&gt;
+                &lt;label class&#x3D;&quot;inputLabel&quot; for&#x3D;&quot;cost&quot;&gt;Цена&lt;/label&gt;
+                &lt;input formControlName&#x3D;&quot;cost&quot; class&#x3D;&quot;addModuleInput&quot; id&#x3D;&quot;cost&quot; type&#x3D;&quot;text&quot; title&#x3D;&quot;Введите цену&quot;&gt;
+                &lt;span
+                    *ngIf&#x3D;&quot;shopForm.get(&#x27;cost&#x27;)?.invalid &amp;&amp; (shopForm.get(&#x27;cost&#x27;)?.dirty || shopForm.get(&#x27;cost&#x27;)?.touched)&quot;
+                    class&#x3D;&quot;error-message&quot;&gt;
+                    Пожалуйста, укажите корректную цену
+                &lt;/span&gt;
+            &lt;/span&gt;
+            &lt;span class&#x3D;&quot;addModuleInputSpan&quot;&gt;
+                &lt;label class&#x3D;&quot;inputLabel&quot; for&#x3D;&quot;url&quot;&gt;Ссылка&lt;/label&gt;
+                &lt;input formControlName&#x3D;&quot;url&quot; class&#x3D;&quot;addModuleInput&quot; id&#x3D;&quot;url&quot; type&#x3D;&quot;text&quot;
+                    title&#x3D;&quot;Введите ссылку на магазин&quot;&gt;
+                &lt;span
+                    *ngIf&#x3D;&quot;shopForm.get(&#x27;url&#x27;)?.invalid &amp;&amp; (shopForm.get(&#x27;url&#x27;)?.dirty || shopForm.get(&#x27;url&#x27;)?.touched)&quot;
+                    class&#x3D;&quot;error-message&quot;&gt;
+                    Пожалуйста, укажите ссылку
+                &lt;/span&gt;
+            &lt;/span&gt;
+            &lt;span class&#x3D;&quot;functionShopsModuleBtns&quot;&gt;
+                &lt;button [disabled]&#x3D;&quot;!shopForm.valid&quot; class&#x3D;&quot;submitAddModuleFormBtn&quot; type&#x3D;&quot;submit&quot;
+                    title&#x3D;&quot;Сохранить магазин&quot;&gt;Продолжить&lt;/button&gt;
+                &lt;button (click)&#x3D;&quot;deleteShop()&quot; class&#x3D;&quot;deleteItemAddModuleBtn&quot; *ngIf&#x3D;&quot;lastClickedShop!&#x3D;&#x3D;undefined&quot;
+                    title&#x3D;&quot;Удалить магазин&quot;&gt;&lt;img loading&#x3D;&quot;lazy&quot; src&#x3D;&quot;/assets/images/deleteIcon.svg&quot;
+                        alt&#x3D;&quot;Удалить&quot;&gt;&lt;/button&gt;
+            &lt;/span&gt;
+        &lt;/span&gt;
+    &lt;/form&gt;
+&lt;/ng-template&gt;
+&lt;ng-template #additionalModule&gt;
+    &lt;form class&#x3D;&quot;addModuleSpan&quot; [formGroup]&#x3D;&quot;proportionsForm&quot; (ngSubmit)&#x3D;&quot;saveAdditional()&quot;&gt;
+        &lt;button (click)&#x3D;&quot;closeAddModule()&quot; class&#x3D;&quot;closeAddModuleBtn&quot; type&#x3D;&quot;button&quot;&gt;
+            &lt;img loading&#x3D;&quot;lazy&quot; src&#x3D;&quot;/assets/images/addIcon.svg&quot; alt&#x3D;&quot;Закрыть&quot;&gt;
+        &lt;/button&gt;
+        &lt;span class&#x3D;&quot;addModuleFormContent&quot;&gt;
+            &lt;h2 class&#x3D;&quot;addModuleTitle&quot;&gt;Информация&lt;/h2&gt;
+            &lt;span class&#x3D;&quot;params&quot;&gt;
+                &lt;span *ngIf&#x3D;&quot;categoryArray!&#x3D;&#x3D;undefined&quot; class&#x3D;&quot;addModuleInputSpan&quot;&gt;
+                    &lt;label class&#x3D;&quot;inputLabel&quot; for&#x3D;&quot;category&quot;&gt;Категория&lt;/label&gt;
+                    &lt;select aria-placeholder&#x3D;&quot;Диван&quot; [ngModelOptions]&#x3D;&quot;{standalone: true}&quot;
+                        [(ngModel)]&#x3D;&quot;furnitureData.additionalData.category&quot; class&#x3D;&quot;categorySelect&quot; name&#x3D;&quot;category&quot;
+                        id&#x3D;&quot;category&quot; title&#x3D;&quot;Выберите категорию&quot;&gt;
+                        &lt;option [value]&#x3D;&quot;category.name&quot; *ngFor&#x3D;&quot;let category of categoryArray&quot;&gt;{{category.translateOne}}
+                        &lt;/option&gt;
+                    &lt;/select&gt;
+                    &lt;label class&#x3D;&quot;inputLabel&quot; for&#x3D;&quot;width&quot;&gt;Ширина(см)&lt;/label&gt;
+                    &lt;input formControlName&#x3D;&quot;width&quot; class&#x3D;&quot;addModuleInput&quot;
+                        [ngClass]&#x3D;&quot;{&#x27;invalid&#x27;: proportionsForm.get(&#x27;width&#x27;)?.invalid &amp;&amp; (proportionsForm.get(&#x27;width&#x27;)?.dirty || proportionsForm.get(&#x27;width&#x27;)?.touched)}&quot;
+                        placeholder&#x3D;&quot;170&quot; id&#x3D;&quot;width&quot; type&#x3D;&quot;number&quot; min&#x3D;&quot;1&quot; step&#x3D;&quot;1&quot; title&#x3D;&quot;Введите ширину&quot;&gt;
+                    &lt;span
+                        *ngIf&#x3D;&quot;proportionsForm.get(&#x27;width&#x27;)?.invalid &amp;&amp; (proportionsForm.get(&#x27;width&#x27;)?.dirty || proportionsForm.get(&#x27;width&#x27;)?.touched)&quot;
+                        class&#x3D;&quot;error-message&quot;&gt;
+                        Пожалуйста, укажите ширину
+                    &lt;/span&gt;
+                    &lt;label class&#x3D;&quot;inputLabel&quot; for&#x3D;&quot;length&quot;&gt;Длина(см)&lt;/label&gt;
+                    &lt;input formControlName&#x3D;&quot;length&quot; class&#x3D;&quot;addModuleInput&quot;
+                        [ngClass]&#x3D;&quot;{&#x27;invalid&#x27;: proportionsForm.get(&#x27;length&#x27;)?.invalid &amp;&amp; (proportionsForm.get(&#x27;length&#x27;)?.dirty || proportionsForm.get(&#x27;length&#x27;)?.touched)}&quot;
+                        placeholder&#x3D;&quot;150&quot; id&#x3D;&quot;length&quot; type&#x3D;&quot;number&quot; min&#x3D;&quot;1&quot; step&#x3D;&quot;1&quot; title&#x3D;&quot;Введите длину&quot;&gt;
+                    &lt;span
+                        *ngIf&#x3D;&quot;proportionsForm.get(&#x27;length&#x27;)?.invalid &amp;&amp; (proportionsForm.get(&#x27;length&#x27;)?.dirty || proportionsForm.get(&#x27;length&#x27;)?.touched)&quot;
+                        class&#x3D;&quot;error-message&quot;&gt;
+                        Пожалуйста, укажите длину
+                    &lt;/span&gt;
+                    &lt;label class&#x3D;&quot;inputLabel&quot; for&#x3D;&quot;height&quot;&gt;Высота(см)&lt;/label&gt;
+                    &lt;input formControlName&#x3D;&quot;height&quot; class&#x3D;&quot;addModuleInput&quot;
+                        [ngClass]&#x3D;&quot;{&#x27;invalid&#x27;: proportionsForm.get(&#x27;height&#x27;)?.invalid &amp;&amp; (proportionsForm.get(&#x27;height&#x27;)?.dirty || proportionsForm.get(&#x27;height&#x27;)?.touched)}&quot;
+                        placeholder&#x3D;&quot;100&quot; id&#x3D;&quot;height&quot; type&#x3D;&quot;number&quot; min&#x3D;&quot;1&quot; step&#x3D;&quot;1&quot; title&#x3D;&quot;Введите высоту&quot;&gt;
+                    &lt;span
+                        *ngIf&#x3D;&quot;proportionsForm.get(&#x27;height&#x27;)?.invalid &amp;&amp; (proportionsForm.get(&#x27;height&#x27;)?.dirty || proportionsForm.get(&#x27;height&#x27;)?.touched)&quot;
+                        class&#x3D;&quot;error-message&quot;&gt;
+                        Пожалуйста, укажите высоту
+                    &lt;/span&gt;
+                    &lt;ng-container *ngIf&#x3D;&quot;furnitureData.additionalData.category&quot;&gt;
+                        &lt;ng-container *ngFor&#x3D;&quot;let filterData of getfilterData()&quot;&gt;
+                            &lt;ng-container *ngTemplateOutlet&#x3D;&quot;
+      filterData.type &#x3D;&#x3D;&#x3D; &#x27;select&#x27; ? selectFilter : rangeFilter;
+      context: { filterData: filterData }&quot;&gt;
+                            &lt;/ng-container&gt;
+                        &lt;/ng-container&gt;
+                    &lt;/ng-container&gt;
+                &lt;/span&gt;
+            &lt;/span&gt;
+            &lt;button [disabled]&#x3D;&quot;proportionsForm.invalid&quot; class&#x3D;&quot;submitAddModuleFormBtn additionalBtn&quot; type&#x3D;&quot;submit&quot;
+                title&#x3D;&quot;Сохранить информацию&quot;&gt;Сохранить&lt;/button&gt;
+        &lt;/span&gt;
+    &lt;/form&gt;
+&lt;/ng-template&gt;
+
+&lt;ng-template #selectFilter let-filterData&#x3D;&quot;filterData&quot;&gt;
+    &lt;span class&#x3D;&quot;filterSpan&quot;&gt;
+        &lt;label class&#x3D;&quot;inputLabel&quot; [for]&#x3D;&quot;filterData.field&quot;&gt;{{filterData.name}}&lt;/label&gt;
+        &lt;select class&#x3D;&quot;categorySelect&quot; [id]&#x3D;&quot;filterData.field&quot;
+            [(ngModel)]&#x3D;&quot;furnitureData.additionalData[filterData.field]&quot; type&#x3D;&quot;number&quot;&gt;
+            &lt;option [value]&#x3D;&quot;option.queryValue&quot; *ngFor&#x3D;&quot;let option of filterData.options&quot;&gt;{{option.name}}&lt;/option&gt;
+        &lt;/select&gt;
+    &lt;/span&gt;
+&lt;/ng-template&gt;
+&lt;ng-template #rangeFilter let-filterData&#x3D;&quot;filterData&quot;&gt;
+    &lt;span class&#x3D;&quot;filterSpan&quot;&gt;
+        &lt;label class&#x3D;&quot;inputLabel&quot; [for]&#x3D;&quot;filterData.field&quot;&gt;{{filterData.name}}&lt;/label&gt;
+        &lt;input class&#x3D;&quot;addModuleInput&quot; [id]&#x3D;&quot;filterData.field&quot;
+            [(ngModel)]&#x3D;&quot;furnitureData.additionalData[filterData.field]&quot; type&#x3D;&quot;number&quot;&gt;
+    &lt;/span&gt;
+&lt;/ng-template&gt;</code></pre>
+    </div>
+
+    <div class="tab-pane fade " id="styleData">
+                <p class="comment">
+                    <code>./create-furniture.component.scss</code>
+                </p>
+                <pre class="line-numbers"><code class="language-scss">@use &#x27;base.scss&#x27; as *;
+
+button:not(.colorVariant),
+.furnitureModelInput {
+    transition: all 0.3s ease-in-out;
+
+    &amp;:hover {
+        transform: translateY(-3px);
+    }
+}
+
+.body {
+    background-color: black;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    margin: 0 auto;
+    margin-top: 60px;
+}
+
+.imageSlideSpan {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr;
+}
+
+.addModuleInput {
+    border-radius: 10px;
+    background-color: transparent;
+    border: #888888 1px solid;
+    padding: 10px;
+    outline: none;
+    color: white;
+}
+
+.editImagesBtn {
+    aspect-ratio: 1;
+    border: none;
+    background: none;
+    grid-area: 1/1/2/2;
+    align-self: start;
+    z-index: 4;
+    justify-self: end;
+    margin-top: -10px;
+    margin-right: -10px;
+
+    @media(max-width:768px) {
+        margin: 0;
+    }
+}
+
+.editImagesBtn&gt;img {
+    width: 25px;
+    cursor: pointer
+}
+
+app-image-slider {
+    width: 100%;
+    display: block;
+    grid-area: 1/1/2/2;
+}
+
+.leftPiece {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.furnitureTitle {
+    color: white;
+    text-align: center;
+    margin: 0 auto;
+    width: fit-content;
+    background: none;
+    border: none;
+    outline: none;
+    font-size: 1.5vw;
+}
+
+.uploadImagesDiv {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr;
+    width: 60px;
+    place-items: center;
+    margin: 60px auto;
+}
+
+.uploadImagesInput {
+    grid-area: 1/1/2/2;
+    border: none;
+    background: none;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+    opacity: 0;
+}
+
+.uploadImagesIcon {
+    grid-area: 1/1/2/2;
+    width: 100%;
+}
+
+.colorSlider {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr;
+    place-items: center;
+    width: 30%;
+    height: 300px;
+    aspect-ratio: 1;
+    position: relative;
+    --radius: 60px;
+}
+
+.colorVariant {
+    --angle: calc(360deg / var(--total-items) * (var(--index) - 1));
+    transform: rotate(var(--angle)) translate(var(--radius)) rotate(calc(-1 * var(--angle)));
+}
+
+.colors {
+    grid-area: 1 / 1 / 2 / 2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    transition: all 0.5s ease-in-out;
+}
+
+.colorVariant {
+    cursor: pointer;
+    position: absolute;
+    width: 40px;
+    aspect-ratio: 1;
+    border: 5px solid black;
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.5s ease-in-out;
+    box-shadow: 0 0 3px 0 white;
+}
+
+
+.colors&gt;.colorVariant {
+    @for $i from 1 through 8 {
+        &amp;:nth-child(#{$i}) {
+            --index: #{$i};
+        }
+    }
+}
+
+.addColorBtn {
+    border-radius: 50%;
+    grid-area: 1/1/2/2;
+    width: 40px;
+    aspect-ratio: 1;
+    z-index: 3;
+    background-color: black;
+    border: none;
+    display: flex;
+    place-content: center;
+    cursor: pointer;
+    box-shadow: 0 0 10px 0px white;
+}
+
+.addColorBtn&gt;img {
+    width: 75%;
+}
+
+.addModule {
+    z-index: 4;
+    transition: all 0.5s ease-in-out;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.75);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.addModuleSpan {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr;
+}
+
+.addModuleFormContent {
+    grid-area: 1/1/2/2;
+    width: 25vw;
+    min-width: 350px;
+    border-radius: 10px;
+    background-color: #000;
+    padding: 30px 45px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    box-shadow: 0 0 10px 0px white;
+
+    .params {
+        max-height: 40vh;
+        overflow-y: scroll;
+        overflow-x: hidden;
+    }
+}
+
+.addModuleInputSpan {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+
+    padding-right: 5px;
+}
+
+.inputLabel {
+    color: $light;
+    cursor: pointer;
+    width: 100%;
+}
+
+.categorySelect {
+    width: 100%;
+    background: none;
+    border: 1px solid #888888;
+    border-radius: 10px;
+    padding: 10px;
+    background-color: black;
+    color: white;
+    cursor: pointer;
+}
+
+.addModuleInput {
+    width: calc(100% - 20px);
+    border-radius: 10px;
+    background-color: transparent;
+    border: #888888 1px solid;
+    padding: 10px;
+    outline: none;
+    color: white;
+}
+
+.addModuleTitle {
+    color: $lightGreen;
+    text-align: center;
+    font-size: 28px;
+}
+
+.submitAddModuleFormBtn {
+    background-color: $lightGreen;
+    color: white;
+    border-radius: 10px;
+    padding: 15px;
+    width: 100%;
+    border: none;
+    cursor: pointer;
+}
+
+.submitAddModuleFormBtn:disabled {
+    background-color: $darkGreen;
+}
+
+.disabled {
+    filter: opacity(0);
+    pointer-events: none;
+}
+
+.closeAddModuleBtn {
+    grid-area: 1/1/2/2;
+    background: none;
+    border: none;
+    z-index: 3;
+    width: 30px;
+    aspect-ratio: 1;
+    margin-right: 10px;
+    margin-top: 10px;
+    justify-self: end;
+    cursor: pointer;
+}
+
+.closeAddModuleBtn&gt;img {
+    transform: rotate(45deg)
+}
+
+.footer {
+    width: 100%;
+    display: flex;
+    background-color: black;
+}
+
+.informationSpan {
+    display: flex;
+    gap: 5px;
+    width: 75%
+}
+
+.descriptionSpan {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 60%;
+}
+
+.descriptionTitle {
+    background-color: $darkGreen;
+    color: white;
+    border-radius: 10px 0px 0px 10px;
+    padding: 15px;
+    width: calc(100% - 30px);
+    text-align: center;
+}
+
+.descriptionInformation {
+    color: white;
+    padding: 0px 10px;
+    min-height: 300px;
+    background: none;
+    border: none;
+    outline: none;
+    resize: vertical;
+}
+
+.rightFunctionalSection {
+    width: 40%;
+    display: flex;
+    height: 100%;
+    flex-direction: column;
+    gap: 20px
+}
+
+.additionalFunctions {
+    width: 100%;
+    background-color: $lightGreen;
+    border-radius: 10px;
+    border: none;
+    color: white;
+    font-size: 115%;
+    line-height: 50px;
+    height: 50px;
+    cursor: pointer;
+}
+
+.shopsSpan {
+    width: 100%;
+    height: calc(100% - 60px);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    transition: all 0.5s ease-in-out;
+}
+
+.shopsTitle {
+    width: calc(100% - 30px);
+    text-align: center;
+    background-color: $darkGreen;
+    border-radius: 0px 10px 10px 0px;
+    padding: 15px;
+    color: white;
+}
+
+.shopFunctions {
+    width: 100%;
+    display: flex;
+    gap: 5px;
+    height: 45px;
+    background: none;
+    padding: 0;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.furnitureCost {
+    width: 75%;
+    background-color: black;
+    color: white;
+    border-radius: 10px 0px 0px 10px;
+    align-content: center;
+    text-align: center;
+    border: 2px solid rgba($lightGreen, 0.3);
+}
+
+.shopsListSpan {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.linkShop {
+    width: 25%;
+    background-color: black;
+    border-radius: 0px 10px 10px 0px;
+    place-content: center;
+    display: flex;
+    border: 2px solid rgba($lightGreen, 0.3);
+}
+
+.linkShop&gt;img {
+    width: 40px;
+}
+
+.addShopButton {
+    background-color: black;
+    border: 2px solid rgba($lightGreen, 0.3);
+    display: flex;
+    place-content: center;
+    border-radius: 10px;
+    height: 45px;
+    cursor: pointer;
+}
+
+.addShopButton&gt;img {
+    width: 30px;
+}
+
+.functionShopsModuleBtns {
+    width: 100%;
+    display: flex;
+    gap: 10px;
+}
+
+.deleteItemAddModuleBtn {
+    border-radius: 10px;
+    background-color: $lightGreen;
+    height: 50px;
+    width: 20%;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.deleteItemAddModuleBtn&gt;img {
+    height: 50%;
+}
+
+.furnitureModelInput {
+    color: white;
+    cursor: pointer;
+    border-radius: 10px;
+    box-shadow: 0 0 5px 0 white;
+    height: 30px;
+    padding: 10px;
+    align-content: center;
+    justify-content: center;
+    display: flex;
+}
+
+.furnitureModelInput::file-selector-button {
+    color: transparent;
+    border-radius: 50%;
+    height: 100%;
+    aspect-ratio: 1;
+    border: none;
+    background-color: transparent;
+    background-image: url(&#x27;/assets/images/addIcon.svg&#x27;);
+    background-repeat: no-repeat;
+}
+
+.furnitureModelLabel {
+    color: white
+}
+
+@media (max-width: 1200px) {
+    .furnitureTitle {
+        font-size: 2vw;
+    }
+}
+
+@media (max-width: 1000px) {
+    app-create-furniture {
+        width: calc(100% - 10px);
+    }
+
+    .leftPiece {
+        gap: 30px;
+    }
+
+    .colorSlider {
+        height: 150px;
+    }
+
+    .furnitureModelInput {
+        height: 25px;
+    }
+
+    .furnitureTitle {
+        font-size: 2.5vw;
+    }
+}
+
+@media (max-width: 600px) {
+    .rightFunctionalSection {
+        gap: 10px;
+    }
+
+    .furnitureTitle {
+        font-size: 3vw;
+    }
+
+    .leftPiece {
+        gap: 0;
+    }
+
+    .shopsTitle,
+    .descriptionTitle {
+        border-radius: 10px;
+    }
+
+    .body {
+        max-width: 400px;
+        margin-top: 30px;
+        gap: 15px;
+    }
+
+    .furnitureTitle {
+        font-size: 1.5rem;
+        width: 90%;
+    }
+
+    .footer {
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .colorSlider {
+        width: 100%;
+        height: 200px;
+        margin-bottom: 20px;
+    }
+
+    .informationSpan {
+        width: 100%;
+        flex-direction: column;
+    }
+
+    .descriptionSpan,
+    .rightFunctionalSection {
+        width: 100%;
+    }
+
+    .addModuleFormContent {
+        width: calc(85vw - 40px);
+        min-width: none;
+        padding: 20px;
+    }
+
+    .shopsSpan {
+        height: auto;
+    }
+
+    .furnitureModelInput {
+        width: calc(100% - 20px);
+        margin-top: 10px;
+    }
+}
+
+.error-message {
+    color: #ff4444;
+    font-size: 0.8rem;
+    margin-top: 5px;
+}
+
+.invalid {
+    border-color: #ff4444 !important;
+    box-shadow: 0 0 5px rgba(255, 68, 68, 0.5);
+}
+
+.addModuleInput {
+    &amp;.ng-invalid.ng-touched {
+        border-color: #ff4444;
+    }
+}</code></pre>
+    </div>
+
+    <div class="tab-pane fade " id="tree">
+        <div id="tree-container"></div>
+        <div class="tree-legend">
+            <div class="title">
+                <b>Legend</b>
+            </div>
+            <div>
+                <div class="color htmlelement"></div><span>Html element</span>
+            </div>
+            <div>
+                <div class="color component"></div><span>Component</span>
+            </div>
+            <div>
+                <div class="color directive"></div><span>Html element with directive</span>
+            </div>
+        </div>
+    </div>
+
+    
+</div>
+
+<script src="../js/libs/vis.min.js"></script>
+<script src="../js/libs/htmlparser.js"></script>
+<script src="../js/libs/deep-iterator.js"></script>
+<script>
+        var COMPONENT_TEMPLATE = '<div><span class="body" (click)="currentColorId ?? openColorModule($event)">    <input class="furnitureTitle" [(ngModel)]="furnitureData.name" placeholder="Название"        title="Введите название мебели">    <span class="imageSlideSpan">        <button *ngIf="currentColorId!==undefined&&furnitureData.colors[currentColorId].imagesData.images.length>0"            (click)="removeImages()" class="editImagesBtn">            <img loading="lazy" alt="edit" src="/assets/images/editIcon.svg" alt=""></button>        <app-image-slider            *ngIf="currentColorId!==undefined&&furnitureData.colors[currentColorId].imagesData.images.length>0"            [imagesData]="furnitureData.colors[currentColorId].imagesData" [changeModeSlider]="true">        </app-image-slider>    </span>    <div class="uploadImagesDiv"        *ngIf="currentColorId===undefined||(currentColorId!==undefined&&furnitureData.colors[currentColorId].imagesData.images.length<=0)">        <input (input)="onInputImages($event)" class="uploadImagesInput" multiple type="file" accept=".png,.jpeg,.jpg"            title="Загрузите изображения">        <img loading="lazy" class="uploadImagesIcon" src="/assets/images/uploadIcon.png" alt="Загрузить">    </div>    <span class="footer">        <span class="leftPiece">            <span class="colorSlider">                <button (click)="openColorModule($event)" class="addColorBtn" title="Добавить новый цвет">                    <img loading="lazy" src="/assets/images/addIcon.svg" alt="Добавить">                </button>                <span *ngIf="furnitureData.colors!==undefined" class="colors"                    [style.--total-items]="furnitureData.colors.length.toString()">                    <button (click)="openFurnitureVariant(index)"                        *ngFor="let colorVariant of furnitureData.colors;let index=index" [attr.data-idColor]="index"                        [style.background-color]="colorVariant.color" class="colorVariant"                        title="Выбрать цвет"></button>                </span>            </span>            <input type="file" accept=".obj" id="furnitureModel" class="furnitureModelInput"                title="Загрузить 3D модель">        </span>        <span class="informationSpan">            <span class="descriptionSpan">                <div class="descriptionTitle">Описание</div>                <textarea appAutoHeight [mobileView]="isMobileView" placeholder="Введите описание..."                    [(ngModel)]="furnitureData.description" class="descriptionInformation"                    title="Введите описание мебели"></textarea>            </span>            <span class="rightFunctionalSection">                <div class="shopsTitle">Магазины</div>                <span class="shopsSpan">                    <span class="shopsListSpan">                        <button (click)="openShopsModule(index)" class="shopFunctions"                            *ngFor="let shopData of furnitureData.shops; let index=index" title="Редактировать магазин">                            <div class="furnitureCost">{{shopData.cost | costFormat}}</div>                            <div class="linkShop">                                <img loading="lazy" src="/assets/images/linkIcon.svg" alt="Ссылка">                            </div>                        </button>                    </span>                    <button (click)="openShopsModule()" class="addShopButton" title="Добавить магазин"><img                            loading="lazy" src="/assets/images/addIcon.svg" alt="Добавить"></button>                </span>                <button (click)="openAdditional()" class="additionalFunctions" title="Дополнительная информация">                    Информация                </button>            </span>        </span>    </span></span><div class="addModule disabled">    <ng-container *ngTemplateOutlet="addModuleTemplate"></ng-container></div><ng-template #colorModule>    <form class="addModuleSpan" [formGroup]="colorForm" (ngSubmit)="addColor()">        <button (click)="closeAddModule()" class="closeAddModuleBtn" type="button">            <img loading="lazy" src="/assets/images/addIcon.svg" alt="Закрыть">        </button>        <span class="addModuleFormContent">            <h2 class="addModuleTitle">Вариант мебели</h2>            <span class="addModuleInputSpan">                <label class="inputLabel" for="colorVariant">Цвет</label>                <input formControlName="color" placeholder="На английском или #hex" class="addModuleInput"                    id="colorVariant" type="text" title="Введите цвет в формате #hex или на английском">                <span                    *ngIf="colorForm.get(\'color\')?.invalid && (colorForm.get(\'color\')?.dirty || colorForm.get(\'color\')?.touched)"                    class="error-message">                    Пожалуйста, укажите цвет                </span>            </span>            <button [disabled]="!colorForm.valid" class="submitAddModuleFormBtn" type="submit"                title="Сохранить цвет">Продолжить</button>        </span>    </form></ng-template><ng-template #shopsModule>    <form class="addModuleSpan" [formGroup]="shopForm" (ngSubmit)="addShop()">        <button (click)="closeAddModule()" class="closeAddModuleBtn" type="button">            <img loading="lazy" src="/assets/images/addIcon.svg" alt="Закрыть">        </button>        <span class="addModuleFormContent">            <h2 class="addModuleTitle">Вариант магазина</h2>            <span class="addModuleInputSpan">                <label class="inputLabel" for="cost">Цена</label>                <input formControlName="cost" class="addModuleInput" id="cost" type="text" title="Введите цену">                <span                    *ngIf="shopForm.get(\'cost\')?.invalid && (shopForm.get(\'cost\')?.dirty || shopForm.get(\'cost\')?.touched)"                    class="error-message">                    Пожалуйста, укажите корректную цену                </span>            </span>            <span class="addModuleInputSpan">                <label class="inputLabel" for="url">Ссылка</label>                <input formControlName="url" class="addModuleInput" id="url" type="text"                    title="Введите ссылку на магазин">                <span                    *ngIf="shopForm.get(\'url\')?.invalid && (shopForm.get(\'url\')?.dirty || shopForm.get(\'url\')?.touched)"                    class="error-message">                    Пожалуйста, укажите ссылку                </span>            </span>            <span class="functionShopsModuleBtns">                <button [disabled]="!shopForm.valid" class="submitAddModuleFormBtn" type="submit"                    title="Сохранить магазин">Продолжить</button>                <button (click)="deleteShop()" class="deleteItemAddModuleBtn" *ngIf="lastClickedShop!==undefined"                    title="Удалить магазин"><img loading="lazy" src="/assets/images/deleteIcon.svg"                        alt="Удалить"></button>            </span>        </span>    </form></ng-template><ng-template #additionalModule>    <form class="addModuleSpan" [formGroup]="proportionsForm" (ngSubmit)="saveAdditional()">        <button (click)="closeAddModule()" class="closeAddModuleBtn" type="button">            <img loading="lazy" src="/assets/images/addIcon.svg" alt="Закрыть">        </button>        <span class="addModuleFormContent">            <h2 class="addModuleTitle">Информация</h2>            <span class="params">                <span *ngIf="categoryArray!==undefined" class="addModuleInputSpan">                    <label class="inputLabel" for="category">Категория</label>                    <select aria-placeholder="Диван" [ngModelOptions]="{standalone: true}"                        [(ngModel)]="furnitureData.additionalData.category" class="categorySelect" name="category"                        id="category" title="Выберите категорию">                        <option [value]="category.name" *ngFor="let category of categoryArray">{{category.translateOne}}                        </option>                    </select>                    <label class="inputLabel" for="width">Ширина(см)</label>                    <input formControlName="width" class="addModuleInput"                        [ngClass]="{\'invalid\': proportionsForm.get(\'width\')?.invalid && (proportionsForm.get(\'width\')?.dirty || proportionsForm.get(\'width\')?.touched)}"                        placeholder="170" id="width" type="number" min="1" step="1" title="Введите ширину">                    <span                        *ngIf="proportionsForm.get(\'width\')?.invalid && (proportionsForm.get(\'width\')?.dirty || proportionsForm.get(\'width\')?.touched)"                        class="error-message">                        Пожалуйста, укажите ширину                    </span>                    <label class="inputLabel" for="length">Длина(см)</label>                    <input formControlName="length" class="addModuleInput"                        [ngClass]="{\'invalid\': proportionsForm.get(\'length\')?.invalid && (proportionsForm.get(\'length\')?.dirty || proportionsForm.get(\'length\')?.touched)}"                        placeholder="150" id="length" type="number" min="1" step="1" title="Введите длину">                    <span                        *ngIf="proportionsForm.get(\'length\')?.invalid && (proportionsForm.get(\'length\')?.dirty || proportionsForm.get(\'length\')?.touched)"                        class="error-message">                        Пожалуйста, укажите длину                    </span>                    <label class="inputLabel" for="height">Высота(см)</label>                    <input formControlName="height" class="addModuleInput"                        [ngClass]="{\'invalid\': proportionsForm.get(\'height\')?.invalid && (proportionsForm.get(\'height\')?.dirty || proportionsForm.get(\'height\')?.touched)}"                        placeholder="100" id="height" type="number" min="1" step="1" title="Введите высоту">                    <span                        *ngIf="proportionsForm.get(\'height\')?.invalid && (proportionsForm.get(\'height\')?.dirty || proportionsForm.get(\'height\')?.touched)"                        class="error-message">                        Пожалуйста, укажите высоту                    </span>                    <ng-container *ngIf="furnitureData.additionalData.category">                        <ng-container *ngFor="let filterData of getfilterData()">                            <ng-container *ngTemplateOutlet="      filterData.type === \'select\' ? selectFilter : rangeFilter;      context: { filterData: filterData }">                            </ng-container>                        </ng-container>                    </ng-container>                </span>            </span>            <button [disabled]="proportionsForm.invalid" class="submitAddModuleFormBtn additionalBtn" type="submit"                title="Сохранить информацию">Сохранить</button>        </span>    </form></ng-template><ng-template #selectFilter let-filterData="filterData">    <span class="filterSpan">        <label class="inputLabel" [for]="filterData.field">{{filterData.name}}</label>        <select class="categorySelect" [id]="filterData.field"            [(ngModel)]="furnitureData.additionalData[filterData.field]" type="number">            <option [value]="option.queryValue" *ngFor="let option of filterData.options">{{option.name}}</option>        </select>    </span></ng-template><ng-template #rangeFilter let-filterData="filterData">    <span class="filterSpan">        <label class="inputLabel" [for]="filterData.field">{{filterData.name}}</label>        <input class="addModuleInput" [id]="filterData.field"            [(ngModel)]="furnitureData.additionalData[filterData.field]" type="number">    </span></ng-template></div>'
+    var COMPONENTS = [{'name': 'AccountPageComponent', 'selector': 'app-account-page'},{'name': 'AppComponent', 'selector': 'app-root'},{'name': 'CreateFurnitureComponent', 'selector': 'app-create-furniture'},{'name': 'CreateFurniturePageComponent', 'selector': 'app-create-furniture-page'},{'name': 'FinderComponent', 'selector': 'app-finder'},{'name': 'ImageSliderComponent', 'selector': 'app-image-slider'},{'name': 'LoginPageComponent', 'selector': 'app-login-page'},{'name': 'MainPageComponent', 'selector': 'app-main-page'},{'name': 'NavigationPanelComponent', 'selector': 'app-navigation-panel'},{'name': 'NotificationComponent', 'selector': 'app-notification'},{'name': 'PlanHouseComponent', 'selector': 'app-plan-house'},{'name': 'PlanHousePageComponent', 'selector': 'app-plan-house-page'},{'name': 'SceneComponent', 'selector': 'app-scene'},{'name': 'ShopPageComponent', 'selector': 'app-shop-page'},{'name': 'ViewFurnitureComponent', 'selector': 'app-view-furniture'}];
+    var DIRECTIVES = [{'name': 'AutoHeightDirective', 'selector': '[appAutoHeight]'}];
+    var ACTUAL_COMPONENT = {'name': 'CreateFurnitureComponent'};
+</script>
+<script src="../js/tree.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                   </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+    </div>
+</div>
+</div>
+               <!-- END CONTENT -->
+           </div>
+       </div>
+
+          <label class="dark-mode-switch">
+               <input type="checkbox">
+               <span class="slider">
+                    <svg class="slider-icon" viewBox="0 0 24 24" fill="none" height="20" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" width="20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+                    </svg>
+               </span>
+          </label>
+
+       <script>
+            var COMPODOC_CURRENT_PAGE_DEPTH = 1;
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'component';
+            var COMPODOC_CURRENT_PAGE_URL = 'CreateFurnitureComponent.html';
+            var MAX_SEARCH_RESULTS = 15;
+       </script>
+
+       <script>
+               $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               checkToggle(darkModeState);
+               if ($darkModeToggleSwitchers.length > 0) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].addEventListener('change', function (event) {
+                              darkModeState = !darkModeState;
+                              toggleDarkMode(darkModeState);
+                         });
+                    }
+               }
+          </script>
+
+       <script src="../js/libs/custom-elements.min.js"></script>
+       <script src="../js/libs/lit-html.js"></script>
+
+       <script src="../js/menu-wc.js" defer></script>
+       <script nomodule src="../js/menu-wc_es5.js" defer></script>
+
+       <script src="../js/libs/bootstrap-native.js"></script>
+
+       <script src="../js/libs/es6-shim.min.js"></script>
+       <script src="../js/libs/EventDispatcher.js"></script>
+       <script src="../js/libs/promise.min.js"></script>
+
+       <script src="../js/compodoc.js"></script>
+
+       <script src="../js/tabs.js"></script>
+       <script src="../js/menu.js"></script>
+       <script src="../js/libs/clipboard.min.js"></script>
+       <script src="../js/libs/prism.js"></script>
+       <script src="../js/sourceCode.js"></script>
+          <script src="../js/search/search.js"></script>
+          <script src="../js/search/lunr.min.js"></script>
+          <script src="../js/search/search-lunr.js"></script>
+          <script src="../js/search/search_index.js"></script>
+       <script src="../js/lazy-load-graphs.js"></script>
+
+
+    </body>
+</html>

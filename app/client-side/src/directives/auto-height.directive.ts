@@ -6,23 +6,40 @@ import { throttle } from 'lodash';
   standalone: true
 })
 export class AutoHeightDirective implements OnInit {
+  /**
+   * Элемент, к которому привязана директива
+   */
+  private el = inject(ElementRef);
+  
+  /**
+   * Флаг мобильного отображения.
+   * Если true, включается автоизменение высоты текстового поля
+   */
+  @Input()
+  mobileView: boolean = false;
+
   constructor() { }
 
-  private el = inject(ElementRef)
-  
-  @Input()
-  mobileView: boolean = false
-
+  /**
+   * Инициализация директивы
+   * Добавляет слушатель события 'input' только если включён мобильный режим
+   */
   ngOnInit(): void {
-    if (!this.mobileView) return
+    if (!this.mobileView) return;
     this.el.nativeElement.addEventListener('input', this.onInput.bind(this.el.nativeElement));
   }
   
-  onInput(event:Event) {
-    const input = event.target as HTMLTextAreaElement
+  /**
+   * Обработчик события ввода текста в textarea
+   * Автоматически регулирует высоту textarea под содержимое
+   * Функция вызова ограничена (throttle) с задержкой 250 мс
+   * @param event Событие ввода
+   */
+  onInput(event: Event) {
+    const input = event.target as HTMLTextAreaElement;
     throttle(() => {
       input.style.height = 'auto';
       input.style.height = (input.scrollHeight) + 'px';
-    }, 250)()
+    }, 250)();
   }
 }

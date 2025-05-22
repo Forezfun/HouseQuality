@@ -45,11 +45,8 @@ app-create-furniture {
 .confirmBtn {
     width: 75%;
     color: white;
-    background-color:$lightGreen;
+    background-color:$darkGreen;
     padding: 15px;
-    &:disabled{
-        background-color: $darkGreen;
-    }
 }
 
 .deleteBtn {

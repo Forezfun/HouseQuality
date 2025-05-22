@@ -1,0 +1,2058 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>house-quality documentation</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+	   <link rel="stylesheet" href="../styles/style.css">
+        <link rel="stylesheet" href="../styles/dark.css">
+    </head>
+    <body>
+          <script>
+               // Blocking script to avoid flickering dark mode
+               // Dark mode toggle button
+               var useDark = window.matchMedia('(prefers-color-scheme: dark)');
+               var darkModeState = useDark.matches;
+               var $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               var $darkModeToggles = document.querySelectorAll('.dark-mode-switch');
+               var darkModeStateLocal = localStorage.getItem('compodoc_darkmode-state');
+
+               function checkToggle(check) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].checked = check;
+                    }
+               }
+
+               function toggleDarkMode(state) {
+                    if (window.localStorage) {
+                         localStorage.setItem('compodoc_darkmode-state', state);
+                    }
+
+                    checkToggle(state);
+
+                    const hasClass = document.body.classList.contains('dark');
+
+                    if (state) {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.add('dark');
+                         }
+                         if (!hasClass) {
+                              document.body.classList.add('dark');
+                         }
+                    } else {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.remove('dark');
+                         }
+                         if (hasClass) {
+                              document.body.classList.remove('dark');
+                         }
+                    }
+               }
+
+               useDark.addEventListener('change', function (evt) {
+                    toggleDarkMode(evt.matches);
+               });
+               if (darkModeStateLocal) {
+                    darkModeState = darkModeStateLocal === 'true';
+               }
+               toggleDarkMode(darkModeState);
+          </script>
+
+        <div class="navbar navbar-default navbar-fixed-top d-md-none p-0">
+               <div class="d-flex">
+                    <a href="../" class="navbar-brand">house-quality documentation</a>
+                    <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+               </div>
+        </div>
+
+        <div class="xs-menu menu" id="mobile-menu">
+                <div id="book-search-input" role="search"><input type="text" placeholder="Type to search"></div>            <compodoc-menu></compodoc-menu>
+        </div>
+
+        <div class="container-fluid main">
+           <div class="row main">
+               <div class="d-none d-md-block menu">
+                   <compodoc-menu mode="normal"></compodoc-menu>
+               </div>
+               <!-- START CONTENT -->
+               <div class="content component">
+                   <div class="content-data">
+
+
+
+
+<ol class="breadcrumb">
+  <li class="breadcrumb-item">Components</li>
+  <li class="breadcrumb-item"
+  >
+  LoginPageComponent</li>
+</ol>
+
+<ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item">
+            <a href="#info" class="nav-link active"
+                role="tab" id="info-tab" data-bs-toggle="tab" data-link="info">Info</a>
+        </li>
+        <li class="nav-item">
+            <a href="#source" class="nav-link"
+                role="tab" id="source-tab" data-bs-toggle="tab" data-link="source">Source</a>
+        </li>
+        <li class="nav-item">
+            <a href="#templateData" class="nav-link"
+                role="tab" id="templateData-tab" data-bs-toggle="tab" data-link="template">Template</a>
+        </li>
+        <li class="nav-item">
+            <a href="#tree" class="nav-link"
+                role="tab" id="tree-tab" data-bs-toggle="tab" data-link="dom-tree">DOM Tree</a>
+        </li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane fade active in" id="info"><p class="comment">
+    <h3>File</h3>
+</p>
+<p class="comment">
+    <code>src/components/login-page/login-page.component.ts</code>
+</p>
+
+
+    <p class="comment">
+        <h3>Description</h3>
+    </p>
+    <p class="comment">
+        <p>Компонент страницы авторизации/регистрации/смены пароля.
+Использует шаблонный подход с TemplateRef для смены форм.</p>
+
+    </p>
+
+
+    <p class="comment">
+        <h3>Implements</h3>
+    </p>
+    <p class="comment">
+                <code>AfterViewInit</code>
+    </p>
+
+
+<section data-compodoc="block-metadata">
+    <h3>Metadata</h3>
+    <table class="table table-sm table-hover metadata">
+        <tbody>
+
+
+
+
+
+
+
+
+
+
+
+
+            <tr>
+                <td class="col-md-3">selector</td>
+                <td class="col-md-9"><code>app-login-page</code></td>
+            </tr>
+
+            <tr>
+                <td class="col-md-3">standalone</td>
+                <td class="col-md-9"><code>true</code></td>
+            </tr>
+
+            <tr>
+                <td class="col-md-3">imports</td>
+                <td class="col-md-9">
+                                <code><a href="../components/NavigationPanelComponent.html" target="_self" >NavigationPanelComponent</a></code>
+                            <code>ReactiveFormsModule</code>
+                            <code>NgTemplateOutlet</code>
+                            <code>FormsModule</code>
+                            <code>NgIf</code>
+                </td>
+            </tr>
+
+
+
+
+            <tr>
+                <td class="col-md-3">templateUrl</td>
+                <td class="col-md-9"><code>./login-page.component.html</code></td>
+            </tr>
+
+
+
+            <tr>
+                <td class="col-md-3">styleUrl</td>
+                <td class="col-md-9"><code>./login-page.component.scss</code></td>
+            </tr>
+
+
+
+
+
+        </tbody>
+    </table>
+</section>
+
+    <section data-compodoc="block-index">
+    <h3 id="index">Index</h3>
+    <table class="table table-sm table-bordered index-table">
+        <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Properties</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                    <span class="modifier">Protected</span>
+                                <a href="#changePasswordForm" >changePasswordForm</a>
+                            </li>
+                            <li>
+                                    <span class="modifier"></span>
+                                    <span class="modifier">Private</span>
+                                <a href="#changePasswordTemplate" >changePasswordTemplate</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Protected</span>
+                                <a href="#codeForm" >codeForm</a>
+                            </li>
+                            <li>
+                                    <span class="modifier"></span>
+                                    <span class="modifier">Private</span>
+                                <a href="#codeTemplate" >codeTemplate</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#currentChangeCode" >currentChangeCode</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Protected</span>
+                                <a href="#currentFormTemplate" >currentFormTemplate</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#currentJwtToken" >currentJwtToken</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Protected</span>
+                                <a href="#inputValues" >inputValues</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#passwordMatchValidator" >passwordMatchValidator</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Protected</span>
+                                <a href="#requestChangeForm" >requestChangeForm</a>
+                            </li>
+                            <li>
+                                    <span class="modifier"></span>
+                                    <span class="modifier">Private</span>
+                                <a href="#requestPasswordChangeTemplate" >requestPasswordChangeTemplate</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Protected</span>
+                                <a href="#signinForm" >signinForm</a>
+                            </li>
+                            <li>
+                                    <span class="modifier"></span>
+                                    <span class="modifier">Private</span>
+                                <a href="#signinTemplate" >signinTemplate</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Protected</span>
+                                <a href="#signupForm" >signupForm</a>
+                            </li>
+                            <li>
+                                    <span class="modifier"></span>
+                                    <span class="modifier">Private</span>
+                                <a href="#signupTemplate" >signupTemplate</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Methods</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                    <span class="modifier">Protected</span>
+                                    <span class="modifier">Async</span>
+                                <a href="#changePasswordUser" >changePasswordUser</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Protected</span>
+                                <a href="#changeTemplate" >changeTemplate</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Protected</span>
+                                    <span class="modifier">Async</span>
+                                <a href="#checkMatchCodes" >checkMatchCodes</a>
+                            </li>
+                            <li>
+                                <a href="#ngAfterViewInit" >ngAfterViewInit</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Protected</span>
+                                <a href="#onBackspace" >onBackspace</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Protected</span>
+                                <a href="#onInput" >onInput</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Protected</span>
+                                    <span class="modifier">Async</span>
+                                <a href="#requestChangeCode" >requestChangeCode</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Protected</span>
+                                    <span class="modifier">Async</span>
+                                <a href="#signinUser" >signinUser</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Protected</span>
+                                    <span class="modifier">Async</span>
+                                <a href="#signUpUser" >signUpUser</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+
+
+
+
+        </tbody>
+    </table>
+</section>
+
+    <section data-compodoc="block-constructor">
+    <h3 id="constructor">Constructor</h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+<code>constructor(accountService: <a href="../injectables/AccountService.html" target="_self">AccountService</a>, authService: <a href="../injectables/AuthService.html" target="_self">AuthService</a>, router: Router, notification: <a href="../injectables/NotificationService.html" target="_self">NotificationService</a>, accountCookieService: <a href="../injectables/AccountCookieService.html" target="_self">AccountCookieService</a>, cdr: ChangeDetectorRef)</code>
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="22" class="link-to-prism">src/components/login-page/login-page.component.ts:22</a></div>
+                            </td>
+                        </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                            <div>
+                                    <b>Parameters :</b>
+                                    <table class="params">
+                                        <thead>
+                                            <tr>
+                                                <td>Name</td>
+                                                    <td>Type</td>
+                                                <td>Optional</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                                <tr>
+                                                        <td>accountService</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/AccountService.html" target="_self" >AccountService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>authService</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/AuthService.html" target="_self" >AuthService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>router</td>
+                                                  
+                                                        <td>
+                                                                    <code>Router</code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>notification</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/NotificationService.html" target="_self" >NotificationService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>accountCookieService</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/AccountCookieService.html" target="_self" >AccountCookieService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>cdr</td>
+                                                  
+                                                        <td>
+                                                                    <code>ChangeDetectorRef</code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                        </tbody>
+                                    </table>
+                            </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+</section>
+
+
+
+
+
+    <section data-compodoc="block-methods">
+    
+    <h3 id="methods">
+        Methods
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="changePasswordUser"></a>
+                    <span class="name">
+                            <span class="modifier">Protected</span>
+                            <span class="modifier">Async</span>
+                        <span ><b>changePasswordUser</b></span>
+                        <a href="#changePasswordUser"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>changePasswordUser()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="123"
+                                    class="link-to-prism">src/components/login-page/login-page.component.ts:123</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Меняет пароль пользователя с использованием временного JWT.</p>
+</div>
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="changeTemplate"></a>
+                    <span class="name">
+                            <span class="modifier">Protected</span>
+                        <span ><b>changeTemplate</b></span>
+                        <a href="#changeTemplate"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>changeTemplate(template: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="188"
+                                    class="link-to-prism">src/components/login-page/login-page.component.ts:188</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Меняет текущую отображаемую форму.</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                                <td>Description</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>template</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                            <td>
+                                                    <p>Ключ шаблона (signin, signup, code, requestChange, changePassword)</p>
+
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="checkMatchCodes"></a>
+                    <span class="name">
+                            <span class="modifier">Protected</span>
+                            <span class="modifier">Async</span>
+                        <span ><b>checkMatchCodes</b></span>
+                        <a href="#checkMatchCodes"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>checkMatchCodes()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="142"
+                                    class="link-to-prism">src/components/login-page/login-page.component.ts:142</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Проверяет введённый код подтверждения.
+При совпадении выдаёт временный JWT и переключает на форму смены пароля.</p>
+</div>
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="ngAfterViewInit"></a>
+                    <span class="name">
+                        <span ><b>ngAfterViewInit</b></span>
+                        <a href="#ngAfterViewInit"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>ngAfterViewInit()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="60"
+                                    class="link-to-prism">src/components/login-page/login-page.component.ts:60</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Инициализация компонента.
+Устанавливает форму входа как текущую форму.</p>
+</div>
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="onBackspace"></a>
+                    <span class="name">
+                            <span class="modifier">Protected</span>
+                        <span ><b>onBackspace</b></span>
+                        <a href="#onBackspace"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>onBackspace(current: HTMLInputElement, prev: HTMLInputElement | null)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="179"
+                                    class="link-to-prism">src/components/login-page/login-page.component.ts:179</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Обрабатывает удаление символа (Backspace) в поле кода.</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                                <td>Description</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>current</td>
+                                            <td>
+                                                        <code>HTMLInputElement</code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                            <td>
+                                                    <p>Текущий input элемент</p>
+
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                                <td>prev</td>
+                                            <td>
+                                                        <code>HTMLInputElement | null</code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                            <td>
+                                                    <p>Предыдущий input элемент (если есть)</p>
+
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="onInput"></a>
+                    <span class="name">
+                            <span class="modifier">Protected</span>
+                        <span ><b>onInput</b></span>
+                        <a href="#onInput"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>onInput(current: HTMLInputElement, next: HTMLInputElement | null)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="169"
+                                    class="link-to-prism">src/components/login-page/login-page.component.ts:169</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Обрабатывает ввод в поле кода.</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                                <td>Description</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>current</td>
+                                            <td>
+                                                        <code>HTMLInputElement</code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                            <td>
+                                                    <p>Текущий input элемент</p>
+
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                                <td>next</td>
+                                            <td>
+                                                        <code>HTMLInputElement | null</code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                            <td>
+                                                    <p>Следующий input элемент (если есть)</p>
+
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="requestChangeCode"></a>
+                    <span class="name">
+                            <span class="modifier">Protected</span>
+                            <span class="modifier">Async</span>
+                        <span ><b>requestChangeCode</b></span>
+                        <a href="#requestChangeCode"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>requestChangeCode()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="68"
+                                    class="link-to-prism">src/components/login-page/login-page.component.ts:68</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Запрашивает код подтверждения для смены пароля.</p>
+</div>
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="signinUser"></a>
+                    <span class="name">
+                            <span class="modifier">Protected</span>
+                            <span class="modifier">Async</span>
+                        <span ><b>signinUser</b></span>
+                        <a href="#signinUser"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>signinUser()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="81"
+                                    class="link-to-prism">src/components/login-page/login-page.component.ts:81</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Авторизует пользователя по email и паролю.</p>
+</div>
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="signUpUser"></a>
+                    <span class="name">
+                            <span class="modifier">Protected</span>
+                            <span class="modifier">Async</span>
+                        <span ><b>signUpUser</b></span>
+                        <a href="#signUpUser"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>signUpUser()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="101"
+                                    class="link-to-prism">src/components/login-page/login-page.component.ts:101</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Регистрирует нового пользователя.</p>
+</div>
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>
+    <section data-compodoc="block-properties">
+    
+    <h3 id="inputs">
+        Properties
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="changePasswordForm"></a>
+                    <span class="name">
+                            <span class="modifier">Protected</span>
+                        <span ><b>changePasswordForm</b></span>
+                        <a href="#changePasswordForm"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>new FormGroup({
+    newPassword: new FormControl(&#x27;&#x27;, [Validators.required, Validators.minLength(6)]),
+    repeatPassword: new FormControl(&#x27;&#x27;, [Validators.required, Validators.minLength(6)])
+  }, { validators: this.passwordMatchValidator } as AbstractControlOptions)</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="213" class="link-to-prism">src/components/login-page/login-page.component.ts:213</a></div>
+                        </td>
+                    </tr>
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Форма смены пароля</p>
+</div>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="changePasswordTemplate"></a>
+                    <span class="name">
+                            <span class="modifier"></span>
+                            <span class="modifier">Private</span>
+                        <span ><b>changePasswordTemplate</b></span>
+                        <a href="#changePasswordTemplate"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>TemplateRef&lt;any&gt;</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <b>Decorators : </b>
+                        <br />
+                        <code>
+                            @ViewChild(&#x27;changePassword&#x27;, {read: TemplateRef})<br />
+                        </code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="52" class="link-to-prism">src/components/login-page/login-page.component.ts:52</a></div>
+                        </td>
+                    </tr>
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Шаблон смены пароля</p>
+</div>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="codeForm"></a>
+                    <span class="name">
+                            <span class="modifier">Protected</span>
+                        <span ><b>codeForm</b></span>
+                        <a href="#codeForm"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>new FormGroup({
+    code: new FormControl(&#x27;&#x27;, [Validators.required, Validators.minLength(4)])
+  })</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="208" class="link-to-prism">src/components/login-page/login-page.component.ts:208</a></div>
+                        </td>
+                    </tr>
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Форма ввода кода подтверждения</p>
+</div>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="codeTemplate"></a>
+                    <span class="name">
+                            <span class="modifier"></span>
+                            <span class="modifier">Private</span>
+                        <span ><b>codeTemplate</b></span>
+                        <a href="#codeTemplate"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>TemplateRef&lt;any&gt;</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <b>Decorators : </b>
+                        <br />
+                        <code>
+                            @ViewChild(&#x27;code&#x27;, {read: TemplateRef})<br />
+                        </code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="50" class="link-to-prism">src/components/login-page/login-page.component.ts:50</a></div>
+                        </td>
+                    </tr>
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Шаблон ввода кода</p>
+</div>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="currentChangeCode"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>currentChangeCode</b></span>
+                        <a href="#currentChangeCode"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>number | undefined</code>
+
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="40" class="link-to-prism">src/components/login-page/login-page.component.ts:40</a></div>
+                        </td>
+                    </tr>
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Код для смены пароля, полученный с сервера</p>
+</div>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="currentFormTemplate"></a>
+                    <span class="name">
+                            <span class="modifier">Protected</span>
+                        <span ><b>currentFormTemplate</b></span>
+                        <a href="#currentFormTemplate"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>TemplateRef&lt;any&gt;</code>
+
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="34" class="link-to-prism">src/components/login-page/login-page.component.ts:34</a></div>
+                        </td>
+                    </tr>
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Текущий отображаемый шаблон формы</p>
+</div>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="currentJwtToken"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>currentJwtToken</b></span>
+                        <a href="#currentJwtToken"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>string | undefined</code>
+
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="43" class="link-to-prism">src/components/login-page/login-page.component.ts:43</a></div>
+                        </td>
+                    </tr>
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Временный JWT-токен для изменения пароля</p>
+</div>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="inputValues"></a>
+                    <span class="name">
+                            <span class="modifier">Protected</span>
+                        <span ><b>inputValues</b></span>
+                        <a href="#inputValues"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>string[]</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>new Array(4).fill(&#x27;&#x27;)</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="37" class="link-to-prism">src/components/login-page/login-page.component.ts:37</a></div>
+                        </td>
+                    </tr>
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Значения ввода кода подтверждения (используется 4 поля ввода)</p>
+</div>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="passwordMatchValidator"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>passwordMatchValidator</b></span>
+                        <a href="#passwordMatchValidator"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>ValidatorFn</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>() &#x3D;&gt; {...}</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="158" class="link-to-prism">src/components/login-page/login-page.component.ts:158</a></div>
+                        </td>
+                    </tr>
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Валидатор совпадения нового пароля и повтора.</p>
+</div>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="requestChangeForm"></a>
+                    <span class="name">
+                            <span class="modifier">Protected</span>
+                        <span ><b>requestChangeForm</b></span>
+                        <a href="#requestChangeForm"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>new FormGroup({
+    email: new FormControl(&#x27;&#x27;, [Validators.required, Validators.email])
+  })</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="225" class="link-to-prism">src/components/login-page/login-page.component.ts:225</a></div>
+                        </td>
+                    </tr>
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Форма запроса смены пароля</p>
+</div>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="requestPasswordChangeTemplate"></a>
+                    <span class="name">
+                            <span class="modifier"></span>
+                            <span class="modifier">Private</span>
+                        <span ><b>requestPasswordChangeTemplate</b></span>
+                        <a href="#requestPasswordChangeTemplate"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>TemplateRef&lt;any&gt;</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <b>Decorators : </b>
+                        <br />
+                        <code>
+                            @ViewChild(&#x27;requestPasswordChange&#x27;, {read: TemplateRef})<br />
+                        </code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="54" class="link-to-prism">src/components/login-page/login-page.component.ts:54</a></div>
+                        </td>
+                    </tr>
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Шаблон запроса смены пароля</p>
+</div>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="signinForm"></a>
+                    <span class="name">
+                            <span class="modifier">Protected</span>
+                        <span ><b>signinForm</b></span>
+                        <a href="#signinForm"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>new FormGroup({
+    email: new FormControl(&#x27;&#x27;, [Validators.required, Validators.email]),
+    password: new FormControl(&#x27;&#x27;, [Validators.required])
+  })</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="219" class="link-to-prism">src/components/login-page/login-page.component.ts:219</a></div>
+                        </td>
+                    </tr>
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Форма входа</p>
+</div>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="signinTemplate"></a>
+                    <span class="name">
+                            <span class="modifier"></span>
+                            <span class="modifier">Private</span>
+                        <span ><b>signinTemplate</b></span>
+                        <a href="#signinTemplate"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>TemplateRef&lt;any&gt;</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <b>Decorators : </b>
+                        <br />
+                        <code>
+                            @ViewChild(&#x27;signin&#x27;, {read: TemplateRef})<br />
+                        </code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="48" class="link-to-prism">src/components/login-page/login-page.component.ts:48</a></div>
+                        </td>
+                    </tr>
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Шаблон формы входа</p>
+</div>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="signupForm"></a>
+                    <span class="name">
+                            <span class="modifier">Protected</span>
+                        <span ><b>signupForm</b></span>
+                        <a href="#signupForm"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>new FormGroup({
+    email: new FormControl&lt;string&gt;(&#x27;&#x27;, [Validators.required, Validators.email]),
+    nickname: new FormControl&lt;string&gt;(&#x27;&#x27;, [Validators.required]),
+    password: new FormControl&lt;string&gt;(&#x27;&#x27;, [Validators.required, Validators.minLength(6)])
+  })</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="201" class="link-to-prism">src/components/login-page/login-page.component.ts:201</a></div>
+                        </td>
+                    </tr>
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Форма регистрации</p>
+</div>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="signupTemplate"></a>
+                    <span class="name">
+                            <span class="modifier"></span>
+                            <span class="modifier">Private</span>
+                        <span ><b>signupTemplate</b></span>
+                        <a href="#signupTemplate"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>TemplateRef&lt;any&gt;</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <b>Decorators : </b>
+                        <br />
+                        <code>
+                            @ViewChild(&#x27;signup&#x27;, {read: TemplateRef})<br />
+                        </code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="46" class="link-to-prism">src/components/login-page/login-page.component.ts:46</a></div>
+                        </td>
+                    </tr>
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Шаблон формы регистрации</p>
+</div>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+</section>
+
+</div>
+
+
+    <div class="tab-pane fade  tab-source-code" id="source">
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { AfterViewInit, ChangeDetectorRef, Component, TemplateRef, ViewChild } from &#x27;@angular/core&#x27;;
+import { NavigationPanelComponent } from &#x27;../navigation-panel/navigation-panel.component&#x27;;
+import { FormGroup, FormControl, Validators, ReactiveFormsModule, FormsModule, AbstractControlOptions, ValidatorFn, AbstractControl } from &#x27;@angular/forms&#x27;;
+import { NgIf, NgTemplateOutlet } from &#x27;@angular/common&#x27;;
+import { AccountService, accountType, createAccountData } from &#x27;../../services/account.service&#x27;;
+import { AccountCookieService } from &#x27;../../services/account-cookie.service&#x27;;
+import { AuthService } from &#x27;../../services/auth.service&#x27;;
+import { Router } from &#x27;@angular/router&#x27;;
+import { NotificationService } from &#x27;../../services/notification.service&#x27;;
+
+/**
+ * Компонент страницы авторизации/регистрации/смены пароля.
+ * Использует шаблонный подход с TemplateRef для смены форм.
+ */
+@Component({
+  selector: &#x27;app-login-page&#x27;,
+  standalone: true,
+  imports: [NavigationPanelComponent, ReactiveFormsModule, NgTemplateOutlet, FormsModule, NgIf],
+  templateUrl: &#x27;./login-page.component.html&#x27;,
+  styleUrl: &#x27;./login-page.component.scss&#x27;
+})
+export class LoginPageComponent implements AfterViewInit {
+
+  constructor(
+    private accountService: AccountService,
+    private authService: AuthService,
+    private router: Router,
+    private notification: NotificationService,
+    private accountCookieService: AccountCookieService,
+    private cdr: ChangeDetectorRef
+  ) {}
+
+  /** Текущий отображаемый шаблон формы */
+  protected currentFormTemplate!: TemplateRef&lt;any&gt;;
+
+  /** Значения ввода кода подтверждения (используется 4 поля ввода) */
+  protected inputValues: string[] &#x3D; new Array(4).fill(&#x27;&#x27;);
+
+  /** Код для смены пароля, полученный с сервера */
+  private currentChangeCode: number | undefined;
+
+  /** Временный JWT-токен для изменения пароля */
+  private currentJwtToken: string | undefined;
+
+  /** Шаблон формы регистрации */
+  @ViewChild(&#x27;signup&#x27;, { read: TemplateRef }) private signupTemplate!: TemplateRef&lt;any&gt;;
+  /** Шаблон формы входа */
+  @ViewChild(&#x27;signin&#x27;, { read: TemplateRef }) private signinTemplate!: TemplateRef&lt;any&gt;;
+  /** Шаблон ввода кода */
+  @ViewChild(&#x27;code&#x27;, { read: TemplateRef }) private codeTemplate!: TemplateRef&lt;any&gt;;
+  /** Шаблон смены пароля */
+  @ViewChild(&#x27;changePassword&#x27;, { read: TemplateRef }) private changePasswordTemplate!: TemplateRef&lt;any&gt;;
+  /** Шаблон запроса смены пароля */
+  @ViewChild(&#x27;requestPasswordChange&#x27;, { read: TemplateRef }) private requestPasswordChangeTemplate!: TemplateRef&lt;any&gt;;
+
+  /**
+   * Инициализация компонента.
+   * Устанавливает форму входа как текущую форму.
+   */
+  ngAfterViewInit(): void {
+    this.currentFormTemplate &#x3D; this.signinTemplate;
+    this.cdr.detectChanges();
+  }
+
+  /**
+   * Запрашивает код подтверждения для смены пароля.
+   */
+  protected async requestChangeCode() {
+    if (this.requestChangeForm.invalid) return;
+    try {
+      this.currentChangeCode &#x3D; (await this.authService.GETrequestPasswordCode(this.requestChangeForm.value.email!)).resetCode;
+      this.changeTemplate(&#x27;code&#x27;);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  /**
+   * Авторизует пользователя по email и паролю.
+   */
+  protected async signinUser() {
+    if (this.signinForm.invalid) return;
+    const SIGN_DATA &#x3D; {
+      email: this.signinForm.value.email!,
+      password: this.signinForm.value.password!,
+      accountType: &#x27;email&#x27; as accountType
+    };
+    try {
+      const JWT &#x3D; (await this.authService.POSTcreateLongJWT(SIGN_DATA)).jwt;
+      this.accountCookieService.setJwt(JWT, &#x27;long&#x27;);
+      this.accountCookieService.setUserType(&#x27;email&#x27;);
+      this.router.navigateByUrl(&#x27;/account&#x27;);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  /**
+   * Регистрирует нового пользователя.
+   */
+  protected async signUpUser() {
+    if (this.signupForm.invalid) return;
+    try {
+      const ACCOUNT_DATA: createAccountData &#x3D; {
+        email: this.signupForm.value.email!,
+        password: this.signupForm.value.password!,
+        nickname: this.signupForm.value.nickname!,
+        accountType: &#x27;email&#x27;
+      };
+      await this.accountService.POSTcreateAccount(ACCOUNT_DATA);
+      const JWT &#x3D; (await this.authService.POSTcreateLongJWT(ACCOUNT_DATA)).jwt;
+      this.accountCookieService.setJwt(JWT, &#x27;long&#x27;);
+      this.accountCookieService.setUserType(&#x27;email&#x27;);
+      this.router.navigateByUrl(&#x27;/account&#x27;);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  /**
+   * Меняет пароль пользователя с использованием временного JWT.
+   */
+  protected async changePasswordUser() {
+    if (this.changePasswordForm.invalid || !this.currentJwtToken) return;
+    const CHANGE_DATA &#x3D; {
+      password: this.changePasswordForm.value.newPassword!,
+      accountType: &#x27;email&#x27; as const,
+      jwt: this.currentJwtToken
+    };
+    try {
+      await this.authService.PUTupdateBaseData(CHANGE_DATA);
+      this.changeTemplate(&#x27;signin&#x27;);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  /**
+   * Проверяет введённый код подтверждения.
+   * При совпадении выдаёт временный JWT и переключает на форму смены пароля.
+   */
+  protected async checkMatchCodes() {
+    if (this.codeForm.value.code &#x3D;&#x3D;&#x3D; this.currentChangeCode) {
+      try {
+        this.currentJwtToken &#x3D; (await this.authService.POSTcreateShortJWT(this.requestChangeForm.value.email!)).jwt;
+        this.changeTemplate(&#x27;changePassword&#x27;);
+      } catch (error) {
+        console.log(error);
+      }
+    } else {
+      this.notification.setError(&#x27;Неверный код&#x27;, 2500);
+    }
+  }
+
+  /**
+   * Валидатор совпадения нового пароля и повтора.
+   */
+  private passwordMatchValidator: ValidatorFn &#x3D; (control: AbstractControl) &#x3D;&gt; {
+    const FORM &#x3D; control as FormGroup;
+    return FORM.get(&#x27;newPassword&#x27;)?.value &#x3D;&#x3D;&#x3D; FORM.get(&#x27;repeatPassword&#x27;)?.value
+      ? null : { mismatch: true };
+  };
+
+  /**
+   * Обрабатывает ввод в поле кода.
+   * @param current Текущий input элемент
+   * @param next Следующий input элемент (если есть)
+   */
+  protected onInput(current: HTMLInputElement, next: HTMLInputElement | null) {
+    this.codeForm.patchValue({ code: this.inputValues.join(&#x27;&#x27;) });
+    if (next &amp;&amp; current.value) next.focus();
+  }
+
+  /**
+   * Обрабатывает удаление символа (Backspace) в поле кода.
+   * @param current Текущий input элемент
+   * @param prev Предыдущий input элемент (если есть)
+   */
+  protected onBackspace(current: HTMLInputElement, prev: HTMLInputElement | null) {
+    if (!current.value &amp;&amp; prev) prev.focus();
+    this.codeForm.patchValue({ code: this.inputValues.join(&#x27;&#x27;) });
+  }
+
+  /**
+   * Меняет текущую отображаемую форму.
+   * @param template Ключ шаблона (signin, signup, code, requestChange, changePassword)
+   */
+  protected changeTemplate(template: string) {
+    const TEMPLATES: Record&lt;string, TemplateRef&lt;any&gt;&gt; &#x3D; {
+      &#x27;requestChange&#x27;: this.requestPasswordChangeTemplate,
+      &#x27;code&#x27;: this.codeTemplate,
+      &#x27;signin&#x27;: this.signinTemplate,
+      &#x27;signup&#x27;: this.signupTemplate,
+      &#x27;changePassword&#x27;: this.changePasswordTemplate
+    };
+
+    this.currentFormTemplate &#x3D; TEMPLATES[template] || this.signinTemplate;
+  }
+
+  /** Форма регистрации */
+  protected signupForm &#x3D; new FormGroup({
+    email: new FormControl&lt;string&gt;(&#x27;&#x27;, [Validators.required, Validators.email]),
+    nickname: new FormControl&lt;string&gt;(&#x27;&#x27;, [Validators.required]),
+    password: new FormControl&lt;string&gt;(&#x27;&#x27;, [Validators.required, Validators.minLength(6)])
+  });
+
+  /** Форма ввода кода подтверждения */
+  protected codeForm &#x3D; new FormGroup({
+    code: new FormControl(&#x27;&#x27;, [Validators.required, Validators.minLength(4)])
+  });
+
+  /** Форма смены пароля */
+  protected changePasswordForm &#x3D; new FormGroup({
+    newPassword: new FormControl(&#x27;&#x27;, [Validators.required, Validators.minLength(6)]),
+    repeatPassword: new FormControl(&#x27;&#x27;, [Validators.required, Validators.minLength(6)])
+  }, { validators: this.passwordMatchValidator } as AbstractControlOptions);
+
+  /** Форма входа */
+  protected signinForm &#x3D; new FormGroup({
+    email: new FormControl(&#x27;&#x27;, [Validators.required, Validators.email]),
+    password: new FormControl(&#x27;&#x27;, [Validators.required])
+  });
+
+  /** Форма запроса смены пароля */
+  protected requestChangeForm &#x3D; new FormGroup({
+    email: new FormControl(&#x27;&#x27;, [Validators.required, Validators.email])
+  });
+}
+</code></pre>
+    </div>
+
+    <div class="tab-pane fade " id="templateData">
+        <pre class="line-numbers"><code class="language-html">&lt;span class&#x3D;&quot;body&quot;&gt;
+    &lt;app-navigation-panel&gt;&lt;/app-navigation-panel&gt;
+    
+    &lt;div class&#x3D;&quot;login-container&quot;&gt;
+        &lt;div class&#x3D;&quot;formModule&quot;&gt;
+            &lt;ng-container *ngTemplateOutlet&#x3D;&quot;currentFormTemplate&quot;&gt;&lt;/ng-container&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+&lt;/span&gt;
+
+&lt;ng-template #code&gt;
+    &lt;form class&#x3D;&quot;addModuleSpan&quot; (ngSubmit)&#x3D;&quot;checkMatchCodes()&quot;&gt;
+        &lt;h2 class&#x3D;&quot;addModuleTitle&quot;&gt;Смена пароля&lt;/h2&gt;
+        &lt;span class&#x3D;&quot;addModuleInputSpan&quot; style&#x3D;&quot;align-items: center;&quot;&gt;
+            &lt;label class&#x3D;&quot;inputLabel&quot; for&#x3D;&quot;#input1&quot;&gt;Код подтверждения&lt;/label&gt;
+            &lt;span class&#x3D;&quot;input-group&quot;&gt;
+                &lt;input type&#x3D;&quot;text&quot; maxlength&#x3D;&quot;1&quot; #input1 (input)&#x3D;&quot;onInput(input1, input2)&quot; 
+                       (keyup.backspace)&#x3D;&quot;onBackspace(input1, input1)&quot; [(ngModel)]&#x3D;&quot;inputValues[0]&quot; 
+                       [ngModelOptions]&#x3D;&quot;{standalone: true}&quot; [class.invalid]&#x3D;&quot;codeForm.get(&#x27;code&#x27;)?.invalid &amp;&amp; codeForm.get(&#x27;code&#x27;)?.touched&quot; /&gt;
+                &lt;input type&#x3D;&quot;text&quot; maxlength&#x3D;&quot;1&quot; #input2 (input)&#x3D;&quot;onInput(input2, input3)&quot; 
+                       (keyup.backspace)&#x3D;&quot;onBackspace(input2, input1)&quot; [(ngModel)]&#x3D;&quot;inputValues[1]&quot; 
+                       [ngModelOptions]&#x3D;&quot;{standalone: true}&quot; [class.invalid]&#x3D;&quot;codeForm.get(&#x27;code&#x27;)?.invalid &amp;&amp; codeForm.get(&#x27;code&#x27;)?.touched&quot; /&gt;
+                &lt;input type&#x3D;&quot;text&quot; maxlength&#x3D;&quot;1&quot; #input3 (input)&#x3D;&quot;onInput(input3, input4)&quot; 
+                       (keyup.backspace)&#x3D;&quot;onBackspace(input3, input2)&quot; [(ngModel)]&#x3D;&quot;inputValues[2]&quot; 
+                       [ngModelOptions]&#x3D;&quot;{standalone: true}&quot; [class.invalid]&#x3D;&quot;codeForm.get(&#x27;code&#x27;)?.invalid &amp;&amp; codeForm.get(&#x27;code&#x27;)?.touched&quot; /&gt;
+                &lt;input type&#x3D;&quot;text&quot; maxlength&#x3D;&quot;1&quot; #input4 (input)&#x3D;&quot;onInput(input4, null)&quot; 
+                       (keyup.backspace)&#x3D;&quot;onBackspace(input4, input3)&quot; [(ngModel)]&#x3D;&quot;inputValues[3]&quot; 
+                       [ngModelOptions]&#x3D;&quot;{standalone: true}&quot; [class.invalid]&#x3D;&quot;codeForm.get(&#x27;code&#x27;)?.invalid &amp;&amp; codeForm.get(&#x27;code&#x27;)?.touched&quot; /&gt;
+            &lt;/span&gt;
+            &lt;div class&#x3D;&quot;error-message&quot; *ngIf&#x3D;&quot;codeForm.get(&#x27;code&#x27;)?.invalid &amp;&amp; codeForm.get(&#x27;code&#x27;)?.touched&quot;&gt;
+                Введите 4-значный код
+            &lt;/div&gt;
+        &lt;/span&gt;
+        &lt;span class&#x3D;&quot;additionalFuntions&quot;&gt;
+            &lt;button type&#x3D;&quot;button&quot; (click)&#x3D;&quot;changeTemplate(&#x27;signin&#x27;)&quot;&gt;Я вспомнил пароль&lt;/button&gt;
+        &lt;/span&gt;
+        &lt;button [disabled]&#x3D;&quot;!codeForm.valid&quot; class&#x3D;&quot;submitAddModuleFormBtn&quot; type&#x3D;&quot;submit&quot;&gt;
+            {{codeForm.valid?&#x27;Сменить пароль&#x27;:&#x27;Неполный код&#x27;}}
+        &lt;/button&gt;
+    &lt;/form&gt;
+&lt;/ng-template&gt;
+
+&lt;!-- Шаблон для входа --&gt;
+&lt;ng-template #signin&gt;
+    &lt;form class&#x3D;&quot;addModuleSpan&quot; [formGroup]&#x3D;&quot;signinForm&quot; (ngSubmit)&#x3D;&quot;signinUser()&quot;&gt;
+        &lt;h2 class&#x3D;&quot;addModuleTitle&quot;&gt;Вход&lt;/h2&gt;
+        &lt;span class&#x3D;&quot;addModuleInputSpan&quot;&gt;
+            &lt;label class&#x3D;&quot;inputLabel&quot; for&#x3D;&quot;email&quot;&gt;Email&lt;/label&gt;
+            &lt;input formControlName&#x3D;&quot;email&quot; class&#x3D;&quot;addModuleInput&quot; id&#x3D;&quot;email&quot; type&#x3D;&quot;email&quot;
+                   [class.invalid]&#x3D;&quot;signinForm.get(&#x27;email&#x27;)?.invalid &amp;&amp; signinForm.get(&#x27;email&#x27;)?.touched&quot;&gt;
+            &lt;div class&#x3D;&quot;error-message&quot; *ngIf&#x3D;&quot;signinForm.get(&#x27;email&#x27;)?.errors?.[&#x27;required&#x27;] &amp;&amp; signinForm.get(&#x27;email&#x27;)?.touched&quot;&gt;
+                Email обязателен
+            &lt;/div&gt;
+            &lt;div class&#x3D;&quot;error-message&quot; *ngIf&#x3D;&quot;signinForm.get(&#x27;email&#x27;)?.errors?.[&#x27;email&#x27;] &amp;&amp; signinForm.get(&#x27;email&#x27;)?.touched&quot;&gt;
+                Введите корректный email
+            &lt;/div&gt;
+        &lt;/span&gt;
+        &lt;span class&#x3D;&quot;addModuleInputSpan&quot;&gt;
+            &lt;label class&#x3D;&quot;inputLabel&quot; for&#x3D;&quot;password&quot;&gt;Пароль&lt;/label&gt;
+            &lt;input formControlName&#x3D;&quot;password&quot; class&#x3D;&quot;addModuleInput&quot; id&#x3D;&quot;password&quot; type&#x3D;&quot;password&quot;
+                   [class.invalid]&#x3D;&quot;signinForm.get(&#x27;password&#x27;)?.invalid &amp;&amp; signinForm.get(&#x27;password&#x27;)?.touched&quot;&gt;
+            &lt;div class&#x3D;&quot;error-message&quot; *ngIf&#x3D;&quot;signinForm.get(&#x27;password&#x27;)?.invalid &amp;&amp; signinForm.get(&#x27;password&#x27;)?.touched&quot;&gt;
+                Введите пароль
+            &lt;/div&gt;
+        &lt;/span&gt;
+        &lt;span class&#x3D;&quot;additionalFuntions&quot;&gt;
+            &lt;button type&#x3D;&quot;button&quot; (click)&#x3D;&quot;changeTemplate(&#x27;signup&#x27;)&quot;&gt;Регистрация&lt;/button&gt;
+            &lt;button type&#x3D;&quot;button&quot; (click)&#x3D;&quot;changeTemplate(&#x27;requestChange&#x27;)&quot;&gt;Забыли пароль?&lt;/button&gt;
+        &lt;/span&gt;
+        &lt;button [disabled]&#x3D;&quot;!signinForm.valid&quot; class&#x3D;&quot;submitAddModuleFormBtn&quot; type&#x3D;&quot;submit&quot;&gt;
+            {{signinForm.valid?&#x27;Войти&#x27;:&#x27;Заполните форму&#x27;}}
+        &lt;/button&gt;
+    &lt;/form&gt;
+&lt;/ng-template&gt;
+
+&lt;ng-template #requestPasswordChange&gt;
+    &lt;form [formGroup]&#x3D;&quot;requestChangeForm&quot; (ngSubmit)&#x3D;&quot;requestChangeCode()&quot; class&#x3D;&quot;addModuleSpan&quot;&gt;
+      &lt;h2 class&#x3D;&quot;addModuleTitle&quot;&gt;Восстановление пароля&lt;/h2&gt;
+      &lt;div class&#x3D;&quot;addModuleInputSpan&quot;&gt;
+        &lt;label class&#x3D;&quot;inputLabel&quot;&gt;Email&lt;/label&gt;
+        &lt;input formControlName&#x3D;&quot;email&quot; type&#x3D;&quot;email&quot; class&#x3D;&quot;addModuleInput&quot;
+               [class.invalid]&#x3D;&quot;requestChangeForm.get(&#x27;email&#x27;)?.invalid &amp;&amp; requestChangeForm.get(&#x27;email&#x27;)?.touched&quot;&gt;
+        &lt;div class&#x3D;&quot;error-message&quot; *ngIf&#x3D;&quot;requestChangeForm.get(&#x27;email&#x27;)?.invalid &amp;&amp; requestChangeForm.get(&#x27;email&#x27;)?.touched&quot;&gt;
+          Введите корректный email
+        &lt;/div&gt;
+      &lt;/div&gt;
+      &lt;div class&#x3D;&quot;additionalFuntions&quot;&gt;
+        &lt;button type&#x3D;&quot;button&quot; (click)&#x3D;&quot;changeTemplate(&#x27;signin&#x27;)&quot;&gt;Назад к входу&lt;/button&gt;
+      &lt;/div&gt;
+      &lt;button type&#x3D;&quot;submit&quot; class&#x3D;&quot;submitAddModuleFormBtn&quot; [disabled]&#x3D;&quot;requestChangeForm.invalid&quot;&gt;
+        Запросить код
+      &lt;/button&gt;
+    &lt;/form&gt;
+  &lt;/ng-template&gt;
+&lt;ng-template #changePassword&gt;
+    &lt;form class&#x3D;&quot;addModuleSpan&quot; [formGroup]&#x3D;&quot;changePasswordForm&quot; (ngSubmit)&#x3D;&quot;changePasswordUser()&quot;&gt;
+        &lt;h2 class&#x3D;&quot;addModuleTitle&quot;&gt;Новый пароль&lt;/h2&gt;
+        &lt;span class&#x3D;&quot;addModuleInputSpan&quot;&gt;
+            &lt;label class&#x3D;&quot;inputLabel&quot; for&#x3D;&quot;newPassword&quot;&gt;Новый пароль&lt;/label&gt;
+            &lt;input formControlName&#x3D;&quot;newPassword&quot; class&#x3D;&quot;addModuleInput&quot; id&#x3D;&quot;newPassword&quot; type&#x3D;&quot;password&quot;
+                   [class.invalid]&#x3D;&quot;changePasswordForm.get(&#x27;newPassword&#x27;)?.invalid &amp;&amp; changePasswordForm.get(&#x27;newPassword&#x27;)?.touched&quot;&gt;
+            &lt;div class&#x3D;&quot;error-message&quot; *ngIf&#x3D;&quot;changePasswordForm.get(&#x27;newPassword&#x27;)?.invalid &amp;&amp; changePasswordForm.get(&#x27;newPassword&#x27;)?.touched&quot;&gt;
+                Пароль должен содержать минимум 6 символов
+            &lt;/div&gt;
+        &lt;/span&gt;
+        &lt;span class&#x3D;&quot;addModuleInputSpan&quot;&gt;
+            &lt;label class&#x3D;&quot;inputLabel&quot; for&#x3D;&quot;repeatPassword&quot;&gt;Повторите пароль&lt;/label&gt;
+            &lt;input formControlName&#x3D;&quot;repeatPassword&quot; class&#x3D;&quot;addModuleInput&quot; id&#x3D;&quot;repeatPassword&quot; type&#x3D;&quot;password&quot;
+                   [class.invalid]&#x3D;&quot;(changePasswordForm.get(&#x27;repeatPassword&#x27;)?.invalid || changePasswordForm.errors?.[&#x27;mismatch&#x27;]) &amp;&amp; changePasswordForm.get(&#x27;repeatPassword&#x27;)?.touched&quot;&gt;
+            &lt;div class&#x3D;&quot;error-message&quot; *ngIf&#x3D;&quot;changePasswordForm.errors?.[&#x27;mismatch&#x27;] &amp;&amp; changePasswordForm.get(&#x27;repeatPassword&#x27;)?.touched&quot;&gt;
+                Пароли не совпадают
+            &lt;/div&gt;
+        &lt;/span&gt;
+        &lt;button [disabled]&#x3D;&quot;!changePasswordForm.valid&quot; class&#x3D;&quot;submitAddModuleFormBtn&quot; type&#x3D;&quot;submit&quot;&gt;
+            {{changePasswordForm.valid?&#x27;Сохранить пароль&#x27;:&#x27;Заполните форму&#x27;}}
+        &lt;/button&gt;
+    &lt;/form&gt;
+&lt;/ng-template&gt;
+
+&lt;!-- Шаблон для регистрации --&gt;
+&lt;ng-template #signup&gt;
+    &lt;form class&#x3D;&quot;addModuleSpan&quot; [formGroup]&#x3D;&quot;signupForm&quot; (ngSubmit)&#x3D;&quot;signUpUser()&quot;&gt;
+        &lt;h2 class&#x3D;&quot;addModuleTitle&quot;&gt;Регистрация&lt;/h2&gt;
+        &lt;span class&#x3D;&quot;addModuleInputSpan&quot;&gt;
+            &lt;label class&#x3D;&quot;inputLabel&quot; for&#x3D;&quot;email&quot;&gt;Email&lt;/label&gt;
+            &lt;input formControlName&#x3D;&quot;email&quot; class&#x3D;&quot;addModuleInput&quot; id&#x3D;&quot;email&quot; type&#x3D;&quot;email&quot;
+                   [class.invalid]&#x3D;&quot;signupForm.get(&#x27;email&#x27;)?.invalid &amp;&amp; signupForm.get(&#x27;email&#x27;)?.touched&quot;&gt;
+            &lt;div class&#x3D;&quot;error-message&quot; *ngIf&#x3D;&quot;signupForm.get(&#x27;email&#x27;)?.errors?.[&#x27;required&#x27;] &amp;&amp; signupForm.get(&#x27;email&#x27;)?.touched&quot;&gt;
+                Email обязателен
+            &lt;/div&gt;
+            &lt;div class&#x3D;&quot;error-message&quot; *ngIf&#x3D;&quot;signupForm.get(&#x27;email&#x27;)?.errors?.[&#x27;email&#x27;] &amp;&amp; signupForm.get(&#x27;email&#x27;)?.touched&quot;&gt;
+                Введите корректный email
+            &lt;/div&gt;
+        &lt;/span&gt;
+        &lt;span class&#x3D;&quot;addModuleInputSpan&quot;&gt;
+            &lt;label class&#x3D;&quot;inputLabel&quot; for&#x3D;&quot;nickname&quot;&gt;Имя пользователя&lt;/label&gt;
+            &lt;input formControlName&#x3D;&quot;nickname&quot; class&#x3D;&quot;addModuleInput&quot; id&#x3D;&quot;nickname&quot; type&#x3D;&quot;text&quot;
+                   [class.invalid]&#x3D;&quot;signupForm.get(&#x27;nickname&#x27;)?.invalid &amp;&amp; signupForm.get(&#x27;nickname&#x27;)?.touched&quot;&gt;
+            &lt;div class&#x3D;&quot;error-message&quot; *ngIf&#x3D;&quot;signupForm.get(&#x27;nickname&#x27;)?.invalid &amp;&amp; signupForm.get(&#x27;nickname&#x27;)?.touched&quot;&gt;
+                Введите имя пользователя
+            &lt;/div&gt;
+        &lt;/span&gt;
+        &lt;span class&#x3D;&quot;addModuleInputSpan&quot;&gt;
+            &lt;label class&#x3D;&quot;inputLabel&quot; for&#x3D;&quot;password&quot;&gt;Пароль&lt;/label&gt;
+            &lt;input formControlName&#x3D;&quot;password&quot; class&#x3D;&quot;addModuleInput&quot; id&#x3D;&quot;password&quot; type&#x3D;&quot;password&quot;
+                   [class.invalid]&#x3D;&quot;signupForm.get(&#x27;password&#x27;)?.invalid &amp;&amp; signupForm.get(&#x27;password&#x27;)?.touched&quot;&gt;
+            &lt;div class&#x3D;&quot;error-message&quot; *ngIf&#x3D;&quot;signupForm.get(&#x27;password&#x27;)?.invalid &amp;&amp; signupForm.get(&#x27;password&#x27;)?.touched&quot;&gt;
+                Пароль должен содержать минимум 6 символов
+            &lt;/div&gt;
+        &lt;/span&gt;
+        &lt;span class&#x3D;&quot;additionalFuntions&quot;&gt;
+            &lt;button type&#x3D;&quot;button&quot; (click)&#x3D;&quot;changeTemplate(&#x27;signin&#x27;)&quot;&gt;Уже есть аккаунт?&lt;/button&gt;
+        &lt;/span&gt;
+        &lt;button [disabled]&#x3D;&quot;!signupForm.valid&quot; class&#x3D;&quot;submitAddModuleFormBtn&quot; type&#x3D;&quot;submit&quot;&gt;
+            {{signupForm.valid?&#x27;Зарегистрироваться&#x27;:&#x27;Заполните форму&#x27;}}
+        &lt;/button&gt;
+    &lt;/form&gt;
+&lt;/ng-template&gt;</code></pre>
+    </div>
+
+
+    <div class="tab-pane fade " id="tree">
+        <div id="tree-container"></div>
+        <div class="tree-legend">
+            <div class="title">
+                <b>Legend</b>
+            </div>
+            <div>
+                <div class="color htmlelement"></div><span>Html element</span>
+            </div>
+            <div>
+                <div class="color component"></div><span>Component</span>
+            </div>
+            <div>
+                <div class="color directive"></div><span>Html element with directive</span>
+            </div>
+        </div>
+    </div>
+
+    
+</div>
+
+<script src="../js/libs/vis.min.js"></script>
+<script src="../js/libs/htmlparser.js"></script>
+<script src="../js/libs/deep-iterator.js"></script>
+<script>
+        var COMPONENT_TEMPLATE = '<div><span class="body">    <app-navigation-panel></app-navigation-panel>        <div class="login-container">        <div class="formModule">            <ng-container *ngTemplateOutlet="currentFormTemplate"></ng-container>        </div>    </div></span><ng-template #code>    <form class="addModuleSpan" (ngSubmit)="checkMatchCodes()">        <h2 class="addModuleTitle">Смена пароля</h2>        <span class="addModuleInputSpan" style="align-items: center;">            <label class="inputLabel" for="#input1">Код подтверждения</label>            <span class="input-group">                <input type="text" maxlength="1" #input1 (input)="onInput(input1, input2)"                        (keyup.backspace)="onBackspace(input1, input1)" [(ngModel)]="inputValues[0]"                        [ngModelOptions]="{standalone: true}" [class.invalid]="codeForm.get(\'code\')?.invalid && codeForm.get(\'code\')?.touched" />                <input type="text" maxlength="1" #input2 (input)="onInput(input2, input3)"                        (keyup.backspace)="onBackspace(input2, input1)" [(ngModel)]="inputValues[1]"                        [ngModelOptions]="{standalone: true}" [class.invalid]="codeForm.get(\'code\')?.invalid && codeForm.get(\'code\')?.touched" />                <input type="text" maxlength="1" #input3 (input)="onInput(input3, input4)"                        (keyup.backspace)="onBackspace(input3, input2)" [(ngModel)]="inputValues[2]"                        [ngModelOptions]="{standalone: true}" [class.invalid]="codeForm.get(\'code\')?.invalid && codeForm.get(\'code\')?.touched" />                <input type="text" maxlength="1" #input4 (input)="onInput(input4, null)"                        (keyup.backspace)="onBackspace(input4, input3)" [(ngModel)]="inputValues[3]"                        [ngModelOptions]="{standalone: true}" [class.invalid]="codeForm.get(\'code\')?.invalid && codeForm.get(\'code\')?.touched" />            </span>            <div class="error-message" *ngIf="codeForm.get(\'code\')?.invalid && codeForm.get(\'code\')?.touched">                Введите 4-значный код            </div>        </span>        <span class="additionalFuntions">            <button type="button" (click)="changeTemplate(\'signin\')">Я вспомнил пароль</button>        </span>        <button [disabled]="!codeForm.valid" class="submitAddModuleFormBtn" type="submit">            {{codeForm.valid?\'Сменить пароль\':\'Неполный код\'}}        </button>    </form></ng-template><!-- Шаблон для входа --><ng-template #signin>    <form class="addModuleSpan" [formGroup]="signinForm" (ngSubmit)="signinUser()">        <h2 class="addModuleTitle">Вход</h2>        <span class="addModuleInputSpan">            <label class="inputLabel" for="email">Email</label>            <input formControlName="email" class="addModuleInput" id="email" type="email"                   [class.invalid]="signinForm.get(\'email\')?.invalid && signinForm.get(\'email\')?.touched">            <div class="error-message" *ngIf="signinForm.get(\'email\')?.errors?.[\'required\'] && signinForm.get(\'email\')?.touched">                Email обязателен            </div>            <div class="error-message" *ngIf="signinForm.get(\'email\')?.errors?.[\'email\'] && signinForm.get(\'email\')?.touched">                Введите корректный email            </div>        </span>        <span class="addModuleInputSpan">            <label class="inputLabel" for="password">Пароль</label>            <input formControlName="password" class="addModuleInput" id="password" type="password"                   [class.invalid]="signinForm.get(\'password\')?.invalid && signinForm.get(\'password\')?.touched">            <div class="error-message" *ngIf="signinForm.get(\'password\')?.invalid && signinForm.get(\'password\')?.touched">                Введите пароль            </div>        </span>        <span class="additionalFuntions">            <button type="button" (click)="changeTemplate(\'signup\')">Регистрация</button>            <button type="button" (click)="changeTemplate(\'requestChange\')">Забыли пароль?</button>        </span>        <button [disabled]="!signinForm.valid" class="submitAddModuleFormBtn" type="submit">            {{signinForm.valid?\'Войти\':\'Заполните форму\'}}        </button>    </form></ng-template><ng-template #requestPasswordChange>    <form [formGroup]="requestChangeForm" (ngSubmit)="requestChangeCode()" class="addModuleSpan">      <h2 class="addModuleTitle">Восстановление пароля</h2>      <div class="addModuleInputSpan">        <label class="inputLabel">Email</label>        <input formControlName="email" type="email" class="addModuleInput"               [class.invalid]="requestChangeForm.get(\'email\')?.invalid && requestChangeForm.get(\'email\')?.touched">        <div class="error-message" *ngIf="requestChangeForm.get(\'email\')?.invalid && requestChangeForm.get(\'email\')?.touched">          Введите корректный email        </div>      </div>      <div class="additionalFuntions">        <button type="button" (click)="changeTemplate(\'signin\')">Назад к входу</button>      </div>      <button type="submit" class="submitAddModuleFormBtn" [disabled]="requestChangeForm.invalid">        Запросить код      </button>    </form>  </ng-template><ng-template #changePassword>    <form class="addModuleSpan" [formGroup]="changePasswordForm" (ngSubmit)="changePasswordUser()">        <h2 class="addModuleTitle">Новый пароль</h2>        <span class="addModuleInputSpan">            <label class="inputLabel" for="newPassword">Новый пароль</label>            <input formControlName="newPassword" class="addModuleInput" id="newPassword" type="password"                   [class.invalid]="changePasswordForm.get(\'newPassword\')?.invalid && changePasswordForm.get(\'newPassword\')?.touched">            <div class="error-message" *ngIf="changePasswordForm.get(\'newPassword\')?.invalid && changePasswordForm.get(\'newPassword\')?.touched">                Пароль должен содержать минимум 6 символов            </div>        </span>        <span class="addModuleInputSpan">            <label class="inputLabel" for="repeatPassword">Повторите пароль</label>            <input formControlName="repeatPassword" class="addModuleInput" id="repeatPassword" type="password"                   [class.invalid]="(changePasswordForm.get(\'repeatPassword\')?.invalid || changePasswordForm.errors?.[\'mismatch\']) && changePasswordForm.get(\'repeatPassword\')?.touched">            <div class="error-message" *ngIf="changePasswordForm.errors?.[\'mismatch\'] && changePasswordForm.get(\'repeatPassword\')?.touched">                Пароли не совпадают            </div>        </span>        <button [disabled]="!changePasswordForm.valid" class="submitAddModuleFormBtn" type="submit">            {{changePasswordForm.valid?\'Сохранить пароль\':\'Заполните форму\'}}        </button>    </form></ng-template><!-- Шаблон для регистрации --><ng-template #signup>    <form class="addModuleSpan" [formGroup]="signupForm" (ngSubmit)="signUpUser()">        <h2 class="addModuleTitle">Регистрация</h2>        <span class="addModuleInputSpan">            <label class="inputLabel" for="email">Email</label>            <input formControlName="email" class="addModuleInput" id="email" type="email"                   [class.invalid]="signupForm.get(\'email\')?.invalid && signupForm.get(\'email\')?.touched">            <div class="error-message" *ngIf="signupForm.get(\'email\')?.errors?.[\'required\'] && signupForm.get(\'email\')?.touched">                Email обязателен            </div>            <div class="error-message" *ngIf="signupForm.get(\'email\')?.errors?.[\'email\'] && signupForm.get(\'email\')?.touched">                Введите корректный email            </div>        </span>        <span class="addModuleInputSpan">            <label class="inputLabel" for="nickname">Имя пользователя</label>            <input formControlName="nickname" class="addModuleInput" id="nickname" type="text"                   [class.invalid]="signupForm.get(\'nickname\')?.invalid && signupForm.get(\'nickname\')?.touched">            <div class="error-message" *ngIf="signupForm.get(\'nickname\')?.invalid && signupForm.get(\'nickname\')?.touched">                Введите имя пользователя            </div>        </span>        <span class="addModuleInputSpan">            <label class="inputLabel" for="password">Пароль</label>            <input formControlName="password" class="addModuleInput" id="password" type="password"                   [class.invalid]="signupForm.get(\'password\')?.invalid && signupForm.get(\'password\')?.touched">            <div class="error-message" *ngIf="signupForm.get(\'password\')?.invalid && signupForm.get(\'password\')?.touched">                Пароль должен содержать минимум 6 символов            </div>        </span>        <span class="additionalFuntions">            <button type="button" (click)="changeTemplate(\'signin\')">Уже есть аккаунт?</button>        </span>        <button [disabled]="!signupForm.valid" class="submitAddModuleFormBtn" type="submit">            {{signupForm.valid?\'Зарегистрироваться\':\'Заполните форму\'}}        </button>    </form></ng-template></div>'
+    var COMPONENTS = [{'name': 'AccountPageComponent', 'selector': 'app-account-page'},{'name': 'AppComponent', 'selector': 'app-root'},{'name': 'CreateFurnitureComponent', 'selector': 'app-create-furniture'},{'name': 'CreateFurniturePageComponent', 'selector': 'app-create-furniture-page'},{'name': 'FinderComponent', 'selector': 'app-finder'},{'name': 'ImageSliderComponent', 'selector': 'app-image-slider'},{'name': 'LoginPageComponent', 'selector': 'app-login-page'},{'name': 'MainPageComponent', 'selector': 'app-main-page'},{'name': 'NavigationPanelComponent', 'selector': 'app-navigation-panel'},{'name': 'NotificationComponent', 'selector': 'app-notification'},{'name': 'PlanHouseComponent', 'selector': 'app-plan-house'},{'name': 'PlanHousePageComponent', 'selector': 'app-plan-house-page'},{'name': 'SceneComponent', 'selector': 'app-scene'},{'name': 'ShopPageComponent', 'selector': 'app-shop-page'},{'name': 'ViewFurnitureComponent', 'selector': 'app-view-furniture'}];
+    var DIRECTIVES = [{'name': 'AutoHeightDirective', 'selector': '[appAutoHeight]'}];
+    var ACTUAL_COMPONENT = {'name': 'LoginPageComponent'};
+</script>
+<script src="../js/tree.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                   </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+    </div>
+</div>
+</div>
+               <!-- END CONTENT -->
+           </div>
+       </div>
+
+          <label class="dark-mode-switch">
+               <input type="checkbox">
+               <span class="slider">
+                    <svg class="slider-icon" viewBox="0 0 24 24" fill="none" height="20" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" width="20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+                    </svg>
+               </span>
+          </label>
+
+       <script>
+            var COMPODOC_CURRENT_PAGE_DEPTH = 1;
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'component';
+            var COMPODOC_CURRENT_PAGE_URL = 'LoginPageComponent.html';
+            var MAX_SEARCH_RESULTS = 15;
+       </script>
+
+       <script>
+               $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               checkToggle(darkModeState);
+               if ($darkModeToggleSwitchers.length > 0) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].addEventListener('change', function (event) {
+                              darkModeState = !darkModeState;
+                              toggleDarkMode(darkModeState);
+                         });
+                    }
+               }
+          </script>
+
+       <script src="../js/libs/custom-elements.min.js"></script>
+       <script src="../js/libs/lit-html.js"></script>
+
+       <script src="../js/menu-wc.js" defer></script>
+       <script nomodule src="../js/menu-wc_es5.js" defer></script>
+
+       <script src="../js/libs/bootstrap-native.js"></script>
+
+       <script src="../js/libs/es6-shim.min.js"></script>
+       <script src="../js/libs/EventDispatcher.js"></script>
+       <script src="../js/libs/promise.min.js"></script>
+
+       <script src="../js/compodoc.js"></script>
+
+       <script src="../js/tabs.js"></script>
+       <script src="../js/menu.js"></script>
+       <script src="../js/libs/clipboard.min.js"></script>
+       <script src="../js/libs/prism.js"></script>
+       <script src="../js/sourceCode.js"></script>
+          <script src="../js/search/search.js"></script>
+          <script src="../js/search/lunr.min.js"></script>
+          <script src="../js/search/search-lunr.js"></script>
+          <script src="../js/search/search_index.js"></script>
+       <script src="../js/lazy-load-graphs.js"></script>
+
+
+    </body>
+</html>

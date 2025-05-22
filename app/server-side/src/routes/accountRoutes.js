@@ -39,7 +39,6 @@ ROUTER.delete('/jwt/delete', async (request, result) => {
     const JWT = request.query.jwt;
     const ACCOUNT_ID = await checkUserAccess(JWT);
     if (!ACCOUNT_ID) return result.status(404).json({ message: 'Аккаунт не найден' });
-    console.log(ACCOUNT_ID)
     const ACCOUNT_ITEM = await ACCOUNT.findById(ACCOUNT_ID);
     ACCOUNT_ITEM.jwts = ACCOUNT_ITEM.jwts.filter(jwt => jwt !== JWT);
     await ACCOUNT_ITEM.save();
@@ -212,9 +211,8 @@ async function proccessFurnitures(ACCOUNT_ID) {
         name: FURNITURE_DATA.name,
         previewUrl: `furniture/images/simple?furnitureCardId=${FURNITURE_DATA._id}&color=${IMAGES_FURNITURE_ITEM.color}&idImage=${IMAGES_FURNITURE_ITEM.idMainImage || 0}`
       });
-      console.log(furnitures)
-      return furnitures;
     }
+    return furnitures;
   } catch (error) {
     return error;
   }

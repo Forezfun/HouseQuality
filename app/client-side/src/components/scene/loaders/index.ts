@@ -2,7 +2,18 @@ import { LoadingManager, Object3D } from 'three';
 import { loadGLTFModel } from './loaders/gltf-glb.loader';
 import { loadFBXModel } from './loaders/fbx.loader';
 import { loadOBJModel } from './loaders/obj.loader';
-
+/**
+ * Загружает 3D-модель из Blob-объекта, определяя её формат по MIME-типу.
+ * 
+ * Поддерживаются форматы: glTF/glb, FBX, OBJ.
+ * 
+ * @param {Blob} blob - Файл модели в виде Blob.
+ * @param {LoadingManager} [manager] - Необязательный менеджер загрузки для отслеживания прогресса.
+ * 
+ * @returns {Promise<Object3D>} Загруженная 3D-модель как объект Three.js.
+ * 
+ * @throws {Error} Если тип файла не удалось определить или формат не поддерживается.
+ */
 export async function loadModel(blob: Blob, manager?: LoadingManager): Promise<Object3D> {
     const mimeType = blob.type;
     let extension: string | undefined;

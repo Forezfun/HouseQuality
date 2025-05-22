@@ -1,23 +1,4 @@
-function calculateZFunction(string, pattern) {
-    const combined = `${pattern}#${string}`; 
-    const z = Array(combined.length).fill(0);
-    let left = 0, right = 0;
-
-    for (let i = 1; i < combined.length; i++) {
-        if (i <= right) {
-            z[i] = Math.min(right - i + 1, z[i - left]);
-        }
-        while (i + z[i] < combined.length && combined[z[i]] === combined[i + z[i]]) {
-            z[i]++;
-        }
-        if (i + z[i] - 1 > right) {
-            left = i;
-            right = i + z[i] - 1;
-        }
-    }
-
-    return z;
-}
+const Fuse = require('fuse.js');
 
 function transliterateQuery(query) {
     const transliterationMap = {
@@ -35,37 +16,36 @@ function transliterateQuery(query) {
         transliterationMap[char] || reverseMap[char] || char
     ).join('');
 }
+const ADD_FIND_PARAMS={
+    threshold: 0.3,
+    getTenItems: false
+}
+function searchPublications(publications, query,additionalFindParams=ADD_FIND_PARAMS) {
+    if (!query) return [];
 
-function searchPublications(publications, query,getTenItems=false) {
-    let results = [];
+    const options = {
+        keys: ['name', 'description'],
+        threshold: additionalFindParams.threshold||0.3,           
+        ignoreLocation: true,     
+        includeScore: true,       
+    };
 
-    for (const PUBLICATION of publications) {
-        const { name = '', description = '' } = PUBLICATION;
-        const COMBINED_TEXT = `${name} ${description}`.toLowerCase(); 
-        const LOWER_CASE_QUERY = query.toLowerCase();
+    const fuse = new Fuse(publications, options);
+    
+    let results = fuse.search(query);
 
-        let matchFound = false;
-        const z = calculateZFunction(COMBINED_TEXT, LOWER_CASE_QUERY);
-        if (z.some(value => value >= LOWER_CASE_QUERY.length)) {
-            matchFound = true;
-        } else {
-            for (let len = LOWER_CASE_QUERY.length - 1; len > 0; len--) {
-                const subQuery = LOWER_CASE_QUERY.substring(0, len);
-                const zSub = calculateZFunction(COMBINED_TEXT, subQuery);
-                if (zSub.some(value => value >= subQuery.length)) {
-                    matchFound = true;
-                    break;
-                }
-            }
+    if (results.length === 0) {
+        const transliteratedQuery = transliterateQuery(query);
+        if (transliteratedQuery !== query) {
+            results = fuse.search(transliteratedQuery);
         }
-
-        if (matchFound) {
-            results.push(PUBLICATION);
-        }
-        if (getTenItems&&results.length >= 10) break;
     }
 
-    return results;
+    if (additionalFindParams.getTenItems) {
+        results = results.slice(0, 10);
+    }
+
+    return results.map(res => res.item);
 }
 
 module.exports.searchPublications = searchPublications;

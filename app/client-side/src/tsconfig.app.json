@@ -7,9 +7,15 @@
     "types": []
   },
   "files": [
-    "./main.ts"
+    "./main.ts",
   ],
   "include": [
-    "./**/*.d.ts" 
+    "./**/*.d.ts",
+    "**/*.ts"
+  ],
+  "exclude": [
+    "**/*.spec.ts",
+    "**/mock-data.ts",
+    "**/*.mock.ts",
   ]
 }

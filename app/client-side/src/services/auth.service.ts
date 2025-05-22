@@ -1,78 +1,106 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { accountType, changeAccountDataEmail,changeAccountData } from './account.service';
+import { accountType, changeAccountDataEmail, changeAccountData } from './account.service';
 import { baseUrl } from '.';
 import { isEmailAccount } from './account.service';
 import { firstValueFrom } from 'rxjs';
 
+/**
+ * Данные для аутентификации через email
+ */
 export interface emailAuthData {
-  email:string;
-  password:string
-  accountType:'email';
+  /** Email пользователя */
+  email: string;
+  /** Пароль пользователя */
+  password: string;
+  /** Тип аккаунта - 'email' */
+  accountType: 'email';
 }
+
+/**
+ * Данные для аутентификации через Google
+ */
 export interface googleAuthData {
-  accountType:'google'
+  /** Тип аккаунта - 'google' */
+  accountType: 'google';
 }
-export type authData = googleAuthData|emailAuthData
+
+/**
+ * Объединённый тип данных для аутентификации
+ */
+export type authData = googleAuthData | emailAuthData;
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  private baseServiceUrl = baseUrl+'auth/'
+  /** Базовый URL для auth-роутов */
+  private baseServiceUrl = baseUrl + 'auth/';
+
   constructor(
     private httpModule: HttpClient
   ) { }
 
   /**
    * Создание длинного JWT токена
-   * @param signInData Данные для входа (email и пароль)
-   * @param accountType Тип пользователя (email или google)
-   * @return firstValueFrom(s Promise с результатом создания токена
+   * @param authData Данные для входа (email+пароль или google)
+   * @returns Promise с JWT токеном
    */
   POSTcreateLongJWT(authData: authData) {
     let HTTP_PARAMS = new HttpParams()
-      .set('accountType', authData.accountType)
+      .set('accountType', authData.accountType);
+
     if (isEmailAccount(authData)) {
       HTTP_PARAMS = HTTP_PARAMS
         .set('email', authData.email)
         .set('password', authData.password);
     }
-    return firstValueFrom(this.httpModule.post(this.baseServiceUrl + 'jwt/long', HTTP_PARAMS)) as Promise<{ jwt: string }>
+
+    return firstValueFrom(this.httpModule.post(this.baseServiceUrl + 'jwt/long', HTTP_PARAMS)) as Promise<{ jwt: string }>;
   }
 
   /**
-   * Создание короткого JWT токена
-   * @param signInData Данные для входа (email и пароль)
-   * @return firstValueFrom(s Promise с результатом создания временного токена
+   * Создание короткого (временного) JWT токена
+   * @param email Email пользователя
+   * @returns Promise с временным JWT токеном
    */
   POSTcreateShortJWT(email: string) {
     let HTTP_PARAMS = new HttpParams()
-      .set('email', email)
-    return firstValueFrom(this.httpModule.post(this.baseServiceUrl + 'jwt/temporary', {params:HTTP_PARAMS})) as Promise<{ jwt: string }>
+      .set('email', email);
+
+    return firstValueFrom(this.httpModule.post(this.baseServiceUrl + 'jwt/temporary', { params: HTTP_PARAMS })) as Promise<{ jwt: string }>;
   }
 
   /**
    * Обновление базовой информации о пользователе
-   * @param jwt JWT токен
-   * @param changeData Новые данные для обновления
-   * @param typeJwt Тип JWT токена (короткий или длинный)
-   * @param accountType Тип пользователя (email или google)
-   * @return Promise с результатом обновления информации о пользователе
+   * @param changeData Новые данные для обновления аккаунта
+   * @returns Promise с сообщением об успехе обновления
    */
   PUTupdateBaseData(changeData: changeAccountData) {
-    let HTTP_PARAMS = new HttpParams()
-      .set('accountType', changeData.accountType)
-      .set('jwt', changeData.jwt)
+    const paramObject: any = {
+      accountType: changeData.accountType,
+      jwt: changeData.jwt
+    };
+
     if (isEmailAccount(changeData)) {
-      HTTP_PARAMS = HTTP_PARAMS
-        .set('password', changeData.password);
+      paramObject.password = changeData.password;
     }
-    return firstValueFrom(this.httpModule.put(this.baseServiceUrl + 'account', {params:HTTP_PARAMS})) as Promise<{message:string}>
+
+    const HTTP_PARAMS = new HttpParams({ fromObject: paramObject });
+    console.log(HTTP_PARAMS.toString());
+
+    return firstValueFrom(this.httpModule.put(this.baseServiceUrl + 'account', changeData)) as Promise<{ message: string }>;
   }
+
+  /**
+   * Запрос кода сброса пароля по email
+   * @param email Email пользователя
+   * @returns Promise с кодом для сброса пароля
+   */
   GETrequestPasswordCode(email: string) {
     let HTTP_PARAMS = new HttpParams()
       .set('email', email);
-    return firstValueFrom(this.httpModule.get(this.baseServiceUrl + 'account/code', { params: HTTP_PARAMS })) as Promise<{ resetCode: number }>
+
+    return firstValueFrom(this.httpModule.get(this.baseServiceUrl + 'account/code', { params: HTTP_PARAMS })) as Promise<{ resetCode: number }>;
   }
 }

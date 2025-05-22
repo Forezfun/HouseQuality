@@ -27,7 +27,6 @@ app-finder{
     padding-bottom: 30px;
 }
 
-
 .furnitureCategoryButton {
     background-color: $darkGreen;
     border-radius: 10px;
@@ -39,10 +38,6 @@ app-finder{
     cursor: pointer;
     border: none;
 
-    &.active {
-        background-color: $lightGreen;
-        color: black;
-    }
 }
 
 .shopModule {
@@ -131,6 +126,11 @@ app-finder{
     max-height: 300px;
     overflow-y: scroll;
     margin-bottom: 10px;
+
+    .active {
+        background-color: $lightGreen;
+        color: black;
+    }
 }
 
 .furnitureCategoryButton {

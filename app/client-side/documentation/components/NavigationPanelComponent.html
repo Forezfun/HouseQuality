@@ -1,0 +1,790 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>house-quality documentation</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+	   <link rel="stylesheet" href="../styles/style.css">
+        <link rel="stylesheet" href="../styles/dark.css">
+    </head>
+    <body>
+          <script>
+               // Blocking script to avoid flickering dark mode
+               // Dark mode toggle button
+               var useDark = window.matchMedia('(prefers-color-scheme: dark)');
+               var darkModeState = useDark.matches;
+               var $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               var $darkModeToggles = document.querySelectorAll('.dark-mode-switch');
+               var darkModeStateLocal = localStorage.getItem('compodoc_darkmode-state');
+
+               function checkToggle(check) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].checked = check;
+                    }
+               }
+
+               function toggleDarkMode(state) {
+                    if (window.localStorage) {
+                         localStorage.setItem('compodoc_darkmode-state', state);
+                    }
+
+                    checkToggle(state);
+
+                    const hasClass = document.body.classList.contains('dark');
+
+                    if (state) {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.add('dark');
+                         }
+                         if (!hasClass) {
+                              document.body.classList.add('dark');
+                         }
+                    } else {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.remove('dark');
+                         }
+                         if (hasClass) {
+                              document.body.classList.remove('dark');
+                         }
+                    }
+               }
+
+               useDark.addEventListener('change', function (evt) {
+                    toggleDarkMode(evt.matches);
+               });
+               if (darkModeStateLocal) {
+                    darkModeState = darkModeStateLocal === 'true';
+               }
+               toggleDarkMode(darkModeState);
+          </script>
+
+        <div class="navbar navbar-default navbar-fixed-top d-md-none p-0">
+               <div class="d-flex">
+                    <a href="../" class="navbar-brand">house-quality documentation</a>
+                    <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+               </div>
+        </div>
+
+        <div class="xs-menu menu" id="mobile-menu">
+                <div id="book-search-input" role="search"><input type="text" placeholder="Type to search"></div>            <compodoc-menu></compodoc-menu>
+        </div>
+
+        <div class="container-fluid main">
+           <div class="row main">
+               <div class="d-none d-md-block menu">
+                   <compodoc-menu mode="normal"></compodoc-menu>
+               </div>
+               <!-- START CONTENT -->
+               <div class="content component">
+                   <div class="content-data">
+
+
+
+
+<ol class="breadcrumb">
+  <li class="breadcrumb-item">Components</li>
+  <li class="breadcrumb-item"
+  >
+  NavigationPanelComponent</li>
+</ol>
+
+<ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item">
+            <a href="#info" class="nav-link active"
+                role="tab" id="info-tab" data-bs-toggle="tab" data-link="info">Info</a>
+        </li>
+        <li class="nav-item">
+            <a href="#source" class="nav-link"
+                role="tab" id="source-tab" data-bs-toggle="tab" data-link="source">Source</a>
+        </li>
+        <li class="nav-item">
+            <a href="#templateData" class="nav-link"
+                role="tab" id="templateData-tab" data-bs-toggle="tab" data-link="template">Template</a>
+        </li>
+        <li class="nav-item">
+            <a href="#tree" class="nav-link"
+                role="tab" id="tree-tab" data-bs-toggle="tab" data-link="dom-tree">DOM Tree</a>
+        </li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane fade active in" id="info"><p class="comment">
+    <h3>File</h3>
+</p>
+<p class="comment">
+    <code>src/components/navigation-panel/navigation-panel.component.ts</code>
+</p>
+
+
+    <p class="comment">
+        <h3>Description</h3>
+    </p>
+    <p class="comment">
+        <p>Компонент навигационной панели.
+Отображает меню навигации и компонент поиска.
+Поддерживает адаптивность под мобильные устройства.</p>
+
+    </p>
+
+
+    <p class="comment">
+        <h3>Implements</h3>
+    </p>
+    <p class="comment">
+                <code>OnInit</code>
+    </p>
+
+
+<section data-compodoc="block-metadata">
+    <h3>Metadata</h3>
+    <table class="table table-sm table-hover metadata">
+        <tbody>
+
+
+
+
+
+
+
+
+
+
+
+
+            <tr>
+                <td class="col-md-3">selector</td>
+                <td class="col-md-9"><code>app-navigation-panel</code></td>
+            </tr>
+
+            <tr>
+                <td class="col-md-3">standalone</td>
+                <td class="col-md-9"><code>true</code></td>
+            </tr>
+
+            <tr>
+                <td class="col-md-3">imports</td>
+                <td class="col-md-9">
+                            <code>RouterLink</code>
+                                <code><a href="../components/FinderComponent.html" target="_self" >FinderComponent</a></code>
+                            <code>NgIf</code>
+                </td>
+            </tr>
+
+
+
+
+            <tr>
+                <td class="col-md-3">templateUrl</td>
+                <td class="col-md-9"><code>./navigation-panel.component.html</code></td>
+            </tr>
+
+
+
+            <tr>
+                <td class="col-md-3">styleUrl</td>
+                <td class="col-md-9"><code>./navigation-panel.component.scss</code></td>
+            </tr>
+
+
+
+
+
+        </tbody>
+    </table>
+</section>
+
+    <section data-compodoc="block-index">
+    <h3 id="index">Index</h3>
+    <table class="table table-sm table-bordered index-table">
+        <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Properties</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                    <span class="modifier">Protected</span>
+                                <a href="#isMobileView" >isMobileView</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Protected</span>
+                                <a href="#menuOpen" >menuOpen</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Methods</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                    <span class="modifier"></span>
+                                    <span class="modifier">Private</span>
+                                <a href="#checkViewport" >checkViewport</a>
+                            </li>
+                            <li>
+                                <a href="#ngOnInit" >ngOnInit</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Protected</span>
+                                <a href="#toggleMenu" >toggleMenu</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+
+
+
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>HostListeners</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                <a href="#window:resize" >window:resize</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+        </tbody>
+    </table>
+</section>
+
+
+
+
+
+    <section data-compodoc="block-methods">
+    <h3>HostListeners</h3>    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="window:resize"></a>
+                    <span class="name">
+                        <span ><b>window:resize</b></span>
+                        <a href="#window:resize"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <i>Arguments : </i><code>'$event' </code>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>window:resize()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="40"
+                                    class="link-to-prism">src/components/navigation-panel/navigation-panel.component.ts:40</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Обработчик события изменения размера окна.
+Проверяет ширину окна и обновляет флаг <code>isMobileView</code>.
+Если устройство не мобильное — закрывает меню.</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                            <td>Optional</td>
+                                                <td>Description</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>event</td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                            <td>
+                                                    <p>Событие изменения размера окна</p>
+
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>
+    <section data-compodoc="block-methods">
+    
+    <h3 id="methods">
+        Methods
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="checkViewport"></a>
+                    <span class="name">
+                            <span class="modifier"></span>
+                            <span class="modifier">Private</span>
+                        <span ><b>checkViewport</b></span>
+                        <a href="#checkViewport"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>checkViewport()</code>
+                </td>
+            </tr>
+
+            <tr>
+                <td class="col-md-4">
+                    <b>Decorators : </b>
+                    <br />
+                    <code>@HostListener(&#x27;window:resize&#x27;, [&#x27;$event&#x27;])<br /></code>
+                </td>
+            </tr>
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="40"
+                                    class="link-to-prism">src/components/navigation-panel/navigation-panel.component.ts:40</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Обработчик события изменения размера окна.
+Проверяет ширину окна и обновляет флаг <code>isMobileView</code>.
+Если устройство не мобильное — закрывает меню.</p>
+</div>
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="ngOnInit"></a>
+                    <span class="name">
+                        <span ><b>ngOnInit</b></span>
+                        <a href="#ngOnInit"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>ngOnInit()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="29"
+                                    class="link-to-prism">src/components/navigation-panel/navigation-panel.component.ts:29</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Жизненный цикл OnInit.
+Выполняет начальную проверку размера экрана.</p>
+</div>
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="toggleMenu"></a>
+                    <span class="name">
+                            <span class="modifier">Protected</span>
+                        <span ><b>toggleMenu</b></span>
+                        <a href="#toggleMenu"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>toggleMenu()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="50"
+                                    class="link-to-prism">src/components/navigation-panel/navigation-panel.component.ts:50</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Переключает состояние меню (открыто/закрыто).</p>
+</div>
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>
+    <section data-compodoc="block-properties">
+    
+    <h3 id="inputs">
+        Properties
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="isMobileView"></a>
+                    <span class="name">
+                            <span class="modifier">Protected</span>
+                        <span ><b>isMobileView</b></span>
+                        <a href="#isMobileView"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>false</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="23" class="link-to-prism">src/components/navigation-panel/navigation-panel.component.ts:23</a></div>
+                        </td>
+                    </tr>
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Флаг, указывающий, отображается ли компонент в мобильной версии</p>
+</div>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="menuOpen"></a>
+                    <span class="name">
+                            <span class="modifier">Protected</span>
+                        <span ><b>menuOpen</b></span>
+                        <a href="#menuOpen"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>false</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="20" class="link-to-prism">src/components/navigation-panel/navigation-panel.component.ts:20</a></div>
+                        </td>
+                    </tr>
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Состояние открытия выпадающего меню (используется на мобильных устройствах)</p>
+</div>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+</section>
+
+</div>
+
+
+    <div class="tab-pane fade  tab-source-code" id="source">
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Component, HostListener, OnInit } from &#x27;@angular/core&#x27;;
+import { RouterLink } from &#x27;@angular/router&#x27;;
+import { FinderComponent } from &#x27;../finder/finder.component&#x27;;
+import { NgIf } from &#x27;@angular/common&#x27;;
+
+/**
+ * Компонент навигационной панели.
+ * Отображает меню навигации и компонент поиска.
+ * Поддерживает адаптивность под мобильные устройства.
+ */
+@Component({
+  selector: &#x27;app-navigation-panel&#x27;,
+  standalone: true,
+  imports: [RouterLink, FinderComponent, NgIf],
+  templateUrl: &#x27;./navigation-panel.component.html&#x27;,
+  styleUrl: &#x27;./navigation-panel.component.scss&#x27;
+})
+export class NavigationPanelComponent implements OnInit {
+  /** Состояние открытия выпадающего меню (используется на мобильных устройствах) */
+  protected menuOpen &#x3D; false;
+
+  /** Флаг, указывающий, отображается ли компонент в мобильной версии */
+  protected isMobileView &#x3D; false;
+
+  /**
+   * Жизненный цикл OnInit.
+   * Выполняет начальную проверку размера экрана.
+   */
+  ngOnInit() {
+    this.checkViewport();
+  }
+
+  /**
+   * Обработчик события изменения размера окна.
+   * Проверяет ширину окна и обновляет флаг &#x60;isMobileView&#x60;.
+   * Если устройство не мобильное — закрывает меню.
+   * @param event Событие изменения размера окна
+   */
+  @HostListener(&#x27;window:resize&#x27;, [&#x27;$event&#x27;])
+  private checkViewport() {
+    this.isMobileView &#x3D; window.innerWidth &lt;&#x3D; 768;
+    if (!this.isMobileView) {
+      this.menuOpen &#x3D; false; // Закрыть меню при переходе в десктопную версию
+    }
+  }
+
+  /**
+   * Переключает состояние меню (открыто/закрыто).
+   */
+  protected toggleMenu() {
+    this.menuOpen &#x3D; !this.menuOpen;
+  }
+}
+</code></pre>
+    </div>
+
+    <div class="tab-pane fade " id="templateData">
+        <pre class="line-numbers"><code class="language-html">&lt;nav class&#x3D;&quot;navigationSpan&quot;&gt;
+    &lt;a routerLink&#x3D;&quot;/&quot; class&#x3D;&quot;homeBtn navigationBtn&quot;&gt;HQ&lt;/a&gt;
+
+    &lt;button [class.active]&#x3D;&quot;menuOpen&quot; class&#x3D;&quot;hamburger-menu&quot; (click)&#x3D;&quot;toggleMenu()&quot; *ngIf&#x3D;&quot;isMobileView&quot;&gt;
+        &lt;img ng loading&#x3D;&quot;lazy&quot; src&#x3D;&quot;/assets/images/hamburgerMenuIcon.svg&quot; alt&#x3D;&quot;menu&quot;&gt;
+    &lt;/button&gt;
+
+    &lt;div class&#x3D;&quot;desktop-content&quot; *ngIf&#x3D;&quot;!isMobileView&quot;&gt;
+        &lt;app-finder&gt;&lt;/app-finder&gt;
+        &lt;span class&#x3D;&quot;mainBtns&quot;&gt;
+            &lt;a routerLink&#x3D;&quot;/account&quot; class&#x3D;&quot;accountBtn navigationBtn&quot;&gt;
+                &lt;img loading&#x3D;&quot;lazy&quot; src&#x3D;&quot;/assets/images/accountIcon.svg&quot; alt&#x3D;&quot;account&quot;&gt;
+            &lt;/a&gt;
+            &lt;a routerLink&#x3D;&quot;/plan&quot; class&#x3D;&quot;createBtn navigationBtn&quot;&gt;
+                &lt;svg viewBox&#x3D;&quot;0 0 32 32&quot;&gt;
+                    &lt;path
+                        d&#x3D;&quot;M28,14H18V4c0-1.104-0.896-2-2-2s-2,0.896-2,2v10H4c-1.104,0-2,0.896-2,2s0.896,2,2,2h10v10c0,1.104,0.896,2,2,2 s2-0.896,2-2V18h10c1.104,0,2-0.896,2-2S29.104,14,28,14z&quot;
+                        fill&#x3D;&quot;#DAD7CD&quot; /&gt;
+                &lt;/svg&gt;
+            &lt;/a&gt;
+            &lt;a routerLink&#x3D;&quot;/create/new&quot; class&#x3D;&quot;navigationBtn&quot;&gt;
+                &lt;img loading&#x3D;&quot;lazy&quot; src&#x3D;&quot;/assets/images/furnitureIcon.svg&quot; alt&#x3D;&quot;furniture&quot;&gt;
+            &lt;/a&gt;
+            &lt;a routerLink&#x3D;&quot;/shop&quot; class&#x3D;&quot;navigationBtn&quot;&gt;
+                &lt;img loading&#x3D;&quot;lazy&quot; src&#x3D;&quot;/assets/images/shopIcon.svg&quot; alt&#x3D;&quot;shop&quot;&gt;
+            &lt;/a&gt;
+        &lt;/span&gt;
+    &lt;/div&gt;
+
+    &lt;div class&#x3D;&quot;mobile-menu&quot; *ngIf&#x3D;&quot;isMobileView &amp;&amp; menuOpen&quot;&gt;
+        &lt;app-finder&gt;&lt;/app-finder&gt;
+        &lt;a routerLink&#x3D;&quot;/account&quot; class&#x3D;&quot;mobile-menu-item&quot;&gt;
+            &lt;img loading&#x3D;&quot;lazy&quot; src&#x3D;&quot;/assets/images/accountIcon.svg&quot; alt&#x3D;&quot;account&quot;&gt;
+            &lt;div&gt;Аккаунт&lt;/div&gt;
+        &lt;/a&gt;
+        &lt;a routerLink&#x3D;&quot;/plan&quot; class&#x3D;&quot;mobile-menu-item&quot;&gt;
+            &lt;svg viewBox&#x3D;&quot;0 0 32 32&quot;&gt;
+                &lt;path
+                    d&#x3D;&quot;M28,14H18V4c0-1.104-0.896-2-2-2s-2,0.896-2,2v10H4c-1.104,0-2,0.896-2,2s0.896,2,2,2h10v10c0,1.104,0.896,2,2,2 s2-0.896,2-2V18h10c1.104,0,2-0.896,2-2S29.104,14,28,14z&quot;
+                    fill&#x3D;&quot;#DAD7CD&quot; /&gt;
+            &lt;/svg&gt;
+            &lt;div&gt;План&lt;/div&gt;
+        &lt;/a&gt;
+        &lt;a routerLink&#x3D;&quot;/create/new&quot; class&#x3D;&quot;mobile-menu-item&quot;&gt;
+            &lt;img loading&#x3D;&quot;lazy&quot; src&#x3D;&quot;/assets/images/furnitureIcon.svg&quot; alt&#x3D;&quot;furniture&quot;&gt;
+            &lt;div&gt;Мебель&lt;/div&gt;
+        &lt;/a&gt;
+        &lt;a routerLink&#x3D;&quot;/shop&quot; class&#x3D;&quot;mobile-menu-item&quot;&gt;
+            &lt;img loading&#x3D;&quot;lazy&quot; src&#x3D;&quot;/assets/images/shopIcon.svg&quot; alt&#x3D;&quot;shop&quot;&gt;
+            &lt;div&gt;Магазин&lt;/div&gt;
+        &lt;/a&gt;
+    &lt;/div&gt;
+&lt;/nav&gt;</code></pre>
+    </div>
+
+
+    <div class="tab-pane fade " id="tree">
+        <div id="tree-container"></div>
+        <div class="tree-legend">
+            <div class="title">
+                <b>Legend</b>
+            </div>
+            <div>
+                <div class="color htmlelement"></div><span>Html element</span>
+            </div>
+            <div>
+                <div class="color component"></div><span>Component</span>
+            </div>
+            <div>
+                <div class="color directive"></div><span>Html element with directive</span>
+            </div>
+        </div>
+    </div>
+
+    
+</div>
+
+<script src="../js/libs/vis.min.js"></script>
+<script src="../js/libs/htmlparser.js"></script>
+<script src="../js/libs/deep-iterator.js"></script>
+<script>
+        var COMPONENT_TEMPLATE = '<div><nav class="navigationSpan">    <a routerLink="/" class="homeBtn navigationBtn">HQ</a>    <button [class.active]="menuOpen" class="hamburger-menu" (click)="toggleMenu()" *ngIf="isMobileView">        <img ng loading="lazy" src="/assets/images/hamburgerMenuIcon.svg" alt="menu">    </button>    <div class="desktop-content" *ngIf="!isMobileView">        <app-finder></app-finder>        <span class="mainBtns">            <a routerLink="/account" class="accountBtn navigationBtn">                <img loading="lazy" src="/assets/images/accountIcon.svg" alt="account">            </a>            <a routerLink="/plan" class="createBtn navigationBtn">                <svg viewBox="0 0 32 32">                    <path                        d="M28,14H18V4c0-1.104-0.896-2-2-2s-2,0.896-2,2v10H4c-1.104,0-2,0.896-2,2s0.896,2,2,2h10v10c0,1.104,0.896,2,2,2 s2-0.896,2-2V18h10c1.104,0,2-0.896,2-2S29.104,14,28,14z"                        fill="#DAD7CD" />                </svg>            </a>            <a routerLink="/create/new" class="navigationBtn">                <img loading="lazy" src="/assets/images/furnitureIcon.svg" alt="furniture">            </a>            <a routerLink="/shop" class="navigationBtn">                <img loading="lazy" src="/assets/images/shopIcon.svg" alt="shop">            </a>        </span>    </div>    <div class="mobile-menu" *ngIf="isMobileView && menuOpen">        <app-finder></app-finder>        <a routerLink="/account" class="mobile-menu-item">            <img loading="lazy" src="/assets/images/accountIcon.svg" alt="account">            <div>Аккаунт</div>        </a>        <a routerLink="/plan" class="mobile-menu-item">            <svg viewBox="0 0 32 32">                <path                    d="M28,14H18V4c0-1.104-0.896-2-2-2s-2,0.896-2,2v10H4c-1.104,0-2,0.896-2,2s0.896,2,2,2h10v10c0,1.104,0.896,2,2,2 s2-0.896,2-2V18h10c1.104,0,2-0.896,2-2S29.104,14,28,14z"                    fill="#DAD7CD" />            </svg>            <div>План</div>        </a>        <a routerLink="/create/new" class="mobile-menu-item">            <img loading="lazy" src="/assets/images/furnitureIcon.svg" alt="furniture">            <div>Мебель</div>        </a>        <a routerLink="/shop" class="mobile-menu-item">            <img loading="lazy" src="/assets/images/shopIcon.svg" alt="shop">            <div>Магазин</div>        </a>    </div></nav></div>'
+    var COMPONENTS = [{'name': 'AccountPageComponent', 'selector': 'app-account-page'},{'name': 'AppComponent', 'selector': 'app-root'},{'name': 'CreateFurnitureComponent', 'selector': 'app-create-furniture'},{'name': 'CreateFurniturePageComponent', 'selector': 'app-create-furniture-page'},{'name': 'FinderComponent', 'selector': 'app-finder'},{'name': 'ImageSliderComponent', 'selector': 'app-image-slider'},{'name': 'LoginPageComponent', 'selector': 'app-login-page'},{'name': 'MainPageComponent', 'selector': 'app-main-page'},{'name': 'NavigationPanelComponent', 'selector': 'app-navigation-panel'},{'name': 'NotificationComponent', 'selector': 'app-notification'},{'name': 'PlanHouseComponent', 'selector': 'app-plan-house'},{'name': 'PlanHousePageComponent', 'selector': 'app-plan-house-page'},{'name': 'SceneComponent', 'selector': 'app-scene'},{'name': 'ShopPageComponent', 'selector': 'app-shop-page'},{'name': 'ViewFurnitureComponent', 'selector': 'app-view-furniture'}];
+    var DIRECTIVES = [{'name': 'AutoHeightDirective', 'selector': '[appAutoHeight]'}];
+    var ACTUAL_COMPONENT = {'name': 'NavigationPanelComponent'};
+</script>
+<script src="../js/tree.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                   </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+    </div>
+</div>
+</div>
+               <!-- END CONTENT -->
+           </div>
+       </div>
+
+          <label class="dark-mode-switch">
+               <input type="checkbox">
+               <span class="slider">
+                    <svg class="slider-icon" viewBox="0 0 24 24" fill="none" height="20" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" width="20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+                    </svg>
+               </span>
+          </label>
+
+       <script>
+            var COMPODOC_CURRENT_PAGE_DEPTH = 1;
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'component';
+            var COMPODOC_CURRENT_PAGE_URL = 'NavigationPanelComponent.html';
+            var MAX_SEARCH_RESULTS = 15;
+       </script>
+
+       <script>
+               $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               checkToggle(darkModeState);
+               if ($darkModeToggleSwitchers.length > 0) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].addEventListener('change', function (event) {
+                              darkModeState = !darkModeState;
+                              toggleDarkMode(darkModeState);
+                         });
+                    }
+               }
+          </script>
+
+       <script src="../js/libs/custom-elements.min.js"></script>
+       <script src="../js/libs/lit-html.js"></script>
+
+       <script src="../js/menu-wc.js" defer></script>
+       <script nomodule src="../js/menu-wc_es5.js" defer></script>
+
+       <script src="../js/libs/bootstrap-native.js"></script>
+
+       <script src="../js/libs/es6-shim.min.js"></script>
+       <script src="../js/libs/EventDispatcher.js"></script>
+       <script src="../js/libs/promise.min.js"></script>
+
+       <script src="../js/compodoc.js"></script>
+
+       <script src="../js/tabs.js"></script>
+       <script src="../js/menu.js"></script>
+       <script src="../js/libs/clipboard.min.js"></script>
+       <script src="../js/libs/prism.js"></script>
+       <script src="../js/sourceCode.js"></script>
+          <script src="../js/search/search.js"></script>
+          <script src="../js/search/lunr.min.js"></script>
+          <script src="../js/search/search-lunr.js"></script>
+          <script src="../js/search/search_index.js"></script>
+       <script src="../js/lazy-load-graphs.js"></script>
+
+
+    </body>
+</html>

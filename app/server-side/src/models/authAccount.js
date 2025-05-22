@@ -25,12 +25,12 @@ const MONGOOSE = require('mongoose');
  * @property {string} googleId - Уникальный идентификатор Google пользователя.
  */
 
-const AUTH_USER_SCHEM = new MONGOOSE.Schema({
+const AUTH_ACCOUNT_SCHEM = new MONGOOSE.Schema({
   accountId: String,
   emailData: { email: String, password: String },
   googleData: { email: String, googleId: String }
 });
 
-const AUTH_USER = MONGOOSE.model('AuthAccount', AUTH_USER_SCHEM);
+const AUTH_ACCOUNT = MONGOOSE.model('AuthAccount', AUTH_ACCOUNT_SCHEM);
 
-module.exports = AUTH_USER;
+module.exports = AUTH_ACCOUNT;

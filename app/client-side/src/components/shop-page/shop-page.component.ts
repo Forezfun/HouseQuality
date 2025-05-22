@@ -1,19 +1,18 @@
 import { Component, ElementRef, OnDestroy, OnInit } from '@angular/core';
 import { NavigationPanelComponent } from '../navigation-panel/navigation-panel.component';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { JsonPipe, Location, NgClass, NgFor, NgIf, NgTemplateOutlet } from '@angular/common';
+import { Location, NgClass, NgFor, NgIf, NgTemplateOutlet } from '@angular/common';
 import { clientFilters, furnitureShopData, queryData, ShopService } from '../../services/shop.service';
 import { ViewFurnitureComponent } from '../view-furniture/view-furniture.component';
 import { AccountService } from '../../services/account.service';
 import { AccountCookieService } from '../../services/account-cookie.service';
 import { projectInformation } from '../../services/project.service';
 import { NotificationService } from '../../services/notification.service';
-import { categoryData, CategoryService, option } from '../../services/category.service';
+import { categoryData, CategoryService } from '../../services/category.service';
 import { checkDesktop } from '../../usable/reusable-functions.used';
 import { CostFormatPipe } from '../../pipes/cost-format.pipe';
-import { TuiInputRangeModule, TuiTextfieldControllerModule } from '@taiga-ui/legacy';
-import { AbstractControl, FormControl, FormGroup, FormsModule, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
-import { TuiRange } from '@taiga-ui/kit';
+import { TuiTextfieldControllerModule } from '@taiga-ui/legacy';
+import { AbstractControl, FormControl, FormGroup, FormsModule, ReactiveFormsModule, ValidationErrors } from '@angular/forms';
 import { FinderService } from '../../services/finder.service';
 import { Subscription } from 'rxjs';
 import { FinderComponent } from '../finder/finder.component';
@@ -27,6 +26,45 @@ import { FinderComponent } from '../finder/finder.component';
   styleUrl: './shop-page.component.scss'
 })
 export class ShopPageComponent implements OnInit, OnDestroy {
+
+  /** Подписка на изменения имени мебели из FinderService*/
+  private furnitureNameSubscription!: Subscription;
+
+  /** Текущее имя мебели для фильтрации */
+  private funritureName: string = '';
+
+  /** Объект с формой фильтров, формируется из category.filters */
+  protected queryGroup: any = {};
+
+  /** ID выбранной карточки мебели (если есть) */
+  protected furnitureCardId: undefined | string;
+
+  /** Имя категории из URL параметров */
+protected categoryName: undefined | string;
+
+/** Массив проектов аккаунта пользователя */
+protected accountProjects: projectInformation[] | undefined;
+
+/** Индекс текущей категории в categoryArray */
+protected currentCategoryId: number | undefined;
+
+/** Массив загруженных карточек мебели */
+protected furnituresArray: furnitureShopData[] = [];
+
+/** Флаг открытия модуля добавления мебели */
+protected openAddModuleToggle: boolean = false;
+
+/** Массив всех категорий */
+protected categoryArray: categoryData[] = [];
+
+/** Объект фильтров, получаемый от сервера */
+protected clientFiltersObject!: clientFilters;
+
+/** Массив выбранных пользователем цветов для фильтрации */
+protected selectedColors: string[] = [];
+
+
+
   constructor(
     private route: ActivatedRoute,
     private shopService: ShopService,
@@ -40,90 +78,114 @@ export class ShopPageComponent implements OnInit, OnDestroy {
     private finderService: FinderService
   ) { }
 
-  private furnitureNameSubscription!: Subscription
-  private funritureName: string = ''
-  protected queryGroup: any = {}
-  protected furnitureCardId: undefined | string
-  protected categoryName: undefined | string
-  protected accountProjects: projectInformation[] | undefined
-  protected currentCategoryId: number | undefined
-  protected furnituresArray: furnitureShopData[] = []
-  protected openAddModuleToggle: boolean = false
-  protected categoryArray: categoryData[] = []
-  protected clientFiltersObject!: clientFilters
-  protected selectedColors: string[] = []
-
-
+  /**
+   * Инициализация компонента
+   * - очистка фильтров
+   * - обработка параметров маршрута
+   * - подписка на изменения имени мебели
+   * - загрузка проектов аккаунта (если есть JWT)
+  */
   async ngOnInit() {
-    this.clearClientFilters()
+    this.clearClientFilters();
     this.processRouteParams();
     this.furnitureNameSubscription = this.finderService.furnitureName$.subscribe(name => {
-      this.furnituresArray = []
-      this.funritureName = name
-      this.requestFurnitures(this.categoryName ?? 'all', 0, this.handleQueryData())
-    })
+      this.furnituresArray = [];
+      this.funritureName = name;
+      this.requestFurnitures(this.categoryName ?? 'all', 0, this.handleQueryData());
+    });
 
-    const JWT = this.accountCookieService.getJwt()
-    if (!JWT) return
+    const JWT = this.accountCookieService.getJwt();
+    if (!JWT) return;
     try {
-      this.accountProjects = (await this.accountService.GETaccount(JWT)).accountData.projects
+      this.accountProjects = (await this.accountService.GETaccount(JWT)).accountData.projects;
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
   }
+
+  /**
+   * Очистка ресурсов при уничтожении компонента
+   */
   ngOnDestroy(): void {
-    this.furnitureNameSubscription.unsubscribe()
+    this.furnitureNameSubscription.unsubscribe();
   }
 
+  /**
+   * Загрузка категорий с сервера и инициализация queryGroup для фильтров
+   */
   private async initCategories() {
     try {
-      this.categoryArray = (await this.categoryService.GETgetAllCategories()).categoryArray
+      this.categoryArray = (await this.categoryService.GETgetAllCategories()).categoryArray;
       this.categoryArray.forEach((categoryData, index) => {
         if (this.categoryName === categoryData.name) {
-          this.currentCategoryId = index
-          this.initQueryGroup()
+          this.currentCategoryId = index;
+          this.initQueryGroup();
         }
-      })
+      });
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
   }
+
+  /**
+   * Запрос мебели для текущей категории и установка наблюдателя прокрутки
+   */
   private async furnituresInit() {
     if (this.categoryName !== undefined) {
-      await this.requestFurnitures(this.categoryName, 0)
+      await this.requestFurnitures(this.categoryName, 0);
     } else {
-      await this.requestFurnitures('all', 0)
+      await this.requestFurnitures('all', 0);
     }
     this.setScrollObserver();
   }
+
+  /**
+   * Запрос данных мебели с сервера с фильтрами и пагинацией
+   * @param categoryName - имя категории
+   * @param furnituresCount - количество уже загруженных элементов (для пагинации)
+   * @param queryData - объект с фильтрами для запроса
+   */
   protected async requestFurnitures(categoryName: string, furnituresCount: number, queryData?: queryData) {
-    const RESPONSE = await this.shopService.GETgetCategoryData(categoryName, furnituresCount, queryData)
-    console.log(RESPONSE)
-    this.furnituresArray = [...this.furnituresArray, ...RESPONSE.resultsArray]
-    this.clientFiltersObject = RESPONSE.resultsClientFiltersData
+    const RESPONSE = await this.shopService.GETgetCategoryData(categoryName, furnituresCount, queryData);
+    console.log(RESPONSE);
+    this.furnituresArray = [...this.furnituresArray, ...RESPONSE.resultsArray];
+    this.clientFiltersObject = RESPONSE.resultsClientFiltersData;
   }
 
+  /**
+   * Очистка фильтров клиента
+   */
   private clearClientFilters() {
     this.clientFiltersObject = {
       colors: [],
       minCost: 0,
       maxCost: 0
-    }
+    };
   }
+
+  /**
+   * Инициализация группы фильтров queryGroup на основе текущей категории
+  */
   private initQueryGroup() {
-    if (this.currentCategoryId === undefined) return
-    this.queryGroup = {}
+    if (this.currentCategoryId === undefined) return;
+    this.queryGroup = {};
     this.categoryArray[this.currentCategoryId].filters.forEach(filterData => {
       if (filterData && filterData.type === 'select') {
-        this.queryGroup[filterData.field] = []
+        this.queryGroup[filterData.field] = [];
       } else {
         this.queryGroup[filterData.field] = new FormGroup({
           min: new FormControl(null, [this.numberOrEmptyValidator]),
           max: new FormControl(null, [this.numberOrEmptyValidator])
-        })
+        });
       }
-    })
+    });
   }
+  
+  /**
+   * Валидатор для проверки, что значение является числом или пустым
+   * @param control - форма контроля
+   * @returns ошибка валидации или null
+   */
   private numberOrEmptyValidator(control: AbstractControl): ValidationErrors | null {
     const value = control.value;
 
@@ -133,18 +195,26 @@ export class ShopPageComponent implements OnInit, OnDestroy {
 
     return isNaN(value) || value < 0 ? { notNumber: true } : null;
   }
+
+  /**
+   * Обработка параметров маршрута для установки категории и ID мебели
+   */
   private processRouteParams() {
     const PARAMS = this.route.snapshot.params;
 
     this.furnitureCardId = PARAMS['furnitureCardId'];
     this.categoryName = PARAMS['category'];
 
-    console.log('route')
+    console.log('route');
     this.initCategories();
   }
+
+  /**
+   * Установка наблюдателя за прокруткой для подгрузки мебели при достижении конца списка
+   */
   private setScrollObserver() {
-    const SCROLL_CONTAINER = this.elementRef.nativeElement.querySelector('.category') as HTMLSpanElement
-    const items = SCROLL_CONTAINER.querySelectorAll('.furnitureItem') as NodeListOf<HTMLDivElement>
+    const SCROLL_CONTAINER = this.elementRef.nativeElement.querySelector('.category') as HTMLSpanElement;
+    const items = SCROLL_CONTAINER.querySelectorAll('.furnitureItem') as NodeListOf<HTMLDivElement>;
     let observedCount = 0;
 
     const observerOptions = {
@@ -163,31 +233,45 @@ export class ShopPageComponent implements OnInit, OnDestroy {
             ITEM.dataset['observed'] = 'true';
             observedCount++;
             if (this.categoryName !== undefined) {
-              await this.requestFurnitures(this.categoryName, this.furnituresArray.length, this.handleQueryData())
+              await this.requestFurnitures(this.categoryName, this.furnituresArray.length, this.handleQueryData());
             } else {
-              await this.requestFurnitures('all', this.furnituresArray.length, this.handleQueryData())
+              await this.requestFurnitures('all', this.furnituresArray.length, this.handleQueryData());
             }
           }
         }
       });
     };
-
+    
     const OBSERVER: IntersectionObserver = new IntersectionObserver(OBSERVER_CALLBACK, observerOptions);
     items.forEach((item: HTMLElement) => OBSERVER.observe(item));
   }
+
+  /**
+   * Проверка ширины экрана для определения типа устройства (мобильный/десктоп)
+   * @returns true если ширина <= 768px
+   */
   protected checkViewport() {
     return window.innerWidth <= 768;
   }
+
+  /**
+   * Запрос мебели с учетом текущих фильтров
+  */
   protected requestWithFilters() {
-    this.furnituresArray.length = 0
-    this.requestFurnitures(this.categoryName ?? 'all', 0, this.handleQueryData())
+    this.furnituresArray.length = 0;
+    this.requestFurnitures(this.categoryName ?? 'all', 0, this.handleQueryData());
   }
+
+  /**
+   * Формирование объекта с данными фильтрации для запроса
+   * @returns объект с данными фильтрации
+  */
   protected handleQueryData() {
-    const QUERY_DATA: any = {}
-    if (this.funritureName.length > 0) QUERY_DATA.name = this.funritureName
+    const QUERY_DATA: any = {};
+    if (this.funritureName.length > 0) QUERY_DATA.name = this.funritureName;
     Object.keys(this.queryGroup).forEach(key => {
       if (this.queryGroup[key] instanceof FormGroup) {
-        if (!this.queryGroup[key].valid) return
+        if (!this.queryGroup[key].valid) return;
         const { min, max } = this.queryGroup[key].value;
         if (+min > 0 || +max > 0) {
           QUERY_DATA[key] = {
@@ -197,61 +281,123 @@ export class ShopPageComponent implements OnInit, OnDestroy {
         }
       } else {
         if (this.queryGroup[key].length > 0) {
-          QUERY_DATA[key] = this.queryGroup[key]
+          QUERY_DATA[key] = this.queryGroup[key];
         }
       }
-    })
-    console.log(QUERY_DATA)
-    return QUERY_DATA
+    });
+    console.log(QUERY_DATA);
+    return QUERY_DATA;
   }
+
+  /**
+   * Добавление выбранного цвета в фильтр
+   * @param color - цвет для добавления
+   */
   protected addSelectedColor(color: string) {
-    this.selectedColors.push(color)
+    this.selectedColors.push(color);
   }
+
+  /**
+   * Удаление выбранного цвета из фильтра
+   * @param color - цвет для удаления
+  */
   protected deleteSelectedColor(color: string) {
-    const SELECTED_COLOR_INDEX = this.selectedColors.findIndex(value => value === color)
-    this.selectedColors.splice(SELECTED_COLOR_INDEX, 1)
+    const SELECTED_COLOR_INDEX = this.selectedColors.findIndex(value => value === color);
+    this.selectedColors.splice(SELECTED_COLOR_INDEX, 1);
   }
+
+  /**
+   * Добавление выбранного значения опции фильтра типа "select"
+   * @param value - значение опции
+   * @param field - имя поля фильтра
+   */
   protected addSelectedOption(value: string, field: string) {
-    if (!this.queryGroup[field]) return
-    this.queryGroup[field].push(value)
+    if (!this.queryGroup[field]) return;
+    this.queryGroup[field].push(value);
   }
+
+  /**
+   * Удаление выбранного значения опции фильтра типа "select"
+   * @param value - значение опции
+   * @param field - имя поля фильтра
+   */
   protected deleteSelectedOption(value: string, field: string) {
-    if (!this.queryGroup[field]) return
-    const SELECTED_OPTION_INDEX = this.queryGroup[field].findIndex((optionValue: string) => optionValue === value)
-    this.queryGroup[field].splice(SELECTED_OPTION_INDEX, 1)
+    if (!this.queryGroup[field]) return;
+    const SELECTED_OPTION_INDEX = this.queryGroup[field].findIndex((optionValue: string) => optionValue === value);
+    this.queryGroup[field].splice(SELECTED_OPTION_INDEX, 1);
   }
+
+  /**
+   * Открытие модуля добавления мебели
+   */
   protected openAddModule() {
-    this.openAddModuleToggle = true
+    this.openAddModuleToggle = true;
   }
+
+  /**
+   * Закрытие модуля добавления мебели
+   */
   protected closeAddModule() {
-    this.openAddModuleToggle = false
+    this.openAddModuleToggle = false;
   }
-  protected checkDesktop = checkDesktop
+
+  /**
+   * Функция проверки, десктоп ли устройство (из reusable функций)
+   */
+  protected checkDesktop = checkDesktop;
+
+  /**
+   * Смена категории мебели
+   * @param categoryIndex - индекс выбранной категории
+   */
   protected changeCategory(categoryIndex: number | undefined) {
-    this.furnituresArray.length = 0
-    this.currentCategoryId = categoryIndex
-    let newUrl = '/shop'
+    this.furnituresArray.length = 0;
+    this.currentCategoryId = categoryIndex;
+    let newUrl = '/shop';
     if (categoryIndex !== undefined) {
-      this.categoryName = this.categoryArray[categoryIndex].name
-      newUrl += '/' + this.categoryArray[categoryIndex].name
+      this.categoryName = this.categoryArray[categoryIndex].name;
+      newUrl += '/' + this.categoryArray[categoryIndex].name;
     } else {
-      this.categoryName = undefined
+      this.categoryName = undefined;
     }
-    this.location.replaceState(newUrl)
-    this.furnituresInit()
-    this.initQueryGroup()
+    this.location.replaceState(newUrl);
+    this.furnituresInit();
+    this.initQueryGroup();
   }
+
+  /**
+   * Закрытие карточки мебели и переход к списку мебели в категории
+  */
   protected closeFurniture() {
-    this.router.navigateByUrl('/shop' + (this.categoryName === 'all' ? '' : ('/' + this.categoryName)))
+    this.router.navigateByUrl('/shop' + (this.categoryName === 'all' ? '' : ('/' + this.categoryName)));
   }
+
+  /**
+   * Получение URL для плана по ID плана, комнаты и мебели
+   * @param planId - ID плана
+   * @param roomId - ID комнаты
+   * @returns строка URL
+   */
   protected getPlanUrl(planId: number, roomId: number) {
-    return `/plan/${planId}/${roomId}/${this.furnitureCardId}`
+    return `/plan/${planId}/${roomId}/${this.furnitureCardId}`;
   }
+
+  /**
+   * Функция для оптимизации *ngFor - отслеживание по уникальному ID
+   * @param index - индекс элемента
+   * @param item - элемент массива
+   * @returns ID элемента
+   */
   protected trackByFn(index: number, item: any): number {
     return item.id;
   }
+
+  /**
+   * Получение массива мебели с учетом выбранных цветов и стоимости из фильтров
+   * @returns отфильтрованный массив мебели
+   */
   protected getClientFilteredFurnitures() {
-    if (!this.costForm.valid) return []
+    if (!this.costForm.valid) return [];
     return this.furnituresArray.filter(furnitureData => {
       const hasColorMatch = this.selectedColors.length === 0 ||
         [...new Set([...furnitureData.colors, ...this.selectedColors])].length
@@ -265,8 +411,10 @@ export class ShopPageComponent implements OnInit, OnDestroy {
     });
   }
 
+  
+  /** Форма для фильтрации по стоимости с валидацией */
   protected costForm = new FormGroup({
     minCost: new FormControl(null, [this.numberOrEmptyValidator]),
     maxCost: new FormControl(null, [this.numberOrEmptyValidator])
-  })
+  });
 }

@@ -11,16 +11,16 @@ export class AccountCookieService {
   ) { }
 
   /**
-   * Установка JWT токена в куки
+   * Установка JWT токена в куки с указанием срока действия
    * @param jwt JWT токен
-   * @param typeJwt Тип JWT токена (долгосрочный или временный)
+   * @param typeJwt Тип JWT токена ('long' — долгосрочный, 'temporary' — временный)
    */
   setJwt(jwt: string, typeJwt: 'long' | 'temporary') {
     const expirationDate = new Date();
     if (typeJwt === 'long') {
-      expirationDate.setDate(expirationDate.getDate() + 7);
+      expirationDate.setDate(expirationDate.getDate() + 7); // срок действия 7 дней
     } else {
-      expirationDate.setMinutes(expirationDate.getMinutes() + 10);
+      expirationDate.setMinutes(expirationDate.getMinutes() + 10); // срок действия 10 минут
     }
     this.cookieService.set('jwt', jwt, { expires: expirationDate, path: '/', sameSite: 'Strict' });
   }
@@ -31,43 +31,62 @@ export class AccountCookieService {
   deleteJwt() {
     this.cookieService.delete('jwt', '/');
   }
-  setGuideRule(){
-    this.cookieService.set('guideInclude','false',{expires:new Date().getDate() + 7,path:'/',sameSite:'Strict'})
+
+  /**
+   * Установка флага отображения руководства (guideInclude) в куки
+   */
+  setGuideRule() {
+    // Здесь исправил установку срока действия куки — должно быть объект Date, а не число
+    const expirationDate = new Date();
+    expirationDate.setDate(expirationDate.getDate() + 7);
+    this.cookieService.set('guideInclude', 'false', { expires: expirationDate, path: '/', sameSite: 'Strict' });
   }
-  getGuideRule(){
-    return this.cookieService.get('guideInclude')
+
+  /**
+   * Получение значения флага отображения руководства из куки
+   * @returns Значение куки guideInclude
+   */
+  getGuideRule() {
+    return this.cookieService.get('guideInclude');
   }
-  deleteGuideRule(){
-    this.cookieService.delete('guideInclude','/')
+
+  /**
+   * Удаление флага отображения руководства из куки
+   */
+  deleteGuideRule() {
+    this.cookieService.delete('guideInclude', '/');
   }
+
   /**
    * Получение JWT токена из куки
-   * @returns JWT токен, если он существует
+   * @returns JWT токен, либо пустую строку, если кука отсутствует
    */
-  getJwt():string|null {
+  getJwt(): string {
     return this.cookieService.get('jwt');
   }
 
   /**
    * Установка типа пользователя в куки
-   * @param accountType Тип пользователя (email или google)
+   * @param accountType Тип аккаунта ('email' или 'google')
    */
   setUserType(accountType: accountType) {
-    this.cookieService.set('accountType', accountType, { expires: new Date().getDate() + 7, path: '/', sameSite: 'Strict' });
+    const expirationDate = new Date();
+    expirationDate.setDate(expirationDate.getDate() + 7);
+    this.cookieService.set('accountType', accountType, { expires: expirationDate, path: '/', sameSite: 'Strict' });
   }
 
   /**
    * Получение типа пользователя из куки
-   * @returns Тип пользователя (email или google)
+   * @returns Тип аккаунта ('email' или 'google'), либо пустая строка, если кука отсутствует
    */
-  getUserType() {
-    return this.cookieService.get('accountType')
+  getUserType(): string {
+    return this.cookieService.get('accountType');
   }
 
   /**
    * Удаление типа пользователя из куки
    */
   deleteAccountType() {
-    this.cookieService.delete('accountType','/');
+    this.cookieService.delete('accountType', '/');
   }
 }

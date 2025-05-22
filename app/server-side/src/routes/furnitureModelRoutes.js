@@ -239,7 +239,6 @@ ROUTER.get('/', async (request, result) => {
         result.setHeader('Content-Type', MIME_TYPE);
         result.setHeader('Content-Disposition', `attachment; filename="${FURNITURE_MODEL_ITEM.filename}"`);
 
-
         result.sendFile(FILE_PATH);
     } catch (error) {
         result.status(500).json({ message: error.message });

@@ -253,7 +253,7 @@ ROUTER.get('/all', async (request, result) => {
  *   "message": error
  * }
  */
-ROUTER.post('/upload/images', (request, result) => {
+ROUTER.post('/upload', (request, result) => {
     upload(request, result, async (error) => {
         if (error) {
             return result.status(500).json({ message: 'Ошибка при загрузке: ' + error.message });

@@ -1,0 +1,993 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>house-quality documentation</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+	   <link rel="stylesheet" href="../styles/style.css">
+        <link rel="stylesheet" href="../styles/dark.css">
+    </head>
+    <body>
+          <script>
+               // Blocking script to avoid flickering dark mode
+               // Dark mode toggle button
+               var useDark = window.matchMedia('(prefers-color-scheme: dark)');
+               var darkModeState = useDark.matches;
+               var $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               var $darkModeToggles = document.querySelectorAll('.dark-mode-switch');
+               var darkModeStateLocal = localStorage.getItem('compodoc_darkmode-state');
+
+               function checkToggle(check) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].checked = check;
+                    }
+               }
+
+               function toggleDarkMode(state) {
+                    if (window.localStorage) {
+                         localStorage.setItem('compodoc_darkmode-state', state);
+                    }
+
+                    checkToggle(state);
+
+                    const hasClass = document.body.classList.contains('dark');
+
+                    if (state) {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.add('dark');
+                         }
+                         if (!hasClass) {
+                              document.body.classList.add('dark');
+                         }
+                    } else {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.remove('dark');
+                         }
+                         if (hasClass) {
+                              document.body.classList.remove('dark');
+                         }
+                    }
+               }
+
+               useDark.addEventListener('change', function (evt) {
+                    toggleDarkMode(evt.matches);
+               });
+               if (darkModeStateLocal) {
+                    darkModeState = darkModeStateLocal === 'true';
+               }
+               toggleDarkMode(darkModeState);
+          </script>
+
+        <div class="navbar navbar-default navbar-fixed-top d-md-none p-0">
+               <div class="d-flex">
+                    <a href="../" class="navbar-brand">house-quality documentation</a>
+                    <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+               </div>
+        </div>
+
+        <div class="xs-menu menu" id="mobile-menu">
+                <div id="book-search-input" role="search"><input type="text" placeholder="Type to search"></div>            <compodoc-menu></compodoc-menu>
+        </div>
+
+        <div class="container-fluid main">
+           <div class="row main">
+               <div class="d-none d-md-block menu">
+                   <compodoc-menu mode="normal"></compodoc-menu>
+               </div>
+               <!-- START CONTENT -->
+               <div class="content injectable">
+                   <div class="content-data">
+
+
+
+
+
+
+
+
+<ol class="breadcrumb">
+  <li class="breadcrumb-item">Injectables</li>
+  <li class="breadcrumb-item" >AccountService</li>
+</ol>
+
+<ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item">
+            <a href="#info" 
+                class="nav-link"
+                class="nav-link active"
+                role="tab" id="info-tab" data-bs-toggle="tab" data-link="info">Info</a>
+        </li>
+        <li class="nav-item">
+            <a href="#source" 
+                class="nav-link"
+                
+                role="tab" id="source-tab" data-bs-toggle="tab" data-link="source">Source</a>
+        </li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane fade active in" id="info">
+        <p class="comment">
+            <h3>File</h3>
+        </p>
+        <p class="comment">
+            <code>src/services/account.service.ts</code>
+        </p>
+
+
+
+
+
+            <section data-compodoc="block-index">
+    <h3 id="index">Index</h3>
+    <table class="table table-sm table-bordered index-table">
+        <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Properties</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#baseServiceUrl" >baseServiceUrl</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Methods</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                <a href="#checkJwt" >checkJwt</a>
+                            </li>
+                            <li>
+                                <a href="#DELETEaccount" >DELETEaccount</a>
+                            </li>
+                            <li>
+                                <a href="#DELETEaccountJwt" >DELETEaccountJwt</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#GETaccount" >GETaccount</a>
+                            </li>
+                            <li>
+                                <a href="#POSTcreateAccount" >POSTcreateAccount</a>
+                            </li>
+                            <li>
+                                <a href="#PUTupdateSecondaryAccountData" >PUTupdateSecondaryAccountData</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+
+
+
+
+        </tbody>
+    </table>
+</section>
+
+            <section data-compodoc="block-constructor">
+    <h3 id="constructor">Constructor</h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+<code>constructor(httpModule: HttpClient, accountCookieService: <a href="../injectables/AccountCookieService.html" target="_self">AccountCookieService</a>)</code>
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="97" class="link-to-prism">src/services/account.service.ts:97</a></div>
+                            </td>
+                        </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                            <div>
+                                    <b>Parameters :</b>
+                                    <table class="params">
+                                        <thead>
+                                            <tr>
+                                                <td>Name</td>
+                                                    <td>Type</td>
+                                                <td>Optional</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                                <tr>
+                                                        <td>httpModule</td>
+                                                  
+                                                        <td>
+                                                                    <code>HttpClient</code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>accountCookieService</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/AccountCookieService.html" target="_self" >AccountCookieService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                        </tbody>
+                                    </table>
+                            </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+</section>
+
+            <section data-compodoc="block-methods">
+    
+    <h3 id="methods">
+        Methods
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="checkJwt"></a>
+                    <span class="name">
+                        <span ><b>checkJwt</b></span>
+                        <a href="#checkJwt"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>checkJwt()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="189"
+                                    class="link-to-prism">src/services/account.service.ts:189</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Проверка наличия JWT токена в куках</p>
+</div>
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                <p>true, если JWT токен найден, иначе false</p>
+
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="DELETEaccount"></a>
+                    <span class="name">
+                        <span ><b>DELETEaccount</b></span>
+                        <a href="#DELETEaccount"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>DELETEaccount(jwt: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="156"
+                                    class="link-to-prism">src/services/account.service.ts:156</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Удаление аккаунта пользователя</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                                <td>Description</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>jwt</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                            <td>
+                                                    <p>JWT токен</p>
+
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>Promise&lt;{ message: string; }&gt;</code>
+
+                        </div>
+                            <div class="io-description">
+                                <p>Promise с сообщением об успешном удалении пользователя</p>
+
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="DELETEaccountJwt"></a>
+                    <span class="name">
+                        <span ><b>DELETEaccountJwt</b></span>
+                        <a href="#DELETEaccountJwt"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>DELETEaccountJwt(jwt: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="128"
+                                    class="link-to-prism">src/services/account.service.ts:128</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Удаление JWT токена пользователя</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                                <td>Description</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>jwt</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                            <td>
+                                                    <p>JWT токен</p>
+
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>Promise&lt;{ message: string; }&gt;</code>
+
+                        </div>
+                            <div class="io-description">
+                                <p>Promise с сообщением об успешном удалении токена</p>
+
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="GETaccount"></a>
+                    <span class="name">
+                            <span class="modifier">Async</span>
+                        <span ><b>GETaccount</b></span>
+                        <a href="#GETaccount"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>GETaccount(jwt: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="167"
+                                    class="link-to-prism">src/services/account.service.ts:167</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Получение полной информации об аккаунте пользователя</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                                <td>Description</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>jwt</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                            <td>
+                                                    <p>JWT токен</p>
+
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>unknown</code>
+
+                        </div>
+                            <div class="io-description">
+                                <p>Promise с данными аккаунта (включая проекты и мебель)</p>
+
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="POSTcreateAccount"></a>
+                    <span class="name">
+                        <span ><b>POSTcreateAccount</b></span>
+                        <a href="#POSTcreateAccount"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>POSTcreateAccount(createAccountData: <a href="../undefineds/createAccountData.html" target="_self">createAccountData</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="109"
+                                    class="link-to-prism">src/services/account.service.ts:109</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Создание нового пользователя</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                                <td>Description</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>createAccountData</td>
+                                            <td>
+                                                            <code><a href="../miscellaneous/typealiases.html#createAccountData" target="_self" >createAccountData</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                            <td>
+                                                    <p>Основная информация о пользователе (никнейм, email, пароль)</p>
+
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>Promise&lt;{ message: string; }&gt;</code>
+
+                        </div>
+                            <div class="io-description">
+                                <p>Promise с сообщением об успешном создании пользователя</p>
+
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="PUTupdateSecondaryAccountData"></a>
+                    <span class="name">
+                        <span ><b>PUTupdateSecondaryAccountData</b></span>
+                        <a href="#PUTupdateSecondaryAccountData"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>PUTupdateSecondaryAccountData(changeData: <a href="../interfaces/changeSecondaryData.html" target="_self">changeSecondaryData</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="139"
+                                    class="link-to-prism">src/services/account.service.ts:139</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Обновление вторичных данных аккаунта (например, никнейм)</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                                <td>Description</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>changeData</td>
+                                            <td>
+                                                            <code><a href="../interfaces/changeSecondaryData.html" target="_self" >changeSecondaryData</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                            <td>
+                                                    <p>Данные для изменения</p>
+
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>Promise&lt;{ message: string; }&gt;</code>
+
+                        </div>
+                            <div class="io-description">
+                                <p>Promise с сообщением об успешном обновлении</p>
+
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>
+            <section data-compodoc="block-properties">
+    
+    <h3 id="inputs">
+        Properties
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="baseServiceUrl"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>baseServiceUrl</b></span>
+                        <a href="#baseServiceUrl"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>baseUrl + &#x27;account&#x27;</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="97" class="link-to-prism">src/services/account.service.ts:97</a></div>
+                        </td>
+                    </tr>
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Базовый URL для аккаунт-сервисов</p>
+</div>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+</section>
+
+    </div>
+
+
+    <div class="tab-pane fade  tab-source-code" id="source">
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Injectable } from &#x27;@angular/core&#x27;;
+import { projectInformation, projectServerInformation } from &#x27;./project.service&#x27;;
+import { HttpClient, HttpParams } from &#x27;@angular/common/http&#x27;;
+import { AccountCookieService } from &#x27;./account-cookie.service&#x27;;
+import { baseUrl } from &#x27;.&#x27;;
+import { firstValueFrom } from &#x27;rxjs&#x27;;
+
+/**
+ * Данные для изменения аккаунта с email
+ */
+export interface changeAccountDataEmail {
+  /** JWT токен */
+  jwt: string;
+  /** Тип аккаунта (email) */
+  accountType: &#x27;email&#x27;;
+  /** Пароль пользователя */
+  password: string;
+}
+
+/**
+ * Полные данные аккаунта пользователя
+ */
+export interface accountFullData {
+  /** URL аватара */
+  avatarUrl: string;
+  /** Никнейм пользователя */
+  nickname: string;
+  /** Email пользователя */
+  email: string;
+  /** Массив проектов пользователя */
+  projects: projectInformation[];
+  /** Массив мебели, связанной с аккаунтом */
+  furnitures: furnitureAccountData[];
+  /** Пароль пользователя (необязательный) */
+  password?: string;
+}
+
+/**
+ * Данные для изменения вторичных данных аккаунта
+ */
+export interface changeSecondaryData {
+  /** JWT токен */
+  jwt: string;
+  /** Новый никнейм */
+  nickname: string;
+}
+
+/**
+ * Данные по мебели, связанной с аккаунтом
+ */
+export interface furnitureAccountData {
+  /** Идентификатор мебели */
+  _id: string;
+  /** Название мебели */
+  name: string;
+  /** URL превью изображения мебели */
+  previewUrl: string;
+}
+
+/** Тип аккаунта */
+export type accountType &#x3D; &#x27;google&#x27; | &#x27;email&#x27;;
+
+/** Тип данных для изменения аккаунта (на данный момент только email) */
+export type changeAccountData &#x3D; changeAccountDataEmail;
+
+/**
+ * Данные для создания аккаунта с email
+ */
+interface createEmailAccountData {
+  /** Email */
+  email: string;
+  /** Пароль */
+  password: string;
+  /** Никнейм */
+  nickname: string;
+  /** Тип аккаунта (email) */
+  accountType: &#x27;email&#x27;;
+}
+
+/** Тип данных для создания аккаунта */
+export type createAccountData &#x3D; createEmailAccountData;
+
+/**
+ * Функция-помощник для проверки, что аккаунт с типом email
+ * @param account Объект аккаунта
+ * @returns true, если аккаунт с типом email
+ */
+export function isEmailAccount(account: { accountType: accountType }): account is changeAccountDataEmail {
+  return account.accountType &#x3D;&#x3D;&#x3D; &#x27;email&#x27;;
+}
+
+@Injectable({
+  providedIn: &#x27;root&#x27;
+})
+export class AccountService {
+  /** Базовый URL для аккаунт-сервисов */
+  private baseServiceUrl &#x3D; baseUrl + &#x27;account&#x27;;
+
+  constructor(
+    private httpModule: HttpClient,
+    private accountCookieService: AccountCookieService
+  ) { }
+
+  /**
+   * Создание нового пользователя
+   * @param createAccountData Основная информация о пользователе (никнейм, email, пароль)
+   * @returns Promise с сообщением об успешном создании пользователя
+   */
+  POSTcreateAccount(createAccountData: createAccountData) {
+    let HTTP_PARAMS &#x3D; new HttpParams()
+      .set(&#x27;accountType&#x27;, createAccountData.accountType)
+      .set(&#x27;nickname&#x27;, createAccountData.nickname);
+
+    if (isEmailAccount(createAccountData)) {
+      HTTP_PARAMS &#x3D; HTTP_PARAMS
+        .set(&#x27;email&#x27;, createAccountData.email)
+        .set(&#x27;password&#x27;, createAccountData.password);
+    }
+
+    return firstValueFrom(this.httpModule.post(this.baseServiceUrl, HTTP_PARAMS)) as Promise&lt;{ message: string }&gt;;
+  }
+
+  /**
+   * Удаление JWT токена пользователя
+   * @param jwt JWT токен
+   * @returns Promise с сообщением об успешном удалении токена
+   */
+  DELETEaccountJwt(jwt: string) {
+    const HTTP_PARAMS &#x3D; new HttpParams()
+      .set(&#x27;jwt&#x27;, jwt);
+    return firstValueFrom(this.httpModule.delete(this.baseServiceUrl + &#x27;/jwt/delete&#x27;, { params: HTTP_PARAMS })) as Promise&lt;{ message: string }&gt;;
+  }
+
+  /**
+   * Обновление вторичных данных аккаунта (например, никнейм)
+   * @param changeData Данные для изменения
+   * @returns Promise с сообщением об успешном обновлении
+   */
+  PUTupdateSecondaryAccountData(changeData: changeSecondaryData) {
+    console.log(&#x27;changeData&#x27;, changeData);
+    const HTTP_PARAMS &#x3D; new HttpParams({
+      fromObject: {
+        nickname: changeData.nickname,
+        jwt: changeData.jwt
+      }
+    });
+    console.log(HTTP_PARAMS.toString());
+    return firstValueFrom(this.httpModule.put(this.baseServiceUrl, null, { params: HTTP_PARAMS })) as Promise&lt;{ message: string }&gt;;
+  }
+
+  /**
+   * Удаление аккаунта пользователя
+   * @param jwt JWT токен
+   * @returns Promise с сообщением об успешном удалении пользователя
+   */
+  DELETEaccount(jwt: string) {
+    const HTTP_PARAMS &#x3D; new HttpParams()
+      .set(&#x27;jwt&#x27;, jwt);
+    return firstValueFrom(this.httpModule.delete(this.baseServiceUrl, { params: HTTP_PARAMS })) as Promise&lt;{ message: string }&gt;;
+  }
+
+  /**
+   * Получение полной информации об аккаунте пользователя
+   * @param jwt JWT токен
+   * @returns Promise с данными аккаунта (включая проекты и мебель)
+   */
+  async GETaccount(jwt: string) {
+    const HTTP_PARAMS &#x3D; new HttpParams()
+      .set(&#x27;jwt&#x27;, jwt);
+    try {
+      let { accountData } &#x3D; await firstValueFrom(this.httpModule.get(this.baseServiceUrl, { params: HTTP_PARAMS })) as { accountData: accountFullData &amp; { projects: projectServerInformation[] } };
+      accountData.furnitures &#x3D; accountData.furnitures.map(furnitureData &#x3D;&gt; {
+        return {
+          ...furnitureData,
+          previewUrl: baseUrl + furnitureData.previewUrl
+        };
+      });
+      return { accountData: accountData };
+    } catch (error) {
+      console.error(&#x27;Error in GETfurnitureCard:&#x27;, error);
+      throw error;
+    }
+  }
+
+  /**
+   * Проверка наличия JWT токена в куках
+   * @returns true, если JWT токен найден, иначе false
+   */
+  checkJwt(): boolean {
+    return this.accountCookieService.getJwt() ? true : false;
+  }
+}
+</code></pre>
+    </div>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+                   </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+    </div>
+</div>
+</div>
+               <!-- END CONTENT -->
+           </div>
+       </div>
+
+          <label class="dark-mode-switch">
+               <input type="checkbox">
+               <span class="slider">
+                    <svg class="slider-icon" viewBox="0 0 24 24" fill="none" height="20" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" width="20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+                    </svg>
+               </span>
+          </label>
+
+       <script>
+            var COMPODOC_CURRENT_PAGE_DEPTH = 1;
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'injectable';
+            var COMPODOC_CURRENT_PAGE_URL = 'AccountService.html';
+            var MAX_SEARCH_RESULTS = 15;
+       </script>
+
+       <script>
+               $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               checkToggle(darkModeState);
+               if ($darkModeToggleSwitchers.length > 0) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].addEventListener('change', function (event) {
+                              darkModeState = !darkModeState;
+                              toggleDarkMode(darkModeState);
+                         });
+                    }
+               }
+          </script>
+
+       <script src="../js/libs/custom-elements.min.js"></script>
+       <script src="../js/libs/lit-html.js"></script>
+
+       <script src="../js/menu-wc.js" defer></script>
+       <script nomodule src="../js/menu-wc_es5.js" defer></script>
+
+       <script src="../js/libs/bootstrap-native.js"></script>
+
+       <script src="../js/libs/es6-shim.min.js"></script>
+       <script src="../js/libs/EventDispatcher.js"></script>
+       <script src="../js/libs/promise.min.js"></script>
+
+       <script src="../js/compodoc.js"></script>
+
+       <script src="../js/tabs.js"></script>
+       <script src="../js/menu.js"></script>
+       <script src="../js/libs/clipboard.min.js"></script>
+       <script src="../js/libs/prism.js"></script>
+       <script src="../js/sourceCode.js"></script>
+          <script src="../js/search/search.js"></script>
+          <script src="../js/search/lunr.min.js"></script>
+          <script src="../js/search/search-lunr.js"></script>
+          <script src="../js/search/search_index.js"></script>
+       <script src="../js/lazy-load-graphs.js"></script>
+
+
+    </body>
+</html>

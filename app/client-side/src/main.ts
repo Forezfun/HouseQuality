@@ -9,7 +9,6 @@ bootstrapApplication(AppComponent, appConfig)
         .then(reg => {
         })
         .catch(err => {
-          console.log(err)
         });
     }
   })

@@ -5,7 +5,7 @@ const ACCOUNT = require('../models/account')
 
 module.exports.isTokenNoneExpired = function isTokenNoneExpired(jwt) {
     try {
-        jwt.verify(jwt, cryptoKey);
+        JWT_SERVICE.verify(jwt, cryptoKey);
         return true;
     } catch (error) {
         if (error.name === 'TokenExpiredError') {

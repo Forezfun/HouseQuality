@@ -44,14 +44,20 @@ ROUTER.get('/', async (request, result) => {
         query = query.toLowerCase()
 
         const PUBLICATIONS = await FURNITURE_CARD.find()
-            .limit(51);
-        let filteredPublications = searchPublications(PUBLICATIONS, query, true);
+            .limit(51)
+            .exec();
+
+
+        const ADD_FIND_PARAMS = {
+            threshold: 0.3,
+            getTenItems: false
+        }
+        let filteredPublications = searchPublications(PUBLICATIONS, query, ADD_FIND_PARAMS);
 
 
         if (filteredPublications.length < 25) {
             const TRANSLITERED_QUERY = transliterateQuery(query);
-            console.log(TRANSLITERED_QUERY)
-            const ADDITIONAL_RESULTS = searchPublications(PUBLICATIONS, TRANSLITERED_QUERY, true);
+            const ADDITIONAL_RESULTS = searchPublications(PUBLICATIONS, TRANSLITERED_QUERY, ADD_FIND_PARAMS);
             const UNIQUE_RESULTS = new Map();
 
             [...filteredPublications, ...ADDITIONAL_RESULTS].forEach(pub => {

@@ -1,14 +1,20 @@
 import { Injectable } from '@angular/core';
 import Compressor from 'compressorjs';
+
+/**
+ * Сервис для работы с клиентскими изображениями, включая сжатие
+ * @class ClientImageControlService
+ * @injectable
+ */
 @Injectable({
   providedIn: 'root'
 })
 export class ClientImageControlService {
-    /**
-   * Удаление furnitureCard по токену
-   * @param Blob файл 
-   * @returns Observable с результатом сжатия
-   * Можно использовать async / await
+
+  /**
+   * Сжимает изображение с помощью библиотеки Compressor.js
+   * @param image - Исходный файл изображения (Blob или File)
+   * @returns Promise, который резолвится в сжатый Blob или отклоняется с ошибкой
    */
   compressImage(image: File): Promise<Blob | null> {
     return new Promise((resolve, reject) => {
@@ -19,8 +25,7 @@ export class ClientImageControlService {
         },
         error: (error) => {
           console.error('Ошибка сжатия:', error.message);
-          
-          reject(error); 
+          reject(error);
         },
       });
     });

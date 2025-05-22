@@ -5,5 +5,12 @@ module.exports.encryptPassword = function encryptPassword(password) {
     return CryptoJS.AES.encrypt(password, cryptoKey);
 }
 module.exports.decryptPassword = function decryptPassword(password) {
-    return CryptoJS.AES.decrypt(password, cryptoKey).toString(CryptoJS.enc.Utf8)
+      try {
+    const bytes = CryptoJS.AES.decrypt(password, cryptoKey);
+    const decrypted = bytes.toString(CryptoJS.enc.Utf8);
+    if (!decrypted) throw new Error('Invalid UTF-8 or wrong key');
+    return decrypted;
+  } catch (error) {
+    return "";
+  }
 }

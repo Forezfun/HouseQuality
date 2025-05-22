@@ -1,46 +1,76 @@
 import { Injectable } from '@angular/core';
-import { baseClientUrl} from '.';
+import { baseClientUrl } from '.';
 import { modelInterface } from '../components/scene/scene.component';
 import { shopData } from './furniture-card-control.service';
 
-
 export interface reportResponse {
-  name: string;
-  proportions: modelInterface,
-  furnitures: {
     name: string;
-    furnitureCardId: string;
-    previewUrl: string;
-    proportions: modelInterface;
-    shops: shopData[];
-    category: string;
-  }[]
+    proportions: modelInterface,
+    furnitures: {
+        name: string;
+        furnitureCardId: string;
+        previewUrl: string;
+        proportions: modelInterface;
+        shops: shopData[];
+        category: string;
+    }[]
 }
 
+/**
+ * Сервис для генерации HTML-отчёта по комнате и мебели.
+ * Открывает отчет в новой вкладке и скачивает его.
+ *
+ * @export
+ * @class ReportService
+ */
 @Injectable({
-  providedIn: 'root'
+    providedIn: 'root'
 })
 export class ReportService {
-  constructor() { }
+    constructor() { }
 
-  createReport(roomData: reportResponse, renderImage: Blob): void {
-    this.createReportHTML(roomData, renderImage);
-  }
+    /**
+     * Инициирует создание HTML-отчета.
+     *
+     * @param {reportResponse} roomData - Данные комнаты и мебели
+     * @param {Blob} renderImage - Изображение визуализации комнаты
+     * @memberof ReportService
+     */
+    createReport(roomData: reportResponse, renderImage: Blob): void {
+        this.createReportHTML(roomData, renderImage);
+    }
 
-  private createReportHTML(roomData: reportResponse, renderImage: Blob): void {
-    const reader = new FileReader();
+    /**
+     * Создаёт HTML-страницу отчета и открывает её.
+     *
+     * @private
+     * @param {reportResponse} roomData - Данные комнаты
+     * @param {Blob} renderImage - Рендер комнаты
+     * @memberof ReportService
+     */
+    private createReportHTML(roomData: reportResponse, renderImage: Blob): void {
+        const reader = new FileReader();
 
-    reader.onload = () => {
-      const imageUrl = reader.result as string;
-      const htmlContent = this.generateHtmlContent(roomData, imageUrl);
-      this.openHtmlInNewTab(roomData.name,htmlContent);
-    };
+        reader.onload = () => {
+            const imageUrl = reader.result as string;
+            const htmlContent = this.generateHtmlContent(roomData, imageUrl);
+            this.openHtmlInNewTab(roomData.name, htmlContent);
+        };
 
-    reader.readAsDataURL(renderImage);
-  }
+        reader.readAsDataURL(renderImage);
+    }
 
-  private generateHtmlContent(roomData: reportResponse, renderUrl: string): string {
-    return `
+    /**
+     * Генерирует HTML-содержимое отчета.
+     *
+     * @private
+     * @param {reportResponse} roomData - Данные комнаты и мебели
+     * @param {string} renderUrl - URL рендер-изображения
+     * @returns {string} HTML-контент отчета
+     * @memberof ReportService
+     */
+    private generateHtmlContent(roomData: reportResponse, renderUrl: string): string {
+        return `
       <!DOCTYPE html>
 <html>
 
@@ -243,20 +273,20 @@ export class ReportService {
 <img src="${renderUrl}"
     alt="Room render">
 
-<h2 class="furnituresSpanTitle">Добавленная мебель</h2>
+<h2 style="display:${roomData.furnitures.length===0?'none':'block'}" class="furnituresSpanTitle">Добавленная мебель</h2>
 ${roomData.furnitures.map(furniture => `
     <span class="furniture">
-    <h3 class="furnitureTitle"> Onte Bucle White </h3>
+    <h3 class="furnitureTitle">${furniture.name}</h3>
     <img class= "furnitureImage"
         src = "${furniture.previewUrl}"
-        alt = "Onte Bucle White" loading = "lazy">
+        alt = "preview" loading = "lazy">
     <span class="furnitureFooter" >
     <span class="paramsSpan" >
     <p class="paramsTitle"> Параметры </p>
     <ul class= "paramsList">
-    <li class="paramsItem"> Ширина: ${roomData.proportions.width}м </li>
-    <li class= "paramsItem"> Высота: ${roomData.proportions.height}м </li>
-    <li class= "paramsItem"> Длина: ${roomData.proportions.length}м </li>
+    <li class="paramsItem"> Ширина: ${furniture.proportions.width}cм </li>
+    <li class= "paramsItem"> Высота: ${furniture.proportions.height}cм </li>
+    <li class= "paramsItem"> Длина: ${furniture.proportions.length}cм </li>
     </ul>
     </span>
     <span class= "shopsSpan" >
@@ -268,7 +298,7 @@ ${roomData.furnitures.map(furniture => `
       </a>
       </span>
       `).join('')
-      }
+            }
     </span>
     </span>
     <a class= "openLink furnitureLink" href = "${baseClientUrl}shop/${furniture.category}/${furniture.furnitureCardId}"> Посмотреть мебель </a>
@@ -278,23 +308,48 @@ ${roomData.furnitures.map(furniture => `
 
 </html>
     `;
-  }
-  private costPipe(cost: number) {
-    return cost.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
-  }
-  private openHtmlInNewTab(roomName:string,htmlContent: string): void {
-    const blob = new Blob([htmlContent], { type: 'text/html' });
-    const url = URL.createObjectURL(blob)
+    }
 
-    window.open(url, '_blank');
-    this.downloadHtml(roomName,url)
-  }
-  private downloadHtml(roomName:string,htmlUrl: string): void {
-    const downloadButton = document.createElement('a');
-    downloadButton.href = htmlUrl;
-    downloadButton.download = roomName+'-report.html';
-    downloadButton.click();
-    URL.revokeObjectURL(htmlUrl);
-  }
+    /**
+     * Форматирует цену с разделителями тысяч.
+     *
+     * @private
+     * @param {number} cost - Стоимость
+     * @returns {string} Отформатированная строка с ценой
+     * @memberof ReportService
+     */
+    private costPipe(cost: number): string {
+        return cost.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+    }
 
+    /**
+     * Открывает HTML-контент в новой вкладке и запускает загрузку.
+     *
+     * @private
+     * @param {string} roomName - Название комнаты (используется для имени файла)
+     * @param {string} htmlContent - Содержимое HTML
+     * @memberof ReportService
+     */
+    private openHtmlInNewTab(roomName: string, htmlContent: string): void {
+        const blob = new Blob([htmlContent], { type: 'text/html' });
+        const url = URL.createObjectURL(blob);
+        window.open(url, '_blank');
+        this.downloadHtml(roomName, url);
+    }
+
+    /**
+     * Загружает HTML-файл отчета.
+     *
+     * @private
+     * @param {string} roomName - Название комнаты (для имени файла)
+     * @param {string} htmlUrl - URL HTML-файла
+     * @memberof ReportService
+     */
+    private downloadHtml(roomName: string, htmlUrl: string): void {
+        const downloadButton = document.createElement('a');
+        downloadButton.href = htmlUrl;
+        downloadButton.download = `${roomName}-report.html`;
+        downloadButton.click();
+        URL.revokeObjectURL(htmlUrl);
+    }
 }

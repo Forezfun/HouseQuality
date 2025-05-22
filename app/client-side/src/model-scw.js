@@ -1,208 +1,166 @@
 const DB_NAME = 'FurnitureModelsDB';
 const DB_VERSION = 2;
-const META_STORE = 'metaStore';
-const CHUNK_STORE = 'chunkStore';
+const MODEL_STORE = 'modelStore';
 const MAX_CACHE_SIZE_BYTES = 2 * 1024 * 1024 * 1024;
 
 self.addEventListener('install', event => {
-  event.skipWaiting()
+  console.log('[SW] Install event');
+  // Skip waiting to activate immediately
+  event.waitUntil(self.skipWaiting());
 });
 
 self.addEventListener('activate', event => {
+  console.log('[SW] Activate event');
   event.waitUntil(
-    self.skipWaiting()
-      .then(() => clients.claim())
-      .then(() => self.clients.matchAll())
-      .then(clients => {
-      })
+    Promise.all([
+      self.clients.claim(),
+      // Initialize database
+      openDB().then(db => db.close())
+    ])
   );
 });
 
 self.addEventListener('fetch', event => {
   const url = new URL(event.request.url);
+
+  // Only intercept requests for model files
   if (url.pathname === '/api/furniture/model' &&
     url.searchParams.has('furnitureCardId') &&
     event.request.method === 'GET') {
     event.respondWith(
       handleModelRequest(event.request).catch(err => {
         console.error('[SW] Ошибка обработки запроса:', err);
-        return fetch(event.request);
+        return fetch(event.request); // Fallback к сети
       })
     );
-  } else {
-    event.respondWith(fetch(event.request));
   }
+  // Let all other requests go to network
 });
 
 async function handleModelRequest(request) {
   const url = new URL(request.url);
   const furnitureCardId = url.searchParams.get('furnitureCardId');
+  console.log('[SW] Запрос модели для furnitureCardId:', furnitureCardId);
 
-  const versionRes = await fetch(`/api/furniture/model/version?furnitureCardId=${furnitureCardId}`);
-  if (!versionRes.ok) {
-    return fetch(request);
-  }
+  try {
+    // 1. Проверяем версию
+    const versionUrl = `/api/furniture/model/version?furnitureCardId=${furnitureCardId}`;
+    console.log('[SW] Запрос версии:', versionUrl);
+    
+    const versionRes = await fetch(versionUrl);
+    console.log('[SW] Ответ версии:', versionRes.status, versionRes.ok);
 
-  const { versionModel } = await versionRes.json();
-  const db = await openDB();
-
-  const meta = await dbGetMeta(db, furnitureCardId);
-  if (meta && meta.versionModel === versionModel) {
-    const chunks = await dbGetChunks(db, furnitureCardId, meta.chunkCount);
-    const blob = new Blob(chunks);
-
-    return new Response(blob, {
-      headers: {
-        'Content-Type': 'model/obj',
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Credentials': 'true',
-        'Content-Disposition': 'attachment; filename="model.obj"'
-      }
-    });
-  }
-
-  const modelRes = await fetch(request);
-  const blob = await modelRes.blob();
-
-  dbPutModel(db, furnitureCardId, versionModel, await blobToChunks(blob), blob.size)
-    .catch(err => console.error('[SW] Ошибка кеширования:', err));
-
-  return new Response(blob, {
-    headers: {
-      'Content-Type': 'model/obj'
+    if (!versionRes.ok) {
+      throw new Error(`Ошибка HTTP: ${versionRes.status}`);
     }
-  });
+
+    const versionData = await versionRes.json();
+    console.log('[SW] Данные версии:', versionData);
+
+    // 2. Проверяем кеш
+    const db = await openDB();
+    const cached = await dbGetModel(db, furnitureCardId);
+    console.log('[SW] Данные из кеша:', cached);
+
+    if (cached && cached.versionModel === versionData.versionModel) {
+      console.log('[SW] Возвращаем модель из кеша');
+      return new Response(cached.blob, { headers: { 'Content-Type': 'model/obj' } });
+    }
+
+    // 3. Загружаем новую модель
+    console.log('[SW] Загрузка новой модели...');
+    const modelRes = await fetch(request);
+    if (!modelRes.ok) throw new Error(`Ошибка загрузки модели: ${modelRes.status}`);
+
+    const blob = await modelRes.blob();
+    console.log('[SW] Размер модели:', blob.size, 'байт');
+
+    // 4. Сохраняем в кеш
+    await dbPutModel(db, furnitureCardId, versionData.versionModel, blob);
+    console.log('[SW] Модель закеширована');
+
+    return new Response(blob, { headers: { 'Content-Type': 'model/obj' } });
+
+  } catch (err) {
+    console.error('[SW] Ошибка в handleModelRequest:', err);
+    throw err; // Перебрасываем ошибку в основной catch
+  }
 }
 
+// Database functions (unchanged from your original)
 function openDB() {
   return new Promise((resolve, reject) => {
     const req = indexedDB.open(DB_NAME, DB_VERSION);
     req.onupgradeneeded = e => {
       const db = e.target.result;
-      if (!db.objectStoreNames.contains(META_STORE)) {
-        db.createObjectStore(META_STORE, { keyPath: 'furnitureCardId' });
-      }
-      if (!db.objectStoreNames.contains(CHUNK_STORE)) {
-        db.createObjectStore(CHUNK_STORE, { keyPath: 'id' });
+      if (!db.objectStoreNames.contains(MODEL_STORE)) {
+        db.createObjectStore(MODEL_STORE, { keyPath: 'furnitureCardId' });
       }
     };
     req.onsuccess = e => resolve(e.target.result);
-    req.onerror = e => reject(e);
+    req.onerror = e => reject(e.target.error);
   });
 }
 
-function dbGetMeta(db, furnitureCardId) {
+function dbGetModel(db, furnitureCardId) {
   return new Promise((resolve, reject) => {
-    const tx = db.transaction(META_STORE, 'readonly');
-    const store = tx.objectStore(META_STORE);
+    const tx = db.transaction(MODEL_STORE, 'readonly');
+    const store = tx.objectStore(MODEL_STORE);
     const req = store.get(furnitureCardId);
     req.onsuccess = () => resolve(req.result);
-    req.onerror = reject;
+    req.onerror = () => reject(req.error);
   });
 }
 
-function dbGetChunks(db, furnitureCardId, count) {
-  return Promise.all(
-    Array.from({ length: count }, (_, i) => {
-      return new Promise((resolve, reject) => {
-        const tx = db.transaction(CHUNK_STORE, 'readonly');
-        const store = tx.objectStore(CHUNK_STORE);
-        const req = store.get(`${furnitureCardId}_${i}`);
-        req.onsuccess = () => resolve(req.result?.data);
-        req.onerror = reject;
-      });
-    })
-  );
-}
-
-function dbPutModel(db, furnitureCardId, versionModel, chunks, size) {
+function dbPutModel(db, furnitureCardId, versionModel, blob) {
   return new Promise((resolve, reject) => {
-    const txMeta = db.transaction(META_STORE, 'readwrite');
-    const metaStore = txMeta.objectStore(META_STORE);
-    metaStore.put({ furnitureCardId, versionModel, chunkCount: chunks.length, requestCount: 1, sizeInBytes: size });
-    txMeta.oncomplete = () => {
-      const txChunks = db.transaction(CHUNK_STORE, 'readwrite');
-      const chunkStore = txChunks.objectStore(CHUNK_STORE);
-      chunks.forEach((chunk, i) => {
-        chunkStore.put({ id: `${furnitureCardId}_${i}`, furnitureCardId, chunkIndex: i, data: chunk });
-      });
-      txChunks.oncomplete = resolve;
-      txChunks.onerror = reject;
+    const tx = db.transaction(MODEL_STORE, 'readwrite');
+    const store = tx.objectStore(MODEL_STORE);
+    const entry = {
+      furnitureCardId,
+      versionModel,
+      blob,
+      sizeInBytes: blob.size,
+      lastAccessed: Date.now()
     };
-    txMeta.onerror = reject;
-  });
-}
-
-function incrementRequestCount(db, furnitureCardId) {
-  return new Promise((resolve, reject) => {
-    const tx = db.transaction(META_STORE, 'readwrite');
-    const store = tx.objectStore(META_STORE);
-    const req = store.get(furnitureCardId);
-    req.onsuccess = () => {
-      const data = req.result;
-      if (!data) return resolve();
-      data.requestCount += 1;
-      store.put(data);
-      tx.oncomplete = resolve;
+    store.put(entry);
+    tx.oncomplete = () => {
+      enforceStorageLimit(db).then(resolve).catch(reject);
     };
-    req.onerror = reject;
+    tx.onerror = () => reject(tx.error);
   });
 }
 
 async function enforceStorageLimit(db) {
-  const entries = await getAllMeta(db);
+  const entries = await getAllModels(db);
   let total = entries.reduce((sum, e) => sum + e.sizeInBytes, 0);
 
   if (total <= MAX_CACHE_SIZE_BYTES) return;
 
-  const sorted = entries.sort((a, b) => a.requestCount - b.requestCount);
+  // Sort by oldest access first
+  const sorted = entries.sort((a, b) => a.lastAccessed - b.lastAccessed);
   while (total > MAX_CACHE_SIZE_BYTES && sorted.length > 0) {
     const toDelete = sorted.shift();
-    await deleteModel(db, toDelete.furnitureCardId, toDelete.chunkCount);
+    await deleteModel(db, toDelete.furnitureCardId);
     total -= toDelete.sizeInBytes;
   }
 }
 
-function getAllMeta(db) {
+function getAllModels(db) {
   return new Promise((resolve, reject) => {
-    const tx = db.transaction(META_STORE, 'readonly');
-    const store = tx.objectStore(META_STORE);
+    const tx = db.transaction(MODEL_STORE, 'readonly');
+    const store = tx.objectStore(MODEL_STORE);
     const req = store.getAll();
     req.onsuccess = () => resolve(req.result);
-    req.onerror = reject;
+    req.onerror = () => reject(req.error);
   });
 }
 
-async function deleteModel(db, furnitureCardId, chunkCount) {
-  const tx1 = db.transaction(CHUNK_STORE, 'readwrite');
-  const chunkStore = tx1.objectStore(CHUNK_STORE);
-  for (let i = 0; i < chunkCount; i++) {
-    chunkStore.delete(`${furnitureCardId}_${i}`);
-  }
-  await txComplete(tx1);
-
-  const tx2 = db.transaction(META_STORE, 'readwrite');
-  const metaStore = tx2.objectStore(META_STORE);
-  metaStore.delete(furnitureCardId);
-  await txComplete(tx2);
-}
-
-function txComplete(tx) {
+function deleteModel(db, furnitureCardId) {
   return new Promise((resolve, reject) => {
+    const tx = db.transaction(MODEL_STORE, 'readwrite');
+    tx.objectStore(MODEL_STORE).delete(furnitureCardId);
     tx.oncomplete = resolve;
-    tx.onerror = reject;
-  });
-}
-
-function blobToChunks(blob, chunkSize = 5 * 1024 * 1024) {
-  return new Promise(resolve => {
-    const chunks = [];
-    let offset = 0;
-    while (offset < blob.size) {
-      const slice = blob.slice(offset, offset + chunkSize);
-      chunks.push(slice);
-      offset += chunkSize;
-    }
-    resolve(chunks);
+    tx.onerror = () => reject(tx.error);
   });
 }

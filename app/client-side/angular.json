@@ -31,9 +31,16 @@
                 "input": "src/assets",
                 "output": "assets"
               },
-              "src/favicon.ico",
-              "src/manifest.webmanifest",
-              "src/model-scw.js"
+              {
+                "glob": "favicon.ico",
+                "input": "src",
+                "output": "."
+              },
+              {
+                "glob": "model-scw.js",
+                "input": "src",
+                "output": "."
+              }
             ],
             "styles": [
               "src/assets/styles/fix-padding.scss"
@@ -104,9 +111,16 @@
                 "input": "src/assets",
                 "output": "assets"
               },
-              "src/favicon.ico",
-              "src/manifest.webmanifest",
-              "src/model-scw.js"
+              {
+                "glob": "favicon.ico",
+                "input": "src",
+                "output": "."
+              },
+              {
+                "glob": "model-scw.js",
+                "input": "src",
+                "output": "."
+              }
             ],
             "styles": [
               "src/assets/styles/fix-padding.scss"

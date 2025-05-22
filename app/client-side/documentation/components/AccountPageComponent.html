@@ -1,0 +1,2199 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>house-quality documentation</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+	   <link rel="stylesheet" href="../styles/style.css">
+        <link rel="stylesheet" href="../styles/dark.css">
+    </head>
+    <body>
+          <script>
+               // Blocking script to avoid flickering dark mode
+               // Dark mode toggle button
+               var useDark = window.matchMedia('(prefers-color-scheme: dark)');
+               var darkModeState = useDark.matches;
+               var $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               var $darkModeToggles = document.querySelectorAll('.dark-mode-switch');
+               var darkModeStateLocal = localStorage.getItem('compodoc_darkmode-state');
+
+               function checkToggle(check) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].checked = check;
+                    }
+               }
+
+               function toggleDarkMode(state) {
+                    if (window.localStorage) {
+                         localStorage.setItem('compodoc_darkmode-state', state);
+                    }
+
+                    checkToggle(state);
+
+                    const hasClass = document.body.classList.contains('dark');
+
+                    if (state) {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.add('dark');
+                         }
+                         if (!hasClass) {
+                              document.body.classList.add('dark');
+                         }
+                    } else {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.remove('dark');
+                         }
+                         if (hasClass) {
+                              document.body.classList.remove('dark');
+                         }
+                    }
+               }
+
+               useDark.addEventListener('change', function (evt) {
+                    toggleDarkMode(evt.matches);
+               });
+               if (darkModeStateLocal) {
+                    darkModeState = darkModeStateLocal === 'true';
+               }
+               toggleDarkMode(darkModeState);
+          </script>
+
+        <div class="navbar navbar-default navbar-fixed-top d-md-none p-0">
+               <div class="d-flex">
+                    <a href="../" class="navbar-brand">house-quality documentation</a>
+                    <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+               </div>
+        </div>
+
+        <div class="xs-menu menu" id="mobile-menu">
+                <div id="book-search-input" role="search"><input type="text" placeholder="Type to search"></div>            <compodoc-menu></compodoc-menu>
+        </div>
+
+        <div class="container-fluid main">
+           <div class="row main">
+               <div class="d-none d-md-block menu">
+                   <compodoc-menu mode="normal"></compodoc-menu>
+               </div>
+               <!-- START CONTENT -->
+               <div class="content component">
+                   <div class="content-data">
+
+
+
+
+<ol class="breadcrumb">
+  <li class="breadcrumb-item">Components</li>
+  <li class="breadcrumb-item"
+  >
+  AccountPageComponent</li>
+</ol>
+
+<ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item">
+            <a href="#info" class="nav-link active"
+                role="tab" id="info-tab" data-bs-toggle="tab" data-link="info">Info</a>
+        </li>
+        <li class="nav-item">
+            <a href="#source" class="nav-link"
+                role="tab" id="source-tab" data-bs-toggle="tab" data-link="source">Source</a>
+        </li>
+        <li class="nav-item">
+            <a href="#templateData" class="nav-link"
+                role="tab" id="templateData-tab" data-bs-toggle="tab" data-link="template">Template</a>
+        </li>
+        <li class="nav-item">
+            <a href="#styleData" class="nav-link"
+                role="tab" id="styleData-tab" data-bs-toggle="tab" data-link="style">Styles</a>
+        </li>
+        <li class="nav-item">
+            <a href="#tree" class="nav-link"
+                role="tab" id="tree-tab" data-bs-toggle="tab" data-link="dom-tree">DOM Tree</a>
+        </li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane fade active in" id="info"><p class="comment">
+    <h3>File</h3>
+</p>
+<p class="comment">
+    <code>src/components/account-page/account-page.component.ts</code>
+</p>
+
+
+    <p class="comment">
+        <h3>Description</h3>
+    </p>
+    <p class="comment">
+        <p>Компонент страницы аккаунта пользователя</p>
+
+    </p>
+
+
+    <p class="comment">
+        <h3>Implements</h3>
+    </p>
+    <p class="comment">
+                <code>OnInit</code>
+    </p>
+
+
+<section data-compodoc="block-metadata">
+    <h3>Metadata</h3>
+    <table class="table table-sm table-hover metadata">
+        <tbody>
+
+
+
+
+
+
+
+
+
+
+
+
+            <tr>
+                <td class="col-md-3">selector</td>
+                <td class="col-md-9"><code>app-account-page</code></td>
+            </tr>
+
+            <tr>
+                <td class="col-md-3">standalone</td>
+                <td class="col-md-9"><code>true</code></td>
+            </tr>
+
+            <tr>
+                <td class="col-md-3">imports</td>
+                <td class="col-md-9">
+                                <code><a href="../components/NavigationPanelComponent.html" target="_self" >NavigationPanelComponent</a></code>
+                            <code>NgFor</code>
+                            <code>NgIf</code>
+                            <code>ReactiveFormsModule</code>
+                            <code>CommonModule</code>
+                            <code>RouterLink</code>
+                </td>
+            </tr>
+
+            <tr>
+                <td class="col-md-3">styleUrls</td>
+                <td class="col-md-9"><code>./account-page.component.scss</code></td>
+            </tr>
+
+
+
+            <tr>
+                <td class="col-md-3">templateUrl</td>
+                <td class="col-md-9"><code>./account-page.component.html</code></td>
+            </tr>
+
+
+
+
+
+
+
+
+        </tbody>
+    </table>
+</section>
+
+    <section data-compodoc="block-index">
+    <h3 id="index">Index</h3>
+    <table class="table table-sm table-bordered index-table">
+        <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Properties</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                    <span class="modifier">Protected</span>
+                                    <span class="modifier">Optional</span>
+                                <a href="#accountData" >accountData</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Protected</span>
+                                <a href="#editForm" >editForm</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Protected</span>
+                                <a href="#isEditFormOpen" >isEditFormOpen</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Methods</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#checkAuthAndLoadData" >checkAuthAndLoadData</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Protected</span>
+                                <a href="#closeEditForm" >closeEditForm</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#initEditForm" >initEditForm</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                    <span class="modifier">Async</span>
+                                <a href="#loadUserData" >loadUserData</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Protected</span>
+                                <a href="#logout" >logout</a>
+                            </li>
+                            <li>
+                                <a href="#ngOnInit" >ngOnInit</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Protected</span>
+                                <a href="#openEditForm" >openEditForm</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Protected</span>
+                                <a href="#openProject" >openProject</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Protected</span>
+                                    <span class="modifier">Async</span>
+                                <a href="#saveChanges" >saveChanges</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                    <span class="modifier">Async</span>
+                                <a href="#updateBaseDataIfNeeded" >updateBaseDataIfNeeded</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                    <span class="modifier">Async</span>
+                                <a href="#updateSecondaryAccountData" >updateSecondaryAccountData</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Protected</span>
+                                    <span class="modifier">Async</span>
+                                <a href="#uploadAvatar" >uploadAvatar</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+
+
+
+
+        </tbody>
+    </table>
+</section>
+
+    <section data-compodoc="block-constructor">
+    <h3 id="constructor">Constructor</h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+<code>constructor(accountService: <a href="../injectables/AccountService.html" target="_self">AccountService</a>, router: Router, accountCookieService: <a href="../injectables/AccountCookieService.html" target="_self">AccountCookieService</a>, imageServerControlService: <a href="../injectables/ServerImageControlService.html" target="_self">ServerImageControlService</a>, imageClientControlService: <a href="../injectables/ClientImageControlService.html" target="_self">ClientImageControlService</a>, authService: <a href="../injectables/AuthService.html" target="_self">AuthService</a>, notification: <a href="../injectables/NotificationService.html" target="_self">NotificationService</a>)</code>
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="46" class="link-to-prism">src/components/account-page/account-page.component.ts:46</a></div>
+                            </td>
+                        </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                            <div>
+                                    <b>Parameters :</b>
+                                    <table class="params">
+                                        <thead>
+                                            <tr>
+                                                <td>Name</td>
+                                                    <td>Type</td>
+                                                <td>Optional</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                                <tr>
+                                                        <td>accountService</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/AccountService.html" target="_self" >AccountService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>router</td>
+                                                  
+                                                        <td>
+                                                                    <code>Router</code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>accountCookieService</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/AccountCookieService.html" target="_self" >AccountCookieService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>imageServerControlService</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/ServerImageControlService.html" target="_self" >ServerImageControlService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>imageClientControlService</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/ClientImageControlService.html" target="_self" >ClientImageControlService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>authService</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/AuthService.html" target="_self" >AuthService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>notification</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/NotificationService.html" target="_self" >NotificationService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                        </tbody>
+                                    </table>
+                            </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+</section>
+
+
+
+
+
+    <section data-compodoc="block-methods">
+    
+    <h3 id="methods">
+        Methods
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="checkAuthAndLoadData"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>checkAuthAndLoadData</b></span>
+                        <a href="#checkAuthAndLoadData"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>checkAuthAndLoadData()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="201"
+                                    class="link-to-prism">src/components/account-page/account-page.component.ts:201</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Проверяет авторизацию пользователя и загружает данные аккаунта</p>
+</div>
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="closeEditForm"></a>
+                    <span class="name">
+                            <span class="modifier">Protected</span>
+                        <span ><b>closeEditForm</b></span>
+                        <a href="#closeEditForm"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>closeEditForm()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="244"
+                                    class="link-to-prism">src/components/account-page/account-page.component.ts:244</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Закрывает форму редактирования и сбрасывает изменения</p>
+</div>
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="initEditForm"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>initEditForm</b></span>
+                        <a href="#initEditForm"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>initEditForm()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="213"
+                                    class="link-to-prism">src/components/account-page/account-page.component.ts:213</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Инициализирует форму редактирования с валидаторами</p>
+</div>
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="loadUserData"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                            <span class="modifier">Async</span>
+                        <span ><b>loadUserData</b></span>
+                        <a href="#loadUserData"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>loadUserData(jwt: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="146"
+                                    class="link-to-prism">src/components/account-page/account-page.component.ts:146</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Загружает данные пользователя с сервера по JWT</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                                <td>Description</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>jwt</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                            <td>
+                                                    <p>JWT токен пользователя</p>
+
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="logout"></a>
+                    <span class="name">
+                            <span class="modifier">Protected</span>
+                        <span ><b>logout</b></span>
+                        <a href="#logout"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>logout()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="269"
+                                    class="link-to-prism">src/components/account-page/account-page.component.ts:269</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Выход из аккаунта:
+удаляет JWT и тип аккаунта из куков, вызывает удаление JWT на сервере,
+и перенаправляет на главную страницу</p>
+</div>
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="ngOnInit"></a>
+                    <span class="name">
+                        <span ><b>ngOnInit</b></span>
+                        <a href="#ngOnInit"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>ngOnInit()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="63"
+                                    class="link-to-prism">src/components/account-page/account-page.component.ts:63</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Инициализация компонента
+Проверяет авторизацию и загружает данные пользователя,
+инициализирует форму редактирования</p>
+</div>
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="openEditForm"></a>
+                    <span class="name">
+                            <span class="modifier">Protected</span>
+                        <span ><b>openEditForm</b></span>
+                        <a href="#openEditForm"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>openEditForm()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="233"
+                                    class="link-to-prism">src/components/account-page/account-page.component.ts:233</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Открывает форму редактирования</p>
+</div>
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="openProject"></a>
+                    <span class="name">
+                            <span class="modifier">Protected</span>
+                        <span ><b>openProject</b></span>
+                        <a href="#openProject"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>openProject(projectId: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="260"
+                                    class="link-to-prism">src/components/account-page/account-page.component.ts:260</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Открывает страницу проекта по id</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                                <td>Description</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>projectId</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                            <td>
+                                                    <p>ID проекта</p>
+
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="saveChanges"></a>
+                    <span class="name">
+                            <span class="modifier">Protected</span>
+                            <span class="modifier">Async</span>
+                        <span ><b>saveChanges</b></span>
+                        <a href="#saveChanges"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>saveChanges()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="94"
+                                    class="link-to-prism">src/components/account-page/account-page.component.ts:94</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Сохраняет изменения данных аккаунта</p>
+</div>
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="updateBaseDataIfNeeded"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                            <span class="modifier">Async</span>
+                        <span ><b>updateBaseDataIfNeeded</b></span>
+                        <a href="#updateBaseDataIfNeeded"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>updateBaseDataIfNeeded(jwt: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, accountType: <a href="../undefineds/accountType.html" target="_self">accountType</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="123"
+                                    class="link-to-prism">src/components/account-page/account-page.component.ts:123</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Обновляет основные данные аккаунта, если это необходимо</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                                <td>Description</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>jwt</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                            <td>
+                                                    <p>JWT токен пользователя</p>
+
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                                <td>accountType</td>
+                                            <td>
+                                                            <code><a href="../miscellaneous/typealiases.html#accountType" target="_self" >accountType</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                            <td>
+                                                    <p>Тип аккаунта (&#39;email&#39; или &#39;google&#39;)</p>
+
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="updateSecondaryAccountData"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                            <span class="modifier">Async</span>
+                        <span ><b>updateSecondaryAccountData</b></span>
+                        <a href="#updateSecondaryAccountData"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>updateSecondaryAccountData(jwt: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="72"
+                                    class="link-to-prism">src/components/account-page/account-page.component.ts:72</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Обновляет вторичные данные аккаунта (например, никнейм)</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                                <td>Description</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>jwt</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                            <td>
+                                                    <p>JWT токен пользователя</p>
+
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="uploadAvatar"></a>
+                    <span class="name">
+                            <span class="modifier">Protected</span>
+                            <span class="modifier">Async</span>
+                        <span ><b>uploadAvatar</b></span>
+                        <a href="#uploadAvatar"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>uploadAvatar(event: Event)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="169"
+                                    class="link-to-prism">src/components/account-page/account-page.component.ts:169</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Обработка загрузки аватара пользователя</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                                <td>Description</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>event</td>
+                                            <td>
+                                                        <code>Event</code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                            <td>
+                                                    <p>Событие выбора файла</p>
+
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>
+    <section data-compodoc="block-properties">
+    
+    <h3 id="inputs">
+        Properties
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="accountData"></a>
+                    <span class="name">
+                            <span class="modifier">Protected</span>
+                            <span class="modifier">Optional</span>
+                        <span ><b>accountData</b></span>
+                        <a href="#accountData"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="../interfaces/accountFullData.html" target="_self" >accountFullData</a></code>
+
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="36" class="link-to-prism">src/components/account-page/account-page.component.ts:36</a></div>
+                        </td>
+                    </tr>
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Данные аккаунта пользователя</p>
+</div>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="editForm"></a>
+                    <span class="name">
+                            <span class="modifier">Protected</span>
+                        <span ><b>editForm</b></span>
+                        <a href="#editForm"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="../interfaces/editForm.html" target="_self" >FormGroup&lt;editForm&gt;</a></code>
+
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="46" class="link-to-prism">src/components/account-page/account-page.component.ts:46</a></div>
+                        </td>
+                    </tr>
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Группа контролов формы редактирования</p>
+</div>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="isEditFormOpen"></a>
+                    <span class="name">
+                            <span class="modifier">Protected</span>
+                        <span ><b>isEditFormOpen</b></span>
+                        <a href="#isEditFormOpen"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>false</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="41" class="link-to-prism">src/components/account-page/account-page.component.ts:41</a></div>
+                        </td>
+                    </tr>
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Флаг открытия формы редактирования</p>
+</div>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+</section>
+
+</div>
+
+
+    <div class="tab-pane fade  tab-source-code" id="source">
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Component, OnInit } from &#x27;@angular/core&#x27;;
+import { NavigationPanelComponent } from &#x27;../navigation-panel/navigation-panel.component&#x27;;
+import { CommonModule, NgFor, NgIf } from &#x27;@angular/common&#x27;;
+import { accountFullData, AccountService, accountType } from &#x27;../../services/account.service&#x27;;
+import { FormGroup, ReactiveFormsModule, FormControl, Validators, AbstractControl } from &#x27;@angular/forms&#x27;;
+import { Router, RouterLink } from &#x27;@angular/router&#x27;;
+import { AccountCookieService } from &#x27;../../services/account-cookie.service&#x27;;
+import { ServerImageControlService } from &#x27;../../services/server-image-control.service&#x27;;
+import { ClientImageControlService } from &#x27;../../services/client-image-control.service&#x27;;
+import { AuthService } from &#x27;../../services/auth.service&#x27;;
+import { NotificationService } from &#x27;../../services/notification.service&#x27;;
+/**
+ * Интерфейс для формы редактирования аккаунта
+ */
+interface editForm {
+  /** Контрол для редактирования никнейма */
+  nickname: FormControl&lt;string | null | undefined&gt;;
+  /** Контрол для редактирования пароля (необязательный) */
+  password?: FormControl&lt;string | null | undefined&gt;;
+}
+
+/**
+ * Компонент страницы аккаунта пользователя
+ */
+@Component({
+  selector: &#x27;app-account-page&#x27;,
+  standalone: true,
+  imports: [NavigationPanelComponent, NgFor, NgIf, ReactiveFormsModule, CommonModule, RouterLink],
+  templateUrl: &#x27;./account-page.component.html&#x27;,
+  styleUrls: [&#x27;./account-page.component.scss&#x27;]
+})
+export class AccountPageComponent implements OnInit {
+  /**
+   * Данные аккаунта пользователя
+   */
+  protected accountData?: accountFullData;
+
+  /**
+   * Флаг открытия формы редактирования
+   */
+  protected isEditFormOpen &#x3D; false;
+
+  /**
+   * Группа контролов формы редактирования
+   */
+  protected editForm!: FormGroup&lt;editForm&gt;;
+
+  constructor(
+    private accountService: AccountService,
+    private router: Router,
+    private accountCookieService: AccountCookieService,
+    private imageServerControlService: ServerImageControlService,
+    private imageClientControlService: ClientImageControlService,
+    private authService: AuthService,
+    private notification: NotificationService
+  ) { }
+
+  /**
+   * Инициализация компонента
+   * Проверяет авторизацию и загружает данные пользователя,
+   * инициализирует форму редактирования
+   */
+  ngOnInit(): void {
+    this.checkAuthAndLoadData();
+    this.initEditForm();
+  }
+
+  /**
+   * Обновляет вторичные данные аккаунта (например, никнейм)
+   * @param jwt JWT токен пользователя
+   */
+  private async updateSecondaryAccountData(jwt: string) {
+    if (!this.accountData) return;
+
+    const CHANGE_DATA &#x3D; {
+      jwt: jwt,
+      nickname: this.editForm.value.nickname!
+    };
+
+    try {
+      await this.accountService.PUTupdateSecondaryAccountData(CHANGE_DATA);
+      this.accountData.nickname &#x3D; this.editForm.value.nickname!;
+      this.notification.setSuccess(&#x27;Данные обновлены&#x27;, 5000);
+    } catch (error) {
+      this.notification.setError(&#x27;Ошибка обновления никнейма&#x27;, 5000);
+      console.error(error);
+      throw error;
+    }
+  }
+
+  /**
+   * Сохраняет изменения данных аккаунта
+   */
+  protected async saveChanges() {
+    if (!this.accountData || !this.editForm.valid) {
+      this.notification.setError(&#x27;Некорректные данные формы&#x27;, 5000);
+      return;
+    }
+
+    const JWT &#x3D; this.accountCookieService.getJwt();
+    const ACCOUNT_TYPE &#x3D; this.accountCookieService.getUserType() as accountType;
+    if (!JWT || !ACCOUNT_TYPE) {
+      this.notification.setError(&#x27;Ошибка аутентификации&#x27;, 5000);
+      return;
+    }
+
+    try {
+      await this.updateSecondaryAccountData(JWT);
+      await this.updateBaseDataIfNeeded(JWT, ACCOUNT_TYPE);
+      this.closeEditForm();
+      this.notification.setSuccess(&#x27;Данные обновлены&#x27;, 5000);
+    } catch (error) {
+      this.notification.setError(&#x27;Ошибка сохранения данных&#x27;, 5000);
+      console.error(error);
+    }
+  }
+
+  /**
+   * Обновляет основные данные аккаунта, если это необходимо
+   * @param jwt JWT токен пользователя
+   * @param accountType Тип аккаунта (&#x27;email&#x27; или &#x27;google&#x27;)
+   */
+  private async updateBaseDataIfNeeded(jwt: string, accountType: accountType) {
+    if (this.accountData?.password &#x3D;&#x3D;&#x3D; undefined || !this.editForm.value.password || accountType &#x3D;&#x3D;&#x3D; &#x27;google&#x27;) return;
+
+    const CHANGE_DATA &#x3D; {
+      jwt: jwt,
+      accountType: accountType,
+      password: this.editForm.value.password
+    };
+
+    try {
+      await this.authService.PUTupdateBaseData(CHANGE_DATA);
+      this.accountData.password &#x3D; this.editForm.value.password;
+    } catch (error) {
+      this.notification.setError(&#x27;Ошибка обновления пароля&#x27;, 5000);
+      console.error(error);
+      throw error;
+    }
+  }
+
+  /**
+   * Загружает данные пользователя с сервера по JWT
+   * @param jwt JWT токен пользователя
+   */
+  private async loadUserData(jwt: string) {
+    try {
+      const ACCOUNT_DATA &#x3D; (await this.accountService.GETaccount(jwt)).accountData;
+      this.accountData &#x3D; {
+        email: ACCOUNT_DATA.email,
+        nickname: ACCOUNT_DATA.nickname,
+        projects: ACCOUNT_DATA.projects,
+        avatarUrl: this.imageServerControlService.GETaccountAvatar(jwt),
+        furnitures: ACCOUNT_DATA.furnitures
+      };
+
+      if (ACCOUNT_DATA.password !&#x3D;&#x3D; undefined) {
+        this.accountData.password &#x3D; ACCOUNT_DATA.password;
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  /**
+   * Обработка загрузки аватара пользователя
+   * @param event Событие выбора файла
+   */
+  protected async uploadAvatar(event: Event) {
+    const JWT &#x3D; this.accountCookieService.getJwt();
+    if (!JWT || !this.accountData) {
+      return;
+    }
+
+    const TARGET &#x3D; event.target as HTMLInputElement;
+    const FILE &#x3D; TARGET.files?.[0];
+    if (!FILE) {
+      this.notification.setError(&#x27;Файл не выбран&#x27;, 5000);
+      return;
+    }
+
+    try {
+      const COMPRESSED_IMAGE &#x3D; await this.imageClientControlService.compressImage(FILE);
+      if (!COMPRESSED_IMAGE) {
+        this.notification.setError(&#x27;Ошибка сжатия изображения&#x27;, 5000);
+        return;
+      }
+
+      await this.imageServerControlService.POSTuploadUserAvatar(COMPRESSED_IMAGE, JWT);
+      this.accountData.avatarUrl &#x3D; URL.createObjectURL(COMPRESSED_IMAGE);
+      this.notification.setSuccess(&#x27;Аватар обновлен&#x27;, 5000);
+    } catch (error) {
+      this.notification.setError(&#x27;Ошибка загрузки аватара&#x27;, 5000);
+      console.error(error);
+    }
+  }
+
+  /**
+   * Проверяет авторизацию пользователя и загружает данные аккаунта
+   */
+  private checkAuthAndLoadData() {
+    const JWT &#x3D; this.accountCookieService.getJwt();
+    if (!JWT) {
+      this.router.navigateByUrl(&#x27;/login&#x27;);
+      return;
+    }
+    this.loadUserData(JWT);
+  }
+
+  /**
+   * Инициализирует форму редактирования с валидаторами
+   */
+  private initEditForm() {
+    this.editForm &#x3D; new FormGroup({
+      nickname: new FormControl(this.accountData?.nickname, [
+        Validators.required,
+        Validators.minLength(3),
+        Validators.maxLength(30)
+      ])
+    });
+
+    if (this.accountCookieService.getUserType() &#x3D;&#x3D;&#x3D; &#x27;email&#x27;) {
+      this.editForm.addControl(&#x27;password&#x27;, new FormControl(this.accountData?.password, [
+        Validators.required,
+        Validators.minLength(6)
+      ]));
+    }
+  }
+
+  /**
+   * Открывает форму редактирования
+   */
+  protected openEditForm() {
+    if (!this.accountData) {
+      this.notification.setError(&#x27;Данные пользователя не загружены&#x27;, 5000);
+      return;
+    }
+    this.isEditFormOpen &#x3D; true;
+  }
+
+  /**
+   * Закрывает форму редактирования и сбрасывает изменения
+   */
+  protected closeEditForm() {
+    this.isEditFormOpen &#x3D; false;
+    if (this.accountData) {
+      // Важно: здесь не происходит обновления значений, а скорее попытка сравнить (исправить можно)
+      this.accountData.nickname !&#x3D; this.editForm.value.nickname;
+      if (this.accountData.password) {
+        this.accountData.password !&#x3D; this.editForm.value.password;
+      }
+    }
+    this.editForm.reset();
+  }
+
+  /**
+   * Открывает страницу проекта по id
+   * @param projectId ID проекта
+   */
+  protected openProject(projectId: number) {
+    this.router.navigateByUrl(&#x27;/plan/&#x27; + projectId);
+  }
+
+  /**
+   * Выход из аккаунта:
+   * удаляет JWT и тип аккаунта из куков, вызывает удаление JWT на сервере,
+   * и перенаправляет на главную страницу
+   */
+  protected logout() {
+    const JWT &#x3D; this.accountCookieService.getJwt();
+    if (JWT) this.accountService.DELETEaccountJwt(JWT);
+    this.accountCookieService.deleteJwt();
+    this.accountCookieService.deleteAccountType();
+    this.router.navigateByUrl(&#x27;/&#x27;);
+  }
+}
+</code></pre>
+    </div>
+
+    <div class="tab-pane fade " id="templateData">
+        <pre class="line-numbers"><code class="language-html">&lt;div class&#x3D;&quot;account-page&quot;&gt;
+    &lt;app-navigation-panel&gt;&lt;/app-navigation-panel&gt;
+    
+    &lt;div *ngIf&#x3D;&quot;accountData&quot; class&#x3D;&quot;account-container&quot;&gt;
+        &lt;div class&#x3D;&quot;profile-card&quot;&gt;
+            &lt;div class&#x3D;&quot;avatar-container&quot;&gt;
+                &lt;img [src]&#x3D;&quot;accountData.avatarUrl&quot; alt&#x3D;&quot;Аватар&quot; class&#x3D;&quot;avatar-image&quot;&gt;
+                &lt;label class&#x3D;&quot;avatar-edit-btn&quot;&gt;
+                    &lt;input type&#x3D;&quot;file&quot; id&#x3D;&quot;avatarInput&quot; (change)&#x3D;&quot;uploadAvatar($event)&quot; accept&#x3D;&quot;.png,.jpeg,.jpg&quot;&gt;
+                    &lt;img src&#x3D;&quot;/assets/images/editIcon.svg&quot; alt&#x3D;&quot;Изменить аватар&quot;&gt;
+                &lt;/label&gt;
+            &lt;/div&gt;
+            
+            &lt;div class&#x3D;&quot;profile-info&quot;&gt;
+                &lt;h2 class&#x3D;&quot;profile-name&quot;&gt;{{accountData.nickname}}&lt;/h2&gt;
+                &lt;div class&#x3D;&quot;profile-stats&quot;&gt;
+                    &lt;div class&#x3D;&quot;stat-item&quot;&gt;
+                        &lt;span class&#x3D;&quot;stat-label&quot;&gt;Проекты:&lt;/span&gt;
+                        &lt;span class&#x3D;&quot;stat-value&quot;&gt;{{accountData.projects.length}}&lt;/span&gt;
+                    &lt;/div&gt;
+                    &lt;div class&#x3D;&quot;stat-item&quot;&gt;
+                        &lt;span class&#x3D;&quot;stat-label&quot;&gt;Мебель:&lt;/span&gt;
+                        &lt;span class&#x3D;&quot;stat-value&quot;&gt;{{accountData.furnitures.length}}&lt;/span&gt;
+                    &lt;/div&gt;
+                    &lt;div class&#x3D;&quot;stat-item&quot;&gt;
+                        &lt;span class&#x3D;&quot;stat-label&quot;&gt;Email:&lt;/span&gt;
+                        &lt;span class&#x3D;&quot;stat-value&quot;&gt;{{accountData.email}}&lt;/span&gt;
+                    &lt;/div&gt;
+                &lt;/div&gt;
+            &lt;/div&gt;
+            
+            &lt;div class&#x3D;&quot;profile-actions&quot;&gt;
+                &lt;button (click)&#x3D;&quot;openEditForm()&quot; style&#x3D;&quot;width:27px&quot; class&#x3D;&quot;edit-btn&quot; title&#x3D;&quot;Редактировать профиль&quot;&gt;
+                    &lt;img src&#x3D;&quot;/assets/images/editIcon.svg&quot; alt&#x3D;&quot;Редактировать&quot;&gt;
+                &lt;/button&gt;
+                &lt;button (click)&#x3D;&quot;logout()&quot; style&#x3D;&quot;width:35px;&quot; class&#x3D;&quot;logout-btn&quot; title&#x3D;&quot;Выйти&quot;&gt;
+                    &lt;img src&#x3D;&quot;/assets/images/logoutIcon.svg&quot; alt&#x3D;&quot;Выйти&quot;&gt;
+                &lt;/button&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+        
+        &lt;div class&#x3D;&quot;projects-section&quot;&gt;
+            &lt;h3 class&#x3D;&quot;section-title&quot;&gt;Мои проекты&lt;/h3&gt;
+            &lt;div class&#x3D;&quot;projects-grid&quot;&gt;
+                &lt;div *ngFor&#x3D;&quot;let project of accountData.projects; let i &#x3D; index&quot; 
+                     (click)&#x3D;&quot;openProject(i)&quot; 
+                     class&#x3D;&quot;project-card&quot;&gt;
+                    &lt;h4 class&#x3D;&quot;project-name&quot;&gt;{{project.name}}&lt;/h4&gt;
+                    &lt;div class&#x3D;&quot;project-scheme&quot;&gt;
+                        &lt;div *ngFor&#x3D;&quot;let room of project.rooms&quot; 
+                             [style.grid-area]&#x3D;&quot;room.gridArea&quot; 
+                             class&#x3D;&quot;room&quot;&gt;&lt;/div&gt;
+                    &lt;/div&gt;
+                &lt;/div&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+        
+        &lt;div class&#x3D;&quot;furniture-section&quot;&gt;
+            &lt;h3 class&#x3D;&quot;section-title&quot;&gt;Моя мебель&lt;/h3&gt;
+            &lt;div class&#x3D;&quot;furniture-grid&quot;&gt;
+                &lt;a *ngFor&#x3D;&quot;let item of accountData.furnitures&quot; 
+                   [routerLink]&#x3D;&quot;&#x27;/create/&#x27; + item._id&quot; 
+                   class&#x3D;&quot;furniture-card&quot;&gt;
+                    &lt;h4 class&#x3D;&quot;furniture-name&quot;&gt;{{item.name}}&lt;/h4&gt;
+                    &lt;img [src]&#x3D;&quot;item.previewUrl&quot; alt&#x3D;&quot;Превью мебели&quot; class&#x3D;&quot;furniture-image&quot;&gt;
+                &lt;/a&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+    
+    &lt;div class&#x3D;&quot;edit-modal&quot; [class.active]&#x3D;&quot;isEditFormOpen&quot;&gt;
+        &lt;div class&#x3D;&quot;modal-content&quot;&gt;
+            &lt;button (click)&#x3D;&quot;closeEditForm()&quot; class&#x3D;&quot;close-btn&quot;&gt;
+                &lt;img src&#x3D;&quot;/assets/images/addIcon.svg&quot; alt&#x3D;&quot;Закрыть&quot;&gt;
+            &lt;/button&gt;
+            
+            &lt;form [formGroup]&#x3D;&quot;editForm&quot; (ngSubmit)&#x3D;&quot;saveChanges()&quot; class&#x3D;&quot;edit-form&quot;&gt;
+                &lt;h3 class&#x3D;&quot;form-title&quot;&gt;Редактирование профиля&lt;/h3&gt;
+                
+                &lt;div class&#x3D;&quot;form-group&quot;&gt;
+                    &lt;label for&#x3D;&quot;nickname&quot;&gt;Имя пользователя&lt;/label&gt;
+                    &lt;input id&#x3D;&quot;nickname&quot; formControlName&#x3D;&quot;nickname&quot; 
+                           [class.invalid]&#x3D;&quot;editForm.get(&#x27;nickname&#x27;)?.invalid &amp;&amp; editForm.get(&#x27;nickname&#x27;)?.touched&quot;&gt;
+                    &lt;div *ngIf&#x3D;&quot;editForm.get(&#x27;nickname&#x27;)?.invalid &amp;&amp; editForm.get(&#x27;nickname&#x27;)?.touched&quot; 
+                         class&#x3D;&quot;error-message&quot;&gt;
+                        Введите имя пользователя
+                    &lt;/div&gt;
+                &lt;/div&gt;
+                
+                &lt;div *ngIf&#x3D;&quot;editForm.get(&#x27;password&#x27;)&quot; class&#x3D;&quot;form-group&quot;&gt;
+                    &lt;label for&#x3D;&quot;password&quot;&gt;Новый пароль&lt;/label&gt;
+                    &lt;input id&#x3D;&quot;password&quot; type&#x3D;&quot;password&quot; formControlName&#x3D;&quot;password&quot;
+                           [class.invalid]&#x3D;&quot;editForm.get(&#x27;password&#x27;)?.invalid &amp;&amp; editForm.get(&#x27;password&#x27;)?.touched&quot;&gt;
+                    &lt;div *ngIf&#x3D;&quot;editForm.get(&#x27;password&#x27;)?.invalid &amp;&amp; editForm.get(&#x27;password&#x27;)?.touched&quot; 
+                         class&#x3D;&quot;error-message&quot;&gt;
+                        Пароль должен содержать минимум 6 символов
+                    &lt;/div&gt;
+                &lt;/div&gt;
+                
+                &lt;button type&#x3D;&quot;submit&quot; [disabled]&#x3D;&quot;!editForm.valid&quot; class&#x3D;&quot;save-btn&quot;&gt;
+                    Сохранить изменения
+                &lt;/button&gt;
+            &lt;/form&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+    </div>
+
+    <div class="tab-pane fade " id="styleData">
+                <p class="comment">
+                    <code>./account-page.component.scss</code>
+                </p>
+                <pre class="line-numbers"><code class="language-scss">@use &#x27;base.scss&#x27; as *;
+@use &#x27;sass:color&#x27;;
+
+.account-page {
+    background: black;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 30px 20px;
+    font-family: &#x27;Courier New&#x27;, Courier, monospace;
+    color: $light;
+}
+
+.account-container {
+    width: 100%;
+    max-width: 1200px;
+    margin-top: 30px;
+}
+
+.profile-card {
+    background: rgba(0, 0, 0, 0.7);
+    border-radius: 15px;
+    padding: 30px;
+    display: flex;
+    align-items: flex-start;
+    gap: 30px;
+    margin-bottom: 30px;
+    border: 1px solid rgba($lightGreen, 0.3);
+    position: relative;
+}
+
+.avatar-container {
+    position: relative;
+    width: 250px;
+    aspect-ratio: 1;
+    flex-shrink: 0;
+
+    .avatar-image {
+        width: 100%;
+        aspect-ratio: 1;
+        border-radius: 50%;
+        object-fit: cover;
+    }
+
+    .avatar-edit-btn {
+        position: absolute;
+        bottom: 10px;
+        right: 10px;
+        background: $darkGreen;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        border: 2px solid black;
+        transition: all 0.3s;
+
+        &amp;:hover {
+            transform: scale(1.1);
+            background: color.scale($darkGreen, $lightness: 10%)
+        }
+
+        input {
+            display: none;
+        }
+
+        img {
+            width: 15px;
+            padding: 10px;
+            aspect-ratio: 1;
+        }
+    }
+}
+
+.profile-info {
+    flex-grow: 1;
+
+    .profile-name {
+        font-family: &#x27;Calypso&#x27;, sans-serif;
+        font-size: 2rem;
+        margin-bottom: 15px;
+        color: $lightGreen;
+        text-shadow: 0 0 10px rgba($lightGreen, 0.3);
+    }
+
+    .profile-stats {
+        display: flex;
+        flex-direction: column;
+        width: fit-content;
+        flex-wrap: wrap;
+        gap: 20px;
+
+
+        .stat-item {
+            background: rgba($lightGreen, 0.1);
+            padding: 8px 15px;
+            border-radius: 20px;
+            border: 1px solid rgba($lightGreen, 0.3);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+
+
+
+            .stat-label {
+                font-weight: bold;
+                margin-right: 5px;
+            }
+
+            .stat-value {
+                color: $lightGreen;
+            }
+        }
+    }
+}
+
+.stat-item {
+    max-width: min(768px, calc(100vw - 500px));
+}
+
+.profile-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    align-items: center;
+
+    button {
+        background: none;
+        border: none;
+        cursor: pointer;
+        transition: all 0.3s;
+
+        &amp;:hover {
+            transform: scale(1.1);
+            opacity: 0.8;
+        }
+
+        img {
+            aspect-ratio: 1;
+        }
+    }
+
+}
+
+/* Секции проектов и мебели */
+.section-title {
+    font-family: &#x27;Calypso&#x27;, sans-serif;
+    font-size: 1.8rem;
+    margin-bottom: 20px;
+    color: $lightGreen;
+    text-shadow: 0 0 5px rgba($lightGreen, 0.3);
+    padding-bottom: 10px;
+    border-bottom: 1px solid rgba($lightGreen, 0.3);
+}
+
+.projects-section,
+.furniture-section {
+    background: rgba(0, 0, 0, 0.7);
+    border-radius: 15px;
+    padding: 25px;
+    margin-bottom: 30px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba($lightGreen, 0.3);
+}
+
+.projects-grid,
+.furniture-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+}
+
+.project-card {
+    background: rgba($lightGreen, 0.1);
+    border-radius: 10px;
+    padding: 15px;
+    cursor: pointer;
+    transition: all 0.3s;
+    border: 1px solid rgba($lightGreen, 0.2);
+
+    &amp;:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 5px 15px rgba($lightGreen, 0.2);
+        border-color: $lightGreen;
+    }
+
+    .project-name {
+        font-size: 1.2rem;
+        margin-bottom: 15px;
+        color: $light;
+        text-align: center;
+    }
+
+    .project-scheme {
+        display: grid;
+        width: 100%;
+        aspect-ratio: 1;
+        gap: 5px;
+        grid-template-columns: repeat(10, 1fr);
+        grid-template-rows: repeat(10, 1fr);
+
+        .room {
+            background: $darkGreen;
+            border-radius: 3px;
+            transition: all 0.3s;
+        }
+    }
+}
+
+.furniture-card {
+    background: rgba($lightGreen, 0.1);
+    border-radius: 10px;
+    padding: 15px;
+    text-decoration: none;
+    transition: all 0.3s;
+    border: 1px solid rgba($lightGreen, 0.2);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    &amp;:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 5px 15px rgba($lightGreen, 0.2);
+        border-color: $lightGreen;
+    }
+
+    .furniture-name {
+        font-size: 1.2rem;
+        margin-bottom: 15px;
+        color: $light;
+        text-align: center;
+    }
+    
+    .furniture-image {
+        width: 100%;
+        aspect-ratio: 1;
+        border-radius: 5px;
+    }
+}
+
+/* Модальное окно редактирования */
+.edit-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.3s;
+    z-index: 1000;
+    
+    &amp;.active {
+        opacity: 1;
+        pointer-events: all;
+    }
+    
+    .modal-content {
+        background: #000;
+        border-radius: 15px;
+        padding: 30px;
+        width: 90%;
+        max-width: 500px;
+        position: relative;
+        box-shadow: 0 0 20px rgba($lightGreen, 0.3);
+        border: 1px solid $lightGreen;
+        box-sizing: border-box;
+    }
+    
+    .close-btn {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        background: none;
+        border: none;
+        cursor: pointer;
+        
+        img {
+            width: 25px;
+            height: 25px;
+            rotate: 45deg;
+            transition: all 0.3s;
+            
+        }
+    }
+    
+    .form-title {
+        font-family: &#x27;Calypso&#x27;, sans-serif;
+        color: $lightGreen;
+        text-align: center;
+        margin-bottom: 25px;
+        font-size: 1.8rem;
+    }
+    
+    .edit-form {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+    
+    .form-group {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+        
+        label {
+            font-size: 0.9rem;
+            color: $light;
+        }
+        
+        input {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba($lightGreen, 0.5);
+            border-radius: 5px;
+            padding: 12px 15px;
+            color: $light;
+            font-family: &#x27;Courier New&#x27;, Courier, monospace;
+            transition: all 0.3s;
+
+            &amp;:focus {
+                outline: none;
+                border-color: $lightGreen;
+                box-shadow: 0 0 0 2px rgba($lightGreen, 0.2);
+            }
+
+            &amp;.invalid {
+                border-color: #ff6b6b;
+                background: rgba(255, 107, 107, 0.1);
+                animation: shake 0.5s ease;
+            }
+        }
+
+        .error-message {
+            color: #ff6b6b;
+            font-size: 0.8rem;
+            margin-top: 3px;
+        }
+    }
+
+    .save-btn {
+        background: $lightGreen;
+        color: #000;
+        border: none;
+        border-radius: 5px;
+        padding: 15px;
+        font-family: &#x27;Courier New&#x27;, Courier, monospace;
+        font-size: 1.1rem;
+        cursor: pointer;
+        transition: all 0.3s;
+        margin-top: 10px;
+
+        &amp;:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba($lightGreen, 0.4);
+        }
+
+        &amp;:disabled {
+            background: $darkGreen;
+            color: rgba(0, 0, 0, 0.5);
+            cursor: not-allowed;
+        }
+    }
+}
+
+/* Анимации */
+@keyframes shake {
+
+    0%,
+    100% {
+        transform: translateX(0);
+    }
+
+    20%,
+    60% {
+        transform: translateX(-5px);
+    }
+
+    40%,
+    80% {
+        transform: translateX(5px);
+    }
+}
+
+/* Адаптивность */
+@media (max-width: 900px) {
+    .stat-item {
+        max-width: calc(100vw - 150px);
+    }
+    .profile-card {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+
+        .profile-info {
+            width: 100%;
+
+            .profile-stats {
+                margin: 0 auto;
+            }
+        }
+
+        .profile-actions {
+            flex-direction: row;
+            width: 100%;
+            justify-content: center;
+        }
+    }
+
+    .projects-grid,
+    .furniture-grid {
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    }
+}
+
+@media (max-width: 600px) {
+    .account-page {
+        padding: 20px 20px;
+    }
+    .avatar-container{
+        width:200px
+    }
+    .stat-item {
+        max-width: calc(100vw - 100px);
+    }
+    .profile-card {
+        padding: 20px 0;
+    }
+
+    .projects-section,
+    .furniture-section {
+        padding: 20px;
+    }
+
+    .profile-name,
+    .section-title {
+        font-size: 1.5rem !important;
+    }
+
+    .modal-content {
+        width: 95% !important;
+        padding: 20px !important;
+    }
+}</code></pre>
+    </div>
+
+    <div class="tab-pane fade " id="tree">
+        <div id="tree-container"></div>
+        <div class="tree-legend">
+            <div class="title">
+                <b>Legend</b>
+            </div>
+            <div>
+                <div class="color htmlelement"></div><span>Html element</span>
+            </div>
+            <div>
+                <div class="color component"></div><span>Component</span>
+            </div>
+            <div>
+                <div class="color directive"></div><span>Html element with directive</span>
+            </div>
+        </div>
+    </div>
+
+    
+</div>
+
+<script src="../js/libs/vis.min.js"></script>
+<script src="../js/libs/htmlparser.js"></script>
+<script src="../js/libs/deep-iterator.js"></script>
+<script>
+        var COMPONENT_TEMPLATE = '<div><div class="account-page">    <app-navigation-panel></app-navigation-panel>        <div *ngIf="accountData" class="account-container">        <div class="profile-card">            <div class="avatar-container">                <img [src]="accountData.avatarUrl" alt="Аватар" class="avatar-image">                <label class="avatar-edit-btn">                    <input type="file" id="avatarInput" (change)="uploadAvatar($event)" accept=".png,.jpeg,.jpg">                    <img src="/assets/images/editIcon.svg" alt="Изменить аватар">                </label>            </div>                        <div class="profile-info">                <h2 class="profile-name">{{accountData.nickname}}</h2>                <div class="profile-stats">                    <div class="stat-item">                        <span class="stat-label">Проекты:</span>                        <span class="stat-value">{{accountData.projects.length}}</span>                    </div>                    <div class="stat-item">                        <span class="stat-label">Мебель:</span>                        <span class="stat-value">{{accountData.furnitures.length}}</span>                    </div>                    <div class="stat-item">                        <span class="stat-label">Email:</span>                        <span class="stat-value">{{accountData.email}}</span>                    </div>                </div>            </div>                        <div class="profile-actions">                <button (click)="openEditForm()" style="width:27px" class="edit-btn" title="Редактировать профиль">                    <img src="/assets/images/editIcon.svg" alt="Редактировать">                </button>                <button (click)="logout()" style="width:35px;" class="logout-btn" title="Выйти">                    <img src="/assets/images/logoutIcon.svg" alt="Выйти">                </button>            </div>        </div>                <div class="projects-section">            <h3 class="section-title">Мои проекты</h3>            <div class="projects-grid">                <div *ngFor="let project of accountData.projects; let i = index"                      (click)="openProject(i)"                      class="project-card">                    <h4 class="project-name">{{project.name}}</h4>                    <div class="project-scheme">                        <div *ngFor="let room of project.rooms"                              [style.grid-area]="room.gridArea"                              class="room"></div>                    </div>                </div>            </div>        </div>                <div class="furniture-section">            <h3 class="section-title">Моя мебель</h3>            <div class="furniture-grid">                <a *ngFor="let item of accountData.furnitures"                    [routerLink]="\'/create/\' + item._id"                    class="furniture-card">                    <h4 class="furniture-name">{{item.name}}</h4>                    <img [src]="item.previewUrl" alt="Превью мебели" class="furniture-image">                </a>            </div>        </div>    </div>        <div class="edit-modal" [class.active]="isEditFormOpen">        <div class="modal-content">            <button (click)="closeEditForm()" class="close-btn">                <img src="/assets/images/addIcon.svg" alt="Закрыть">            </button>                        <form [formGroup]="editForm" (ngSubmit)="saveChanges()" class="edit-form">                <h3 class="form-title">Редактирование профиля</h3>                                <div class="form-group">                    <label for="nickname">Имя пользователя</label>                    <input id="nickname" formControlName="nickname"                            [class.invalid]="editForm.get(\'nickname\')?.invalid && editForm.get(\'nickname\')?.touched">                    <div *ngIf="editForm.get(\'nickname\')?.invalid && editForm.get(\'nickname\')?.touched"                          class="error-message">                        Введите имя пользователя                    </div>                </div>                                <div *ngIf="editForm.get(\'password\')" class="form-group">                    <label for="password">Новый пароль</label>                    <input id="password" type="password" formControlName="password"                           [class.invalid]="editForm.get(\'password\')?.invalid && editForm.get(\'password\')?.touched">                    <div *ngIf="editForm.get(\'password\')?.invalid && editForm.get(\'password\')?.touched"                          class="error-message">                        Пароль должен содержать минимум 6 символов                    </div>                </div>                                <button type="submit" [disabled]="!editForm.valid" class="save-btn">                    Сохранить изменения                </button>            </form>        </div>    </div></div></div>'
+    var COMPONENTS = [{'name': 'AccountPageComponent', 'selector': 'app-account-page'},{'name': 'AppComponent', 'selector': 'app-root'},{'name': 'CreateFurnitureComponent', 'selector': 'app-create-furniture'},{'name': 'CreateFurniturePageComponent', 'selector': 'app-create-furniture-page'},{'name': 'FinderComponent', 'selector': 'app-finder'},{'name': 'ImageSliderComponent', 'selector': 'app-image-slider'},{'name': 'LoginPageComponent', 'selector': 'app-login-page'},{'name': 'MainPageComponent', 'selector': 'app-main-page'},{'name': 'NavigationPanelComponent', 'selector': 'app-navigation-panel'},{'name': 'NotificationComponent', 'selector': 'app-notification'},{'name': 'PlanHouseComponent', 'selector': 'app-plan-house'},{'name': 'PlanHousePageComponent', 'selector': 'app-plan-house-page'},{'name': 'SceneComponent', 'selector': 'app-scene'},{'name': 'ShopPageComponent', 'selector': 'app-shop-page'},{'name': 'ViewFurnitureComponent', 'selector': 'app-view-furniture'}];
+    var DIRECTIVES = [{'name': 'AutoHeightDirective', 'selector': '[appAutoHeight]'}];
+    var ACTUAL_COMPONENT = {'name': 'AccountPageComponent'};
+</script>
+<script src="../js/tree.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                   </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+    </div>
+</div>
+</div>
+               <!-- END CONTENT -->
+           </div>
+       </div>
+
+          <label class="dark-mode-switch">
+               <input type="checkbox">
+               <span class="slider">
+                    <svg class="slider-icon" viewBox="0 0 24 24" fill="none" height="20" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" width="20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+                    </svg>
+               </span>
+          </label>
+
+       <script>
+            var COMPODOC_CURRENT_PAGE_DEPTH = 1;
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'component';
+            var COMPODOC_CURRENT_PAGE_URL = 'AccountPageComponent.html';
+            var MAX_SEARCH_RESULTS = 15;
+       </script>
+
+       <script>
+               $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               checkToggle(darkModeState);
+               if ($darkModeToggleSwitchers.length > 0) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].addEventListener('change', function (event) {
+                              darkModeState = !darkModeState;
+                              toggleDarkMode(darkModeState);
+                         });
+                    }
+               }
+          </script>
+
+       <script src="../js/libs/custom-elements.min.js"></script>
+       <script src="../js/libs/lit-html.js"></script>
+
+       <script src="../js/menu-wc.js" defer></script>
+       <script nomodule src="../js/menu-wc_es5.js" defer></script>
+
+       <script src="../js/libs/bootstrap-native.js"></script>
+
+       <script src="../js/libs/es6-shim.min.js"></script>
+       <script src="../js/libs/EventDispatcher.js"></script>
+       <script src="../js/libs/promise.min.js"></script>
+
+       <script src="../js/compodoc.js"></script>
+
+       <script src="../js/tabs.js"></script>
+       <script src="../js/menu.js"></script>
+       <script src="../js/libs/clipboard.min.js"></script>
+       <script src="../js/libs/prism.js"></script>
+       <script src="../js/sourceCode.js"></script>
+          <script src="../js/search/search.js"></script>
+          <script src="../js/search/lunr.min.js"></script>
+          <script src="../js/search/search-lunr.js"></script>
+          <script src="../js/search/search_index.js"></script>
+       <script src="../js/lazy-load-graphs.js"></script>
+
+
+    </body>
+</html>

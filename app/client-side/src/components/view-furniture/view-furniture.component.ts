@@ -10,7 +10,7 @@ import { CostFormatPipe } from '../../pipes/cost-format.pipe';
 @Component({
   selector: 'app-view-furniture',
   standalone: true,
-  imports: [ImageSliderComponent, NgFor, NgIf, ReactiveFormsModule,CostFormatPipe],
+  imports: [ImageSliderComponent, NgFor, NgIf, ReactiveFormsModule, CostFormatPipe],
   templateUrl: './view-furniture.component.html',
   styleUrl: './view-furniture.component.scss'
 })
@@ -22,14 +22,18 @@ export class ViewFurnitureComponent implements OnChanges {
     private notification: NotificationService
   ) { }
 
+  /** Текущий индекс выбранного цвета */
   protected currentColorId: number = 0
 
   @Input()
+  /** ID карточки мебели, передаваемый как входной параметр */
   furnitureCardId?: string
+
   @Input()
+  /** Данные карточки мебели, загружаемые из сервиса */
   furnitureData?: furnitureFromServerData;
 
-  async ngOnChanges(changes: SimpleChanges) {
+  async ngOnChanges() {
     if (this.furnitureCardId === undefined) return
     try {
       this.furnitureData = (await this.furnitureCardService.GETfurnitureCard(this.furnitureCardId)).furnitureCard
@@ -38,6 +42,7 @@ export class ViewFurnitureComponent implements OnChanges {
     }
   }
 
+  /** Смена цвета мебели на выбранный вариант */
   protected openFurnitureVariant(colorButton: EventTarget) {
     const COLOR_BUTTON_ELEMENT = colorButton as HTMLButtonElement;
     const COLORS_ELEMENT = this.elementRef.nativeElement.querySelector('.colors') as HTMLSpanElement;
@@ -64,9 +69,11 @@ export class ViewFurnitureComponent implements OnChanges {
       COLOR_BUTTON_ELEMENT.style.setProperty('margin-right', '0')
     }, 1250)
   }
+  /** Добавление габаритов к описанию мебели */
   protected proccessDescription(description: string, proportions: furnitureProportions) {
     return `Ширина: ${proportions.width} см\nДлина: ${proportions.length} см\nВысота: ${proportions.height} см\n${description}`;
   }
+  /** Копирование ссылки на магазин */
   protected copyShopLink(furnitureUrl: string) {
     this.clipboardService.copyFromContent(furnitureUrl)
   }

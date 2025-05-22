@@ -12,25 +12,52 @@ import { NotificationService } from '../../services/notification.service';
 import { Location, NgIf } from '@angular/common';
 import { PlanHouseComponent } from '../plan-house/plan-house.component';
 
+/**
+ * Интерфейс для описания размеров модели.
+ */
 export interface modelInterface {
+  /** Ширина модели */
   width: number;
+  /** Высота модели */
   height: number;
+  /** Длина модели */
   length: number;
 }
+
+/**
+ * Интерфейс для описания объекта сцены.
+ */
 export interface objectSceneInterface {
+  /** ID объекта */
   objectId: string;
+  /** Расстояние по оси X в метрах */
   xMetersDistance: number;
+  /** Расстояние по оси Z в метрах */
   zMetersDistance: number;
-  yRotate: number
+  /** Угол поворота по оси Y */
+  yRotate: number;
 }
+
+/**
+ * Интерфейс для описания данных загрузки объекта.
+ */
 interface objectLoadInterface {
+  /** Расстояние по оси X */
   xDistance: number;
+  /** Расстояние по оси Z */
   zDistance: number;
-  yRotate: number
+  /** Угол поворота по оси Y */
+  yRotate: number;
 }
+
+/**
+ * Интерфейс для описания данных комнаты.
+ */
 interface roomData extends modelInterface {
-  objects: objectSceneInterface[]
+  /** Массив объектов в комнате */
+  objects: objectSceneInterface[];
 }
+
 @Component({
   selector: 'app-scene',
   standalone: true,
@@ -53,26 +80,51 @@ export class SceneComponent implements AfterViewInit, OnChanges {
   ) { }
 
   @Input()
-  roomData!: roomDataPlan | undefined
-  @Output()
-  saveObjectsEmitter = new EventEmitter<objectSceneInterface[]>()
+  /** Данные комнаты */
+  roomData!: roomDataPlan | undefined;
 
+  @Output()
+  /** Событие для сохранения объектов */
+  saveObjectsEmitter = new EventEmitter<objectSceneInterface[]>();
+
+  /** Рендерер Three.js */
   private renderer!: THREE.WebGLRenderer;
+
+  /** Камера Three.js */
   private camera!: THREE.PerspectiveCamera;
+
+  /** Сцена Three.js */
   private scene!: THREE.Scene;
+
+  /** Контроллеры OrbitControls */
   private controls!: OrbitControls;
+
+  /** ID текущего кадра анимации */
   private animationFrameId: number | null = null;
+
+  /** Соотношение размеров холста */
   private canvasRatioOfWindow = 1.5;
+
+  /** Пропорции комнаты */
   private roomProportions!: modelInterface;
+
+  /** Луч для определения пересечений */
   private raycaster = new THREE.Raycaster();
+
+  /** Координаты мыши */
   private mouse = new THREE.Vector2();
+
+  /** Прямоугольная сетка комнаты */
   private rectangleMesh!: THREE.Mesh;
+
+  /** Целевой объект для взаимодействия */
   protected targetobject: THREE.Object3D | undefined = undefined;
 
 
   ngAfterViewInit(): void {
     this.initThreeJs();
   }
+
   ngOnChanges(changes: SimpleChanges): void {
     this.roomData = changes['roomData'].currentValue as roomDataPlan
     if (!this.roomData || this.scene === undefined || this.roomData === changes['roomData'].previousValue) return
@@ -121,6 +173,9 @@ export class SceneComponent implements AfterViewInit, OnChanges {
     const NEW_URL = this.location.path().split('/').slice(0, -1).join('/')
     this.location.replaceState(NEW_URL)
   }
+  /**
+   * Инициализация Three.js сцены.
+   */
   private initThreeJs(): void {
     this.scene = new THREE.Scene();
     this.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -134,10 +189,23 @@ export class SceneComponent implements AfterViewInit, OnChanges {
     this.animationFrameId = requestAnimationFrame(() => this.animate());
     this.renderer.render(this.scene, this.camera);
   }
+
+  /**
+   * Анимация сцены.
+   */
   private animate(): void {
     this.animationFrameId = requestAnimationFrame(() => this.animate());
     this.renderer.render(this.scene, this.camera);
   }
+
+  /**
+   * Создает геометрию прямоугольника с закругленными углами.
+   * @param width Ширина прямоугольника.
+   * @param height Высота прямоугольника.
+   * @param radius Радиус закругления.
+   * @param segments Количество сегментов.
+   * @returns Геометрия прямоугольника.
+   */
   private createRoundedRectangleGeometry(width: number, height: number, radius: number, segments: number): THREE.BufferGeometry {
     const SHAPE = new THREE.Shape();
     SHAPE.moveTo(-width / 2 + radius, -height / 2);
@@ -154,6 +222,10 @@ export class SceneComponent implements AfterViewInit, OnChanges {
 
     return geometry;
   }
+
+  /**
+   * Создает комнату на сцене.
+   */
   private createRoom(): void {
     if (!this.roomData) return
     const ROOM_PROPORTIONS = this.roomData.roomProportions
@@ -170,7 +242,13 @@ export class SceneComponent implements AfterViewInit, OnChanges {
     this.rectangleMesh.name = 'roomFloorBase';
     this.rectangleMesh
   }
-  private calculateObjectSaveData(object: THREE.Object3D) {
+
+  /**
+   * Рассчитывает данные для сохранения объекта.
+   * @param object Объект сцены.
+   * @returns Данные для сохранения объекта.
+   */
+  private calculateObjectSaveData(object: THREE.Object3D): objectSceneInterface {
     const FLOOR_SIZE = this.getObjectSize(this.rectangleMesh)
     const OBJECT_POSITION = object.position
     const objectSaveData: objectSceneInterface = {
@@ -181,6 +259,12 @@ export class SceneComponent implements AfterViewInit, OnChanges {
     }
     return objectSaveData
   }
+
+  /**
+   * Рассчитывает данные для перемещения объекта.
+   * @param objectSaveData Данные сохраненного объекта.
+   * @returns Данные для перемещения объекта.
+   */
   private calculateMoveObjectData(objectSaveData: objectSceneInterface): objectLoadInterface {
     const FLOOR_SIZE = this.getObjectSize(this.rectangleMesh)
     return {
@@ -189,6 +273,13 @@ export class SceneComponent implements AfterViewInit, OnChanges {
       yRotate: objectSaveData.yRotate
     }
   }
+
+  /**
+   * Создает форму комнаты.
+   * @param widthRatio Соотношение ширины.
+   * @param heightRatio Соотношение высоты.
+   * @param radius Радиус закругления.
+   */
   private createRoomShape(widthRatio: number, heightRatio: number, radius: number): void {
     const CAMERA_FRUSTUM_BOUNDS = this.calculateFrustumBounds();
     const SHAPE_RATIO = widthRatio / heightRatio;
@@ -210,6 +301,11 @@ export class SceneComponent implements AfterViewInit, OnChanges {
     this.renderer.render(this.scene, this.camera);
     this.rectangleMesh.updateMatrixWorld(true);
   }
+
+  /**
+   * Рассчитывает границы камеры.
+   * @returns Объект с шириной и высотой камеры.
+   */
   private calculateFrustumBounds(): { width: number; height: number } {
     const CAMERA_Y = this.camera.position.y;
     const FOV_RAD = THREE.MathUtils.degToRad(this.camera.fov);
@@ -218,7 +314,15 @@ export class SceneComponent implements AfterViewInit, OnChanges {
 
     return { width: FRUSTUM_WIDTH, height: FRUSTUM_HEIGHT };
   }
-  private addObjectToScene(object: THREE.Object3D, objectProportions: modelInterface, furnitureCardId: string, moveData?: objectLoadInterface) {
+
+  /**
+   * Добавляет объект на сцену.
+   * @param object Объект Three.js.
+   * @param objectProportions Пропорции объекта.
+   * @param furnitureCardId ID карточки мебели.
+   * @param moveData Данные для перемещения объекта.
+   */
+  private addObjectToScene(object: THREE.Object3D, objectProportions: modelInterface, furnitureCardId: string, moveData?: objectLoadInterface): void {
     object.userData = { id: furnitureCardId }
     this.scaleImportModel(object, objectProportions);
     this.scene.add(object)
@@ -228,6 +332,12 @@ export class SceneComponent implements AfterViewInit, OnChanges {
     object.rotation.y = moveData.yRotate
 
   }
+
+  /**
+   * Получает размеры объекта.
+   * @param object Объект Three.js.
+   * @returns Размеры объекта.
+   */
   private getObjectSize(object: THREE.Object3D): { width: number; height: number; length: number } {
     const BOUNDING_BOX = new THREE.Box3().setFromObject(object);
     const SIZE = BOUNDING_BOX.getSize(new THREE.Vector3());
@@ -237,7 +347,13 @@ export class SceneComponent implements AfterViewInit, OnChanges {
       height: SIZE.y
     };
   }
-  private scaleImportModel(object: THREE.Object3D, objectProportions: modelInterface) {
+
+  /**
+   * Масштабирует импортированную модель.
+   * @param object Объект Three.js.
+   * @param objectProportions Пропорции объекта.
+   */
+  private scaleImportModel(object: THREE.Object3D, objectProportions: modelInterface): void {
     let { width, length } = objectProportions
     width = width / 100
     length = length / 100
@@ -249,7 +365,11 @@ export class SceneComponent implements AfterViewInit, OnChanges {
     const GENERAL_COEFFICIENT = REAL_PROPORTIONS_COEFFICIENT * SCENE_PROPORTIONS_COEFFICIENT;
     object.scale.set(GENERAL_COEFFICIENT, GENERAL_COEFFICIENT, GENERAL_COEFFICIENT);
   }
-  public async loadRoom() {
+
+  /**
+   * Загружает комнату с объектами.
+   */
+  public async loadRoom(): Promise<void> {
     const JWT = this.accountCookieService.getJwt()
     if (!JWT || !this.roomData) return
     const roomData: roomData = {
@@ -263,7 +383,11 @@ export class SceneComponent implements AfterViewInit, OnChanges {
     }
     this.spinner.hide()
   }
-  private clearRoom() {
+
+  /**
+   * Очищает комнату от объектов.
+   */
+  private clearRoom(): void {
     for (let i = this.scene.children.length - 1; i >= 0; i--) {
       const OBJECT = this.scene.children[i];
       if (OBJECT.type !== 'Scene' && OBJECT.type !== 'HemisphereLight') {
@@ -271,6 +395,11 @@ export class SceneComponent implements AfterViewInit, OnChanges {
       }
     }
   }
+
+  /**
+   * Обрабатывает изменение размера окна.
+   * @param event Событие изменения размера.
+   */
   @HostListener('window:resize', ['$event'])
   private onResize(event: Event): void {
     this.renderer.setSize(window.innerWidth / this.canvasRatioOfWindow, window.innerHeight / this.canvasRatioOfWindow);
@@ -278,6 +407,11 @@ export class SceneComponent implements AfterViewInit, OnChanges {
     this.camera.updateProjectionMatrix();
     this.renderer.render(this.scene, this.camera);
   }
+
+  /**
+   * Обрабатывает клик мыши.
+   * @param event Событие клика.
+   */
   @HostListener('click', ['$event'])
   private onMouseClick(event: MouseEvent): void {
     if (this.targetobject) {
@@ -300,8 +434,13 @@ export class SceneComponent implements AfterViewInit, OnChanges {
     if (!FOUND_INTERSECTION) return
     this.targetobject = FOUND_INTERSECTION.parent ? FOUND_INTERSECTION.parent : FOUND_INTERSECTION
   }
+
+  /**
+   * Поворачивает целевой объект.
+   * @param event Событие нажатия клавиши.
+   */
   @HostListener('window:keydown', ['$event'])
-  private rotateTargetObject(event: KeyboardEvent) {
+  private rotateTargetObject(event: KeyboardEvent): void {
     if (!this.targetobject) return
     let rotateAngle = -0.05
 
@@ -315,6 +454,11 @@ export class SceneComponent implements AfterViewInit, OnChanges {
         this.targetobject.rotation.y += rotateAngle
     }
   }
+
+  /**
+   * Обрабатывает перемещение мыши.
+   * @param event Событие перемещения мыши.
+   */
   @HostListener('mousemove', ['$event'])
   private onMousemove(event: MouseEvent): void {
     if (!this.targetobject) return;
@@ -357,7 +501,11 @@ export class SceneComponent implements AfterViewInit, OnChanges {
 
     this.targetobject.position.set(newXObjectPosition, 0, newZObjectPosition);
   }
-  protected async getReport() {
+
+  /**
+   * Генерирует отчет по комнате.
+   */
+  protected async getReport(): Promise<void> {
     const JWT = this.accountCookieService.getJwt()
     if (!JWT || !this.roomData?._id) return
 
@@ -380,12 +528,20 @@ export class SceneComponent implements AfterViewInit, OnChanges {
 
     this.projectService.GETgetReportOfRoom(JWT, this.roomData?._id, imageDataBlob)
   }
-  protected deleteModel() {
+
+  /**
+   * Удаляет выбранную модель.
+   */
+  protected deleteModel(): void {
     if (!this.targetobject) return
     this.scene.remove(this.targetobject)
     this.saveRoom()
   }
-  public saveRoom() {
+
+  /**
+   * Сохраняет текущее состояние комнаты.
+   */
+  public saveRoom(): void {
     if (!this.roomData) return
     const OBJECTS_SCENE_ARRAY = this.scene.children.filter(object => {
       if (
