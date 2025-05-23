@@ -133,6 +133,7 @@ export class FinderComponent implements AfterViewInit {
       CURRENT_ROUTE = CURRENT_ROUTE.firstChild;
     }
     const component = CURRENT_ROUTE.snapshot.routeConfig?.component;
+    console.log(component);
     if (component && component.name === '_ShopPageComponent') {
       this.finderService.setFurnitureName(name);
       return true;
