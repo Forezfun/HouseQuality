@@ -15,9 +15,9 @@ export const routes: Routes = [
     { component: PlanHousePageComponent, path: 'plan/:planId/:roomId' },
     { component: PlanHousePageComponent, path: 'plan/:planId/:roomId/:furnitureCardId' },
     { component: CreateFurniturePageComponent, path: 'create/:id' },
-    { component: ShopPageComponent, path: 'shop' },
-    { component: ShopPageComponent, path: 'shop/:category' },
-    { component: ShopPageComponent, path: 'shop/:category/:furnitureCardId' },
+    { component: ShopPageComponent, path: 'shop', data: { pageName: 'shop' } },
+    { component: ShopPageComponent, path: 'shop/:category', data: { pageName: 'shop' }},
+    { component: ShopPageComponent, path: 'shop/:category/:furnitureCardId', data: { pageName: 'shop' } },
     {
         path: '**',
         redirectTo: '',
