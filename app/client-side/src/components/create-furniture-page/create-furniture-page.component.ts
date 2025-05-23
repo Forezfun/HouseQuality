@@ -82,6 +82,7 @@ export class CreateFurniturePageComponent implements OnInit, OnDestroy {
       this.router.navigateByUrl('/login');
       return;
     }
+    console.log('routeSub init')
     this.routeSub = this.route.paramMap.subscribe(params => {
       this.idPage = params.get('id') ?? 'new';
       this.clearFurnitureCard();
@@ -93,6 +94,7 @@ export class CreateFurniturePageComponent implements OnInit, OnDestroy {
    * Отписка от подписки при уничтожении компонента.
    */
   ngOnDestroy() {
+    console.log('routeSub destroy')
     this.routeSub.unsubscribe();
   }
 
