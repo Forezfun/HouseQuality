@@ -2,6 +2,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { baseUrl } from '.';
 import { firstValueFrom } from 'rxjs';
+import { UploadService } from './upload.service';
 
 @Injectable({
   providedIn: 'root'
@@ -10,7 +11,10 @@ export class FurnitureModelControlService {
   /** Базовый URL для API запросов к моделям мебели */
   private baseServiceUrl = baseUrl + 'furniture/model';
 
-  constructor(private httpModule: HttpClient) { }
+  constructor(
+    private httpModule: HttpClient,
+    private uploadService: UploadService
+  ) { }
 
   /**
    * Получение 3D модели мебели по ID
@@ -33,19 +37,9 @@ export class FurnitureModelControlService {
    * @param {Blob} modelFile - Файл модели для загрузки
    * @param {string} jwt - JWT токен пользователя
    * @param {string} furnitureCardId - ID мебели, к которой относится модель
-   * @returns {Promise<{message: string}>} - Результат запроса с сообщением
    */
-  POSTuploadFurnitureModel(modelFile: Blob, jwt: string, furnitureCardId: string): Promise<{message: string}> {
-    const formData = new FormData();
-    formData.append('model', modelFile);
-    const HTTP_PARAMS = new HttpParams()
-      .set('jwt', jwt)
-      .set('furnitureCardId', furnitureCardId)
-      .set('fileName', (modelFile as any).name);
-
-    return firstValueFrom(
-      this.httpModule.post(this.baseServiceUrl, formData, { params: HTTP_PARAMS })
-    ) as Promise<{message: string}>;
+  POSTuploadFurnitureModel(modelFile: File, jwt: string, furnitureCardId: string) {
+    this.uploadService.addFile(modelFile, jwt, furnitureCardId);
   }
 
   /**

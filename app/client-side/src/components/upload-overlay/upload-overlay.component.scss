@@ -1,0 +1,103 @@
+@use 'base.scss' as *;
+
+.upload-overlay {
+  position: fixed;
+  bottom: 1rem;
+  right: 1rem;
+  width: 250px;
+  z-index: 9999;
+  font-size: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+
+  @media (max-width: 500px) {
+    right: calc(50% - 125px);
+    left: calc(50% - 125px);
+  }
+}
+
+.upload-item {
+  margin-bottom: 0.5rem;
+  border: 2px solid $lightGreen;
+  padding: 1rem;
+  border-radius: 10px;
+  background: black;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+
+.file-info {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  max-width: 65%;
+
+  .file-name {
+    font-weight: bold;
+    color: white;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .file-status {
+    color: $lightGreen;
+    font-size: 12px;
+  }
+}
+
+.progress-wrapper {
+  position: relative;
+  width: 40px;
+  height: 40px;
+
+  svg.progress-circle {
+    transform: rotate(-90deg);
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+
+    .progress-bg {
+      stroke: $light;
+    }
+
+    .progress-bar {
+      stroke: $darkGreen;
+      box-shadow: 0 0 5px $darkGreen;
+      transition: stroke-dashoffset 0.3s ease;
+      stroke-linecap: round;
+    }
+  }
+
+  .cancel-btn {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 28px;
+    height: 28px;
+    padding: 0;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    transform: translate(-50%, -50%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+
+    img {
+      width: 50%;
+      height: 50%;
+      object-fit: contain;
+      box-sizing: border-box;
+      margin-bottom: -3px;
+      rotate: 45deg;
+    }
+
+    &:hover {
+      opacity: 1 !important;
+    }
+  }
+}

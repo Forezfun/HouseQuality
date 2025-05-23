@@ -47,7 +47,7 @@ const storage = multer.diskStorage({
     },
     filename: (request, file, cb) => {
         let extension = path.extname(file.originalname).toLowerCase();
-        if (!extension || !['.obj', '.fbx', '.stl'].includes(extension)) return
+        if (!extension || !['.obj', '.fbx', '.stl'].includes(extension)) return cb(new Error('Недопустимый формат файла'), null);
 
         const fileName = request.query.furnitureCardId + extension;
         saveModel(fileName, request.query.furnitureCardId);
@@ -71,7 +71,7 @@ async function saveModel(fileName, furnitureCardId) {
     }
 }
 
-const upload = multer({ storage: storage });
+const upload = multer({ storage });
 /**
  * @function POST /furniture/model
  * @instance
@@ -92,25 +92,27 @@ const upload = multer({ storage: storage });
  *   "message": error
  * }
  */
-ROUTER.post('/', upload.single('model'), async (request, result) => {
+ROUTER.post('/', upload.single('file'), async (req, res) => {
     try {
-        let FURNITURE_MODEL_ITEM = await FURNITURE_MODEL.findOne({ furnitureCardId: request.query.furnitureCardId })
-        if (!FURNITURE_MODEL_ITEM) {
-            FURNITURE_MODEL_ITEM = new FURNITURE_MODEL({
-                filename: request.file.filename,
-                furnitureCardId: request.query.furnitureCardId,
-                originalName: request.query.fileName
+        const { furnitureCardId, fileName } = req.body;
+        let item = await FURNITURE_MODEL.findOne({ furnitureCardId });
+
+        if (!item) {
+            item = new FURNITURE_MODEL({
+                filename: req.file.filename,
+                furnitureCardId,
+                originalName: fileName
             });
-            FURNITURE_MODEL_ITEM.originalName = request.query.fileName
         } else {
-            FURNITURE_MODEL_ITEM.__v += 1
-            FURNITURE_MODEL_ITEM.filename = request.file.filename;
-            FURNITURE_MODEL_ITEM.originalName = request.query.fileName
+            item.__v += 1;
+            item.filename = req.file.filename;
+            item.originalName = fileName;
         }
-        await FURNITURE_MODEL_ITEM.save();
-        result.status(200).json({ message: 'Модель добавлена' });
+
+        await item.save();
+        res.status(200).json({ message: 'Модель добавлена' });
     } catch (error) {
-        result.status(400).json({ message: error.message });
+        res.status(400).json({ message: error.message });
     }
 });
 /**

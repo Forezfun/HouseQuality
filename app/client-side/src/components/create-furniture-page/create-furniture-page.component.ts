@@ -174,7 +174,7 @@ export class CreateFurniturePageComponent implements OnInit, OnDestroy {
 
       // Загрузка 3D модели
       const FURNITURE_MODEL_BLOB = this.createFurnitureComponent.furnitureModelInput.files![0];
-      await this.furnitureModelService.POSTuploadFurnitureModel(FURNITURE_MODEL_BLOB, JWT, FURNITURE_ID);
+      this.furnitureModelService.POSTuploadFurnitureModel(FURNITURE_MODEL_BLOB, JWT, FURNITURE_ID);
 
       this.notification.setSuccess('Мебель добавлена', 5000);
       this.router.navigateByUrl('/account');

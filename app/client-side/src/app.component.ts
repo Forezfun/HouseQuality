@@ -13,12 +13,13 @@ import { FurnitureModelControlService } from './services/furniture-model-control
 import { ShopService } from './services/shop.service';
 import { FinderService } from './services/finder.service';
 import { AutoHeightDirective } from './directives/auto-height.directive';
+import { UploadOverlayComponent } from './components/upload-overlay/upload-overlay.component';
 
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet,NotificationComponent],
+  imports: [RouterOutlet,NotificationComponent,UploadOverlayComponent],
   providers:[AutoHeightDirective,NotificationComponent,AccountService,AuthService,AccountCookieService,ServerImageControlService,ProjectService,PlanHouseComponent,SceneComponent,FurnitureCardControlService,FurnitureModelControlService,ShopService,FinderService,Location],
   templateUrl: './app.component.html'
 })
