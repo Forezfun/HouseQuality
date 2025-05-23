@@ -32,7 +32,7 @@ interface clientProportions {
 export class CreateFurniturePageComponent implements OnInit, OnDestroy {
 
   /** Подписка на изменения маршрута в приложении.*/
-  private routeSub: Subscription = new Subscription();
+  private routeSub!: Subscription;
   /** Id страницы.*/
   protected idPage!: string;
   
@@ -93,7 +93,7 @@ export class CreateFurniturePageComponent implements OnInit, OnDestroy {
    * Отписка от подписки при уничтожении компонента.
    */
   ngOnDestroy() {
-    this.routeSub.unsubscribe();
+    if(this.routeSub) this.routeSub.unsubscribe();
   }
 
   /**
