@@ -81,12 +81,12 @@ export class ReportService {
     <style>
         @font-face {
             font-family: 'Calypso';
-            src: url('http://localhost:4200/assets/fonts/Calypso.ttf') format('truetype');
+            src: url('${baseClientUrl}assets/fonts/Calypso.ttf') format('truetype');
         }
 
         @font-face {
             font-family: 'Courier New';
-            src: url('http://localhost:4200/assets/fonts/Courier New.ttf') format('truetype');
+            src: url('${baseClientUrl}assets/fonts/Courier New.ttf') format('truetype');
         }
 
         body {
