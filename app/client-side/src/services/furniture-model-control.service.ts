@@ -22,14 +22,19 @@ export class FurnitureModelControlService {
    * @param {string} furnitureCardId - ID модели мебели
    * @returns {Promise<Blob>} - Файл модели в формате Blob
    */
-  GETfurnitureModel(jwt: string, furnitureCardId: string): Promise<Blob> {
-    const HTTP_PARAMS = new HttpParams()
-      .set('jwt', jwt)
-      .set('furnitureCardId', furnitureCardId);
+  GETfurnitureModel(jwt: string, furnitureCardId: string, controller: AbortController): Promise<Blob> {
+    const url = new URL(this.baseServiceUrl);
+    url.searchParams.set('jwt', jwt);
+    url.searchParams.set('furnitureCardId', furnitureCardId);
 
-    return firstValueFrom(
-      this.httpModule.get(this.baseServiceUrl, { params: HTTP_PARAMS, responseType: 'blob' })
-    ) as Promise<Blob>;
+    return fetch(url.toString(), {
+      method: 'GET',
+      signal: controller.signal,
+    })
+      .then((res) => {
+        if (!res.ok) throw new Error(`Ошибка загрузки модели: ${res.status}`);
+        return res.blob();
+      });
   }
 
   /**
@@ -38,7 +43,7 @@ export class FurnitureModelControlService {
    * @param {string} jwt - JWT токен пользователя
    * @param {string} furnitureCardId - ID мебели, к которой относится модель
    */
-  POSTuploadFurnitureModel(modelFile: File, jwt: string, furnitureCardId: string, uploadType:uploadType) {
+  POSTuploadFurnitureModel(modelFile: File, jwt: string, furnitureCardId: string, uploadType: uploadType) {
     this.uploadService.addFile(modelFile, jwt, furnitureCardId, uploadType);
   }
 
@@ -48,13 +53,13 @@ export class FurnitureModelControlService {
    * @param {string} furnitureCardId - ID модели мебели для удаления
    * @returns {Promise<{message: string}>} - Результат запроса с сообщением
    */
-  DELETEfurnitureModel(jwt: string, furnitureCardId: string): Promise<{message: string}> {
+  DELETEfurnitureModel(jwt: string, furnitureCardId: string): Promise<{ message: string }> {
     const HTTP_PARAMS = new HttpParams()
       .set('jwt', jwt)
       .set('furnitureCardId', furnitureCardId);
 
     return firstValueFrom(
       this.httpModule.delete(this.baseServiceUrl, { params: HTTP_PARAMS })
-    ) as Promise<{message: string}>;
+    ) as Promise<{ message: string }>;
   }
 }

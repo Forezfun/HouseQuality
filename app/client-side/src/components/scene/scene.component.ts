@@ -1,7 +1,6 @@
-import { Component, AfterViewInit, ElementRef, HostListener, Input, SimpleChanges, Output, EventEmitter, OnChanges, OnDestroy } from '@angular/core';
+import { Component, AfterViewInit, ElementRef, HostListener, Input, SimpleChanges, Output, EventEmitter, OnChanges, OnDestroy, Renderer2 } from '@angular/core';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
-import { NgxSpinnerModule, NgxSpinnerService } from 'ngx-spinner';
 import { ProjectService, roomData as roomDataPlan } from '../../services/project.service';
 import { loadModel } from './loaders';
 import { FurnitureModelControlService } from '../../services/furniture-model-control.service';
@@ -61,14 +60,13 @@ interface roomData extends modelInterface {
 @Component({
   selector: 'app-scene',
   standalone: true,
-  imports: [NgxSpinnerModule, NgIf],
+  imports: [NgIf],
   templateUrl: './scene.component.html',
   styleUrls: ['./scene.component.scss']
 })
 export class SceneComponent implements AfterViewInit, OnChanges {
   constructor(
     private elementRef: ElementRef,
-    private spinner: NgxSpinnerService,
     private furnitureModelService: FurnitureModelControlService,
     private furnitureCardService: FurnitureCardControlService,
     private accountCookieService: AccountCookieService,
@@ -117,8 +115,14 @@ export class SceneComponent implements AfterViewInit, OnChanges {
   /** Прямоугольная сетка комнаты */
   private rectangleMesh!: THREE.Mesh;
 
+  /** Прямоугольная сетка комнаты */
+  private abortConroller: AbortController = new AbortController();
+
   /** Целевой объект для взаимодействия */
   protected targetobject: THREE.Object3D | undefined = undefined;
+
+  /** Целевой объект для взаимодействия */
+  protected isShowLoader: boolean = false
 
 
   ngAfterViewInit(): void {
@@ -142,7 +146,7 @@ export class SceneComponent implements AfterViewInit, OnChanges {
     const FURNITURE_ID = this.route.snapshot.params['furnitureCardId']
     if (!FURNITURE_ID || changes['roomData'].previousValue) return
     this.fixPath()
-    this.addModel(FURNITURE_ID, true)
+    this.addModel(FURNITURE_ID, true, this.abortConroller)
   }
 
   private async loadFurnitureModel(fileModel: Blob, furnitureSize: modelInterface, furnitureCardId: string, saveRoom: boolean, moveData?: objectLoadInterface) {
@@ -153,17 +157,17 @@ export class SceneComponent implements AfterViewInit, OnChanges {
     } catch (error) {
     }
   }
-  private async addModel(furnitureCardId: string, saveRoom: boolean, moveData?: objectLoadInterface) {
+  private async addModel(furnitureCardId: string, saveRoom: boolean, controller: AbortController, moveData?: objectLoadInterface) {
     const JWT = this.accountCookieService.getJwt()
     if (!JWT) return
     try {
-      if (saveRoom) this.spinner.show()
+      if (saveRoom) this.showLoader()
       const PROPORTIONS = (await this.furnitureCardService.GETfurnitureCard(furnitureCardId)).furnitureCard.proportions as modelInterface
-      const MODEL = await this.furnitureModelService.GETfurnitureModel(JWT, furnitureCardId)
+      const MODEL = await this.furnitureModelService.GETfurnitureModel(JWT, furnitureCardId, controller)
       await this.loadFurnitureModel(MODEL, PROPORTIONS, furnitureCardId, saveRoom, moveData)
-      this.spinner.hide()
+      this.closeLoader()
     } catch (error) {
-      this.spinner.hide()
+      this.closeLoader()
       this.notification.setError('Ошибка загрузки модели', 5000)
       console.log(error)
     }
@@ -357,7 +361,7 @@ export class SceneComponent implements AfterViewInit, OnChanges {
     let { width, length } = objectProportions
     width = width / 100
     length = length / 100
-    
+
     const UPLOAD_OBJECT_SIZE = this.getObjectSize(object);
     const RECTANGLE_SIZE = this.getObjectSize(this.rectangleMesh);
     const SCENE_PROPORTIONS_COEFFICIENT = UPLOAD_OBJECT_SIZE.width > UPLOAD_OBJECT_SIZE.length ? RECTANGLE_SIZE.width / UPLOAD_OBJECT_SIZE.width : RECTANGLE_SIZE.length / UPLOAD_OBJECT_SIZE.length;
@@ -377,13 +381,19 @@ export class SceneComponent implements AfterViewInit, OnChanges {
       ...this.roomData.roomProportions
     }
 
-    this.spinner.show()
+    this.showLoader()
     for (const object of roomData.objects) {
-      await this.addModel(object.objectId, false, this.calculateMoveObjectData(object));
+      await this.addModel(object.objectId, false, this.abortConroller, this.calculateMoveObjectData(object));
     }
-    this.spinner.hide()
+    this.closeLoader()
   }
 
+  private showLoader() {
+    this.isShowLoader = true
+  }
+  private closeLoader() {
+    this.isShowLoader = false
+  }
   /**
    * Очищает комнату от объектов.
    */
@@ -500,6 +510,16 @@ export class SceneComponent implements AfterViewInit, OnChanges {
     }
 
     this.targetobject.position.set(newXObjectPosition, 0, newZObjectPosition);
+  }
+
+  /**
+   * Генерирует отчет по комнате.
+   */
+  protected abortLoadRoom() {
+    this.abortConroller.abort()
+    this.abortConroller = new AbortController()
+    this.planHouseComponent.sceneOpenToggle = false
+
   }
 
   /**

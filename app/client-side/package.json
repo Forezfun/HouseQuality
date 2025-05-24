@@ -29,6 +29,7 @@
     "compressorjs": "^1.2.1",
     "html2canvas": "^1.4.1",
     "html2pdf.js": "^0.10.3",
+    "idb": "^8.0.3",
     "jspdf": "^3.0.1",
     "lodash": "^4.17.21",
     "ngx-clipboard": "^16.0.0",
@@ -37,6 +38,9 @@
     "puppeteer": "^24.8.2",
     "rxjs": "~7.8.2",
     "three": "^0.176.0",
+    "workbox-core": "^7.3.0",
+    "workbox-routing": "^7.3.0",
+    "workbox-strategies": "^7.3.0",
     "zone.js": "~0.15.0"
   },
   "devDependencies": {

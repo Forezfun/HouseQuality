@@ -216,6 +216,7 @@ ROUTER.get('/version', async (request, result) => {
         if (!FURNITURE_MODEL_ITEM) {
             return result.status(404).json({ message: 'Модель не найдена' });
         }
+        console.log('Версия: ',FURNITURE_MODEL_ITEM.__v )
         result.status(201).json({ versionModel: FURNITURE_MODEL_ITEM.__v })
     } catch (error) {
         result.status(500).json({ message: error.message });
@@ -267,6 +268,7 @@ ROUTER.get('/', async (request, result) => {
         result.setHeader('Content-Type', MIME_TYPE);
         result.setHeader('Content-Disposition', `attachment; filename="${FURNITURE_MODEL_ITEM.filename}"`);
 
+        console.log('Отдача файла')
         result.sendFile(FILE_PATH);
     } catch (error) {
         result.status(500).json({ message: error.message });

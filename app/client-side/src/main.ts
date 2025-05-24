@@ -7,8 +7,10 @@ bootstrapApplication(AppComponent, appConfig)
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('/model-scw.js', { scope: '/' })
         .then(reg => {
+          console.log(reg)
         })
         .catch(err => {
+          console.log(err)
         });
     }
   })
