@@ -2,7 +2,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { baseUrl } from '.';
 import { firstValueFrom } from 'rxjs';
-import { UploadService } from './upload.service';
+import { UploadService, uploadType } from './upload.service';
 
 @Injectable({
   providedIn: 'root'
@@ -38,8 +38,8 @@ export class FurnitureModelControlService {
    * @param {string} jwt - JWT токен пользователя
    * @param {string} furnitureCardId - ID мебели, к которой относится модель
    */
-  POSTuploadFurnitureModel(modelFile: File, jwt: string, furnitureCardId: string) {
-    this.uploadService.addFile(modelFile, jwt, furnitureCardId);
+  POSTuploadFurnitureModel(modelFile: File, jwt: string, furnitureCardId: string, uploadType:uploadType) {
+    this.uploadService.addFile(modelFile, jwt, furnitureCardId, uploadType);
   }
 
   /**

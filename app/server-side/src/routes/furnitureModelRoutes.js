@@ -14,14 +14,21 @@ ROUTER.use(async (request, result, next) => {
             next();
             return;
         }
-        const JWT = request.query.jwt;
+        if (request.method == 'POST') {
+            console.log('Пропуск . загрузка модели...')
+            next();
+            return;
+        }
+        const JWT = request.body.jwt || request.query.jwt;
         const ACCOUNT_ID = await checkUserAccess(JWT);
-        if (!ACCOUNT_ID) return result.status(404).json({ message: 'Аккаунт не найден' })
-        const FURNITURE_CARD_ITEM = await FURNITURE_CARD.findOne({ authorId: ACCOUNT_ID })
-        if (!FURNITURE_CARD_ITEM || FURNITURE_CARD_ITEM.authorId !== ACCOUNT_ID) return result.status(409).json({ message: "Нет доступа" })
-        request.query.accountId = ACCOUNT_ID;
+        if (!ACCOUNT_ID) return result.status(404).json({ message: 'Аккаунт не найден' });
+        const FURNITURE_CARD_ID = request.body.furnitureCardId || request.query.furnitureCardId;
+        const FURNITURE_CARD_ITEM = await FURNITURE_CARD.findOne({ _id: FURNITURE_CARD_ID, authorId: ACCOUNT_ID });
+        if (!FURNITURE_CARD_ITEM) return result.status(409).json({ message: "Нет доступа" });
+        request.body.accountId = ACCOUNT_ID;
         next();
     } catch (error) {
+        console.log(error)
         result.status(500).json({ message: 'Ошибка при валидации: ' + error.message });
     }
 });
@@ -37,41 +44,52 @@ function removeOldModelIfExists(furnitureCardId, uploadDir) {
 }
 
 const storage = multer.diskStorage({
-    destination: (request, file, cb) => {
+    destination: (req, file, cb) => {
         const uploadDir = path.join(__dirname, '..', 'uploads', 'models');
         if (!fs.existsSync(uploadDir)) {
             fs.mkdirSync(uploadDir, { recursive: true });
         }
-        removeOldModelIfExists(request.query.furnitureCardId, uploadDir);
+        removeOldModelIfExists(req.body.furnitureCardId, uploadDir);
         cb(null, uploadDir);
     },
-    filename: (request, file, cb) => {
+    filename: (req, file, cb) => {
         let extension = path.extname(file.originalname).toLowerCase();
-        if (!extension || !['.obj', '.fbx', '.stl'].includes(extension)) return cb(new Error('Недопустимый формат файла'), null);
-
-        const fileName = request.query.furnitureCardId + extension;
-        saveModel(fileName, request.query.furnitureCardId);
+        if (!extension || !['.obj', '.fbx', '.stl'].includes(extension)) {
+            return cb(new Error('Недопустимый формат файла'), null);
+        }
+        const fileName = req.body.furnitureCardId + extension;
         cb(null, fileName);
     }
 });
 
-async function saveModel(fileName, furnitureCardId) {
-    let FURNITURE_MODEL_ITEM = await FURNITURE_MODEL.findOne({ furnitureCardId: furnitureCardId });
-    if (FURNITURE_MODEL_ITEM) {
+const fileFilter = async (req, file, cb) => {
+    try {
+        const jwt = req.body.jwt;
+        const furnitureCardId = req.body.furnitureCardId;
+        if (!jwt || !furnitureCardId) {
+            return cb(new Error('JWT или furnitureCardId отсутствует'), false);
+        }
 
-        FURNITURE_MODEL_ITEM.filename = fileName;
-        await FURNITURE_MODEL_ITEM.save();
-    } else {
+        const accountId = await checkUserAccess(jwt);
+        if (!accountId) {
+            return cb(new Error('Невалидный JWT'), false);
+        }
 
-        const FURNITURE_MODEL_NEW_ITEM = new FURNITURE_MODEL({
-            filename: fileName,
-            furnitureCardId: furnitureCardId
-        });
-        await FURNITURE_MODEL_NEW_ITEM.save();
+        const card = await FURNITURE_CARD.findOne({ _id: furnitureCardId, authorId: accountId });
+        if (!card) {
+            return cb(new Error('Нет доступа к карточке'), false);
+        }
+
+        req.body.accountId = accountId;
+        cb(null, true);
+    } catch (err) {
+        cb(new Error('Ошибка авторизации: ' + err.message), false);
     }
-}
+};
 
-const upload = multer({ storage });
+
+const upload = multer({ storage, fileFilter });
+
 /**
  * @function POST /furniture/model
  * @instance
@@ -94,27 +112,35 @@ const upload = multer({ storage });
  */
 ROUTER.post('/', upload.single('file'), async (req, res) => {
     try {
-        const { furnitureCardId, fileName } = req.body;
+        const { furnitureCardId } = req.body;
+
         let item = await FURNITURE_MODEL.findOne({ furnitureCardId });
 
         if (!item) {
             item = new FURNITURE_MODEL({
                 filename: req.file.filename,
                 furnitureCardId,
-                originalName: fileName
+                originalName: req.file.originalname
             });
         } else {
             item.__v += 1;
             item.filename = req.file.filename;
-            item.originalName = fileName;
+            item.originalName = req.file.originalname;
         }
 
         await item.save();
         res.status(200).json({ message: 'Модель добавлена' });
+
     } catch (error) {
+        if (req.file && req.file.path) {
+            fs.unlink(req.file.path, (err) => {
+                if (err) console.error('Ошибка удаления файла:', err);
+            });
+        }
         res.status(400).json({ message: error.message });
     }
 });
+
 /**
  * @function DELETE /furniture/model
  * @instance
@@ -236,7 +262,7 @@ ROUTER.get('/', async (request, result) => {
         }
 
 
-        const MIME_TYPE = mime.lookup(FILE_PATH)||'application/octet-stream'
+        const MIME_TYPE = mime.lookup(FILE_PATH) || 'application/octet-stream'
 
         result.setHeader('Content-Type', MIME_TYPE);
         result.setHeader('Content-Disposition', `attachment; filename="${FURNITURE_MODEL_ITEM.filename}"`);
@@ -245,6 +271,15 @@ ROUTER.get('/', async (request, result) => {
     } catch (error) {
         result.status(500).json({ message: error.message });
     }
+});
+
+ROUTER.use((err, req, res, next) => {
+    console.log(err.message)
+    if (err instanceof multer.MulterError || err.message === 'Нет доступа к карточке') {
+    return res.status(500).json({ message: err.message });
+}
+
+return res.status(500).json({ message: 'Ошибка сервера: ' + err.message });
 });
 
 module.exports = ROUTER;

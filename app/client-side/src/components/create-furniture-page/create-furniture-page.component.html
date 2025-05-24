@@ -8,10 +8,10 @@
     <button (click)="idPage==='new' ? createFurnitureCard() : updateFurnitureCard()" class="functionalBtn confirmBtn">
       {{idPage === 'new' ? 'Создать' : 'Обновить'}}
     </button>
-    <button [title]="idPage === 'new' ? 'Очистить форму' : 'Удалить карточку мебели'" class="functionalBtn deleteBtn">
+    <button (click)="idPage === 'new'?clearFurnitureCard():deleteFurnitureCard()" [title]="idPage === 'new' ? 'Очистить форму' : 'Удалить карточку мебели'" class="functionalBtn deleteBtn">
       <img [src]=" 'assets/images/'+(idPage === 'new'?'addIcon.svg':'deleteIcon.svg')"
         [style.rotate]="idPage === 'new'?'45deg':'0deg'"
-        (click)="idPage === 'new'?clearFurnitureCard():deleteFurnitureCard()" alt="">
+         alt="">
     </button>
   </span>
 </span>

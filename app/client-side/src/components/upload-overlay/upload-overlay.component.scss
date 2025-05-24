@@ -68,7 +68,7 @@
     .progress-bar {
       stroke: $darkGreen;
       box-shadow: 0 0 5px $darkGreen;
-      transition: stroke-dashoffset 0.3s ease;
+      transition: stroke-dashoffset 0.3s ease-in-out;
       stroke-linecap: round;
     }
   }

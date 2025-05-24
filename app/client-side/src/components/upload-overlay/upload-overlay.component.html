@@ -8,12 +8,12 @@
       <div class="progress-wrapper">
         <svg class="progress-circle" width="40" height="40" viewBox="0 0 40 40">
           <circle class="progress-bg" cx="20" cy="20" r="18" stroke-width="4" fill="none"></circle>
-          <circle class="progress-bar" cx="20" cy="20" r="18" stroke-width="4" fill="none"
+          <circle class="progress-bar" [style.stroke]="file.status == 'error'?'red':'#344E41'" cx="20" cy="20" r="18" stroke-width="4" fill="none"
             [attr.stroke-dasharray]="circumference"
             [attr.stroke-dashoffset]="circumference - (file.progress / 100) * circumference"></circle>
         </svg>
 
-        <button [style.opacity]="checkDesktop()?0:1" class="cancel-btn" (click)="cancel(file.id)"
+        <button [style.opacity]="checkDesktop()?0:1" class="cancel-btn" (click)="file.status === 'uploading'?cancelUpload(file.id):removeFromQueue(file.id)"
           [title]="file.status === 'uploading'?'Отменить загрузку':'Убрать из списка'">
           <img src="/assets/images/addIcon.svg" alt="Cancel" />
         </button>

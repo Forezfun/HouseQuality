@@ -2,7 +2,7 @@
     [ngClass]="{'appearBody': errorMessage||successMessage,'disappearBody':!errorMessage&&!successMessage}"
     class="body">
     <img loading="lazy" style="width: 30px; height: 30px" src="/assets/images/successIcon.svg"
-        alt="" *ngIf="successMessage">
+        alt="" *ngIf="!errorMessage">
     <span class="textSpan">
         <h2 class="title">{{errorMessage?'Что-то пошло не так':'Успешно'}}</h2>
         <h3 [style.color]="errorMessage?'red':'green'" class="errorMessage">{{errorMessage||successMessage}}</h3>

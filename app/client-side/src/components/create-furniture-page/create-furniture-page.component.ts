@@ -111,6 +111,7 @@ export class CreateFurniturePageComponent implements OnInit, OnDestroy {
       this.furnitureData = RESPONSE.furnitureCard;
       this.createFurnitureComponent.currentColorId = 0;
     } catch (error) {
+      this.router.navigateByUrl('/create/new');
       console.error(error);
     }
   }
@@ -137,14 +138,21 @@ export class CreateFurniturePageComponent implements OnInit, OnDestroy {
   protected async deleteFurnitureCard() {
     const JWT = this.cookieService.getJwt();
     if (!JWT) return;
-    try {
-      await this.furnitureModelService.DELETEfurnitureModel(JWT, this.idPage);
-      await this.serverImageControl.DELETEproject(JWT, this.idPage);
-      await this.furnitureCardService.DELETEfurnitureCard(JWT, this.idPage);
-      this.router.navigateByUrl('/account');
-    } catch (error) {
-      console.error(error);
-    }
+
+    const operations = [
+      () => this.furnitureModelService.DELETEfurnitureModel(JWT, this.idPage),
+      () => this.serverImageControl.DELETEproject(JWT, this.idPage),
+      () => this.furnitureCardService.DELETEfurnitureCard(JWT, this.idPage)
+    ];
+
+for (const op of operations) {
+  try {
+    await op();
+  } catch (error) {
+  }
+}
+
+    this.router.navigateByUrl('/account');
   }
 
   /**
@@ -162,7 +170,7 @@ export class CreateFurniturePageComponent implements OnInit, OnDestroy {
       const FURNITURE_DATA = this.createFurnitureComponent.furnitureData;
       const FURNITURE_ID = (await this.furnitureCardService.POSTcreateFurnitureCard(FURNITURE_DATA, JWT)).furnitureData._id;
 
-      // Загрузка изображений по цветам
+
       FURNITURE_DATA.colors.forEach(async (colorData) => {
         const imagesBlobArray = await this.transformUrlArrayToBlob(colorData.imagesData.images);
         const imagesData: imageSliderClientData = {
@@ -172,9 +180,9 @@ export class CreateFurniturePageComponent implements OnInit, OnDestroy {
         await this.serverImageControl.POSTuploadProjectImages(colorData.color, imagesData, JWT, FURNITURE_ID);
       });
 
-      // Загрузка 3D модели
+
       const FURNITURE_MODEL_BLOB = this.createFurnitureComponent.furnitureModelInput.files![0];
-      this.furnitureModelService.POSTuploadFurnitureModel(FURNITURE_MODEL_BLOB, JWT, FURNITURE_ID);
+      this.furnitureModelService.POSTuploadFurnitureModel(FURNITURE_MODEL_BLOB, JWT, FURNITURE_ID, 'create');
 
       this.notification.setSuccess('Мебель добавлена', 5000);
       this.router.navigateByUrl('/account');
@@ -197,8 +205,9 @@ export class CreateFurniturePageComponent implements OnInit, OnDestroy {
     try {
       const FURNITURE_DATA = this.createFurnitureComponent.furnitureData;
       await this.furnitureCardService.PUTupdateFurnitureCard(FURNITURE_DATA, this.idPage, JWT);
+      this.notification.setSuccess('Карточка обновлена', 2500);
 
-      // Загрузка изображений по цветам, если есть
+      let changeImagesCounter = 0
       FURNITURE_DATA.colors.forEach(async (colorData) => {
         if (colorData.imagesData.images.length === 0) return;
         const IMAGES_BLOB_ARRAY = await this.transformUrlArrayToBlob(colorData.imagesData.images);
@@ -207,15 +216,16 @@ export class CreateFurniturePageComponent implements OnInit, OnDestroy {
           idMainImage: colorData.imagesData.idMainImage
         };
         await this.serverImageControl.POSTuploadProjectImages(colorData.color, IMAGES_DATA, JWT, this.idPage);
+        changeImagesCounter++;
       });
+      if(changeImagesCounter > 0)this.notification.setSuccess('Изображения обновлены', 2500);
 
-      // Загрузка 3D модели, если файл выбран
       const FURNITURE_MODEL_BLOB = this.createFurnitureComponent.furnitureModelInput.files!;
       if (FURNITURE_MODEL_BLOB[0]) {
-        await this.furnitureModelService.POSTuploadFurnitureModel(FURNITURE_MODEL_BLOB[0], JWT, this.idPage);
+        this.furnitureModelService.POSTuploadFurnitureModel(FURNITURE_MODEL_BLOB[0], JWT, this.idPage, 'update');
       }
 
-      this.notification.setSuccess('Мебель обновлена', 5000);
+      
     } catch (error) {
       console.error(error);
     }
