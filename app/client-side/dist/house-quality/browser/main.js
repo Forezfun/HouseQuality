@@ -3885,7 +3885,7 @@ Uppy plugins must have unique \`id\` options.`;throw new Error(l)}return e.VERSI
         }
 
         .title {
-            font-family: 'Calypso', sans-serif;
+            font-family: 'Calypso', 'Courier New', monospace;
             text-align: center;
             font-size: 3rem;
             margin-bottom: 40px;
@@ -3907,7 +3907,7 @@ Uppy plugins must have unique \`id\` options.`;throw new Error(l)}return e.VERSI
         }
 
         .furnituresSpanTitle {
-            font-family: 'Calypso', sans-serif;
+            font-family: 'Calypso', monospace;
             font-size: 2rem;
             margin: 40px 0 20px;
             color: #A3B18A;
@@ -3950,7 +3950,7 @@ Uppy plugins must have unique \`id\` options.`;throw new Error(l)}return e.VERSI
 
         .paramsTitle,
         .shopsTitle {
-            font-family: 'Calypso', sans-serif;
+            font-family: 'Calypso', monospace;
             font-size: 1.2rem;
             color: #A3B18A;
             margin-bottom: 15px;
@@ -3982,16 +3982,17 @@ Uppy plugins must have unique \`id\` options.`;throw new Error(l)}return e.VERSI
             background-color: white;
             color: black;
             text-decoration: none;
-            padding: 5px 20px;
             border-radius: 10px;
             transition: all 0.3s ease;
             border: 2px solid transparent;
             width:250px;
             max-width: 250px;
             text-align: center;
-            font-family: 'Courier New';
+            font-family: 'Courier New', monospace;
             font-weight: 400;
             font-size: 0.8rem
+            height:50px;
+            align-content:center;
         }
 
         a:hover {
