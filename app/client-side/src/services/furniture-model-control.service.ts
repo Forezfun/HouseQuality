@@ -32,7 +32,7 @@ export class FurnitureModelControlService {
       signal: controller.signal,
     })
       .then((res) => {
-        if (!res.ok) throw new Error(`Ошибка загрузки модели: ${res.status}`);
+        if (!res.ok) throw new Error('Отмена загрузки');
         return res.blob();
       });
   }

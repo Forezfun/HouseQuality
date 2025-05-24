@@ -205,7 +205,7 @@ async function proccessFunriture(funritureId) {
     name: FURNITURE_ITEM.name,
     proportions: FURNITURE_ITEM.proportions,
     furnitureCardId: FURNITURE_ITEM._id,
-    category: FURNITURE_ITEM.additionalData.category || 'all'
+    category: (FURNITURE_ITEM.additionalData || {}).category || 'all'
   }
   result.shops = FURNITURE_ITEM.shops.sort((a, b) => a - b).slice(0, 5)
 

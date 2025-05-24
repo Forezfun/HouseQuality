@@ -500,29 +500,13 @@ export class PlanHouseComponent implements AfterViewInit, OnInit {
     this.location.replaceState(NEW_URL)
     this.sceneOpenToggle = true
     this.sceneComponent.loadRoom()
+
   }
   protected closeScene() {
     const NEW_URL = this.location.path().split('/').slice(0, -1).join('/')
     this.location.replaceState(NEW_URL)
     this.sceneComponent.saveRoom()
     this.sceneOpenToggle = false
-  }
-  protected closeViewRoom() {
-    const ROOM_ELEMENT = this.roomSpan.querySelector(`[data-index="${this.currentViewRoom}"]`) as HTMLDivElement;
-    if (!ROOM_ELEMENT || !this.oldSizeViewRoom) return;
-    this.currentViewRoom = undefined;
-    this.currentIdClickedRoom = undefined
-    this.renderer.setStyle(ROOM_ELEMENT, 'width', this.oldSizeViewRoom.width + 'px')
-    this.renderer.setStyle(ROOM_ELEMENT, 'height', this.oldSizeViewRoom.height + 'px')
-    this.renderer.removeStyle(ROOM_ELEMENT, 'border');
-    this.renderer.removeClass(ROOM_ELEMENT, 'roomView');
-
-    this.renderer.setStyle(this.roomSpan, 'display', 'grid');
-
-    setTimeout(() => {
-      this.renderer.removeStyle(ROOM_ELEMENT, 'width');
-      this.renderer.removeStyle(ROOM_ELEMENT, 'height');
-    }, 768);
   }
   protected updateRoom() {
     if (this.currentIdClickedRoom === undefined || !this.roomForm.value.name) return
@@ -616,6 +600,23 @@ export class PlanHouseComponent implements AfterViewInit, OnInit {
       this.formElement.classList.add('openAddModule');
       this.renderer.setStyle(this.toggleModuleButton, 'rotate', '135deg');
     }
+  }
+  public closeViewRoom() {
+    const ROOM_ELEMENT = this.roomSpan.querySelector(`[data-index="${this.currentViewRoom}"]`) as HTMLDivElement;
+    if (!ROOM_ELEMENT || !this.oldSizeViewRoom) return;
+    this.currentViewRoom = undefined;
+    this.currentIdClickedRoom = undefined
+    this.renderer.setStyle(ROOM_ELEMENT, 'width', this.oldSizeViewRoom.width + 'px')
+    this.renderer.setStyle(ROOM_ELEMENT, 'height', this.oldSizeViewRoom.height + 'px')
+    this.renderer.removeStyle(ROOM_ELEMENT, 'border');
+    this.renderer.removeClass(ROOM_ELEMENT, 'roomView');
+
+    this.renderer.setStyle(this.roomSpan, 'display', 'grid');
+
+    setTimeout(() => {
+      this.renderer.removeStyle(ROOM_ELEMENT, 'width');
+      this.renderer.removeStyle(ROOM_ELEMENT, 'height');
+    }, 768);
   }
   public openViewRoom(indexRoom: number) {
     this.formElement.classList.remove('openAddModule');

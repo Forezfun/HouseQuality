@@ -6,7 +6,7 @@ import { loadModel } from './loaders';
 import { FurnitureModelControlService } from '../../services/furniture-model-control.service';
 import { AccountCookieService } from '../../services/account-cookie.service';
 import { FurnitureCardControlService } from '../../services/furniture-card-control.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { NotificationService } from '../../services/notification.service';
 import { Location, NgIf } from '@angular/common';
 import { PlanHouseComponent } from '../plan-house/plan-house.component';
@@ -74,8 +74,10 @@ export class SceneComponent implements AfterViewInit, OnChanges {
     private route: ActivatedRoute,
     private notification: NotificationService,
     private location: Location,
-    private planHouseComponent: PlanHouseComponent
+    private planHouseComponent: PlanHouseComponent,
+    private router: Router
   ) { }
+
 
   @Input()
   /** Данные комнаты */
@@ -126,13 +128,19 @@ export class SceneComponent implements AfterViewInit, OnChanges {
 
 
   ngAfterViewInit(): void {
+    console.log('init')
     this.initThreeJs();
   }
 
   ngOnChanges(changes: SimpleChanges): void {
     this.roomData = changes['roomData'].currentValue as roomDataPlan
-    if (!this.roomData || this.scene === undefined || this.roomData === changes['roomData'].previousValue) return
+
+    console.log('currentValue: ',changes['roomData'].currentValue)
+    console.log('previousValue: ',changes['roomData'].previousValue)
+
+    if (!this.roomData || this.scene === undefined) return
     if (changes['roomData'].previousValue !== undefined) { this.clearRoom() }
+
     this.camera.position.set(0, 5, 0)
     this.camera.rotation.set(THREE.MathUtils.degToRad(-90), 0, 0)
     this.roomProportions = this.roomData.roomProportions
@@ -143,9 +151,12 @@ export class SceneComponent implements AfterViewInit, OnChanges {
     if (!this.planHouseComponent.sceneOpenToggle) return
 
     this.loadRoom()
+
     const FURNITURE_ID = this.route.snapshot.params['furnitureCardId']
     if (!FURNITURE_ID || changes['roomData'].previousValue) return
+
     this.fixPath()
+    
     this.addModel(FURNITURE_ID, true, this.abortConroller)
   }
 
@@ -518,8 +529,12 @@ export class SceneComponent implements AfterViewInit, OnChanges {
   protected abortLoadRoom() {
     this.abortConroller.abort()
     this.abortConroller = new AbortController()
+    
     this.planHouseComponent.sceneOpenToggle = false
-
+    this.planHouseComponent.closeViewRoom()
+    
+    const PLAN_ID = this.route.snapshot.params['planId']
+    this.router.navigateByUrl('/plan/'+PLAN_ID)
   }
 
   /**
