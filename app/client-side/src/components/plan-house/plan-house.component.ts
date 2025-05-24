@@ -499,8 +499,8 @@ export class PlanHouseComponent implements AfterViewInit, OnInit {
     const NEW_URL = this.location.path() + '/' + this.currentViewRoom
     this.location.replaceState(NEW_URL)
     this.sceneOpenToggle = true
-    this.sceneComponent.loadRoom()
-
+    
+    if(this.sceneComponent.hasBeenChanged)this.sceneComponent.loadRoom()
   }
   protected closeScene() {
     const NEW_URL = this.location.path().split('/').slice(0, -1).join('/')

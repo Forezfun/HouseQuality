@@ -123,8 +123,11 @@ export class SceneComponent implements AfterViewInit, OnChanges {
   /** Целевой объект для взаимодействия */
   protected targetobject: THREE.Object3D | undefined = undefined;
 
-  /** Целевой объект для взаимодействия */
+  /** Отображается ли loader */
   protected isShowLoader: boolean = false
+
+  /** Были ли изменения roomData */
+  public hasBeenChanged: boolean = false
 
 
   ngAfterViewInit(): void {
@@ -135,8 +138,8 @@ export class SceneComponent implements AfterViewInit, OnChanges {
   ngOnChanges(changes: SimpleChanges): void {
     this.roomData = changes['roomData'].currentValue as roomDataPlan
 
-    console.log('currentValue: ',changes['roomData'].currentValue)
-    console.log('previousValue: ',changes['roomData'].previousValue)
+    console.log('currentValue: ', changes['roomData'].currentValue)
+    console.log('previousValue: ', changes['roomData'].previousValue)
 
     if (!this.roomData || this.scene === undefined) return
     if (changes['roomData'].previousValue !== undefined) { this.clearRoom() }
@@ -148,7 +151,10 @@ export class SceneComponent implements AfterViewInit, OnChanges {
     this.rectangleMesh.rotation.x = THREE.MathUtils.degToRad(-90)
 
     if (this.getObjectSize(this.rectangleMesh).width === 0) return
-    if (!this.planHouseComponent.sceneOpenToggle) return
+    if (!this.planHouseComponent.sceneOpenToggle) {
+      this.hasBeenChanged = true
+      return
+    }
 
     this.loadRoom()
 
@@ -156,7 +162,7 @@ export class SceneComponent implements AfterViewInit, OnChanges {
     if (!FURNITURE_ID || changes['roomData'].previousValue) return
 
     this.fixPath()
-    
+
     this.addModel(FURNITURE_ID, true, this.abortConroller)
   }
 
@@ -397,6 +403,7 @@ export class SceneComponent implements AfterViewInit, OnChanges {
       await this.addModel(object.objectId, false, this.abortConroller, this.calculateMoveObjectData(object));
     }
     this.closeLoader()
+    this.hasBeenChanged = false
   }
 
   private showLoader() {
@@ -529,12 +536,12 @@ export class SceneComponent implements AfterViewInit, OnChanges {
   protected abortLoadRoom() {
     this.abortConroller.abort()
     this.abortConroller = new AbortController()
-    
+
     this.planHouseComponent.sceneOpenToggle = false
     this.planHouseComponent.closeViewRoom()
-    
+
     const PLAN_ID = this.route.snapshot.params['planId']
-    this.router.navigateByUrl('/plan/'+PLAN_ID)
+    this.router.navigateByUrl('/plan/' + PLAN_ID)
   }
 
   /**
