@@ -35,7 +35,7 @@ const { searchPublications, transliterateQuery } = require('../helpers/findPubli
  *
  * @see Посмотрите {@link module:category | Category} для возможности получения списка категорий.
  */
-ROUTER.get('/', async (request, result) => {
+ROUTER.get('/', async (request, result) => {    
     try {
         let query = request.query.q;
         if (!query || query.trim() === '') {

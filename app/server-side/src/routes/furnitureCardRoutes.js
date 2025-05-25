@@ -9,7 +9,7 @@ const sendEmail = require('../helpers/sendcode');
 
 /**
  * @module furnitureCard
- * @description Маршруты для работы с поиском мебели.
+ * @description Маршруты для работы с карточками мебели.
  */
 
 /**
