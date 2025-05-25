@@ -522,8 +522,8 @@ export class FinderComponent implements AfterViewInit {
     while (CURRENT_ROUTE.firstChild) {
       CURRENT_ROUTE &#x3D; CURRENT_ROUTE.firstChild;
     }
-    const component &#x3D; CURRENT_ROUTE.snapshot.routeConfig?.component;
-    if (component &amp;&amp; component.name &#x3D;&#x3D;&#x3D; &#x27;_ShopPageComponent&#x27;) {
+    const pageName &#x3D; CURRENT_ROUTE.snapshot.data[&#x27;pageName&#x27;];
+    if (pageName &#x3D;&#x3D;&#x3D; &#x27;shop&#x27;) {
       this.finderService.setFurnitureName(name);
       return true;
     }

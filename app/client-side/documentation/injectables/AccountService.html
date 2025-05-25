@@ -267,8 +267,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="189"
-                                    class="link-to-prism">src/services/account.service.ts:189</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="187"
+                                    class="link-to-prism">src/services/account.service.ts:187</a></div>
                         </td>
                     </tr>
 
@@ -310,8 +310,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="156"
-                                    class="link-to-prism">src/services/account.service.ts:156</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="154"
+                                    class="link-to-prism">src/services/account.service.ts:154</a></div>
                         </td>
                     </tr>
 
@@ -462,8 +462,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="167"
-                                    class="link-to-prism">src/services/account.service.ts:167</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="165"
+                                    class="link-to-prism">src/services/account.service.ts:165</a></div>
                         </td>
                     </tr>
 
@@ -850,14 +850,12 @@ export class AccountService {
    * @returns Promise с сообщением об успешном обновлении
    */
   PUTupdateSecondaryAccountData(changeData: changeSecondaryData) {
-    console.log(&#x27;changeData&#x27;, changeData);
     const HTTP_PARAMS &#x3D; new HttpParams({
       fromObject: {
         nickname: changeData.nickname,
         jwt: changeData.jwt
       }
     });
-    console.log(HTTP_PARAMS.toString());
     return firstValueFrom(this.httpModule.put(this.baseServiceUrl, null, { params: HTTP_PARAMS })) as Promise&lt;{ message: string }&gt;;
   }
 

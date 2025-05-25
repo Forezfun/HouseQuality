@@ -197,11 +197,7 @@ export class CreateFurnitureComponent implements OnInit, AfterViewInit {
 
 
     setTimeout(() => {
-      console.log(this.currentColorId)
       this.currentColorId = +idColor;
-      console.log(this.currentColorId)
-      console.log(this.furnitureData.colors)
-      console.log(this.furnitureData.colors[this.currentColorId].imagesData)
       COLOR_BUTTON_ELEMENT.style.setProperty('margin-right', '0');
     }, 1250);
   }

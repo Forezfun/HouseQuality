@@ -46,7 +46,7 @@ export const CODE_RESPONSE = { resetCode: 123456 };
 
 export const MOCK_IMAGE_FILE = new File(['sample'], 'sample.jpg', { type: 'image/jpeg' });
 export const COMPRESSED_IMAGE = new Blob(['compressed'], { type: 'image/jpeg' });
-export const MODEL_BLOB = new Blob(['dummy content'], { type: 'application/octet-stream' }) as Blob;
+export const MODEL_FILE = new File(['dummy content'], '123')
 
 export const PROJECT_ID = 'test-project-id';
 export const PROJECT_NAME = 'My Project';

@@ -32,7 +32,7 @@ function sendEmail(accountEmail, typeEmail, additionalData) {
     };
     transporter.sendMail(mailOptions, (error) => {
         if (error) {
-            return console.log(error);
+            return error;
         }
     });
     

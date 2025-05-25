@@ -160,8 +160,6 @@ ROUTER.get('/simple', async (request, result) => {
         const DIRECTORY = path.join(__dirname, '..', 'uploads', 'cards', furnitureCardId, color);
         const FILE_PATH = path.join(DIRECTORY, IMAGE_NAME);
 
-        console.log(FILE_PATH)
-
         if (fs.existsSync(FILE_PATH)) {
             result.sendFile(FILE_PATH);
         } else {

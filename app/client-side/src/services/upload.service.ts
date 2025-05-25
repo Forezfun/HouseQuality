@@ -41,21 +41,12 @@ export class UploadService {
       endpoint: this.baseServiceUrl,
       fieldName: 'file',
       formData: true,
-      async onBeforeRequest(xhr: any) {
-        console.log('onBeforeRequest', xhr);
-      },
-      shouldRetry: (error: any, response: any) => {
-        console.log(error, response);
-      },
       getResponseError: (responseText, response) => {
-        console.error('Ответ от сервера:', responseText, response);
         return new Error(`Ошибка: ${response.statusText}`);
       }
     } as MyXhrUploadOptions);
 
     this.uppy.on('upload-progress', (file, progress) => {
-      console.log('Progress:', progress, file);
-
       if (file === undefined || file.meta.name === undefined) return;
 
       const NAME = file.data instanceof File ? file.data.name : 'file'
@@ -63,8 +54,6 @@ export class UploadService {
     });
 
     this.uppy.on('upload-success', (file) => {
-      console.log('Success:', file);
-
       if (file === undefined || file.meta.name === undefined) return;
 
       const NAME = file.data instanceof File ? file.data.name : 'file'
@@ -73,8 +62,6 @@ export class UploadService {
     });
 
     this.uppy.on('upload-error', (file, error) => {
-      console.log('Error:', error.message);
-
       if (file === undefined || file.meta.name === undefined) return;
 
       const NAME = file.data instanceof File ? file.data.name : 'file'
@@ -114,7 +101,7 @@ export class UploadService {
   }
   private getFileExtension(fileName: string): string | null {
     const parts = fileName.split('.');
-    const EXTENSION = parts.length > 1?parts.pop()?.toLowerCase():"obj"
+    const EXTENSION = parts.length > 1 ? parts.pop()?.toLowerCase() : "obj"
     return `.${EXTENSION}`
   }
   removeFileFromQueue(fileID: string) {

@@ -407,7 +407,9 @@ a {
         }
     }
 }
-
+nav{
+    display: none;
+}
 #main {
     width: 100%;
     padding-left: 50px;

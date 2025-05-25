@@ -305,7 +305,7 @@ export interface projectServerInformation extends projectInformation {
 })
 export class ProjectService {
   /** Базовый URL для API запросов к проектам */
-  private baseServiceUrl &#x3D; baseUrl + &#x27;project/&#x27;;
+  private baseServiceUrl &#x3D; baseUrl + &#x27;project&#x27;;
 
   constructor(
     private httpModule: HttpClient,
@@ -377,7 +377,7 @@ export class ProjectService {
       .set(&#x27;jwt&#x27;, jwt)
       .set(&#x27;roomId&#x27;, roomId);
 
-    const RESPONSE &#x3D; await firstValueFrom(this.httpModule.get(this.baseServiceUrl + &#x27;room&#x27;, { params: HTTP_PARAMS })) as reportResponse;
+    const RESPONSE &#x3D; await firstValueFrom(this.httpModule.get(this.baseServiceUrl + &#x27;/room&#x27;, { params: HTTP_PARAMS })) as reportResponse;
 
     RESPONSE.furnitures &#x3D; RESPONSE.furnitures.map(furnitureData &#x3D;&gt; {
       furnitureData.previewUrl &#x3D; baseUrl + furnitureData.previewUrl;

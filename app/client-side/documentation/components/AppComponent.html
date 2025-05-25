@@ -174,6 +174,7 @@
                 <td class="col-md-9">
                             <code>RouterOutlet</code>
                                 <code><a href="../components/NotificationComponent.html" target="_self" >NotificationComponent</a></code>
+                                <code><a href="../components/UploadOverlayComponent.html" target="_self" >UploadOverlayComponent</a></code>
                 </td>
             </tr>
 
@@ -259,7 +260,7 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="26" class="link-to-prism">src/app.component.ts:26</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="27" class="link-to-prism">src/app.component.ts:27</a></div>
                         </td>
                     </tr>
 
@@ -287,12 +288,13 @@ import { FurnitureModelControlService } from &#x27;./services/furniture-model-co
 import { ShopService } from &#x27;./services/shop.service&#x27;;
 import { FinderService } from &#x27;./services/finder.service&#x27;;
 import { AutoHeightDirective } from &#x27;./directives/auto-height.directive&#x27;;
+import { UploadOverlayComponent } from &#x27;./components/upload-overlay/upload-overlay.component&#x27;;
 
 
 @Component({
   selector: &#x27;app-root&#x27;,
   standalone: true,
-  imports: [RouterOutlet,NotificationComponent],
+  imports: [RouterOutlet,NotificationComponent,UploadOverlayComponent],
   providers:[AutoHeightDirective,NotificationComponent,AccountService,AuthService,AccountCookieService,ServerImageControlService,ProjectService,PlanHouseComponent,SceneComponent,FurnitureCardControlService,FurnitureModelControlService,ShopService,FinderService,Location],
   templateUrl: &#x27;./app.component.html&#x27;
 })
@@ -306,6 +308,7 @@ export class AppComponent {
         <pre class="line-numbers"><code class="language-html">&lt;router-outlet&gt;
 &lt;/router-outlet&gt;
 &lt;app-notification&gt;&lt;/app-notification&gt;
+&lt;app-upload-overlay&gt;&lt;/app-upload-overlay&gt;
 </code></pre>
     </div>
 
@@ -335,8 +338,8 @@ export class AppComponent {
 <script src="../js/libs/htmlparser.js"></script>
 <script src="../js/libs/deep-iterator.js"></script>
 <script>
-        var COMPONENT_TEMPLATE = '<div><router-outlet></router-outlet><app-notification></app-notification></div>'
-    var COMPONENTS = [{'name': 'AccountPageComponent', 'selector': 'app-account-page'},{'name': 'AppComponent', 'selector': 'app-root'},{'name': 'CreateFurnitureComponent', 'selector': 'app-create-furniture'},{'name': 'CreateFurniturePageComponent', 'selector': 'app-create-furniture-page'},{'name': 'FinderComponent', 'selector': 'app-finder'},{'name': 'ImageSliderComponent', 'selector': 'app-image-slider'},{'name': 'LoginPageComponent', 'selector': 'app-login-page'},{'name': 'MainPageComponent', 'selector': 'app-main-page'},{'name': 'NavigationPanelComponent', 'selector': 'app-navigation-panel'},{'name': 'NotificationComponent', 'selector': 'app-notification'},{'name': 'PlanHouseComponent', 'selector': 'app-plan-house'},{'name': 'PlanHousePageComponent', 'selector': 'app-plan-house-page'},{'name': 'SceneComponent', 'selector': 'app-scene'},{'name': 'ShopPageComponent', 'selector': 'app-shop-page'},{'name': 'ViewFurnitureComponent', 'selector': 'app-view-furniture'}];
+        var COMPONENT_TEMPLATE = '<div><router-outlet></router-outlet><app-notification></app-notification><app-upload-overlay></app-upload-overlay></div>'
+    var COMPONENTS = [{'name': 'AccountPageComponent', 'selector': 'app-account-page'},{'name': 'AppComponent', 'selector': 'app-root'},{'name': 'CreateFurnitureComponent', 'selector': 'app-create-furniture'},{'name': 'CreateFurniturePageComponent', 'selector': 'app-create-furniture-page'},{'name': 'FinderComponent', 'selector': 'app-finder'},{'name': 'ImageSliderComponent', 'selector': 'app-image-slider'},{'name': 'LoginPageComponent', 'selector': 'app-login-page'},{'name': 'MainPageComponent', 'selector': 'app-main-page'},{'name': 'NavigationPanelComponent', 'selector': 'app-navigation-panel'},{'name': 'NotificationComponent', 'selector': 'app-notification'},{'name': 'PlanHouseComponent', 'selector': 'app-plan-house'},{'name': 'PlanHousePageComponent', 'selector': 'app-plan-house-page'},{'name': 'SceneComponent', 'selector': 'app-scene'},{'name': 'ShopPageComponent', 'selector': 'app-shop-page'},{'name': 'UploadOverlayComponent', 'selector': 'app-upload-overlay'},{'name': 'ViewFurnitureComponent', 'selector': 'app-view-furniture'}];
     var DIRECTIVES = [{'name': 'AutoHeightDirective', 'selector': '[appAutoHeight]'}];
     var ACTUAL_COMPONENT = {'name': 'AppComponent'};
 </script>

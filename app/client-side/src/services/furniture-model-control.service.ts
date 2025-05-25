@@ -44,7 +44,7 @@ export class FurnitureModelControlService {
    * @param {string} furnitureCardId - ID мебели, к которой относится модель
    */
   POSTuploadFurnitureModel(modelFile: File, jwt: string, furnitureCardId: string, uploadType: uploadType) {
-    this.uploadService.addFile(modelFile, jwt, furnitureCardId, uploadType);
+    this.uploadService.addFile(modelFile, jwt, furnitureCardId, uploadType)
   }
 
   /**

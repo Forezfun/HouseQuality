@@ -15,7 +15,6 @@ ROUTER.use(async (request, result, next) => {
             return;
         }
         if (request.method == 'POST') {
-            console.log('Пропуск . загрузка модели...')
             next();
             return;
         }
@@ -28,7 +27,6 @@ ROUTER.use(async (request, result, next) => {
         request.body.accountId = ACCOUNT_ID;
         next();
     } catch (error) {
-        console.log(error)
         result.status(500).json({ message: 'Ошибка при валидации: ' + error.message });
     }
 });
@@ -95,8 +93,8 @@ const upload = multer({ storage, fileFilter });
  * @instance
  * @memberof module:furnitureCard
  * @summary Загрузка или обновление модели
- * @param {string} jwt - JWT токен
- * @param {string} furnitureCardId - ID карточки мебели 
+ * @param {string} body.jwt - JWT токен
+ * @param {string} body.furnitureCardId - ID карточки мебели 
  * @param {file} model - Файл модели (multipart/form-data)
  * @returns {object} JSON с сообщением об успехе или ошибке
  * @example
@@ -216,7 +214,6 @@ ROUTER.get('/version', async (request, result) => {
         if (!FURNITURE_MODEL_ITEM) {
             return result.status(404).json({ message: 'Модель не найдена' });
         }
-        console.log('Версия: ',FURNITURE_MODEL_ITEM.__v )
         result.status(201).json({ versionModel: FURNITURE_MODEL_ITEM.__v })
     } catch (error) {
         result.status(500).json({ message: error.message });
@@ -268,7 +265,6 @@ ROUTER.get('/', async (request, result) => {
         result.setHeader('Content-Type', MIME_TYPE);
         result.setHeader('Content-Disposition', `attachment; filename="${FURNITURE_MODEL_ITEM.filename}"`);
 
-        console.log('Отдача файла')
         result.sendFile(FILE_PATH);
     } catch (error) {
         result.status(500).json({ message: error.message });
@@ -276,7 +272,6 @@ ROUTER.get('/', async (request, result) => {
 });
 
 ROUTER.use((err, req, res, next) => {
-    console.log(err.message)
     if (err instanceof multer.MulterError || err.message === 'Нет доступа к карточке') {
     return res.status(500).json({ message: err.message });
 }

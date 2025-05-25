@@ -79,50 +79,109 @@
                    <compodoc-menu mode="normal"></compodoc-menu>
                </div>
                <!-- START CONTENT -->
-               <div class="content injectable">
+               <div class="content component">
                    <div class="content-data">
 
 
 
 
-
-
-
-
 <ol class="breadcrumb">
-  <li class="breadcrumb-item">Injectables</li>
-  <li class="breadcrumb-item" >AuthService</li>
+  <li class="breadcrumb-item">Components</li>
+  <li class="breadcrumb-item"
+  >
+  UploadOverlayComponent</li>
 </ol>
 
 <ul class="nav nav-tabs" role="tablist">
         <li class="nav-item">
-            <a href="#info" 
-                class="nav-link"
-                class="nav-link active"
+            <a href="#info" class="nav-link active"
                 role="tab" id="info-tab" data-bs-toggle="tab" data-link="info">Info</a>
         </li>
         <li class="nav-item">
-            <a href="#source" 
-                class="nav-link"
-                
+            <a href="#source" class="nav-link"
                 role="tab" id="source-tab" data-bs-toggle="tab" data-link="source">Source</a>
+        </li>
+        <li class="nav-item">
+            <a href="#templateData" class="nav-link"
+                role="tab" id="templateData-tab" data-bs-toggle="tab" data-link="template">Template</a>
+        </li>
+        <li class="nav-item">
+            <a href="#tree" class="nav-link"
+                role="tab" id="tree-tab" data-bs-toggle="tab" data-link="dom-tree">DOM Tree</a>
         </li>
 </ul>
 
 <div class="tab-content">
-    <div class="tab-pane fade active in" id="info">
-        <p class="comment">
-            <h3>File</h3>
-        </p>
-        <p class="comment">
-            <code>src/services/auth.service.ts</code>
-        </p>
+    <div class="tab-pane fade active in" id="info"><p class="comment">
+    <h3>File</h3>
+</p>
+<p class="comment">
+    <code>src/components/upload-overlay/upload-overlay.component.ts</code>
+</p>
 
 
 
 
 
-            <section data-compodoc="block-index">
+
+<section data-compodoc="block-metadata">
+    <h3>Metadata</h3>
+    <table class="table table-sm table-hover metadata">
+        <tbody>
+
+
+
+
+
+
+
+
+
+
+
+
+            <tr>
+                <td class="col-md-3">selector</td>
+                <td class="col-md-9"><code>app-upload-overlay</code></td>
+            </tr>
+
+            <tr>
+                <td class="col-md-3">standalone</td>
+                <td class="col-md-9"><code>true</code></td>
+            </tr>
+
+            <tr>
+                <td class="col-md-3">imports</td>
+                <td class="col-md-9">
+                            <code>NgFor</code>
+                            <code>AsyncPipe</code>
+                </td>
+            </tr>
+
+
+
+
+            <tr>
+                <td class="col-md-3">templateUrl</td>
+                <td class="col-md-9"><code>./upload-overlay.component.html</code></td>
+            </tr>
+
+
+
+            <tr>
+                <td class="col-md-3">styleUrl</td>
+                <td class="col-md-9"><code>./upload-overlay.component.scss</code></td>
+            </tr>
+
+
+
+
+
+        </tbody>
+    </table>
+</section>
+
+    <section data-compodoc="block-index">
     <h3 id="index">Index</h3>
     <table class="table table-sm table-bordered index-table">
         <tbody>
@@ -135,8 +194,16 @@
                     <td class="col-md-4">
                         <ul class="index-list">
                             <li>
-                                    <span class="modifier">Private</span>
-                                <a href="#baseServiceUrl" >baseServiceUrl</a>
+                                    <span class="modifier">Protected</span>
+                                <a href="#checkDesktop" >checkDesktop</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Protected</span>
+                                <a href="#circumference" >circumference</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#uploadService" >uploadService</a>
                             </li>
                         </ul>
                     </td>
@@ -151,16 +218,12 @@
                     <td class="col-md-4">
                         <ul class="index-list">
                             <li>
-                                <a href="#GETrequestPasswordCode" >GETrequestPasswordCode</a>
+                                    <span class="modifier">Protected</span>
+                                <a href="#cancelUpload" >cancelUpload</a>
                             </li>
                             <li>
-                                <a href="#POSTcreateLongJWT" >POSTcreateLongJWT</a>
-                            </li>
-                            <li>
-                                <a href="#POSTcreateShortJWT" >POSTcreateShortJWT</a>
-                            </li>
-                            <li>
-                                <a href="#PUTupdateBaseData" >PUTupdateBaseData</a>
+                                    <span class="modifier">Protected</span>
+                                <a href="#removeFromQueue" >removeFromQueue</a>
                             </li>
                         </ul>
                     </td>
@@ -174,18 +237,18 @@
     </table>
 </section>
 
-            <section data-compodoc="block-constructor">
+    <section data-compodoc="block-constructor">
     <h3 id="constructor">Constructor</h3>
         <table class="table table-sm table-bordered">
             <tbody>
                 <tr>
                     <td class="col-md-4">
-<code>constructor(httpModule: HttpClient)</code>
+<code>constructor(uploadService: <a href="../injectables/UploadService.html" target="_self">UploadService</a>)</code>
                     </td>
                 </tr>
                         <tr>
                             <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="38" class="link-to-prism">src/services/auth.service.ts:38</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="13" class="link-to-prism">src/components/upload-overlay/upload-overlay.component.ts:13</a></div>
                             </td>
                         </tr>
 
@@ -203,10 +266,10 @@
                                         </thead>
                                         <tbody>
                                                 <tr>
-                                                        <td>httpModule</td>
+                                                        <td>uploadService</td>
                                                   
                                                         <td>
-                                                                    <code>HttpClient</code>
+                                                                        <code><a href="../injectables/UploadService.html" target="_self" >UploadService</a></code>
                                                         </td>
                                                   
                                                     <td>
@@ -223,7 +286,11 @@
         </table>
 </section>
 
-            <section data-compodoc="block-methods">
+
+
+
+
+    <section data-compodoc="block-methods">
     
     <h3 id="methods">
         Methods
@@ -232,32 +299,32 @@
         <tbody>
             <tr>
                 <td class="col-md-4">
-                    <a name="GETrequestPasswordCode"></a>
+                    <a name="cancelUpload"></a>
                     <span class="name">
-                        <span ><b>GETrequestPasswordCode</b></span>
-                        <a href="#GETrequestPasswordCode"><span class="icon ion-ios-link"></span></a>
+                            <span class="modifier">Protected</span>
+                        <span ><b>cancelUpload</b></span>
+                        <a href="#cancelUpload"><span class="icon ion-ios-link"></span></a>
                     </span>
                 </td>
             </tr>
             <tr>
                 <td class="col-md-4">
-<code>GETrequestPasswordCode(email: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>cancelUpload(id: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
                 </td>
             </tr>
 
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="98"
-                                    class="link-to-prism">src/services/auth.service.ts:98</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="18"
+                                    class="link-to-prism">src/components/upload-overlay/upload-overlay.component.ts:18</a></div>
                         </td>
                     </tr>
 
 
             <tr>
                 <td class="col-md-4">
-                        <div class="io-description"><p>Запрос кода сброса пароля по email</p>
-</div>
 
                             <div class="io-description">
                                 <b>Parameters :</b>
@@ -268,12 +335,11 @@
                                             <td>Name</td>
                                                 <td>Type</td>
                                             <td>Optional</td>
-                                                <td>Description</td>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <tr>
-                                                <td>email</td>
+                                                <td>id</td>
                                             <td>
                                                             <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
                                             </td>
@@ -283,21 +349,16 @@
                                             </td>
 
 
-                                            <td>
-                                                    <p>Email пользователя</p>
-
-                                            </td>
                                         </tr>
                                     </tbody>
                                 </table>
                             </div>
                         <div class="io-description">
-                            <b>Returns : </b>    <code>Promise&lt;{ resetCode: number; }&gt;</code>
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
 
                         </div>
                             <div class="io-description">
-                                <p>Promise с кодом для сброса пароля</p>
-
+                                
                             </div>
                 </td>
             </tr>
@@ -307,32 +368,32 @@
         <tbody>
             <tr>
                 <td class="col-md-4">
-                    <a name="POSTcreateLongJWT"></a>
+                    <a name="removeFromQueue"></a>
                     <span class="name">
-                        <span ><b>POSTcreateLongJWT</b></span>
-                        <a href="#POSTcreateLongJWT"><span class="icon ion-ios-link"></span></a>
+                            <span class="modifier">Protected</span>
+                        <span ><b>removeFromQueue</b></span>
+                        <a href="#removeFromQueue"><span class="icon ion-ios-link"></span></a>
                     </span>
                 </td>
             </tr>
             <tr>
                 <td class="col-md-4">
-<code>POSTcreateLongJWT(authData: <a href="../undefineds/authData.html" target="_self">authData</a>)</code>
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>removeFromQueue(id: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
                 </td>
             </tr>
 
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="49"
-                                    class="link-to-prism">src/services/auth.service.ts:49</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="22"
+                                    class="link-to-prism">src/components/upload-overlay/upload-overlay.component.ts:22</a></div>
                         </td>
                     </tr>
 
 
             <tr>
                 <td class="col-md-4">
-                        <div class="io-description"><p>Создание длинного JWT токена</p>
-</div>
 
                             <div class="io-description">
                                 <b>Parameters :</b>
@@ -343,87 +404,11 @@
                                             <td>Name</td>
                                                 <td>Type</td>
                                             <td>Optional</td>
-                                                <td>Description</td>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <tr>
-                                                <td>authData</td>
-                                            <td>
-                                                            <code><a href="../miscellaneous/typealiases.html#authData" target="_self" >authData</a></code>
-                                            </td>
-
-                                            <td>
-                                                    No
-                                            </td>
-
-
-                                            <td>
-                                                    <p>Данные для входа (email+пароль или google)</p>
-
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        <div class="io-description">
-                            <b>Returns : </b>    <code>Promise&lt;{ jwt: string; }&gt;</code>
-
-                        </div>
-                            <div class="io-description">
-                                <p>Promise с JWT токеном</p>
-
-                            </div>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-    <table class="table table-sm table-bordered">
-        <tbody>
-            <tr>
-                <td class="col-md-4">
-                    <a name="POSTcreateShortJWT"></a>
-                    <span class="name">
-                        <span ><b>POSTcreateShortJWT</b></span>
-                        <a href="#POSTcreateShortJWT"><span class="icon ion-ios-link"></span></a>
-                    </span>
-                </td>
-            </tr>
-            <tr>
-                <td class="col-md-4">
-<code>POSTcreateShortJWT(email: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
-                </td>
-            </tr>
-
-
-                    <tr>
-                        <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="67"
-                                    class="link-to-prism">src/services/auth.service.ts:67</a></div>
-                        </td>
-                    </tr>
-
-
-            <tr>
-                <td class="col-md-4">
-                        <div class="io-description"><p>Создание короткого (временного) JWT токена</p>
-</div>
-
-                            <div class="io-description">
-                                <b>Parameters :</b>
-                                
-                                <table class="params">
-                                    <thead>
-                                        <tr>
-                                            <td>Name</td>
-                                                <td>Type</td>
-                                            <td>Optional</td>
-                                                <td>Description</td>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                                <td>email</td>
+                                                <td>id</td>
                                             <td>
                                                             <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
                                             </td>
@@ -433,103 +418,23 @@
                                             </td>
 
 
-                                            <td>
-                                                    <p>Email пользователя</p>
-
-                                            </td>
                                         </tr>
                                     </tbody>
                                 </table>
                             </div>
                         <div class="io-description">
-                            <b>Returns : </b>    <code>Promise&lt;{ jwt: string; }&gt;</code>
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
 
                         </div>
                             <div class="io-description">
-                                <p>Promise с временным JWT токеном</p>
-
-                            </div>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-    <table class="table table-sm table-bordered">
-        <tbody>
-            <tr>
-                <td class="col-md-4">
-                    <a name="PUTupdateBaseData"></a>
-                    <span class="name">
-                        <span ><b>PUTupdateBaseData</b></span>
-                        <a href="#PUTupdateBaseData"><span class="icon ion-ios-link"></span></a>
-                    </span>
-                </td>
-            </tr>
-            <tr>
-                <td class="col-md-4">
-<code>PUTupdateBaseData(changeData: <a href="../undefineds/changeAccountData.html" target="_self">changeAccountData</a>)</code>
-                </td>
-            </tr>
-
-
-                    <tr>
-                        <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="79"
-                                    class="link-to-prism">src/services/auth.service.ts:79</a></div>
-                        </td>
-                    </tr>
-
-
-            <tr>
-                <td class="col-md-4">
-                        <div class="io-description"><p>Обновление базовой информации о пользователе</p>
-</div>
-
-                            <div class="io-description">
-                                <b>Parameters :</b>
                                 
-                                <table class="params">
-                                    <thead>
-                                        <tr>
-                                            <td>Name</td>
-                                                <td>Type</td>
-                                            <td>Optional</td>
-                                                <td>Description</td>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                                <td>changeData</td>
-                                            <td>
-                                                            <code><a href="../miscellaneous/typealiases.html#changeAccountData" target="_self" >changeAccountData</a></code>
-                                            </td>
-
-                                            <td>
-                                                    No
-                                            </td>
-
-
-                                            <td>
-                                                    <p>Новые данные для обновления аккаунта</p>
-
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        <div class="io-description">
-                            <b>Returns : </b>    <code>Promise&lt;{ message: string; }&gt;</code>
-
-                        </div>
-                            <div class="io-description">
-                                <p>Promise с сообщением об успехе обновления</p>
-
                             </div>
                 </td>
             </tr>
         </tbody>
     </table>
 </section>
-            <section data-compodoc="block-properties">
+    <section data-compodoc="block-properties">
     
     <h3 id="inputs">
         Properties
@@ -538,148 +443,177 @@
         <tbody>
             <tr>
                 <td class="col-md-4">
-                    <a name="baseServiceUrl"></a>
+                    <a name="checkDesktop"></a>
                     <span class="name">
-                            <span class="modifier">Private</span>
-                        <span ><b>baseServiceUrl</b></span>
-                        <a href="#baseServiceUrl"><span class="icon ion-ios-link"></span></a>
+                            <span class="modifier">Protected</span>
+                        <span ><b>checkDesktop</b></span>
+                        <a href="#checkDesktop"><span class="icon ion-ios-link"></span></a>
                     </span>
                 </td>
             </tr>
                 <tr>
                     <td class="col-md-4">
-                        <i>Default value : </i><code>baseUrl + &#x27;auth/&#x27;</code>
+                        <i>Default value : </i><code>checkDesktop</code>
                     </td>
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="38" class="link-to-prism">src/services/auth.service.ts:38</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="25" class="link-to-prism">src/components/upload-overlay/upload-overlay.component.ts:25</a></div>
                         </td>
                     </tr>
 
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
             <tr>
                 <td class="col-md-4">
-                    <div class="io-description"><p>Базовый URL для auth-роутов</p>
-</div>
+                    <a name="circumference"></a>
+                    <span class="name">
+                            <span class="modifier">Protected</span>
+                        <span ><b>circumference</b></span>
+                        <a href="#circumference"><span class="icon ion-ios-link"></span></a>
+                    </span>
                 </td>
             </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>2 * Math.PI * 18</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="16" class="link-to-prism">src/components/upload-overlay/upload-overlay.component.ts:16</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="uploadService"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>uploadService</b></span>
+                        <a href="#uploadService"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="../injectables/UploadService.html" target="_self" >UploadService</a></code>
+
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="14" class="link-to-prism">src/components/upload-overlay/upload-overlay.component.ts:14</a></div>
+                        </td>
+                    </tr>
+
 
         </tbody>
     </table>
 </section>
 
-    </div>
+</div>
 
 
     <div class="tab-pane fade  tab-source-code" id="source">
-        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Injectable } from &#x27;@angular/core&#x27;;
-import { HttpClient, HttpParams } from &#x27;@angular/common/http&#x27;;
-import { accountType, changeAccountDataEmail, changeAccountData } from &#x27;./account.service&#x27;;
-import { baseUrl } from &#x27;.&#x27;;
-import { isEmailAccount } from &#x27;./account.service&#x27;;
-import { firstValueFrom } from &#x27;rxjs&#x27;;
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { AsyncPipe, NgFor, NgIf } from &#x27;@angular/common&#x27;;
+import { Component } from &#x27;@angular/core&#x27;;
+import { UploadEntry, UploadService } from &#x27;../../services/upload.service&#x27;;
+import { checkDesktop } from &#x27;../../usable/reusable-functions.used&#x27;;
 
-/**
- * Данные для аутентификации через email
- */
-export interface emailAuthData {
-  /** Email пользователя */
-  email: string;
-  /** Пароль пользователя */
-  password: string;
-  /** Тип аккаунта - &#x27;email&#x27; */
-  accountType: &#x27;email&#x27;;
-}
-
-/**
- * Данные для аутентификации через Google
- */
-export interface googleAuthData {
-  /** Тип аккаунта - &#x27;google&#x27; */
-  accountType: &#x27;google&#x27;;
-}
-
-/**
- * Объединённый тип данных для аутентификации
- */
-export type authData &#x3D; googleAuthData | emailAuthData;
-
-@Injectable({
-  providedIn: &#x27;root&#x27;
+@Component({
+  selector: &#x27;app-upload-overlay&#x27;,
+  imports: [NgFor, AsyncPipe],
+  standalone:true,
+  templateUrl: &#x27;./upload-overlay.component.html&#x27;,
+  styleUrl: &#x27;./upload-overlay.component.scss&#x27;
 })
-export class AuthService {
-  /** Базовый URL для auth-роутов */
-  private baseServiceUrl &#x3D; baseUrl + &#x27;auth/&#x27;;
+export class UploadOverlayComponent {
+  constructor(public uploadService: UploadService) { }
+  
+  protected circumference &#x3D; 2 * Math.PI * 18;
 
-  constructor(
-    private httpModule: HttpClient
-  ) { }
-
-  /**
-   * Создание длинного JWT токена
-   * @param authData Данные для входа (email+пароль или google)
-   * @returns Promise с JWT токеном
-   */
-  POSTcreateLongJWT(authData: authData) {
-    let HTTP_PARAMS &#x3D; new HttpParams()
-      .set(&#x27;accountType&#x27;, authData.accountType);
-
-    if (isEmailAccount(authData)) {
-      HTTP_PARAMS &#x3D; HTTP_PARAMS
-        .set(&#x27;email&#x27;, authData.email)
-        .set(&#x27;password&#x27;, authData.password);
-    }
-
-    return firstValueFrom(this.httpModule.post(this.baseServiceUrl + &#x27;jwt/long&#x27;, HTTP_PARAMS)) as Promise&lt;{ jwt: string }&gt;;
+  protected cancelUpload(id: string) {
+    this.uploadService.cancelUpload(id)
+    this.uploadService.removeFileFromQueue(id)
   }
-
-  /**
-   * Создание короткого (временного) JWT токена
-   * @param email Email пользователя
-   * @returns Promise с временным JWT токеном
-   */
-  POSTcreateShortJWT(email: string) {
-    let HTTP_PARAMS &#x3D; new HttpParams()
-      .set(&#x27;email&#x27;, email);
-
-    return firstValueFrom(this.httpModule.post(this.baseServiceUrl + &#x27;jwt/temporary&#x27;,null, { params: HTTP_PARAMS })) as Promise&lt;{ jwt: string }&gt;;
+  protected removeFromQueue(id: string) {
+    this.uploadService.removeFileFromQueue(id)
   }
-
-  /**
-   * Обновление базовой информации о пользователе
-   * @param changeData Новые данные для обновления аккаунта
-   * @returns Promise с сообщением об успехе обновления
-   */
-  PUTupdateBaseData(changeData: changeAccountData) {
-    const paramObject: any &#x3D; {
-      accountType: changeData.accountType,
-      jwt: changeData.jwt
-    };
-
-    if (isEmailAccount(changeData)) {
-      paramObject.password &#x3D; changeData.password;
-    }
-
-    const HTTP_PARAMS &#x3D; new HttpParams({ fromObject: paramObject });
-    return firstValueFrom(this.httpModule.put(this.baseServiceUrl + &#x27;account&#x27;, changeData)) as Promise&lt;{ message: string }&gt;;
-  }
-
-  /**
-   * Запрос кода сброса пароля по email
-   * @param email Email пользователя
-   * @returns Promise с кодом для сброса пароля
-   */
-  GETrequestPasswordCode(email: string) {
-    let HTTP_PARAMS &#x3D; new HttpParams()
-      .set(&#x27;email&#x27;, email);
-
-    return firstValueFrom(this.httpModule.get(this.baseServiceUrl + &#x27;account/code&#x27;, { params: HTTP_PARAMS })) as Promise&lt;{ resetCode: number }&gt;;
-  }
+  protected checkDesktop &#x3D; checkDesktop
 }
 </code></pre>
     </div>
 
+    <div class="tab-pane fade " id="templateData">
+        <pre class="line-numbers"><code class="language-html">&lt;span class&#x3D;&quot;upload-overlay&quot;&gt;
+  &lt;div  [style.display]&#x3D;&quot;checkDesktop() || file.status !&#x3D;&#x3D; &#x27;success&#x27;?&#x27;flex&#x27;:&#x27;none&#x27;&quot; *ngFor&#x3D;&quot;let file of uploadService.uploads$ | async&quot; class&#x3D;&quot;upload-item&quot;&gt;
+      &lt;div class&#x3D;&quot;file-info&quot;&gt;
+        &lt;div class&#x3D;&quot;file-name&quot;&gt;{{ file.name }}&lt;/div&gt;
+        &lt;div class&#x3D;&quot;file-status&quot;&gt;{{ file.status }}&lt;/div&gt;
+      &lt;/div&gt;
+
+      &lt;div class&#x3D;&quot;progress-wrapper&quot;&gt;
+        &lt;svg class&#x3D;&quot;progress-circle&quot; width&#x3D;&quot;40&quot; height&#x3D;&quot;40&quot; viewBox&#x3D;&quot;0 0 40 40&quot;&gt;
+          &lt;circle class&#x3D;&quot;progress-bg&quot; cx&#x3D;&quot;20&quot; cy&#x3D;&quot;20&quot; r&#x3D;&quot;18&quot; stroke-width&#x3D;&quot;4&quot; fill&#x3D;&quot;none&quot;&gt;&lt;/circle&gt;
+          &lt;circle class&#x3D;&quot;progress-bar&quot; [style.stroke]&#x3D;&quot;file.status &#x3D;&#x3D; &#x27;error&#x27;?&#x27;red&#x27;:&#x27;#344E41&#x27;&quot; cx&#x3D;&quot;20&quot; cy&#x3D;&quot;20&quot; r&#x3D;&quot;18&quot; stroke-width&#x3D;&quot;4&quot; fill&#x3D;&quot;none&quot;
+            [attr.stroke-dasharray]&#x3D;&quot;circumference&quot;
+            [attr.stroke-dashoffset]&#x3D;&quot;circumference - (file.progress / 100) * circumference&quot;&gt;&lt;/circle&gt;
+        &lt;/svg&gt;
+
+        &lt;button [style.opacity]&#x3D;&quot;checkDesktop()?0:1&quot; class&#x3D;&quot;cancel-btn&quot; (click)&#x3D;&quot;file.status &#x3D;&#x3D;&#x3D; &#x27;uploading&#x27;?cancelUpload(file.id):removeFromQueue(file.id)&quot;
+          [title]&#x3D;&quot;file.status &#x3D;&#x3D;&#x3D; &#x27;uploading&#x27;?&#x27;Отменить загрузку&#x27;:&#x27;Убрать из списка&#x27;&quot;&gt;
+          &lt;img src&#x3D;&quot;/assets/images/addIcon.svg&quot; alt&#x3D;&quot;Cancel&quot; /&gt;
+        &lt;/button&gt;
+      &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/span&gt;</code></pre>
+    </div>
+
+
+    <div class="tab-pane fade " id="tree">
+        <div id="tree-container"></div>
+        <div class="tree-legend">
+            <div class="title">
+                <b>Legend</b>
+            </div>
+            <div>
+                <div class="color htmlelement"></div><span>Html element</span>
+            </div>
+            <div>
+                <div class="color component"></div><span>Component</span>
+            </div>
+            <div>
+                <div class="color directive"></div><span>Html element with directive</span>
+            </div>
+        </div>
+    </div>
+
+    
 </div>
+
+<script src="../js/libs/vis.min.js"></script>
+<script src="../js/libs/htmlparser.js"></script>
+<script src="../js/libs/deep-iterator.js"></script>
+<script>
+        var COMPONENT_TEMPLATE = '<div><span class="upload-overlay">  <div  [style.display]="checkDesktop() || file.status !== \'success\'?\'flex\':\'none\'" *ngFor="let file of uploadService.uploads$ | async" class="upload-item">      <div class="file-info">        <div class="file-name">{{ file.name }}</div>        <div class="file-status">{{ file.status }}</div>      </div>      <div class="progress-wrapper">        <svg class="progress-circle" width="40" height="40" viewBox="0 0 40 40">          <circle class="progress-bg" cx="20" cy="20" r="18" stroke-width="4" fill="none"></circle>          <circle class="progress-bar" [style.stroke]="file.status == \'error\'?\'red\':\'#344E41\'" cx="20" cy="20" r="18" stroke-width="4" fill="none"            [attr.stroke-dasharray]="circumference"            [attr.stroke-dashoffset]="circumference - (file.progress / 100) * circumference"></circle>        </svg>        <button [style.opacity]="checkDesktop()?0:1" class="cancel-btn" (click)="file.status === \'uploading\'?cancelUpload(file.id):removeFromQueue(file.id)"          [title]="file.status === \'uploading\'?\'Отменить загрузку\':\'Убрать из списка\'">          <img src="/assets/images/addIcon.svg" alt="Cancel" />        </button>      </div>  </div></span></div>'
+    var COMPONENTS = [{'name': 'AccountPageComponent', 'selector': 'app-account-page'},{'name': 'AppComponent', 'selector': 'app-root'},{'name': 'CreateFurnitureComponent', 'selector': 'app-create-furniture'},{'name': 'CreateFurniturePageComponent', 'selector': 'app-create-furniture-page'},{'name': 'FinderComponent', 'selector': 'app-finder'},{'name': 'ImageSliderComponent', 'selector': 'app-image-slider'},{'name': 'LoginPageComponent', 'selector': 'app-login-page'},{'name': 'MainPageComponent', 'selector': 'app-main-page'},{'name': 'NavigationPanelComponent', 'selector': 'app-navigation-panel'},{'name': 'NotificationComponent', 'selector': 'app-notification'},{'name': 'PlanHouseComponent', 'selector': 'app-plan-house'},{'name': 'PlanHousePageComponent', 'selector': 'app-plan-house-page'},{'name': 'SceneComponent', 'selector': 'app-scene'},{'name': 'ShopPageComponent', 'selector': 'app-shop-page'},{'name': 'UploadOverlayComponent', 'selector': 'app-upload-overlay'},{'name': 'ViewFurnitureComponent', 'selector': 'app-view-furniture'}];
+    var DIRECTIVES = [{'name': 'AutoHeightDirective', 'selector': '[appAutoHeight]'}];
+    var ACTUAL_COMPONENT = {'name': 'UploadOverlayComponent'};
+</script>
+<script src="../js/tree.js"></script>
+
+
+
+
 
 
 
@@ -718,8 +652,8 @@ export class AuthService {
 
        <script>
             var COMPODOC_CURRENT_PAGE_DEPTH = 1;
-            var COMPODOC_CURRENT_PAGE_CONTEXT = 'injectable';
-            var COMPODOC_CURRENT_PAGE_URL = 'AuthService.html';
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'component';
+            var COMPODOC_CURRENT_PAGE_URL = 'UploadOverlayComponent.html';
             var MAX_SEARCH_RESULTS = 15;
        </script>
 

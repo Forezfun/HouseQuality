@@ -87,8 +87,6 @@ export class AuthService {
     }
 
     const HTTP_PARAMS = new HttpParams({ fromObject: paramObject });
-    console.log(HTTP_PARAMS.toString());
-
     return firstValueFrom(this.httpModule.put(this.baseServiceUrl + 'account', changeData)) as Promise<{ message: string }>;
   }
 

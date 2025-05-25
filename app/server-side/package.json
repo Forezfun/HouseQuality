@@ -6,7 +6,8 @@
     "scripts": {
         "start": "node server.js",
         "test": "jest",
-        "test:coverage": "jest --coverage"
+        "test:coverage": "jest --coverage",
+        "docs": "jsdoc ./src -r -d ./docs"
     },
     "dependencies": {
         "axios": "^1.9.0",

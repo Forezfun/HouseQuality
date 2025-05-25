@@ -356,12 +356,12 @@ export class ReportService {
     &lt;style&gt;
         @font-face {
             font-family: &#x27;Calypso&#x27;;
-            src: url(&#x27;http://localhost:4200/assets/fonts/Calypso.ttf&#x27;) format(&#x27;truetype&#x27;);
+            src: url(&#x27;${baseClientUrl}assets/fonts/Calypso.ttf&#x27;) format(&#x27;truetype&#x27;);
         }
 
         @font-face {
             font-family: &#x27;Courier New&#x27;;
-            src: url(&#x27;http://localhost:4200/assets/fonts/Courier New.ttf&#x27;) format(&#x27;truetype&#x27;);
+            src: url(&#x27;${baseClientUrl}assets/fonts/Courier New.ttf&#x27;) format(&#x27;truetype&#x27;);
         }
 
         body {
@@ -376,7 +376,7 @@ export class ReportService {
         }
 
         .title {
-            font-family: &#x27;Calypso&#x27;, Courier, monospace;
+            font-family: &#x27;Calypso&#x27;, &#x27;Courier New&#x27;, monospace;
             text-align: center;
             font-size: 3rem;
             margin-bottom: 40px;
@@ -386,7 +386,7 @@ export class ReportService {
         }
 
         .renderTitle {
-            font-family: &#x27;Courier New&#x27;, monospace;
+            font-family: &#x27;Courier New&#x27;, &#x27;Courier New&#x27;, monospace;
             font-weight: 400;
             font-size: 1.5rem;
             margin: 30px 0 15px;
@@ -398,7 +398,7 @@ export class ReportService {
         }
 
         .furnituresSpanTitle {
-            font-family: &#x27;Calypso&#x27;, Courier, monospace;
+            font-family: &#x27;Calypso&#x27;, &#x27;Courier New&#x27;, monospace;
             font-size: 2rem;
             margin: 40px 0 20px;
             color: #A3B18A;
@@ -441,7 +441,7 @@ export class ReportService {
 
         .paramsTitle,
         .shopsTitle {
-            font-family: &#x27;Calypso&#x27;, Courier, monospace;
+            font-family: &#x27;Calypso&#x27;, &#x27;Courier New&#x27;, monospace;
             font-size: 1.2rem;
             color: #A3B18A;
             margin-bottom: 15px;
@@ -449,7 +449,6 @@ export class ReportService {
 
         .paramsSpan {
             width: fit-content;
-            min-width: 200px;
         }
 
         .paramsList {
@@ -464,25 +463,24 @@ export class ReportService {
             padding-left: 20px;
         }
 
-        .shopsSpan {
-            min-width: 200px;
-        }
 
         a {
             display: inline-block;
             background-color: white;
             color: black;
             text-decoration: none;
-            padding: 5px 20px;
             border-radius: 10px;
             transition: all 0.3s ease;
             border: 2px solid transparent;
             width:250px;
             max-width: 250px;
             text-align: center;
-            font-family: &#x27;Courier New&#x27;;
+            font-family: &#x27;Courier New&#x27;, monospace;
             font-weight: 400;
-            font-size: 0.8rem
+            font-size: 0.8rem;
+            height:40px;
+            align-content:center;
+            box-sizing:border-box;
         }
 
         a:hover {
@@ -529,7 +527,6 @@ export class ReportService {
             }
 
             .openLink,.shopLink {
-                box-sizing: border-box;
                 width: 100%;
             }
 
@@ -540,6 +537,10 @@ export class ReportService {
             body {
                 padding: 20px;
             }
+            .paramsItem{
+                padding-left:0;
+            }
+                
         }
     &lt;/style&gt;
 &lt;/head&gt;
@@ -548,7 +549,7 @@ export class ReportService {
 &lt;img src&#x3D;&quot;${renderUrl}&quot;
     alt&#x3D;&quot;Room render&quot;&gt;
 
-&lt;h2 style&#x3D;&quot;display:${roomData.furnitures.length&#x3D;&#x3D;&#x3D;0?&#x27;none&#x27;:&#x27;block&#x27;}&quot; class&#x3D;&quot;furnituresSpanTitle&quot;&gt;Добавленная мебель&lt;/h2&gt;
+&lt;h2 style&#x3D;&quot;display:${roomData.furnitures.length &#x3D;&#x3D;&#x3D; 0 ? &#x27;none&#x27; : &#x27;block&#x27;}&quot; class&#x3D;&quot;furnituresSpanTitle&quot;&gt;Добавленная мебель&lt;/h2&gt;
 ${roomData.furnitures.map(furniture &#x3D;&gt; &#x60;
     &lt;span class&#x3D;&quot;furniture&quot;&gt;
     &lt;h3 class&#x3D;&quot;furnitureTitle&quot;&gt;${furniture.name}&lt;/h3&gt;

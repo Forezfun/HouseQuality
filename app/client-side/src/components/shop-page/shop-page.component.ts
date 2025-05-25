@@ -147,7 +147,6 @@ protected selectedColors: string[] = [];
    */
   protected async requestFurnitures(categoryName: string, furnituresCount: number, queryData?: queryData) {
     const RESPONSE = await this.shopService.GETgetCategoryData(categoryName, furnituresCount, queryData);
-    console.log(RESPONSE);
     this.furnituresArray = [...this.furnituresArray, ...RESPONSE.resultsArray];
     this.clientFiltersObject = RESPONSE.resultsClientFiltersData;
   }
@@ -205,7 +204,6 @@ protected selectedColors: string[] = [];
     this.furnitureCardId = PARAMS['furnitureCardId'];
     this.categoryName = PARAMS['category'];
 
-    console.log('route');
     this.initCategories();
   }
 
@@ -285,7 +283,7 @@ protected selectedColors: string[] = [];
         }
       }
     });
-    console.log(QUERY_DATA);
+
     return QUERY_DATA;
   }
 

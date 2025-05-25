@@ -131,15 +131,11 @@ export class SceneComponent implements AfterViewInit, OnChanges {
 
 
   ngAfterViewInit(): void {
-    console.log('init')
     this.initThreeJs();
   }
 
   ngOnChanges(changes: SimpleChanges): void {
     this.roomData = changes['roomData'].currentValue as roomDataPlan
-
-    console.log('currentValue: ', changes['roomData'].currentValue)
-    console.log('previousValue: ', changes['roomData'].previousValue)
 
     if (!this.roomData || this.scene === undefined) return
     if (changes['roomData'].previousValue !== undefined) { this.clearRoom() }

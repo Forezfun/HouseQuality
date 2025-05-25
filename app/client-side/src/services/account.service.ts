@@ -137,14 +137,12 @@ export class AccountService {
    * @returns Promise с сообщением об успешном обновлении
    */
   PUTupdateSecondaryAccountData(changeData: changeSecondaryData) {
-    console.log('changeData', changeData);
     const HTTP_PARAMS = new HttpParams({
       fromObject: {
         nickname: changeData.nickname,
         jwt: changeData.jwt
       }
     });
-    console.log(HTTP_PARAMS.toString());
     return firstValueFrom(this.httpModule.put(this.baseServiceUrl, null, { params: HTTP_PARAMS })) as Promise<{ message: string }>;
   }
 

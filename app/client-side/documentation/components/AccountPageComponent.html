@@ -1641,8 +1641,8 @@ export class AccountPageComponent implements OnInit {
 }
 
 .account-container {
-    width: 100%;
     max-width: 1200px;
+    width: 100%;
     margin-top: 30px;
 }
 
@@ -1707,7 +1707,7 @@ export class AccountPageComponent implements OnInit {
     flex-grow: 1;
 
     .profile-name {
-        font-family: &#x27;Calypso&#x27;, sans-serif;
+        font-family: &#x27;Calypso&#x27;, Courier, monospace;
         font-size: 2rem;
         margin-bottom: 15px;
         color: $lightGreen;
@@ -1775,7 +1775,7 @@ export class AccountPageComponent implements OnInit {
 
 /* Секции проектов и мебели */
 .section-title {
-    font-family: &#x27;Calypso&#x27;, sans-serif;
+    font-family: &#x27;Calypso&#x27;, Courier, monospace;
     font-size: 1.8rem;
     margin-bottom: 20px;
     color: $lightGreen;
@@ -1920,7 +1920,7 @@ export class AccountPageComponent implements OnInit {
     }
     
     .form-title {
-        font-family: &#x27;Calypso&#x27;, sans-serif;
+        font-family: &#x27;Calypso&#x27;, Courier, monospace;
         color: $lightGreen;
         text-align: center;
         margin-bottom: 25px;
@@ -2104,7 +2104,7 @@ export class AccountPageComponent implements OnInit {
 <script src="../js/libs/deep-iterator.js"></script>
 <script>
         var COMPONENT_TEMPLATE = '<div><div class="account-page">    <app-navigation-panel></app-navigation-panel>        <div *ngIf="accountData" class="account-container">        <div class="profile-card">            <div class="avatar-container">                <img [src]="accountData.avatarUrl" alt="Аватар" class="avatar-image">                <label class="avatar-edit-btn">                    <input type="file" id="avatarInput" (change)="uploadAvatar($event)" accept=".png,.jpeg,.jpg">                    <img src="/assets/images/editIcon.svg" alt="Изменить аватар">                </label>            </div>                        <div class="profile-info">                <h2 class="profile-name">{{accountData.nickname}}</h2>                <div class="profile-stats">                    <div class="stat-item">                        <span class="stat-label">Проекты:</span>                        <span class="stat-value">{{accountData.projects.length}}</span>                    </div>                    <div class="stat-item">                        <span class="stat-label">Мебель:</span>                        <span class="stat-value">{{accountData.furnitures.length}}</span>                    </div>                    <div class="stat-item">                        <span class="stat-label">Email:</span>                        <span class="stat-value">{{accountData.email}}</span>                    </div>                </div>            </div>                        <div class="profile-actions">                <button (click)="openEditForm()" style="width:27px" class="edit-btn" title="Редактировать профиль">                    <img src="/assets/images/editIcon.svg" alt="Редактировать">                </button>                <button (click)="logout()" style="width:35px;" class="logout-btn" title="Выйти">                    <img src="/assets/images/logoutIcon.svg" alt="Выйти">                </button>            </div>        </div>                <div class="projects-section">            <h3 class="section-title">Мои проекты</h3>            <div class="projects-grid">                <div *ngFor="let project of accountData.projects; let i = index"                      (click)="openProject(i)"                      class="project-card">                    <h4 class="project-name">{{project.name}}</h4>                    <div class="project-scheme">                        <div *ngFor="let room of project.rooms"                              [style.grid-area]="room.gridArea"                              class="room"></div>                    </div>                </div>            </div>        </div>                <div class="furniture-section">            <h3 class="section-title">Моя мебель</h3>            <div class="furniture-grid">                <a *ngFor="let item of accountData.furnitures"                    [routerLink]="\'/create/\' + item._id"                    class="furniture-card">                    <h4 class="furniture-name">{{item.name}}</h4>                    <img [src]="item.previewUrl" alt="Превью мебели" class="furniture-image">                </a>            </div>        </div>    </div>        <div class="edit-modal" [class.active]="isEditFormOpen">        <div class="modal-content">            <button (click)="closeEditForm()" class="close-btn">                <img src="/assets/images/addIcon.svg" alt="Закрыть">            </button>                        <form [formGroup]="editForm" (ngSubmit)="saveChanges()" class="edit-form">                <h3 class="form-title">Редактирование профиля</h3>                                <div class="form-group">                    <label for="nickname">Имя пользователя</label>                    <input id="nickname" formControlName="nickname"                            [class.invalid]="editForm.get(\'nickname\')?.invalid && editForm.get(\'nickname\')?.touched">                    <div *ngIf="editForm.get(\'nickname\')?.invalid && editForm.get(\'nickname\')?.touched"                          class="error-message">                        Введите имя пользователя                    </div>                </div>                                <div *ngIf="editForm.get(\'password\')" class="form-group">                    <label for="password">Новый пароль</label>                    <input id="password" type="password" formControlName="password"                           [class.invalid]="editForm.get(\'password\')?.invalid && editForm.get(\'password\')?.touched">                    <div *ngIf="editForm.get(\'password\')?.invalid && editForm.get(\'password\')?.touched"                          class="error-message">                        Пароль должен содержать минимум 6 символов                    </div>                </div>                                <button type="submit" [disabled]="!editForm.valid" class="save-btn">                    Сохранить изменения                </button>            </form>        </div>    </div></div></div>'
-    var COMPONENTS = [{'name': 'AccountPageComponent', 'selector': 'app-account-page'},{'name': 'AppComponent', 'selector': 'app-root'},{'name': 'CreateFurnitureComponent', 'selector': 'app-create-furniture'},{'name': 'CreateFurniturePageComponent', 'selector': 'app-create-furniture-page'},{'name': 'FinderComponent', 'selector': 'app-finder'},{'name': 'ImageSliderComponent', 'selector': 'app-image-slider'},{'name': 'LoginPageComponent', 'selector': 'app-login-page'},{'name': 'MainPageComponent', 'selector': 'app-main-page'},{'name': 'NavigationPanelComponent', 'selector': 'app-navigation-panel'},{'name': 'NotificationComponent', 'selector': 'app-notification'},{'name': 'PlanHouseComponent', 'selector': 'app-plan-house'},{'name': 'PlanHousePageComponent', 'selector': 'app-plan-house-page'},{'name': 'SceneComponent', 'selector': 'app-scene'},{'name': 'ShopPageComponent', 'selector': 'app-shop-page'},{'name': 'ViewFurnitureComponent', 'selector': 'app-view-furniture'}];
+    var COMPONENTS = [{'name': 'AccountPageComponent', 'selector': 'app-account-page'},{'name': 'AppComponent', 'selector': 'app-root'},{'name': 'CreateFurnitureComponent', 'selector': 'app-create-furniture'},{'name': 'CreateFurniturePageComponent', 'selector': 'app-create-furniture-page'},{'name': 'FinderComponent', 'selector': 'app-finder'},{'name': 'ImageSliderComponent', 'selector': 'app-image-slider'},{'name': 'LoginPageComponent', 'selector': 'app-login-page'},{'name': 'MainPageComponent', 'selector': 'app-main-page'},{'name': 'NavigationPanelComponent', 'selector': 'app-navigation-panel'},{'name': 'NotificationComponent', 'selector': 'app-notification'},{'name': 'PlanHouseComponent', 'selector': 'app-plan-house'},{'name': 'PlanHousePageComponent', 'selector': 'app-plan-house-page'},{'name': 'SceneComponent', 'selector': 'app-scene'},{'name': 'ShopPageComponent', 'selector': 'app-shop-page'},{'name': 'UploadOverlayComponent', 'selector': 'app-upload-overlay'},{'name': 'ViewFurnitureComponent', 'selector': 'app-view-furniture'}];
     var DIRECTIVES = [{'name': 'AutoHeightDirective', 'selector': '[appAutoHeight]'}];
     var ACTUAL_COMPONENT = {'name': 'AccountPageComponent'};
 </script>

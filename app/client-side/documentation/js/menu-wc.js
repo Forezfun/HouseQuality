@@ -91,6 +91,9 @@ customElements.define('compodoc-menu', class extends HTMLElement {
                                 <a href="components/ShopPageComponent.html" data-type="entity-link" >ShopPageComponent</a>
                             </li>
                             <li class="link">
+                                <a href="components/UploadOverlayComponent.html" data-type="entity-link" >UploadOverlayComponent</a>
+                            </li>
+                            <li class="link">
                                 <a href="components/ViewFurnitureComponent.html" data-type="entity-link" >ViewFurnitureComponent</a>
                             </li>
                         </ul>
@@ -154,6 +157,9 @@ customElements.define('compodoc-menu', class extends HTMLElement {
                                 </li>
                                 <li class="link">
                                     <a href="injectables/ShopService.html" data-type="entity-link" >ShopService</a>
+                                </li>
+                                <li class="link">
+                                    <a href="injectables/UploadService.html" data-type="entity-link" >UploadService</a>
                                 </li>
                             </ul>
                         </li>
@@ -251,6 +257,9 @@ customElements.define('compodoc-menu', class extends HTMLElement {
                                 <a href="interfaces/modelInterface.html" data-type="entity-link" >modelInterface</a>
                             </li>
                             <li class="link">
+                                <a href="interfaces/MyXhrUploadOptions.html" data-type="entity-link" >MyXhrUploadOptions</a>
+                            </li>
+                            <li class="link">
                                 <a href="interfaces/objectLoadInterface.html" data-type="entity-link" >objectLoadInterface</a>
                             </li>
                             <li class="link">
@@ -294,6 +303,9 @@ customElements.define('compodoc-menu', class extends HTMLElement {
                             </li>
                             <li class="link">
                                 <a href="interfaces/shopData.html" data-type="entity-link" >shopData</a>
+                            </li>
+                            <li class="link">
+                                <a href="interfaces/UploadEntry.html" data-type="entity-link" >UploadEntry</a>
                             </li>
                         </ul>
                     </li>

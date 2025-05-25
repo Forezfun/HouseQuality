@@ -964,7 +964,7 @@ export class ServerImageControlService {
    * @returns {string} Строка с URL для получения аватара.
    */
   GETaccountAvatar(jwt: string): string {
-    return &#x60;${baseUrl}/account/avatar?jwt&#x3D;${jwt}&#x60;;
+    return &#x60;${baseUrl}account/avatar?jwt&#x3D;${jwt}&#x60;;
   }
 
   /**
@@ -977,7 +977,7 @@ export class ServerImageControlService {
     const formData &#x3D; new FormData();
     formData.append(&#x27;image&#x27;, imageFile);
     const HTTP_PARAMS &#x3D; new HttpParams().set(&#x27;jwt&#x27;, jwt);
-    return firstValueFrom(this.httpModule.post(&#x60;${baseUrl}/account/avatar&#x60;, formData, { params: HTTP_PARAMS })) as Promise&lt;{ message: string }&gt;;
+    return firstValueFrom(this.httpModule.post(&#x60;${baseUrl}account/avatar&#x60;, formData, { params: HTTP_PARAMS })) as Promise&lt;{ message: string }&gt;;
   }
 
   /**

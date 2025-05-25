@@ -2,7 +2,7 @@ body {
     position: absolute;
     width: 100%;
     height: 100%;
-    font-family: 'Roboto', Courier, monospace;
+    font-family: 'Roboto', sans-serif;
     --bs-body-font-size: 0.9rem;
 }
 

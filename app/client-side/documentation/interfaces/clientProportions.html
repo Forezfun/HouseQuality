@@ -312,9 +312,8 @@ interface clientProportions {
   styleUrl: &#x27;./create-furniture-page.component.scss&#x27;
 })
 export class CreateFurniturePageComponent implements OnInit, OnDestroy {
-
   /** Подписка на изменения маршрута в приложении.*/
-  private routeSub!: Subscription;
+  private routeSub: Subscription &#x3D; new Subscription();
   /** Id страницы.*/
   protected idPage!: string;
   
@@ -364,6 +363,7 @@ export class CreateFurniturePageComponent implements OnInit, OnDestroy {
       this.router.navigateByUrl(&#x27;/login&#x27;);
       return;
     }
+
     this.routeSub &#x3D; this.route.paramMap.subscribe(params &#x3D;&gt; {
       this.idPage &#x3D; params.get(&#x27;id&#x27;) ?? &#x27;new&#x27;;
       this.clearFurnitureCard();
@@ -375,7 +375,7 @@ export class CreateFurniturePageComponent implements OnInit, OnDestroy {
    * Отписка от подписки при уничтожении компонента.
    */
   ngOnDestroy() {
-    this.routeSub.unsubscribe();
+    if(this.routeSub)this.routeSub.unsubscribe();
   }
 
   /**
@@ -393,6 +393,7 @@ export class CreateFurniturePageComponent implements OnInit, OnDestroy {
       this.furnitureData &#x3D; RESPONSE.furnitureCard;
       this.createFurnitureComponent.currentColorId &#x3D; 0;
     } catch (error) {
+      this.router.navigateByUrl(&#x27;/create/new&#x27;);
       console.error(error);
     }
   }
@@ -419,14 +420,21 @@ export class CreateFurniturePageComponent implements OnInit, OnDestroy {
   protected async deleteFurnitureCard() {
     const JWT &#x3D; this.cookieService.getJwt();
     if (!JWT) return;
-    try {
-      await this.furnitureModelService.DELETEfurnitureModel(JWT, this.idPage);
-      await this.serverImageControl.DELETEproject(JWT, this.idPage);
-      await this.furnitureCardService.DELETEfurnitureCard(JWT, this.idPage);
-      this.router.navigateByUrl(&#x27;/account&#x27;);
-    } catch (error) {
-      console.error(error);
-    }
+
+    const operations &#x3D; [
+      () &#x3D;&gt; this.furnitureModelService.DELETEfurnitureModel(JWT, this.idPage),
+      () &#x3D;&gt; this.serverImageControl.DELETEproject(JWT, this.idPage),
+      () &#x3D;&gt; this.furnitureCardService.DELETEfurnitureCard(JWT, this.idPage)
+    ];
+
+for (const op of operations) {
+  try {
+    await op();
+  } catch (error) {
+  }
+}
+
+    this.router.navigateByUrl(&#x27;/account&#x27;);
   }
 
   /**
@@ -444,7 +452,7 @@ export class CreateFurniturePageComponent implements OnInit, OnDestroy {
       const FURNITURE_DATA &#x3D; this.createFurnitureComponent.furnitureData;
       const FURNITURE_ID &#x3D; (await this.furnitureCardService.POSTcreateFurnitureCard(FURNITURE_DATA, JWT)).furnitureData._id;
 
-      // Загрузка изображений по цветам
+
       FURNITURE_DATA.colors.forEach(async (colorData) &#x3D;&gt; {
         const imagesBlobArray &#x3D; await this.transformUrlArrayToBlob(colorData.imagesData.images);
         const imagesData: imageSliderClientData &#x3D; {
@@ -454,9 +462,9 @@ export class CreateFurniturePageComponent implements OnInit, OnDestroy {
         await this.serverImageControl.POSTuploadProjectImages(colorData.color, imagesData, JWT, FURNITURE_ID);
       });
 
-      // Загрузка 3D модели
+
       const FURNITURE_MODEL_BLOB &#x3D; this.createFurnitureComponent.furnitureModelInput.files![0];
-      await this.furnitureModelService.POSTuploadFurnitureModel(FURNITURE_MODEL_BLOB, JWT, FURNITURE_ID);
+      this.furnitureModelService.POSTuploadFurnitureModel(FURNITURE_MODEL_BLOB, JWT, FURNITURE_ID, &#x27;create&#x27;);
 
       this.notification.setSuccess(&#x27;Мебель добавлена&#x27;, 5000);
       this.router.navigateByUrl(&#x27;/account&#x27;);
@@ -479,8 +487,9 @@ export class CreateFurniturePageComponent implements OnInit, OnDestroy {
     try {
       const FURNITURE_DATA &#x3D; this.createFurnitureComponent.furnitureData;
       await this.furnitureCardService.PUTupdateFurnitureCard(FURNITURE_DATA, this.idPage, JWT);
+      this.notification.setSuccess(&#x27;Карточка обновлена&#x27;, 2500);
 
-      // Загрузка изображений по цветам, если есть
+      let changeImagesCounter &#x3D; 0
       FURNITURE_DATA.colors.forEach(async (colorData) &#x3D;&gt; {
         if (colorData.imagesData.images.length &#x3D;&#x3D;&#x3D; 0) return;
         const IMAGES_BLOB_ARRAY &#x3D; await this.transformUrlArrayToBlob(colorData.imagesData.images);
@@ -489,15 +498,16 @@ export class CreateFurniturePageComponent implements OnInit, OnDestroy {
           idMainImage: colorData.imagesData.idMainImage
         };
         await this.serverImageControl.POSTuploadProjectImages(colorData.color, IMAGES_DATA, JWT, this.idPage);
+        changeImagesCounter++;
       });
+      if(changeImagesCounter &gt; 0)this.notification.setSuccess(&#x27;Изображения обновлены&#x27;, 2500);
 
-      // Загрузка 3D модели, если файл выбран
       const FURNITURE_MODEL_BLOB &#x3D; this.createFurnitureComponent.furnitureModelInput.files!;
       if (FURNITURE_MODEL_BLOB[0]) {
-        await this.furnitureModelService.POSTuploadFurnitureModel(FURNITURE_MODEL_BLOB[0], JWT, this.idPage);
+        this.furnitureModelService.POSTuploadFurnitureModel(FURNITURE_MODEL_BLOB[0], JWT, this.idPage, &#x27;update&#x27;);
       }
 
-      this.notification.setSuccess(&#x27;Мебель обновлена&#x27;, 5000);
+      
     } catch (error) {
       console.error(error);
     }

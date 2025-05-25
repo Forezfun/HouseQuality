@@ -345,7 +345,7 @@
                                 <a href="#closeScene" >closeScene</a>
                             </li>
                             <li>
-                                    <span class="modifier">Protected</span>
+                                    <span class="modifier">Public</span>
                                 <a href="#closeViewRoom" >closeViewRoom</a>
                             </li>
                             <li>
@@ -1277,8 +1277,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="546"
-                                    class="link-to-prism">src/components/plan-house/plan-house.component.ts:546</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="530"
+                                    class="link-to-prism">src/components/plan-house/plan-house.component.ts:530</a></div>
                         </td>
                     </tr>
 
@@ -1611,8 +1611,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="504"
-                                    class="link-to-prism">src/components/plan-house/plan-house.component.ts:504</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="505"
+                                    class="link-to-prism">src/components/plan-house/plan-house.component.ts:505</a></div>
                         </td>
                     </tr>
 
@@ -1634,7 +1634,7 @@
                 <td class="col-md-4">
                     <a name="closeViewRoom"></a>
                     <span class="name">
-                            <span class="modifier">Protected</span>
+                            <span class="modifier">Public</span>
                         <span ><b>closeViewRoom</b></span>
                         <a href="#closeViewRoom"><span class="icon ion-ios-link"></span></a>
                     </span>
@@ -1650,8 +1650,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="510"
-                                    class="link-to-prism">src/components/plan-house/plan-house.component.ts:510</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="604"
+                                    class="link-to-prism">src/components/plan-house/plan-house.component.ts:604</a></div>
                         </td>
                     </tr>
 
@@ -1689,8 +1689,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="569"
-                                    class="link-to-prism">src/components/plan-house/plan-house.component.ts:569</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="553"
+                                    class="link-to-prism">src/components/plan-house/plan-house.component.ts:553</a></div>
                         </td>
                     </tr>
 
@@ -2539,8 +2539,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="620"
-                                    class="link-to-prism">src/components/plan-house/plan-house.component.ts:620</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="621"
+                                    class="link-to-prism">src/components/plan-house/plan-house.component.ts:621</a></div>
                         </td>
                     </tr>
 
@@ -2782,8 +2782,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="579"
-                                    class="link-to-prism">src/components/plan-house/plan-house.component.ts:579</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="563"
+                                    class="link-to-prism">src/components/plan-house/plan-house.component.ts:563</a></div>
                         </td>
                     </tr>
 
@@ -2851,8 +2851,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="590"
-                                    class="link-to-prism">src/components/plan-house/plan-house.component.ts:590</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="574"
+                                    class="link-to-prism">src/components/plan-house/plan-house.component.ts:574</a></div>
                         </td>
                     </tr>
 
@@ -2989,8 +2989,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="527"
-                                    class="link-to-prism">src/components/plan-house/plan-house.component.ts:527</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="511"
+                                    class="link-to-prism">src/components/plan-house/plan-house.component.ts:511</a></div>
                         </td>
                     </tr>
 
@@ -3656,7 +3656,7 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="649" class="link-to-prism">src/components/plan-house/plan-house.component.ts:649</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="650" class="link-to-prism">src/components/plan-house/plan-house.component.ts:650</a></div>
                         </td>
                     </tr>
 
@@ -4457,30 +4457,14 @@ export class PlanHouseComponent implements AfterViewInit, OnInit {
     const NEW_URL &#x3D; this.location.path() + &#x27;/&#x27; + this.currentViewRoom
     this.location.replaceState(NEW_URL)
     this.sceneOpenToggle &#x3D; true
-    this.sceneComponent.loadRoom()
+    
+    if(this.sceneComponent.hasBeenChanged)this.sceneComponent.loadRoom()
   }
   protected closeScene() {
     const NEW_URL &#x3D; this.location.path().split(&#x27;/&#x27;).slice(0, -1).join(&#x27;/&#x27;)
     this.location.replaceState(NEW_URL)
     this.sceneComponent.saveRoom()
     this.sceneOpenToggle &#x3D; false
-  }
-  protected closeViewRoom() {
-    const ROOM_ELEMENT &#x3D; this.roomSpan.querySelector(&#x60;[data-index&#x3D;&quot;${this.currentViewRoom}&quot;]&#x60;) as HTMLDivElement;
-    if (!ROOM_ELEMENT || !this.oldSizeViewRoom) return;
-    this.currentViewRoom &#x3D; undefined;
-    this.currentIdClickedRoom &#x3D; undefined
-    this.renderer.setStyle(ROOM_ELEMENT, &#x27;width&#x27;, this.oldSizeViewRoom.width + &#x27;px&#x27;)
-    this.renderer.setStyle(ROOM_ELEMENT, &#x27;height&#x27;, this.oldSizeViewRoom.height + &#x27;px&#x27;)
-    this.renderer.removeStyle(ROOM_ELEMENT, &#x27;border&#x27;);
-    this.renderer.removeClass(ROOM_ELEMENT, &#x27;roomView&#x27;);
-
-    this.renderer.setStyle(this.roomSpan, &#x27;display&#x27;, &#x27;grid&#x27;);
-
-    setTimeout(() &#x3D;&gt; {
-      this.renderer.removeStyle(ROOM_ELEMENT, &#x27;width&#x27;);
-      this.renderer.removeStyle(ROOM_ELEMENT, &#x27;height&#x27;);
-    }, 768);
   }
   protected updateRoom() {
     if (this.currentIdClickedRoom &#x3D;&#x3D;&#x3D; undefined || !this.roomForm.value.name) return
@@ -4574,6 +4558,23 @@ export class PlanHouseComponent implements AfterViewInit, OnInit {
       this.formElement.classList.add(&#x27;openAddModule&#x27;);
       this.renderer.setStyle(this.toggleModuleButton, &#x27;rotate&#x27;, &#x27;135deg&#x27;);
     }
+  }
+  public closeViewRoom() {
+    const ROOM_ELEMENT &#x3D; this.roomSpan.querySelector(&#x60;[data-index&#x3D;&quot;${this.currentViewRoom}&quot;]&#x60;) as HTMLDivElement;
+    if (!ROOM_ELEMENT || !this.oldSizeViewRoom) return;
+    this.currentViewRoom &#x3D; undefined;
+    this.currentIdClickedRoom &#x3D; undefined
+    this.renderer.setStyle(ROOM_ELEMENT, &#x27;width&#x27;, this.oldSizeViewRoom.width + &#x27;px&#x27;)
+    this.renderer.setStyle(ROOM_ELEMENT, &#x27;height&#x27;, this.oldSizeViewRoom.height + &#x27;px&#x27;)
+    this.renderer.removeStyle(ROOM_ELEMENT, &#x27;border&#x27;);
+    this.renderer.removeClass(ROOM_ELEMENT, &#x27;roomView&#x27;);
+
+    this.renderer.setStyle(this.roomSpan, &#x27;display&#x27;, &#x27;grid&#x27;);
+
+    setTimeout(() &#x3D;&gt; {
+      this.renderer.removeStyle(ROOM_ELEMENT, &#x27;width&#x27;);
+      this.renderer.removeStyle(ROOM_ELEMENT, &#x27;height&#x27;);
+    }, 768);
   }
   public openViewRoom(indexRoom: number) {
     this.formElement.classList.remove(&#x27;openAddModule&#x27;);
@@ -5009,12 +5010,12 @@ app-scene {
 }
 
 .deleteItemAddModuleBtn {
-    width: 20%;
     height: 50px;
+    aspect-ratio: 1;
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 15px;
+    border-radius: 10px;
     background-color: $lightGreen;
     border: none;
     cursor: pointer;
@@ -5414,7 +5415,7 @@ app-scene {
 <script src="../js/libs/deep-iterator.js"></script>
 <script>
         var COMPONENT_TEMPLATE = '<div><span class="planHouseModule">  <span class="addModuleSpan">    <button (click)="    currentViewRoom === undefined    ? toggleOpenRoomModule()    : (sceneOpenToggle === true      ? closeScene()      : closeViewRoom())    " [style.rotate]="currentViewRoom === undefined ? \'0deg\' : \'225deg\'" class="addModuleBtn" type="button"      tabindex="0">      <img loading="lazy" src="/assets/images/addIcon.svg" style="transition: all 0.5s;pointer-events: none;" alt="">    </button>    <form [style.opacity]="currentViewRoom===undefined?1:0" [formGroup]="roomForm"      (ngSubmit)="currentIdClickedRoom===undefined?addRoom():updateRoom()" class="addModuleFormContent">      <h2 class="addModuleTitle">Параметры комнаты</h2>      <span class="addModuleInputSpan">        <label class="inputLabel" for="width">Ширина(м)</label>        <input placeholder="5" formControlName="width" max="10" min="0.1" class="addModuleInput" id="width" type="number" step="0.01">        <span class="validation-error" *ngIf="roomForm.get(\'width\')?.invalid && roomForm.get(\'width\')?.touched">          Введите число от 0.1 до 10        </span>      </span>      <span class="addModuleInputSpan">        <label class="inputLabel" for="length">Длина(м)</label>        <input placeholder="3" formControlName="length" max="10" min="0.1" class="addModuleInput" id="length" type="number" step="0.01">        <span class="validation-error" *ngIf="roomForm.get(\'length\')?.invalid && roomForm.get(\'length\')?.touched">          Введите число от 0.1 до 10        </span>      </span>      <span class="addModuleInputSpan">        <label class="inputLabel" for="height">Высота(м)</label>        <input placeholder="2.5" formControlName="height" max="10" min="0.1" class="addModuleInput" id="height" type="number" step="0.01">        <span class="validation-error" *ngIf="roomForm.get(\'height\')?.invalid && roomForm.get(\'height\')?.touched">          Введите число от 0.1 до 10        </span>      </span>      <span class="addModuleInputSpan">        <label class="inputLabel" for="name">Название</label>        <input placeholder="Гостиная" formControlName="name" class="addModuleInput" id="name" type="text">        <span class="validation-error" *ngIf="roomForm.get(\'name\')?.invalid && roomForm.get(\'name\')?.touched">          Введите название комнаты (до 20)        </span>      </span>      <span class="functionShopsModuleBtns">        <button [disabled]="!roomForm.valid" class="submitAddModuleFormBtn" type="submit">Продолжить</button>        <button (click)="deleteRoom()" class="deleteItemAddModuleBtn" *ngIf="currentIdClickedRoom !== undefined">          <img loading="lazy" src="/assets/images/deleteIcon.svg" alt="">        </button>      </span>    </form>  </span>  <span class="workArea">    <button (click)="turnoffGuides(isGuideIncluded?true:false)" [title]="isGuideIncluded?\'Выключить\':\'Включить\'"      class="guideSwitcher">      Подсказки по управлению {{isGuideIncluded?\'включены\':\'выключены\'}}    </button>    <app-scene #scene (saveObjectsEmitter)="updateRoomObjects($event)"      [style.opacity]="sceneOpenToggle&&currentViewRoom!==undefined?1:0"      [style.z-index]="sceneOpenToggle&&currentViewRoom!==undefined?1:0"      [roomData]="currentViewRoom!==undefined?planHouse[currentViewRoom]:lastPlanHouse"></app-scene>    <span [class.viewRoomSmallScreen]="currentViewRoom!==undefined" class="roomSpan">      <button *ngFor="let roomData of planHouse; let index = index" class="room" [style.grid-area]="roomData.gridArea"        [style.display]="(currentViewRoom===index||currentViewRoom===undefined)&&!sceneOpenToggle?\'block\':\'none\'"        [attr.data-index]="index" (touchstart)="currentViewRoom===undefined?clickRoom($event, index):openScene()"        (keydown.enter)="currentViewRoom===undefined?clickRoom($event, index):openScene()"        (mousedown)="currentViewRoom===undefined?clickRoom($event, index):openScene()">        {{roomData.name}}      </button>      <span *ngIf="!sceneOpenToggle&&currentViewRoom!==undefined" class="furnitureCategoriesButtonsSpan">        <a [href]="\'/shop/\'+category.name" class="furnitureCategoryButton"          *ngFor="let category of categoryArray; let index = index">          {{category.translateMany}}        </a>      </span>    </span>  </span></span><div class="guideOverlay" *ngIf="isGuideVisible && isGuideIncluded">  <div class="guideSpan">    <span [ngTemplateOutlet]="guideTemplate" class="guideWindow"></span>    <img src="assets/images/addIcon.svg" alt="Close" class="closeIcon" (click)="closeGuide()">  </div></div><ng-template #roomsGuideTemplate1>  <div class="guideContainer">    <div class="guideSection">      <p class="guideText">Нажмите один раз ЛКМ на комнатe для смены названия</p>      <div class="animationContainer" style="display:flex;justify-content: center;">        <img src="assets/images/mouse.svg" alt="Mouse" class="mouse pressMouse">      </div>    </div>    <div class="dividerWithText">      <div class="dividerLine"></div>    </div>    <div class="guideSection">      <p class="guideText">Нажмите два раза ЛКМ на комнатe для редактирования мебели</p>      <div class="animationContainer" style="display:flex;justify-content: center;">        <img src="assets/images/mouse.svg" alt="Mouse" class="mouse pressMousetwice">      </div>    </div>  </div></ng-template><ng-template #roomsGuideTemplate2>  <div class="guideContainer">    <div class="guideSection">      <p class="guideText">Зажмите ЛКМ на комнате и перетаскивайте</p>      <div class="animationContainer">        <img src="assets/images/mouse.svg" alt="Mouse" class="mouse xMouse">      </div>    </div>    <div class="dividerWithText">      <div class="dividerLine"></div>      <span class="dividerText">ИЛИ</span>      <div class="dividerLine"></div>    </div>    <div class="guideSection">      <p class="guideText">Наведитесь на TAB и с зажатым ENTER нажимайте стрелочки</p>      <div class="keyboardHint">        <img src="assets/images/enter.svg" alt="Enter" class="enterKey">        <div class="arrowsWrapper">          <img src="assets/images/arrowLeft.svg" style="rotate:90deg;" alt="<--" class="arrowKey top">          <div class="middleArrows">            <img src="assets/images/arrowLeft.svg" alt="<--" class="arrowKey left">            <img src="assets/images/arrowLeft.svg" style="rotate:270deg;" alt="<--" class="arrowKey bottom">            <img src="assets/images/arrowLeft.svg" style="rotate:180deg;" alt="<--" class="arrowKey right">          </div>        </div>      </div>    </div>  </div></ng-template><ng-template #roomGuideTemplate>  <div class="guideContainer">    <div class="guideSection">      <p class="guideText">Нажмите ЛКМ на мебели для перетаскивания и нажмите еще раз для отмены</p>      <div class="animationContainer" style="display:flex;justify-content: center;">        <img src="assets/images/mouse.svg" alt="Mouse" class="mouse pressMouse">      </div>    </div>    <div class="dividerWithText">      <div class="dividerLine"></div>    </div>    <div class="guideSection">      <p class="guideText">В режиме перетаскивания нажимайте Q и E для поворота мебели</p>      <div class="keyboardHint">        <div class="arrowsWrapper">          <div class="middleArrows">            <img src="assets/images/qButton.svg" style="width:50px;" alt="q" class="arrowKey left">            <img src="assets/images/eButton.svg" style="width:50px;" alt="e" class="arrowKey right">          </div>        </div>      </div>    </div>  </div></ng-template></div>'
-    var COMPONENTS = [{'name': 'AccountPageComponent', 'selector': 'app-account-page'},{'name': 'AppComponent', 'selector': 'app-root'},{'name': 'CreateFurnitureComponent', 'selector': 'app-create-furniture'},{'name': 'CreateFurniturePageComponent', 'selector': 'app-create-furniture-page'},{'name': 'FinderComponent', 'selector': 'app-finder'},{'name': 'ImageSliderComponent', 'selector': 'app-image-slider'},{'name': 'LoginPageComponent', 'selector': 'app-login-page'},{'name': 'MainPageComponent', 'selector': 'app-main-page'},{'name': 'NavigationPanelComponent', 'selector': 'app-navigation-panel'},{'name': 'NotificationComponent', 'selector': 'app-notification'},{'name': 'PlanHouseComponent', 'selector': 'app-plan-house'},{'name': 'PlanHousePageComponent', 'selector': 'app-plan-house-page'},{'name': 'SceneComponent', 'selector': 'app-scene'},{'name': 'ShopPageComponent', 'selector': 'app-shop-page'},{'name': 'ViewFurnitureComponent', 'selector': 'app-view-furniture'}];
+    var COMPONENTS = [{'name': 'AccountPageComponent', 'selector': 'app-account-page'},{'name': 'AppComponent', 'selector': 'app-root'},{'name': 'CreateFurnitureComponent', 'selector': 'app-create-furniture'},{'name': 'CreateFurniturePageComponent', 'selector': 'app-create-furniture-page'},{'name': 'FinderComponent', 'selector': 'app-finder'},{'name': 'ImageSliderComponent', 'selector': 'app-image-slider'},{'name': 'LoginPageComponent', 'selector': 'app-login-page'},{'name': 'MainPageComponent', 'selector': 'app-main-page'},{'name': 'NavigationPanelComponent', 'selector': 'app-navigation-panel'},{'name': 'NotificationComponent', 'selector': 'app-notification'},{'name': 'PlanHouseComponent', 'selector': 'app-plan-house'},{'name': 'PlanHousePageComponent', 'selector': 'app-plan-house-page'},{'name': 'SceneComponent', 'selector': 'app-scene'},{'name': 'ShopPageComponent', 'selector': 'app-shop-page'},{'name': 'UploadOverlayComponent', 'selector': 'app-upload-overlay'},{'name': 'ViewFurnitureComponent', 'selector': 'app-view-furniture'}];
     var DIRECTIVES = [{'name': 'AutoHeightDirective', 'selector': '[appAutoHeight]'}];
     var ACTUAL_COMPONENT = {'name': 'PlanHouseComponent'};
 </script>

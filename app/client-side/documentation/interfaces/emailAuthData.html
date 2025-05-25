@@ -362,7 +362,7 @@ export class AuthService {
     let HTTP_PARAMS &#x3D; new HttpParams()
       .set(&#x27;email&#x27;, email);
 
-    return firstValueFrom(this.httpModule.post(this.baseServiceUrl + &#x27;jwt/temporary&#x27;, { params: HTTP_PARAMS })) as Promise&lt;{ jwt: string }&gt;;
+    return firstValueFrom(this.httpModule.post(this.baseServiceUrl + &#x27;jwt/temporary&#x27;,null, { params: HTTP_PARAMS })) as Promise&lt;{ jwt: string }&gt;;
   }
 
   /**
@@ -381,8 +381,6 @@ export class AuthService {
     }
 
     const HTTP_PARAMS &#x3D; new HttpParams({ fromObject: paramObject });
-    console.log(HTTP_PARAMS.toString());
-
     return firstValueFrom(this.httpModule.put(this.baseServiceUrl + &#x27;account&#x27;, changeData)) as Promise&lt;{ message: string }&gt;;
   }
 

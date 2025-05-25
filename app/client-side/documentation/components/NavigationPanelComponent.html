@@ -623,20 +623,16 @@ export class NavigationPanelComponent implements OnInit {
     &lt;div class&#x3D;&quot;desktop-content&quot; *ngIf&#x3D;&quot;!isMobileView&quot;&gt;
         &lt;app-finder&gt;&lt;/app-finder&gt;
         &lt;span class&#x3D;&quot;mainBtns&quot;&gt;
-            &lt;a routerLink&#x3D;&quot;/account&quot; class&#x3D;&quot;accountBtn navigationBtn&quot;&gt;
+            &lt;a title&#x3D;&quot;Аккаунт&quot; routerLink&#x3D;&quot;/account&quot; class&#x3D;&quot;accountBtn navigationBtn&quot;&gt;
                 &lt;img loading&#x3D;&quot;lazy&quot; src&#x3D;&quot;/assets/images/accountIcon.svg&quot; alt&#x3D;&quot;account&quot;&gt;
             &lt;/a&gt;
-            &lt;a routerLink&#x3D;&quot;/plan&quot; class&#x3D;&quot;createBtn navigationBtn&quot;&gt;
-                &lt;svg viewBox&#x3D;&quot;0 0 32 32&quot;&gt;
-                    &lt;path
-                        d&#x3D;&quot;M28,14H18V4c0-1.104-0.896-2-2-2s-2,0.896-2,2v10H4c-1.104,0-2,0.896-2,2s0.896,2,2,2h10v10c0,1.104,0.896,2,2,2 s2-0.896,2-2V18h10c1.104,0,2-0.896,2-2S29.104,14,28,14z&quot;
-                        fill&#x3D;&quot;#DAD7CD&quot; /&gt;
-                &lt;/svg&gt;
+            &lt;a title&#x3D;&quot;Расстановка&quot; routerLink&#x3D;&quot;/plan&quot; class&#x3D;&quot;createBtn navigationBtn&quot;&gt;
+                &lt;img src&#x3D;&quot;/assets/images/planIcon.svg&quot; alt&#x3D;&quot;plan&quot;&gt;
             &lt;/a&gt;
-            &lt;a routerLink&#x3D;&quot;/create/new&quot; class&#x3D;&quot;navigationBtn&quot;&gt;
+            &lt;a title&#x3D;&quot;Добавить мебель&quot; routerLink&#x3D;&quot;/create/new&quot; class&#x3D;&quot;navigationBtn&quot;&gt;
                 &lt;img loading&#x3D;&quot;lazy&quot; src&#x3D;&quot;/assets/images/furnitureIcon.svg&quot; alt&#x3D;&quot;furniture&quot;&gt;
             &lt;/a&gt;
-            &lt;a routerLink&#x3D;&quot;/shop&quot; class&#x3D;&quot;navigationBtn&quot;&gt;
+            &lt;a title&#x3D;&quot;Магазин&quot; routerLink&#x3D;&quot;/shop&quot; class&#x3D;&quot;navigationBtn&quot;&gt;
                 &lt;img loading&#x3D;&quot;lazy&quot; src&#x3D;&quot;/assets/images/shopIcon.svg&quot; alt&#x3D;&quot;shop&quot;&gt;
             &lt;/a&gt;
         &lt;/span&gt;
@@ -649,12 +645,8 @@ export class NavigationPanelComponent implements OnInit {
             &lt;div&gt;Аккаунт&lt;/div&gt;
         &lt;/a&gt;
         &lt;a routerLink&#x3D;&quot;/plan&quot; class&#x3D;&quot;mobile-menu-item&quot;&gt;
-            &lt;svg viewBox&#x3D;&quot;0 0 32 32&quot;&gt;
-                &lt;path
-                    d&#x3D;&quot;M28,14H18V4c0-1.104-0.896-2-2-2s-2,0.896-2,2v10H4c-1.104,0-2,0.896-2,2s0.896,2,2,2h10v10c0,1.104,0.896,2,2,2 s2-0.896,2-2V18h10c1.104,0,2-0.896,2-2S29.104,14,28,14z&quot;
-                    fill&#x3D;&quot;#DAD7CD&quot; /&gt;
-            &lt;/svg&gt;
-            &lt;div&gt;План&lt;/div&gt;
+            &lt;img src&#x3D;&quot;/assets/images/planIcon.svg&quot; alt&#x3D;&quot;plan&quot;&gt;
+            &lt;div&gt;Расстановка&lt;/div&gt;
         &lt;/a&gt;
         &lt;a routerLink&#x3D;&quot;/create/new&quot; class&#x3D;&quot;mobile-menu-item&quot;&gt;
             &lt;img loading&#x3D;&quot;lazy&quot; src&#x3D;&quot;/assets/images/furnitureIcon.svg&quot; alt&#x3D;&quot;furniture&quot;&gt;
@@ -694,8 +686,8 @@ export class NavigationPanelComponent implements OnInit {
 <script src="../js/libs/htmlparser.js"></script>
 <script src="../js/libs/deep-iterator.js"></script>
 <script>
-        var COMPONENT_TEMPLATE = '<div><nav class="navigationSpan">    <a routerLink="/" class="homeBtn navigationBtn">HQ</a>    <button [class.active]="menuOpen" class="hamburger-menu" (click)="toggleMenu()" *ngIf="isMobileView">        <img ng loading="lazy" src="/assets/images/hamburgerMenuIcon.svg" alt="menu">    </button>    <div class="desktop-content" *ngIf="!isMobileView">        <app-finder></app-finder>        <span class="mainBtns">            <a routerLink="/account" class="accountBtn navigationBtn">                <img loading="lazy" src="/assets/images/accountIcon.svg" alt="account">            </a>            <a routerLink="/plan" class="createBtn navigationBtn">                <svg viewBox="0 0 32 32">                    <path                        d="M28,14H18V4c0-1.104-0.896-2-2-2s-2,0.896-2,2v10H4c-1.104,0-2,0.896-2,2s0.896,2,2,2h10v10c0,1.104,0.896,2,2,2 s2-0.896,2-2V18h10c1.104,0,2-0.896,2-2S29.104,14,28,14z"                        fill="#DAD7CD" />                </svg>            </a>            <a routerLink="/create/new" class="navigationBtn">                <img loading="lazy" src="/assets/images/furnitureIcon.svg" alt="furniture">            </a>            <a routerLink="/shop" class="navigationBtn">                <img loading="lazy" src="/assets/images/shopIcon.svg" alt="shop">            </a>        </span>    </div>    <div class="mobile-menu" *ngIf="isMobileView && menuOpen">        <app-finder></app-finder>        <a routerLink="/account" class="mobile-menu-item">            <img loading="lazy" src="/assets/images/accountIcon.svg" alt="account">            <div>Аккаунт</div>        </a>        <a routerLink="/plan" class="mobile-menu-item">            <svg viewBox="0 0 32 32">                <path                    d="M28,14H18V4c0-1.104-0.896-2-2-2s-2,0.896-2,2v10H4c-1.104,0-2,0.896-2,2s0.896,2,2,2h10v10c0,1.104,0.896,2,2,2 s2-0.896,2-2V18h10c1.104,0,2-0.896,2-2S29.104,14,28,14z"                    fill="#DAD7CD" />            </svg>            <div>План</div>        </a>        <a routerLink="/create/new" class="mobile-menu-item">            <img loading="lazy" src="/assets/images/furnitureIcon.svg" alt="furniture">            <div>Мебель</div>        </a>        <a routerLink="/shop" class="mobile-menu-item">            <img loading="lazy" src="/assets/images/shopIcon.svg" alt="shop">            <div>Магазин</div>        </a>    </div></nav></div>'
-    var COMPONENTS = [{'name': 'AccountPageComponent', 'selector': 'app-account-page'},{'name': 'AppComponent', 'selector': 'app-root'},{'name': 'CreateFurnitureComponent', 'selector': 'app-create-furniture'},{'name': 'CreateFurniturePageComponent', 'selector': 'app-create-furniture-page'},{'name': 'FinderComponent', 'selector': 'app-finder'},{'name': 'ImageSliderComponent', 'selector': 'app-image-slider'},{'name': 'LoginPageComponent', 'selector': 'app-login-page'},{'name': 'MainPageComponent', 'selector': 'app-main-page'},{'name': 'NavigationPanelComponent', 'selector': 'app-navigation-panel'},{'name': 'NotificationComponent', 'selector': 'app-notification'},{'name': 'PlanHouseComponent', 'selector': 'app-plan-house'},{'name': 'PlanHousePageComponent', 'selector': 'app-plan-house-page'},{'name': 'SceneComponent', 'selector': 'app-scene'},{'name': 'ShopPageComponent', 'selector': 'app-shop-page'},{'name': 'ViewFurnitureComponent', 'selector': 'app-view-furniture'}];
+        var COMPONENT_TEMPLATE = '<div><nav class="navigationSpan">    <a routerLink="/" class="homeBtn navigationBtn">HQ</a>    <button [class.active]="menuOpen" class="hamburger-menu" (click)="toggleMenu()" *ngIf="isMobileView">        <img ng loading="lazy" src="/assets/images/hamburgerMenuIcon.svg" alt="menu">    </button>    <div class="desktop-content" *ngIf="!isMobileView">        <app-finder></app-finder>        <span class="mainBtns">            <a title="Аккаунт" routerLink="/account" class="accountBtn navigationBtn">                <img loading="lazy" src="/assets/images/accountIcon.svg" alt="account">            </a>            <a title="Расстановка" routerLink="/plan" class="createBtn navigationBtn">                <img src="/assets/images/planIcon.svg" alt="plan">            </a>            <a title="Добавить мебель" routerLink="/create/new" class="navigationBtn">                <img loading="lazy" src="/assets/images/furnitureIcon.svg" alt="furniture">            </a>            <a title="Магазин" routerLink="/shop" class="navigationBtn">                <img loading="lazy" src="/assets/images/shopIcon.svg" alt="shop">            </a>        </span>    </div>    <div class="mobile-menu" *ngIf="isMobileView && menuOpen">        <app-finder></app-finder>        <a routerLink="/account" class="mobile-menu-item">            <img loading="lazy" src="/assets/images/accountIcon.svg" alt="account">            <div>Аккаунт</div>        </a>        <a routerLink="/plan" class="mobile-menu-item">            <img src="/assets/images/planIcon.svg" alt="plan">            <div>Расстановка</div>        </a>        <a routerLink="/create/new" class="mobile-menu-item">            <img loading="lazy" src="/assets/images/furnitureIcon.svg" alt="furniture">            <div>Мебель</div>        </a>        <a routerLink="/shop" class="mobile-menu-item">            <img loading="lazy" src="/assets/images/shopIcon.svg" alt="shop">            <div>Магазин</div>        </a>    </div></nav></div>'
+    var COMPONENTS = [{'name': 'AccountPageComponent', 'selector': 'app-account-page'},{'name': 'AppComponent', 'selector': 'app-root'},{'name': 'CreateFurnitureComponent', 'selector': 'app-create-furniture'},{'name': 'CreateFurniturePageComponent', 'selector': 'app-create-furniture-page'},{'name': 'FinderComponent', 'selector': 'app-finder'},{'name': 'ImageSliderComponent', 'selector': 'app-image-slider'},{'name': 'LoginPageComponent', 'selector': 'app-login-page'},{'name': 'MainPageComponent', 'selector': 'app-main-page'},{'name': 'NavigationPanelComponent', 'selector': 'app-navigation-panel'},{'name': 'NotificationComponent', 'selector': 'app-notification'},{'name': 'PlanHouseComponent', 'selector': 'app-plan-house'},{'name': 'PlanHousePageComponent', 'selector': 'app-plan-house-page'},{'name': 'SceneComponent', 'selector': 'app-scene'},{'name': 'ShopPageComponent', 'selector': 'app-shop-page'},{'name': 'UploadOverlayComponent', 'selector': 'app-upload-overlay'},{'name': 'ViewFurnitureComponent', 'selector': 'app-view-furniture'}];
     var DIRECTIVES = [{'name': 'AutoHeightDirective', 'selector': '[appAutoHeight]'}];
     var ACTUAL_COMPONENT = {'name': 'NavigationPanelComponent'};
 </script>
