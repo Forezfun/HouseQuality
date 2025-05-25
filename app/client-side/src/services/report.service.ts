@@ -111,7 +111,7 @@ export class ReportService {
         }
 
         .renderTitle {
-            font-family: 'Courier New', monospace;
+            font-family: 'Courier New', 'Courier New', monospace;
             font-weight: 400;
             font-size: 1.5rem;
             margin: 30px 0 15px;
@@ -123,7 +123,7 @@ export class ReportService {
         }
 
         .furnituresSpanTitle {
-            font-family: 'Calypso', monospace;
+            font-family: 'Calypso', 'Courier New', monospace;
             font-size: 2rem;
             margin: 40px 0 20px;
             color: #A3B18A;
@@ -166,7 +166,7 @@ export class ReportService {
 
         .paramsTitle,
         .shopsTitle {
-            font-family: 'Calypso', monospace;
+            font-family: 'Calypso', 'Courier New', monospace;
             font-size: 1.2rem;
             color: #A3B18A;
             margin-bottom: 15px;

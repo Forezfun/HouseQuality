@@ -331,6 +331,8 @@ protected selectedColors: string[] = [];
    * Открытие модуля добавления мебели
    */
   protected openAddModule() {
+    const JWT = this.accountCookieService.getJwt()
+    if(!JWT)this.router.navigateByUrl('/login')
     this.openAddModuleToggle = true;
   }
 

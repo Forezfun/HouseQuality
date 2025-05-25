@@ -49,7 +49,7 @@ function getResetCodeHtml() {
         <title>Password Reset</title>
         <style>
             body {
-                font-family: Arial, sans-serif;
+                font-family: Arial, Courier, monospace;
                 color: #333;
                 margin: 0;
                 padding: 0;
@@ -130,7 +130,7 @@ function getDeleteFurnitureHtml(furnitureName, roomsNamesArray) {
     <title>Furniture Removal Notification</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: Arial, Courier, monospace;
             color: #333;
             margin: 0;
             padding: 0;

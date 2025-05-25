@@ -79,7 +79,7 @@
     flex-grow: 1;
 
     .profile-name {
-        font-family: 'Calypso', sans-serif;
+        font-family: 'Calypso', Courier, monospace;
         font-size: 2rem;
         margin-bottom: 15px;
         color: $lightGreen;
@@ -147,7 +147,7 @@
 
 /* Секции проектов и мебели */
 .section-title {
-    font-family: 'Calypso', sans-serif;
+    font-family: 'Calypso', Courier, monospace;
     font-size: 1.8rem;
     margin-bottom: 20px;
     color: $lightGreen;
@@ -292,7 +292,7 @@
     }
     
     .form-title {
-        font-family: 'Calypso', sans-serif;
+        font-family: 'Calypso', Courier, monospace;
         color: $lightGreen;
         text-align: center;
         margin-bottom: 25px;
