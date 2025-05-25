@@ -1,5 +1,8 @@
 [![House-Quality-Logo.png](https://i.postimg.cc/dt2jSgrR/House-Quality-Logo.png)](https://postimg.cc/ppdjmG0y)
 
+## 🌐 Ссылка на сайт
+[HouseQuality](https://housequality.site)
+
 ## 📋 Содержание
 - [Требования](#-требования)
 - [Установка](#-установка)
@@ -7,7 +10,7 @@
 - [Структура проекта](#-структура-проекта)
 - [Разработка](#-разработка)
 
-## ⚙️ Требования
+## ⚙ Требования
 
 Перед началом работы убедитесь, что у вас установлены:
 
@@ -46,8 +49,8 @@ npm install
 ### Клиентская часть (Angular)
 
 ```bash
-cd app/client-side/src
-ng serve
+cd app/client-side
+npm start
 ```
 
 Проект будет доступен по адресу: [http://localhost:4200](http://localhost:4200)
@@ -55,8 +58,8 @@ ng serve
 ### Серверная часть (Node.js + MongoDB)
 
 ```bash
-cd app/server-side/src
-node server
+cd app/server-side
+npm start
 ```
 
 Сервер по умолчанию запустится на [http://localhost:5000](http://localhost:5000)
@@ -86,7 +89,10 @@ node server
 └── README.md                   # README
 ```
 
-## 🛠 Разработка
-
+# 🛠 Разработка
+## 🧱 Стек 
 - Фронтенд написан на **Angular** (SCSS, RxJS, TypeScript).
 - Бэкенд использует **Node.js**, **Express**, **MongoDB (Mongoose)**.
+## 🗂️ Документация
+[Клиентская часть](https://housequality.site/docs/client/index.html)
+[Серверная часть](https://housequality.site/docs/server/index.html)
