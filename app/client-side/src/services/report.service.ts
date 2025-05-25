@@ -174,7 +174,6 @@ export class ReportService {
 
         .paramsSpan {
             width: fit-content;
-            min-width: 200px;
         }
 
         .paramsList {
@@ -189,9 +188,6 @@ export class ReportService {
             padding-left: 20px;
         }
 
-        .shopsSpan {
-            min-width: 200px;
-        }
 
         a {
             display: inline-block;
@@ -206,9 +202,10 @@ export class ReportService {
             text-align: center;
             font-family: 'Courier New', monospace;
             font-weight: 400;
-            font-size: 0.8rem
-            height:50px;
+            font-size: 0.8rem;
+            height:40px;
             align-content:center;
+            box-sizing:border-box;
         }
 
         a:hover {
@@ -255,7 +252,6 @@ export class ReportService {
             }
 
             .openLink,.shopLink {
-                box-sizing: border-box;
                 width: 100%;
             }
 
@@ -266,6 +262,10 @@ export class ReportService {
             body {
                 padding: 20px;
             }
+            .paramsItem{
+                padding-left:0;
+            }
+                
         }
     </style>
 </head>
@@ -274,7 +274,7 @@ export class ReportService {
 <img src="${renderUrl}"
     alt="Room render">
 
-<h2 style="display:${roomData.furnitures.length===0?'none':'block'}" class="furnituresSpanTitle">Добавленная мебель</h2>
+<h2 style="display:${roomData.furnitures.length === 0 ? 'none' : 'block'}" class="furnituresSpanTitle">Добавленная мебель</h2>
 ${roomData.furnitures.map(furniture => `
     <span class="furniture">
     <h3 class="furnitureTitle">${furniture.name}</h3>

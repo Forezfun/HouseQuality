@@ -268,11 +268,9 @@ async function deleteUsedObject(furnitureCardId, furnitureName) {
 async function proccessColorsData(FURNITURE_CARD_ITEM) {
     let colorsFromServerData = [];
 
-    for (const COLOR_DATA of FURNITURE_CARD_ITEM.colors) {
+    for (let COLOR_DATA of FURNITURE_CARD_ITEM.colors) {
         try {
-            const IMAGES_FURNITURE_ITEM = await IMAGES_FURNITURE.findOne({
-                furnitureCardId: FURNITURE_CARD_ITEM._id
-            });
+            let IMAGES_FURNITURE_ITEM = await IMAGES_FURNITURE.findById(COLOR_DATA.idImages);
 
             if (!IMAGES_FURNITURE_ITEM) continue;
 

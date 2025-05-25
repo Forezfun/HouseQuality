@@ -153,12 +153,15 @@ ROUTER.get('/main', async (request, result) => {
 ROUTER.get('/simple', async (request, result) => {
     try {
         const { furnitureCardId, color, idImage } = request.query;
-        const IMAGES_FURNITURE_ITEM = await IMAGES_FURNITURE.findOne({ furnitureCardId: furnitureCardId })
+        const IMAGES_FURNITURE_ITEM = await IMAGES_FURNITURE.findOne({ furnitureCardId: furnitureCardId, color: color })
         if (!IMAGES_FURNITURE_ITEM) return result.status(404).json({ message: 'Изображения не найдены' })
 
         const IMAGE_NAME = IMAGES_FURNITURE_ITEM.images[idImage].filename
         const DIRECTORY = path.join(__dirname, '..', 'uploads', 'cards', furnitureCardId, color);
         const FILE_PATH = path.join(DIRECTORY, IMAGE_NAME);
+
+        console.log(FILE_PATH)
+
         if (fs.existsSync(FILE_PATH)) {
             result.sendFile(FILE_PATH);
         } else {
