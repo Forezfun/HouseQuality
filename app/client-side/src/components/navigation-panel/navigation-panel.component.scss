@@ -26,12 +26,13 @@ app-finder {
 }
 
 .navigationSpan {
+    box-sizing: border-box;
     display: flex;
     background-color: black;
     border-radius: 10px;
     gap: 5px;
     justify-content: space-around;
-    width: calc(90vw - 30px);
+    width: 90vw;
     min-width: 768px;
     margin: 0 auto;
     height: 60px;
@@ -42,7 +43,6 @@ app-finder {
     @media (max-width: 768px) {
         justify-content: space-between;
         padding: 0 15px;
-        width: calc(90vw - 30px);
         min-width: auto;
     }
 }

@@ -8,20 +8,16 @@
     <div class="desktop-content" *ngIf="!isMobileView">
         <app-finder></app-finder>
         <span class="mainBtns">
-            <a routerLink="/account" class="accountBtn navigationBtn">
+            <a title="Аккаунт" routerLink="/account" class="accountBtn navigationBtn">
                 <img loading="lazy" src="/assets/images/accountIcon.svg" alt="account">
             </a>
-            <a routerLink="/plan" class="createBtn navigationBtn">
-                <svg viewBox="0 0 32 32">
-                    <path
-                        d="M28,14H18V4c0-1.104-0.896-2-2-2s-2,0.896-2,2v10H4c-1.104,0-2,0.896-2,2s0.896,2,2,2h10v10c0,1.104,0.896,2,2,2 s2-0.896,2-2V18h10c1.104,0,2-0.896,2-2S29.104,14,28,14z"
-                        fill="#DAD7CD" />
-                </svg>
+            <a title="Расстановка" routerLink="/plan" class="createBtn navigationBtn">
+                <img src="/assets/images/planIcon.svg" alt="plan">
             </a>
-            <a routerLink="/create/new" class="navigationBtn">
+            <a title="Добавить мебель" routerLink="/create/new" class="navigationBtn">
                 <img loading="lazy" src="/assets/images/furnitureIcon.svg" alt="furniture">
             </a>
-            <a routerLink="/shop" class="navigationBtn">
+            <a title="Магазин" routerLink="/shop" class="navigationBtn">
                 <img loading="lazy" src="/assets/images/shopIcon.svg" alt="shop">
             </a>
         </span>
@@ -34,12 +30,8 @@
             <div>Аккаунт</div>
         </a>
         <a routerLink="/plan" class="mobile-menu-item">
-            <svg viewBox="0 0 32 32">
-                <path
-                    d="M28,14H18V4c0-1.104-0.896-2-2-2s-2,0.896-2,2v10H4c-1.104,0-2,0.896-2,2s0.896,2,2,2h10v10c0,1.104,0.896,2,2,2 s2-0.896,2-2V18h10c1.104,0,2-0.896,2-2S29.104,14,28,14z"
-                    fill="#DAD7CD" />
-            </svg>
-            <div>План</div>
+            <img src="/assets/images/planIcon.svg" alt="plan">
+            <div>Расстановка</div>
         </a>
         <a routerLink="/create/new" class="mobile-menu-item">
             <img loading="lazy" src="/assets/images/furnitureIcon.svg" alt="furniture">

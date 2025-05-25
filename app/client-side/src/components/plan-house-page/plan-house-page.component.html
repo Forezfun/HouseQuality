@@ -1,22 +1,22 @@
 <span class="body">
   <app-navigation-panel></app-navigation-panel>
-  <p *ngIf="!checkDesktop()" class="mobileAlert">Просмотр этой страницы с мобильных устройств невозможен. Пожалуйста, используйте компьютер.</p>
-  <span *ngIf="checkDesktop()" class="functionalModule">
+  <p *ngIf="!checkDesktop" class="mobileAlert">Просмотр этой страницы с мобильных устройств невозможен. Пожалуйста, используйте компьютер.</p>
+  <span *ngIf="checkDesktop" class="functionalModule">
     <span [ngClass]="{'disabled': currentProjectId!==undefined}" *ngIf="accountData!==undefined" class="chooseProjectSpan">
-      <button (click)="openProject(index)" *ngFor="let projectData of accountData.projects;let index=index"
+      <span *ngFor="let projectData of accountData.projects;let index=index"
         class="projectCard">
-        <span class="mainProjectInformation">
+        <button (click)="openProject(index)" class="mainProjectInformation">
           <h3 class="projectTitle">{{projectData.name}}</h3>
           <div class="projectSchem">
             <div [style.grid-area]="roomData.gridArea" *ngFor="let roomData of projectData.rooms" class="room">
             </div>
           </div>
-        </span>
+        </button>
         <button class="deleteProjectBtn" (click)="deleteProject(index)">
           <img src="/assets/images/deleteIcon.svg" alt="">
         </button>
-      </button>
-      <button (click)="openAddModule()" class="addProjectCard projectCard">
+      </span>
+      <button style="cursor: pointer;" (click)="openAddModule()" class="addProjectCard projectCard">
         <h3>Создать</h3>
         <img src="/assets/images/addIcon.svg" alt="">
       </button>
@@ -37,12 +37,12 @@
       <img loading="lazy" src="/assets/images/addIcon.svg" alt="">
     </button>
     <span class="addModuleFormContent">
-      <h2 class="addModuleTitle">Название плана</h2>
+      <h2 class="addModuleTitle">Название дома</h2>
       <span class="addModuleInputSpan">
         <label class="inputLabel" for="name">Название</label>
         <input formControlName="name" class="addModuleInput" id="name" type="text">
       </span>
-      <button [disabled]="!projectNameForm.valid" class="submitAddModuleFormBtn" type="submit">Continue</button>
+      <button [disabled]="!projectNameForm.valid" class="submitAddModuleFormBtn" type="submit">Продолжить</button>
     </span>
   </form>
 </span>

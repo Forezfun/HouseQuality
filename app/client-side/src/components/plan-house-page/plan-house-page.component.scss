@@ -41,7 +41,7 @@ app-plan-house {
 .chooseProjectSpan {
     width: calc(100% - 60px);
     z-index: 0;
-    gap: 10px;
+    gap: 30px;
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
@@ -64,11 +64,15 @@ app-plan-house {
     flex-direction: column;
     gap: 10px;
     border-radius: 10px;
-    border: none;
-    box-shadow: 0 0 10px 0 white;
+    border: 1px solid rgba($lightGreen, 0.3);
     background-color: #000;
-    cursor: pointer;
     overflow: hidden;
+    transition: transform 0.2s ease-in-out;
+    padding: 3px;
+
+    &:hover {
+        transform: translateY(-5px);
+    }
 
     @media (max-width:1024px) {
         width: clamp(450px, 70%, 700px);
@@ -89,8 +93,12 @@ app-plan-house {
     display: flex;
     height: 90%;
     width: 100%;
+    z-index: 3;
     flex-direction: column;
     align-items: center;
+    background: none;
+    border: none;
+    cursor: pointer;
 }
 
 .addProjectCard {
@@ -141,6 +149,7 @@ app-plan-house {
     align-items: flex-start;
     justify-items: center;
     width: 90vw;
+
     @media (max-width:768px) {
         width: calc(100vw - 10px);
     }
@@ -206,7 +215,7 @@ app-plan-house {
 .submitAddModuleFormBtn {
     background-color: $lightGreen;
     color: white;
-    border-radius: 15px;
+    border-radius: 10px;
     padding: 15px;
     width: 100%;
     border: none;

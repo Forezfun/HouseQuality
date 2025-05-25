@@ -50,7 +50,7 @@ export class PlanHousePageComponent implements AfterViewInit, OnInit, AfterViewC
     private projectService: ProjectService,
     private notification: NotificationService,
     private location: Location
-  ) {}
+  ) { }
 
   /** Флаг, чтобы комната не открывалась повторно */
   private hasRoomIdBeenProcessed = false;
@@ -63,6 +63,9 @@ export class PlanHousePageComponent implements AfterViewInit, OnInit, AfterViewC
 
   /** Данные аккаунта пользователя с массивом проектов */
   protected accountData!: accountFullData & { projects: projectServerInformation[] };
+
+  /** Проверка, является ли текущее устройство десктопом */
+  protected checkDesktop = checkDesktop();
 
   /** Индекс текущего выбранного проекта */
   protected currentProjectId: number | undefined = undefined;
@@ -120,8 +123,10 @@ export class PlanHousePageComponent implements AfterViewInit, OnInit, AfterViewC
       this.route.paramMap.subscribe(params => {
         if (params.get('planId') === null) return;
         const PLAN_ID = parseInt(params.get('planId')!);
-        if (this.accountData.projects.length >= PLAN_ID && PLAN_ID >= 0) {
+        if (this.accountData.projects.length >= PLAN_ID && PLAN_ID >= 0 && this.accountData.projects[PLAN_ID] !== undefined) {
           this.currentProjectId = PLAN_ID;
+        } else {
+          this.router.navigateByUrl('/plan')
         }
       });
     } catch (error) {
@@ -185,8 +190,6 @@ export class PlanHousePageComponent implements AfterViewInit, OnInit, AfterViewC
     this.accountData.projects.splice(indexProject, 1);
   }
 
-  /** Проверка, является ли текущее устройство десктопом */
-  protected checkDesktop = checkDesktop;
 
   /**
    * Возвращает текущую выбранную комнату в планировке.

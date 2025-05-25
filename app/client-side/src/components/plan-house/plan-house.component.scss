@@ -213,12 +213,12 @@ app-scene {
 }
 
 .deleteItemAddModuleBtn {
-    width: 20%;
     height: 50px;
+    aspect-ratio: 1;
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 15px;
+    border-radius: 10px;
     background-color: $lightGreen;
     border: none;
     cursor: pointer;
