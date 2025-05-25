@@ -81,6 +81,7 @@ ROUTER.get('/', async (request, result) => {
 
         result.json(PROCCESSED_PUBLICATIONS);
     } catch (error) {
+        console.log(error)
         result.status(500).json({ message: error.message });
     }
 });
