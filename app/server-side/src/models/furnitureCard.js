@@ -76,8 +76,10 @@ const FURNITURE_CARD_SCHEM = new MONGOOSE.Schema({
   shops: [{ cost: Number, url: String }],
   authorId: String,
   proportions: PROPORTIONS_DATA_SCHEM,
-  additionalData: { type: MONGOOSE.Schema.Types.Mixed }
+  additionalData: {type: MONGOOSE.Schema.Types.Mixed}
 });
+
+
 
 const FURNITURE_CARD = MONGOOSE.model('FurnitureCard', FURNITURE_CARD_SCHEM);
 

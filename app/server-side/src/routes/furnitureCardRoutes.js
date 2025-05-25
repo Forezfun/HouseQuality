@@ -50,16 +50,11 @@ ROUTER.post('/', async (request, result) => {
             shops: request.body.shops,
             authorId: ACCOUNT_ID,
             proportions: request.body.proportions,
-            additionalData: {}
+            additionalData: request.body.additionalData || {}
         })
-        request.body.colors.forEach(color => { FURNITURE_CARD_ITEM.colors.push({ color: color.color, idImages: '' }) })
-        if (request.body.additionalData !== undefined) {
-            const ADDITIONAL_DATA = request.body.additionalData;
 
-            Object.keys(ADDITIONAL_DATA).forEach(propertyKey => {
-                FURNITURE_CARD_ITEM.additionalData[propertyKey] = ADDITIONAL_DATA[propertyKey];
-            });
-        }
+        request.body.colors.forEach(color => { FURNITURE_CARD_ITEM.colors.push({ color: color.color, idImages: '' }) })
+
         await FURNITURE_CARD_ITEM.save()
         result.status(201).json({ furnitureData: FURNITURE_CARD_ITEM })
     } catch (error) {
@@ -101,7 +96,6 @@ ROUTER.put('/', async (request, result) => {
         FURNITURE_CARD_ITEM.proportions = request.body.proportions,
         FURNITURE_CARD_ITEM.colors = request.body.colors.map(color => { return ({ color: color.color, idImages: '' }) })
         FURNITURE_CARD_ITEM.shops = request.body.shops;
-        FURNITURE_CARD_ITEM.additionalData = {}
 
         if (request.body.additionalData !== undefined) {
             const ADDITIONAL_DATA = request.body.additionalData;
@@ -212,7 +206,7 @@ ROUTER.get('/', async (request, result) => {
             shops: FURNITURE_CARD_ITEM.shops,
             authorId: FURNITURE_CARD_ITEM.authorId,
             proportions: FURNITURE_CARD_ITEM.proportions,
-            additionalData: FURNITURE_CARD_ITEM.additionalData
+            additionalData: FURNITURE_CARD_ITEM.additionalData || {}
         }
         result.status(201).json({ furnitureCard: PROCESSED_FURNITURE_ITEM, authorMatched: AUTHOR_MATCHED });
     } catch (error) {

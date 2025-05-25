@@ -75,7 +75,7 @@ ROUTER.get('/', async (request, result) => {
                 cost: COST,
                 colorRequest: COLOR_REQUEST,
                 id: furnitureData._id,
-                category: furnitureData.additionalData.category
+                category: (furnitureData.additionalData || {}).category
             };
         });
 
