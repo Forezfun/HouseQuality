@@ -199,7 +199,7 @@
                 </tr>
                         <tr>
                             <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="30" class="link-to-prism">src/services/upload.service.ts:30</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="31" class="link-to-prism">src/services/upload.service.ts:31</a></div>
                             </td>
                         </tr>
 
@@ -716,7 +716,7 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="30" class="link-to-prism">src/services/upload.service.ts:30</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="31" class="link-to-prism">src/services/upload.service.ts:31</a></div>
                         </td>
                     </tr>
 
@@ -742,7 +742,7 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="29" class="link-to-prism">src/services/upload.service.ts:29</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="30" class="link-to-prism">src/services/upload.service.ts:30</a></div>
                         </td>
                     </tr>
 
@@ -769,7 +769,7 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="28" class="link-to-prism">src/services/upload.service.ts:28</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="29" class="link-to-prism">src/services/upload.service.ts:29</a></div>
                         </td>
                     </tr>
 
@@ -791,6 +791,7 @@ import { FurnitureCardControlService } from &#x27;./furniture-card-control.servi
 import { ServerImageControlService } from &#x27;./server-image-control.service&#x27;;
 import { AccountCookieService } from &#x27;./account-cookie.service&#x27;;
 import { NotificationService } from &#x27;./notification.service&#x27;;
+import { UploadOverlayComponent } from &#x27;../components/upload-overlay/upload-overlay.component&#x27;;
 
 type uploadStatus &#x3D; &#x27;uploading&#x27; | &#x27;success&#x27; | &#x27;error&#x27;;
 export type uploadType &#x3D; &#x27;create&#x27; | &#x27;update&#x27;;
@@ -832,8 +833,7 @@ export class UploadService {
 
     this.uppy.on(&#x27;upload-progress&#x27;, (file, progress) &#x3D;&gt; {
       if (file &#x3D;&#x3D;&#x3D; undefined || file.meta.name &#x3D;&#x3D;&#x3D; undefined) return;
-
-      const NAME &#x3D; file.data instanceof File ? file.data.name : &#x27;file&#x27;
+      const NAME &#x3D; file.data instanceof File ? file.data.name : &#x27;file&#x27;;
       this.updateUpload(file.id, NAME, file.progress.percentage ?? 50, &#x27;uploading&#x27;);
     });
 

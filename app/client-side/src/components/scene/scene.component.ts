@@ -182,10 +182,8 @@ export class SceneComponent implements AfterViewInit, OnChanges {
     if (!JWT) return
     try {
       if (saveRoom) this.showLoader()
-      console.log(furnitureCardId)
       const PROPORTIONS = (await this.furnitureCardService.GETfurnitureCard(furnitureCardId)).furnitureCard.proportions as modelInterface
       const MODEL = await this.furnitureModelService.GETfurnitureModel(JWT, furnitureCardId, controller)
-      console.log(MODEL.type)
       await this.loadFurnitureModel(MODEL, PROPORTIONS, furnitureCardId, saveRoom, moveData)
     } catch (error) {
       this.notification.setError('Ошибка загрузки модели', 5000)

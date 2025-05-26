@@ -35,7 +35,6 @@ async function putCachedModel(furnitureCardId, versionModel, blob) {
     lastAccessed: Date.now()
   });
   console.log('[SW] Модель закеширована:', furnitureCardId);
-  console.log('[SW] Mime-type модели:', blob.type)
   await enforceCacheLimit();
 }
 

@@ -43,7 +43,6 @@ ROUTER.use(async (request, result, next) => {
             return;
         }
         if (request.method == 'POST') {
-            console.log('Пропуск . загрузка модели...')
             next();
             return;
         }

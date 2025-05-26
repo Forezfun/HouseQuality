@@ -170,7 +170,7 @@
                         <ul class="index-list">
                             <li>
                                     <span class="modifier">Private</span>
-                                <a href="#clearError" >clearError</a>
+                                <a href="#clearNotification" >clearNotification</a>
                             </li>
                             <li>
                                 <a href="#setError" >setError</a>
@@ -200,18 +200,18 @@
         <tbody>
             <tr>
                 <td class="col-md-4">
-                    <a name="clearError"></a>
+                    <a name="clearNotification"></a>
                     <span class="name">
                             <span class="modifier">Private</span>
-                        <span ><b>clearError</b></span>
-                        <a href="#clearError"><span class="icon ion-ios-link"></span></a>
+                        <span ><b>clearNotification</b></span>
+                        <a href="#clearNotification"><span class="icon ion-ios-link"></span></a>
                     </span>
                 </td>
             </tr>
             <tr>
                 <td class="col-md-4">
                         <span class="modifier-icon icon ion-ios-reset"></span>
-                    <code>clearError()</code>
+                    <code>clearNotification()</code>
                 </td>
             </tr>
 
@@ -591,7 +591,7 @@ export class NotificationService {
    */
   setError(message: string, delay: number): void {
     this.errorSubject.next(message);
-    setTimeout(() &#x3D;&gt; this.clearError(), delay);
+    setTimeout(() &#x3D;&gt; this.clearNotification(), delay);
   }
 
   /**
@@ -601,14 +601,14 @@ export class NotificationService {
    */
   setSuccess(message: string, delay: number): void {
     this.successSubject.next(message);
-    setTimeout(() &#x3D;&gt; this.clearError(), delay);
+    setTimeout(() &#x3D;&gt; this.clearNotification(), delay);
   }
 
   /**
    * Очищает сообщения об ошибках и успехах
    * (устанавливает значения в пустую строку)
    */
-  private clearError(): void {
+  private clearNotification(): void {
     this.errorSubject.next(&#x27;&#x27;);
     this.successSubject.next(&#x27;&#x27;);
   }

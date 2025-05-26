@@ -122,6 +122,12 @@
 
 
 
+    <p class="comment">
+        <h3>Implements</h3>
+    </p>
+    <p class="comment">
+                <code>OnInit</code>
+    </p>
 
 
 <section data-compodoc="block-metadata">
@@ -154,7 +160,6 @@
                 <td class="col-md-3">imports</td>
                 <td class="col-md-9">
                             <code>NgFor</code>
-                            <code>AsyncPipe</code>
                 </td>
             </tr>
 
@@ -203,6 +208,14 @@
                             </li>
                             <li>
                                     <span class="modifier">Public</span>
+                                <a href="#displayUploads" >displayUploads</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Protected</span>
+                                <a href="#hoverMap" >hoverMap</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
                                 <a href="#uploadService" >uploadService</a>
                             </li>
                         </ul>
@@ -219,7 +232,26 @@
                         <ul class="index-list">
                             <li>
                                     <span class="modifier">Protected</span>
+                                <a href="#calculatePercentage" >calculatePercentage</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Protected</span>
                                 <a href="#cancelUpload" >cancelUpload</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#isHovered" >isHovered</a>
+                            </li>
+                            <li>
+                                <a href="#ngOnInit" >ngOnInit</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Protected</span>
+                                <a href="#onMouseEnter" >onMouseEnter</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Protected</span>
+                                <a href="#onMouseLeave" >onMouseLeave</a>
                             </li>
                             <li>
                                     <span class="modifier">Protected</span>
@@ -299,6 +331,77 @@
         <tbody>
             <tr>
                 <td class="col-md-4">
+                    <a name="calculatePercentage"></a>
+                    <span class="name">
+                            <span class="modifier">Protected</span>
+                        <span ><b>calculatePercentage</b></span>
+                        <a href="#calculatePercentage"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>calculatePercentage(percentage: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="42"
+                                    class="link-to-prism">src/components/upload-overlay/upload-overlay.component.ts:42</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Вычисление длины окружности для прогресса</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>percentage</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
                     <a name="cancelUpload"></a>
                     <span class="name">
                             <span class="modifier">Protected</span>
@@ -317,14 +420,266 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="18"
-                                    class="link-to-prism">src/components/upload-overlay/upload-overlay.component.ts:18</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="47"
+                                    class="link-to-prism">src/components/upload-overlay/upload-overlay.component.ts:47</a></div>
                         </td>
                     </tr>
 
 
             <tr>
                 <td class="col-md-4">
+                        <div class="io-description"><p>Отмена загрузки</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>id</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="isHovered"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>isHovered</b></span>
+                        <a href="#isHovered"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>isHovered(id: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="68"
+                                    class="link-to-prism">src/components/upload-overlay/upload-overlay.component.ts:68</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Проверка на hover</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>id</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="ngOnInit"></a>
+                    <span class="name">
+                        <span ><b>ngOnInit</b></span>
+                        <a href="#ngOnInit"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>ngOnInit()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="28"
+                                    class="link-to-prism">src/components/upload-overlay/upload-overlay.component.ts:28</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="onMouseEnter"></a>
+                    <span class="name">
+                            <span class="modifier">Protected</span>
+                        <span ><b>onMouseEnter</b></span>
+                        <a href="#onMouseEnter"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>onMouseEnter(id: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="58"
+                                    class="link-to-prism">src/components/upload-overlay/upload-overlay.component.ts:58</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Указание, что у файла hover</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>id</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="onMouseLeave"></a>
+                    <span class="name">
+                            <span class="modifier">Protected</span>
+                        <span ><b>onMouseLeave</b></span>
+                        <a href="#onMouseLeave"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>onMouseLeave(id: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="63"
+                                    class="link-to-prism">src/components/upload-overlay/upload-overlay.component.ts:63</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Указание, что у файла hover</p>
+</div>
 
                             <div class="io-description">
                                 <b>Parameters :</b>
@@ -386,14 +741,16 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="22"
-                                    class="link-to-prism">src/components/upload-overlay/upload-overlay.component.ts:22</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="53"
+                                    class="link-to-prism">src/components/upload-overlay/upload-overlay.component.ts:53</a></div>
                         </td>
                     </tr>
 
 
             <tr>
                 <td class="col-md-4">
+                        <div class="io-description"><p>Удаление файла из очереди</p>
+</div>
 
                             <div class="io-description">
                                 <b>Parameters :</b>
@@ -458,10 +815,16 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="25" class="link-to-prism">src/components/upload-overlay/upload-overlay.component.ts:25</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="20" class="link-to-prism">src/components/upload-overlay/upload-overlay.component.ts:20</a></div>
                         </td>
                     </tr>
 
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Проверка десктоп ли клиент</p>
+</div>
+                </td>
+            </tr>
 
         </tbody>
     </table>
@@ -484,10 +847,86 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="16" class="link-to-prism">src/components/upload-overlay/upload-overlay.component.ts:16</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="17" class="link-to-prism">src/components/upload-overlay/upload-overlay.component.ts:17</a></div>
                         </td>
                     </tr>
 
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Максимальная длина прогресс бара</p>
+</div>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="displayUploads"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>displayUploads</b></span>
+                        <a href="#displayUploads"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="../interfaces/UploadEntry.html" target="_self" >UploadEntry[]</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>[]</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="23" class="link-to-prism">src/components/upload-overlay/upload-overlay.component.ts:23</a></div>
+                        </td>
+                    </tr>
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Список загруженных файлов с учетом остановки визуального изменения прогресса при наведении</p>
+</div>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="hoverMap"></a>
+                    <span class="name">
+                            <span class="modifier">Protected</span>
+                        <span ><b>hoverMap</b></span>
+                        <a href="#hoverMap"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>new Map&lt;string, boolean&gt;()</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="26" class="link-to-prism">src/components/upload-overlay/upload-overlay.component.ts:26</a></div>
+                        </td>
+                    </tr>
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Хеш мапа &lt;Id загружаемого файла:isHover&gt;</p>
+</div>
+                </td>
+            </tr>
 
         </tbody>
     </table>
@@ -524,58 +963,129 @@
 
 
     <div class="tab-pane fade  tab-source-code" id="source">
-        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { AsyncPipe, NgFor, NgIf } from &#x27;@angular/common&#x27;;
-import { Component } from &#x27;@angular/core&#x27;;
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { AsyncPipe, NgFor } from &#x27;@angular/common&#x27;;
+import { AfterViewChecked, ChangeDetectionStrategy, Component, OnInit } from &#x27;@angular/core&#x27;;
 import { UploadEntry, UploadService } from &#x27;../../services/upload.service&#x27;;
 import { checkDesktop } from &#x27;../../usable/reusable-functions.used&#x27;;
 
 @Component({
   selector: &#x27;app-upload-overlay&#x27;,
-  imports: [NgFor, AsyncPipe],
-  standalone:true,
+  standalone: true,
+  imports: [NgFor],
   templateUrl: &#x27;./upload-overlay.component.html&#x27;,
   styleUrl: &#x27;./upload-overlay.component.scss&#x27;
 })
-export class UploadOverlayComponent {
+export class UploadOverlayComponent implements OnInit {
   constructor(public uploadService: UploadService) { }
-  
+
+  /**Максимальная длина прогресс бара*/
   protected circumference &#x3D; 2 * Math.PI * 18;
 
+  /**Проверка десктоп ли клиент*/
+  protected checkDesktop &#x3D; checkDesktop;
+
+  /**Список загруженных файлов с учетом остановки визуального изменения прогресса при наведении*/
+  public displayUploads: UploadEntry[] &#x3D; [];
+
+  /**Хеш мапа &lt;Id загружаемого файла:isHover&gt; */
+  protected hoverMap &#x3D; new Map&lt;string, boolean&gt;();
+
+  ngOnInit() {
+    this.uploadService.uploads$.subscribe(files &#x3D;&gt; {
+
+      this.displayUploads &#x3D; files.map(file &#x3D;&gt; {
+        if (this.isHovered(file.id)) {
+          const old &#x3D; this.displayUploads.find(f &#x3D;&gt; f.id &#x3D;&#x3D;&#x3D; file.id);
+          return old ?? file;
+        }
+        return file;
+      });
+    });
+  }
+
+  /**Вычисление длины окружности для прогресса*/
+  protected calculatePercentage(percentage: number) {
+    return this.circumference - (percentage / 100) * this.circumference
+  }
+
+  /**Отмена загрузки*/
   protected cancelUpload(id: string) {
-    this.uploadService.cancelUpload(id)
-    this.uploadService.removeFileFromQueue(id)
+    this.uploadService.cancelUpload(id);
+    this.uploadService.removeFileFromQueue(id);
   }
+
+  /**Удаление файла из очереди*/
   protected removeFromQueue(id: string) {
-    this.uploadService.removeFileFromQueue(id)
+    this.uploadService.removeFileFromQueue(id);
   }
-  protected checkDesktop &#x3D; checkDesktop
+
+  /**Указание, что у файла hover*/
+  protected onMouseEnter(id: string) {
+    this.hoverMap.set(id, true);
+  }
+
+  /**Указание, что у файла hover*/
+  protected onMouseLeave(id: string) {
+    this.hoverMap.set(id, false);
+  }
+
+  /**Проверка на hover*/
+  public isHovered(id: string): boolean {
+    return this.hoverMap.get(id) || false;
+  }
 }
 </code></pre>
     </div>
 
     <div class="tab-pane fade " id="templateData">
         <pre class="line-numbers"><code class="language-html">&lt;span class&#x3D;&quot;upload-overlay&quot;&gt;
-  &lt;div  [style.display]&#x3D;&quot;checkDesktop() || file.status !&#x3D;&#x3D; &#x27;success&#x27;?&#x27;flex&#x27;:&#x27;none&#x27;&quot; *ngFor&#x3D;&quot;let file of uploadService.uploads$ | async&quot; class&#x3D;&quot;upload-item&quot;&gt;
-      &lt;div class&#x3D;&quot;file-info&quot;&gt;
-        &lt;div class&#x3D;&quot;file-name&quot;&gt;{{ file.name }}&lt;/div&gt;
-        &lt;div class&#x3D;&quot;file-status&quot;&gt;{{ file.status }}&lt;/div&gt;
-      &lt;/div&gt;
+  &lt;div
+    *ngFor&#x3D;&quot;let file of displayUploads&quot;
+    [style.display]&#x3D;&quot;checkDesktop() || file.status !&#x3D;&#x3D; &#x27;success&#x27; ? &#x27;flex&#x27; : &#x27;none&#x27;&quot;
+    class&#x3D;&quot;upload-item&quot;
+    (mouseenter)&#x3D;&quot;onMouseEnter(file.id)&quot;
+    (mouseleave)&#x3D;&quot;onMouseLeave(file.id)&quot;
+  &gt;
+    &lt;div class&#x3D;&quot;file-info&quot;&gt;
+      &lt;div class&#x3D;&quot;file-name&quot;&gt;{{ file.name }}&lt;/div&gt;
+      &lt;div class&#x3D;&quot;file-status&quot;&gt;{{ file.status }}&lt;/div&gt;
+    &lt;/div&gt;
 
-      &lt;div class&#x3D;&quot;progress-wrapper&quot;&gt;
-        &lt;svg class&#x3D;&quot;progress-circle&quot; width&#x3D;&quot;40&quot; height&#x3D;&quot;40&quot; viewBox&#x3D;&quot;0 0 40 40&quot;&gt;
-          &lt;circle class&#x3D;&quot;progress-bg&quot; cx&#x3D;&quot;20&quot; cy&#x3D;&quot;20&quot; r&#x3D;&quot;18&quot; stroke-width&#x3D;&quot;4&quot; fill&#x3D;&quot;none&quot;&gt;&lt;/circle&gt;
-          &lt;circle class&#x3D;&quot;progress-bar&quot; [style.stroke]&#x3D;&quot;file.status &#x3D;&#x3D; &#x27;error&#x27;?&#x27;red&#x27;:&#x27;#344E41&#x27;&quot; cx&#x3D;&quot;20&quot; cy&#x3D;&quot;20&quot; r&#x3D;&quot;18&quot; stroke-width&#x3D;&quot;4&quot; fill&#x3D;&quot;none&quot;
-            [attr.stroke-dasharray]&#x3D;&quot;circumference&quot;
-            [attr.stroke-dashoffset]&#x3D;&quot;circumference - (file.progress / 100) * circumference&quot;&gt;&lt;/circle&gt;
-        &lt;/svg&gt;
+    &lt;div class&#x3D;&quot;progress-wrapper&quot;&gt;
+      &lt;svg class&#x3D;&quot;progress-circle&quot; width&#x3D;&quot;40&quot; height&#x3D;&quot;40&quot; viewBox&#x3D;&quot;0 0 40 40&quot;&gt;
+        &lt;circle
+          class&#x3D;&quot;progress-bg&quot;
+          cx&#x3D;&quot;20&quot;
+          cy&#x3D;&quot;20&quot;
+          r&#x3D;&quot;18&quot;
+          stroke-width&#x3D;&quot;4&quot;
+          fill&#x3D;&quot;none&quot;
+        &gt;&lt;/circle&gt;
+        &lt;circle
+          class&#x3D;&quot;progress-bar&quot;
+          [style.stroke]&#x3D;&quot;file.status &#x3D;&#x3D;&#x3D; &#x27;error&#x27; ? &#x27;red&#x27; : &#x27;#344E41&#x27;&quot;
+          cx&#x3D;&quot;20&quot;
+          cy&#x3D;&quot;20&quot;
+          r&#x3D;&quot;18&quot;
+          stroke-width&#x3D;&quot;4&quot;
+          fill&#x3D;&quot;none&quot;
+          [attr.stroke-dasharray]&#x3D;&quot;circumference&quot;
+          [attr.stroke-dashoffset]&#x3D;&quot;calculatePercentage(file.progress)&quot;
+        &gt;&lt;/circle&gt;
+      &lt;/svg&gt;
 
-        &lt;button [style.opacity]&#x3D;&quot;checkDesktop()?0:1&quot; class&#x3D;&quot;cancel-btn&quot; (click)&#x3D;&quot;file.status &#x3D;&#x3D;&#x3D; &#x27;uploading&#x27;?cancelUpload(file.id):removeFromQueue(file.id)&quot;
-          [title]&#x3D;&quot;file.status &#x3D;&#x3D;&#x3D; &#x27;uploading&#x27;?&#x27;Отменить загрузку&#x27;:&#x27;Убрать из списка&#x27;&quot;&gt;
-          &lt;img src&#x3D;&quot;/assets/images/addIcon.svg&quot; alt&#x3D;&quot;Cancel&quot; /&gt;
-        &lt;/button&gt;
-      &lt;/div&gt;
+      &lt;button
+        [style.opacity]&#x3D;&quot;checkDesktop() ? 0 : 1&quot;
+        class&#x3D;&quot;cancel-btn&quot;
+        (click)&#x3D;&quot;file.status &#x3D;&#x3D;&#x3D; &#x27;uploading&#x27; ? cancelUpload(file.id) : removeFromQueue(file.id)&quot;
+        [title]&#x3D;&quot;file.status &#x3D;&#x3D;&#x3D; &#x27;uploading&#x27; ? &#x27;Отменить загрузку&#x27; : &#x27;Убрать из списка&#x27;&quot;
+      &gt;
+        &lt;img src&#x3D;&quot;/assets/images/addIcon.svg&quot; alt&#x3D;&quot;Cancel&quot; /&gt;
+      &lt;/button&gt;
+    &lt;/div&gt;
   &lt;/div&gt;
-&lt;/span&gt;</code></pre>
+&lt;/span&gt;
+</code></pre>
     </div>
 
 
@@ -604,7 +1114,7 @@ export class UploadOverlayComponent {
 <script src="../js/libs/htmlparser.js"></script>
 <script src="../js/libs/deep-iterator.js"></script>
 <script>
-        var COMPONENT_TEMPLATE = '<div><span class="upload-overlay">  <div  [style.display]="checkDesktop() || file.status !== \'success\'?\'flex\':\'none\'" *ngFor="let file of uploadService.uploads$ | async" class="upload-item">      <div class="file-info">        <div class="file-name">{{ file.name }}</div>        <div class="file-status">{{ file.status }}</div>      </div>      <div class="progress-wrapper">        <svg class="progress-circle" width="40" height="40" viewBox="0 0 40 40">          <circle class="progress-bg" cx="20" cy="20" r="18" stroke-width="4" fill="none"></circle>          <circle class="progress-bar" [style.stroke]="file.status == \'error\'?\'red\':\'#344E41\'" cx="20" cy="20" r="18" stroke-width="4" fill="none"            [attr.stroke-dasharray]="circumference"            [attr.stroke-dashoffset]="circumference - (file.progress / 100) * circumference"></circle>        </svg>        <button [style.opacity]="checkDesktop()?0:1" class="cancel-btn" (click)="file.status === \'uploading\'?cancelUpload(file.id):removeFromQueue(file.id)"          [title]="file.status === \'uploading\'?\'Отменить загрузку\':\'Убрать из списка\'">          <img src="/assets/images/addIcon.svg" alt="Cancel" />        </button>      </div>  </div></span></div>'
+        var COMPONENT_TEMPLATE = '<div><span class="upload-overlay">  <div    *ngFor="let file of displayUploads"    [style.display]="checkDesktop() || file.status !== \'success\' ? \'flex\' : \'none\'"    class="upload-item"    (mouseenter)="onMouseEnter(file.id)"    (mouseleave)="onMouseLeave(file.id)"  >    <div class="file-info">      <div class="file-name">{{ file.name }}</div>      <div class="file-status">{{ file.status }}</div>    </div>    <div class="progress-wrapper">      <svg class="progress-circle" width="40" height="40" viewBox="0 0 40 40">        <circle          class="progress-bg"          cx="20"          cy="20"          r="18"          stroke-width="4"          fill="none"        ></circle>        <circle          class="progress-bar"          [style.stroke]="file.status === \'error\' ? \'red\' : \'#344E41\'"          cx="20"          cy="20"          r="18"          stroke-width="4"          fill="none"          [attr.stroke-dasharray]="circumference"          [attr.stroke-dashoffset]="calculatePercentage(file.progress)"        ></circle>      </svg>      <button        [style.opacity]="checkDesktop() ? 0 : 1"        class="cancel-btn"        (click)="file.status === \'uploading\' ? cancelUpload(file.id) : removeFromQueue(file.id)"        [title]="file.status === \'uploading\' ? \'Отменить загрузку\' : \'Убрать из списка\'"      >        <img src="/assets/images/addIcon.svg" alt="Cancel" />      </button>    </div>  </div></span></div>'
     var COMPONENTS = [{'name': 'AccountPageComponent', 'selector': 'app-account-page'},{'name': 'AppComponent', 'selector': 'app-root'},{'name': 'CreateFurnitureComponent', 'selector': 'app-create-furniture'},{'name': 'CreateFurniturePageComponent', 'selector': 'app-create-furniture-page'},{'name': 'FinderComponent', 'selector': 'app-finder'},{'name': 'ImageSliderComponent', 'selector': 'app-image-slider'},{'name': 'LoginPageComponent', 'selector': 'app-login-page'},{'name': 'MainPageComponent', 'selector': 'app-main-page'},{'name': 'NavigationPanelComponent', 'selector': 'app-navigation-panel'},{'name': 'NotificationComponent', 'selector': 'app-notification'},{'name': 'PlanHouseComponent', 'selector': 'app-plan-house'},{'name': 'PlanHousePageComponent', 'selector': 'app-plan-house-page'},{'name': 'SceneComponent', 'selector': 'app-scene'},{'name': 'ShopPageComponent', 'selector': 'app-shop-page'},{'name': 'UploadOverlayComponent', 'selector': 'app-upload-overlay'},{'name': 'ViewFurnitureComponent', 'selector': 'app-view-furniture'}];
     var DIRECTIVES = [{'name': 'AutoHeightDirective', 'selector': '[appAutoHeight]'}];
     var ACTUAL_COMPONENT = {'name': 'UploadOverlayComponent'};

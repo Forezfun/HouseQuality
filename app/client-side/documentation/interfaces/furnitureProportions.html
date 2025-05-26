@@ -446,7 +446,6 @@ export class FurnitureCardControlService {
         throw new Error(&#x27;Invalid response structure: furnitureCard missing&#x27;);
       }
 
-      // Добавляем полный URL к изображениям
       const transformedFurnitureCard &#x3D; {
         ...response.furnitureCard,
         colors: response.furnitureCard.colors.map(colorData &#x3D;&gt; ({
@@ -464,7 +463,6 @@ export class FurnitureCardControlService {
       };
 
     } catch (error) {
-      console.error(&#x27;Error in GETfurnitureCard:&#x27;, error);
       throw error;
     }
   }

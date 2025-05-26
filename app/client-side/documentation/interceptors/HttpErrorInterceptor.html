@@ -340,9 +340,7 @@ export class HttpErrorInterceptor implements HttpInterceptor {
   intercept(request: HttpRequest&lt;any&gt;, next: HttpHandler): Observable&lt;HttpEvent&lt;any&gt;&gt; {
     return next.handle(request).pipe(
       catchError((error: HttpErrorResponse) &#x3D;&gt; {
-        // Показываем сообщение об ошибке через NotificationService
         this.notification.setError(error.error.message, 5000);
-        // Пробрасываем ошибку дальше
         return throwError(() &#x3D;&gt; error);
       })
     );

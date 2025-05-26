@@ -494,11 +494,11 @@ export class PlanHouseComponent implements AfterViewInit, OnInit {
   /** План дома */
   planHouse!: roomData[];
 
-  @ViewChild(&#x27;scene&#x27;) 
+  @ViewChild(&#x27;scene&#x27;)
   /** Компонент сцены */
   sceneComponent!: SceneComponent;
 
-  @Output() 
+  @Output()
   /** Событие инициализации */
   initialized &#x3D; new EventEmitter&lt;void&gt;();
 
@@ -822,9 +822,10 @@ export class PlanHouseComponent implements AfterViewInit, OnInit {
   }, 100)
   @HostListener(&#x27;document:keydown.Escape&#x27;)
   private escapeDraggingMode() {
+    const DRAGGED_ELEMENT &#x3D; this.elementRef.nativeElement.querySelector(&#x27;[style*&#x3D;&quot;cursor: grabbing&quot;]&#x27;);
+    if (this.currentIdClickedRoom !&#x3D;&#x3D; undefined &amp;&amp; this.isAreaOccupied(DRAGGED_ELEMENT.style.gridArea, this.currentIdClickedRoom)) return
     this.isDragging &#x3D; false
     this.currentIdClickedRoom &#x3D; undefined
-    const DRAGGED_ELEMENT &#x3D; this.elementRef.nativeElement.querySelector(&#x27;[style*&#x3D;&quot;cursor: grabbing&quot;]&#x27;);
     if (DRAGGED_ELEMENT) {
       this.renderer.removeStyle(DRAGGED_ELEMENT, &#x27;background-color&#x27;)
       this.renderer.removeStyle(DRAGGED_ELEMENT, &#x27;cursor&#x27;);
@@ -869,6 +870,8 @@ export class PlanHouseComponent implements AfterViewInit, OnInit {
       this.accountCookieService.setGuideRule()
       if (this.sceneOpenToggle &#x3D;&#x3D;&#x3D; true &amp;&amp; this.currentViewRoom !&#x3D;&#x3D; undefined) {
         this.guideTemplate &#x3D; this.roomGuideTemplate
+      } else {
+        this.guideTemplate &#x3D; this.roomsGuideTemplate1
       }
     } else {
       this.accountCookieService.deleteGuideRule()
@@ -889,8 +892,8 @@ export class PlanHouseComponent implements AfterViewInit, OnInit {
     const NEW_URL &#x3D; this.location.path() + &#x27;/&#x27; + this.currentViewRoom
     this.location.replaceState(NEW_URL)
     this.sceneOpenToggle &#x3D; true
-    
-    if(this.sceneComponent.hasBeenChanged)this.sceneComponent.loadRoom()
+
+    if (this.sceneComponent.hasBeenChanged) this.sceneComponent.loadRoom()
   }
   protected closeScene() {
     const NEW_URL &#x3D; this.location.path().split(&#x27;/&#x27;).slice(0, -1).join(&#x27;/&#x27;)
@@ -971,7 +974,7 @@ export class PlanHouseComponent implements AfterViewInit, OnInit {
         length: length,
         name: this.planHouse[indexRoom].name
       });
-      this.toggleControls(this.currentIdClickedRoom &#x3D;&#x3D;&#x3D; undefined)
+      this.toggleControls(false)
       this.formElement.classList.add(&#x27;openAddModule&#x27;);
       this.renderer.setStyle(this.toggleModuleButton, &#x27;rotate&#x27;, &#x27;135deg&#x27;);
       return;
@@ -986,6 +989,7 @@ export class PlanHouseComponent implements AfterViewInit, OnInit {
         length: null,
         name: &#x27;&#x27;
       });
+      this.toggleControls(true)
     } else {
       this.formElement.classList.add(&#x27;openAddModule&#x27;);
       this.renderer.setStyle(this.toggleModuleButton, &#x27;rotate&#x27;, &#x27;135deg&#x27;);

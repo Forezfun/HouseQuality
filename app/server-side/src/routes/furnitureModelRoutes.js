@@ -261,7 +261,6 @@ ROUTER.get('/', async (request, result) => {
 
 
         const MIME_TYPE = mime.lookup(FILE_PATH) || 'application/octet-stream'
-        console.log('FURNITURE_MODEL_ITEM.furnitureCardId: ',MIME_TYPE)
 
         result.setHeader('Content-Type', MIME_TYPE);
         result.setHeader('Content-Disposition', `attachment; filename="${FURNITURE_MODEL_ITEM.filename}"`);

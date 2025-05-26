@@ -101,9 +101,7 @@ export class UploadService {
   }
   private getFileExtension(fileName: string): string | null {
     const parts = fileName.split('.');
-    console.log(parts)
     const EXTENSION = parts.length > 1 ? parts.pop()?.toLowerCase() : "obj"
-    console.log(`.${EXTENSION}`)
     return `.${EXTENSION}`
   }
   removeFileFromQueue(fileID: string) {
