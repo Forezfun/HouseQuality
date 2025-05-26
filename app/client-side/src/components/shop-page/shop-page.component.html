@@ -29,9 +29,11 @@
         </span>
         <strong class="paramsChapterTitle">Стоимость</strong>
         <form class="rangeInputsSpan" [formGroup]="costForm">
-            <input [placeholder]="'от '+clientFiltersObject.minCost" formControlName="minCost" type="text" class="rangeInput">
-            <hr>
-            <input [placeholder]="'до '+clientFiltersObject.maxCost" formControlName="maxCost" type="text" class="rangeInput">
+          <input [placeholder]="'от '+clientFiltersObject.minCost" formControlName="minCost" type="text"
+            class="rangeInput">
+          <hr>
+          <input [placeholder]="'до '+clientFiltersObject.maxCost" formControlName="maxCost" type="text"
+            class="rangeInput">
         </form>
         <strong *ngIf="!costForm.valid" class="paramsError">Введите числа</strong>
         <strong class="paramsChapterTitle">Цвет</strong>
@@ -41,16 +43,16 @@
             <img *ngIf="selectedColors.includes(color)" src="/assets/images/cancelIcon.svg" alt="x" srcset="">
           </button>
         </span>
-        <ng-container *ngIf="currentCategoryId!==undefined">
-          <span class="categoryFilter" *ngFor="let filterData of categoryArray[currentCategoryId].filters">
-            <strong class="paramsChapterTitle">{{filterData.name}}</strong>
-            <ng-container *ngTemplateOutlet="
+        <span *ngIf="currentCategoryId!==undefined" class="categoryFilters">
+            <span class="categoryFilter" *ngFor="let filterData of categoryArray[currentCategoryId].filters">
+              <strong class="paramsChapterTitle">{{filterData.name}}</strong>
+              <ng-container *ngTemplateOutlet="
       filterData.type === 'select' ? selectFilter : rangeFilter;
       context: { fieldData: filterData }
     ">
-            </ng-container>
-          </span>
-        </ng-container>
+              </ng-container>
+            </span>
+        </span>
         <button *ngIf="currentCategoryId!==undefined" (click)="requestWithFilters()" class="useFiltersBtn">
           Применить фильтры
         </button>
@@ -61,8 +63,7 @@
           <h2 class="furnitureTitle" title="Название мебели">{{furnitureData.name}}</h2>
           <img loading="lazy" class="furniturePreview" [src]="furnitureData.previewUrl" alt="Превью мебели"
             title="Превью мебели">
-          <a class="furnitureLink"
-            [routerLink]="checkDesktop()?'/shop/'+(categoryName ?? 'all')+'/'+furnitureData.furnitureCardId:'/plan'"
+          <a class="furnitureLink" [routerLink]="'/shop/'+(categoryName ?? 'all')+'/'+furnitureData.furnitureCardId"
             title="Цена мебели">{{furnitureData.cost | costFormat}}</a>
         </div>
         <span *ngIf="getClientFilteredFurnitures().length===0" class="noItemsMsgSpan">

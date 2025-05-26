@@ -263,13 +263,16 @@ export class CreateFurnitureComponent implements OnInit, AfterViewInit {
         cost: this.shopForm.value.cost!,
         url: this.shopForm.value.url!
       };
-      return;
     }
     this.furnitureData.shops.push({
       cost: this.shopForm.value.cost!,
       url: this.shopForm.value.url!
     });
     this.closeAddModule();
+    this.shopForm.patchValue({
+      cost: null,
+      url: null
+    })
   }
 
   /**
@@ -280,6 +283,7 @@ export class CreateFurnitureComponent implements OnInit, AfterViewInit {
       this.furnitureData.shops.splice(this.lastClickedShop, 1);
       this.changeDetectorRef.detectChanges();
       this.lastClickedShop = undefined;
+      this.closeAddModule()
     }
   }
 

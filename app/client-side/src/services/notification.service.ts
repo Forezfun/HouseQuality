@@ -33,7 +33,7 @@ export class NotificationService {
    */
   setError(message: string, delay: number): void {
     this.errorSubject.next(message);
-    setTimeout(() => this.clearError(), delay);
+    setTimeout(() => this.clearNotification(), delay);
   }
 
   /**
@@ -43,14 +43,14 @@ export class NotificationService {
    */
   setSuccess(message: string, delay: number): void {
     this.successSubject.next(message);
-    setTimeout(() => this.clearError(), delay);
+    setTimeout(() => this.clearNotification(), delay);
   }
 
   /**
    * Очищает сообщения об ошибках и успехах
    * (устанавливает значения в пустую строку)
    */
-  private clearError(): void {
+  private clearNotification(): void {
     this.errorSubject.next('');
     this.successSubject.next('');
   }

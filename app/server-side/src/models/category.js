@@ -1,5 +1,3 @@
-
-
 const MONGOOSE = require('mongoose');
 
 /**

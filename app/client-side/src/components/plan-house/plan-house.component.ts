@@ -104,11 +104,11 @@ export class PlanHouseComponent implements AfterViewInit, OnInit {
   /** План дома */
   planHouse!: roomData[];
 
-  @ViewChild('scene') 
+  @ViewChild('scene')
   /** Компонент сцены */
   sceneComponent!: SceneComponent;
 
-  @Output() 
+  @Output()
   /** Событие инициализации */
   initialized = new EventEmitter<void>();
 
@@ -432,9 +432,10 @@ export class PlanHouseComponent implements AfterViewInit, OnInit {
   }, 100)
   @HostListener('document:keydown.Escape')
   private escapeDraggingMode() {
+    const DRAGGED_ELEMENT = this.elementRef.nativeElement.querySelector('[style*="cursor: grabbing"]');
+    if (this.currentIdClickedRoom !== undefined && this.isAreaOccupied(DRAGGED_ELEMENT.style.gridArea, this.currentIdClickedRoom)) return
     this.isDragging = false
     this.currentIdClickedRoom = undefined
-    const DRAGGED_ELEMENT = this.elementRef.nativeElement.querySelector('[style*="cursor: grabbing"]');
     if (DRAGGED_ELEMENT) {
       this.renderer.removeStyle(DRAGGED_ELEMENT, 'background-color')
       this.renderer.removeStyle(DRAGGED_ELEMENT, 'cursor');
@@ -479,6 +480,8 @@ export class PlanHouseComponent implements AfterViewInit, OnInit {
       this.accountCookieService.setGuideRule()
       if (this.sceneOpenToggle === true && this.currentViewRoom !== undefined) {
         this.guideTemplate = this.roomGuideTemplate
+      } else {
+        this.guideTemplate = this.roomsGuideTemplate1
       }
     } else {
       this.accountCookieService.deleteGuideRule()
@@ -499,8 +502,8 @@ export class PlanHouseComponent implements AfterViewInit, OnInit {
     const NEW_URL = this.location.path() + '/' + this.currentViewRoom
     this.location.replaceState(NEW_URL)
     this.sceneOpenToggle = true
-    
-    if(this.sceneComponent.hasBeenChanged)this.sceneComponent.loadRoom()
+
+    if (this.sceneComponent.hasBeenChanged) this.sceneComponent.loadRoom()
   }
   protected closeScene() {
     const NEW_URL = this.location.path().split('/').slice(0, -1).join('/')
@@ -581,7 +584,7 @@ export class PlanHouseComponent implements AfterViewInit, OnInit {
         length: length,
         name: this.planHouse[indexRoom].name
       });
-      this.toggleControls(this.currentIdClickedRoom === undefined)
+      this.toggleControls(false)
       this.formElement.classList.add('openAddModule');
       this.renderer.setStyle(this.toggleModuleButton, 'rotate', '135deg');
       return;
@@ -596,6 +599,7 @@ export class PlanHouseComponent implements AfterViewInit, OnInit {
         length: null,
         name: ''
       });
+      this.toggleControls(true)
     } else {
       this.formElement.classList.add('openAddModule');
       this.renderer.setStyle(this.toggleModuleButton, 'rotate', '135deg');

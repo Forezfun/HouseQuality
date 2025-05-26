@@ -22,6 +22,7 @@ async function getDB() {
 async function getCachedModel(furnitureCardId) {
   const db = await getDB();
   return db.get(MODEL_STORE, furnitureCardId);
+
 }
 
 async function putCachedModel(furnitureCardId, versionModel, blob) {
@@ -34,6 +35,7 @@ async function putCachedModel(furnitureCardId, versionModel, blob) {
     lastAccessed: Date.now()
   });
   console.log('[SW] Модель закеширована:', furnitureCardId);
+  console.log('[SW] Mime-type модели:', blob.type)
   await enforceCacheLimit();
 }
 
@@ -46,7 +48,7 @@ async function enforceCacheLimit() {
 
   if (totalSize <= MAX_CACHE_SIZE) return;
 
-  allItems.sort((a, b) => a.lastAccessed - b.lastAccessed); // старые вперёд
+  allItems.sort((a, b) => a.lastAccessed - b.lastAccessed);
 
   for (const item of allItems) {
     await store.delete(item.furnitureCardId);
@@ -82,12 +84,11 @@ registerRoute(
       const serverVersion = await fetchVersionFromServer(furnitureCardId);
       const cached = await getCachedModel(furnitureCardId);
 
+
       if (cached && cached.versionModel === serverVersion) {
         console.log('[SW] Отдаём модель из кеша:', furnitureCardId);
-        await updateAccessTime(furnitureCardId); // обновить время доступа
-        return new Response(cached.blob, {
-          headers: { 'Content-Type': 'model/obj' }
-        });
+        await updateAccessTime(furnitureCardId);
+        return new Response(cached.blob);
       }
 
       console.log('[SW] Загружаем модель с сервера:', furnitureCardId);
@@ -102,7 +103,7 @@ registerRoute(
       });
     } catch (e) {
       console.error('[SW] Ошибка в обработке модели:', e.message);
-      return fetch(event.request); // fallback
+      return fetch(event.request);
     }
   }
 );

@@ -7,6 +7,7 @@ import { FurnitureCardControlService } from './furniture-card-control.service';
 import { ServerImageControlService } from './server-image-control.service';
 import { AccountCookieService } from './account-cookie.service';
 import { NotificationService } from './notification.service';
+import { UploadOverlayComponent } from '../components/upload-overlay/upload-overlay.component';
 
 type uploadStatus = 'uploading' | 'success' | 'error';
 export type uploadType = 'create' | 'update';
@@ -48,8 +49,7 @@ export class UploadService {
 
     this.uppy.on('upload-progress', (file, progress) => {
       if (file === undefined || file.meta.name === undefined) return;
-
-      const NAME = file.data instanceof File ? file.data.name : 'file'
+      const NAME = file.data instanceof File ? file.data.name : 'file';
       this.updateUpload(file.id, NAME, file.progress.percentage ?? 50, 'uploading');
     });
 
@@ -101,7 +101,9 @@ export class UploadService {
   }
   private getFileExtension(fileName: string): string | null {
     const parts = fileName.split('.');
+    console.log(parts)
     const EXTENSION = parts.length > 1 ? parts.pop()?.toLowerCase() : "obj"
+    console.log(`.${EXTENSION}`)
     return `.${EXTENSION}`
   }
   removeFileFromQueue(fileID: string) {

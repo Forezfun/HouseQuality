@@ -117,11 +117,16 @@ protected selectedColors: string[] = [];
     try {
       this.categoryArray = (await this.categoryService.GETgetAllCategories()).categoryArray;
       this.categoryArray.forEach((categoryData, index) => {
+        console.log(categoryData.name,this.categoryName);
         if (this.categoryName === categoryData.name) {
           this.currentCategoryId = index;
           this.initQueryGroup();
         }
       });
+      console.log(this.currentCategoryId, this.categoryArray);
+      if(this.currentCategoryId===undefined&&this.categoryArray.length>0&&this.categoryName!=='all'){
+        this.router.navigateByUrl('/shop')
+      }
     } catch (error) {
       console.log(error);
     }
@@ -200,9 +205,9 @@ protected selectedColors: string[] = [];
    */
   private processRouteParams() {
     const PARAMS = this.route.snapshot.params;
-
-    this.furnitureCardId = PARAMS['furnitureCardId'];
+    
     this.categoryName = PARAMS['category'];
+    this.furnitureCardId = PARAMS['furnitureCardId'];
 
     this.initCategories();
   }

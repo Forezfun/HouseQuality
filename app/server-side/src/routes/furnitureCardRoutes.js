@@ -96,6 +96,7 @@ ROUTER.put('/', async (request, result) => {
         FURNITURE_CARD_ITEM.proportions = request.body.proportions,
         FURNITURE_CARD_ITEM.colors = request.body.colors.map(color => { return ({ color: color.color, idImages: '' }) })
         FURNITURE_CARD_ITEM.shops = request.body.shops;
+        FURNITURE_CARD_ITEM.additionalData = FURNITURE_CARD_ITEM.additionalData || {}
 
         if (request.body.additionalData !== undefined) {
             const ADDITIONAL_DATA = request.body.additionalData;

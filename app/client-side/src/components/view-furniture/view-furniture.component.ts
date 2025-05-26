@@ -6,6 +6,7 @@ import { ClipboardService } from 'ngx-clipboard';
 import { FurnitureCardControlService, furnitureFromServerData, furnitureProportions } from '../../services/furniture-card-control.service';
 import { NotificationService } from '../../services/notification.service';
 import { CostFormatPipe } from '../../pipes/cost-format.pipe';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-view-furniture',
@@ -19,7 +20,8 @@ export class ViewFurnitureComponent implements OnChanges {
     private elementRef: ElementRef,
     private clipboardService: ClipboardService,
     private furnitureCardService: FurnitureCardControlService,
-    private notification: NotificationService
+    private notification: NotificationService,
+    private router: Router
   ) { }
 
   /** Текущий индекс выбранного цвета */
@@ -36,8 +38,11 @@ export class ViewFurnitureComponent implements OnChanges {
   async ngOnChanges() {
     if (this.furnitureCardId === undefined) return
     try {
-      this.furnitureData = (await this.furnitureCardService.GETfurnitureCard(this.furnitureCardId)).furnitureCard
+      const RESPONSE = await this.furnitureCardService.GETfurnitureCard(this.furnitureCardId);
+      this.furnitureData = RESPONSE.furnitureCard
     } catch (error) {
+      this.notification.setError('Ошибка при получении', 5000);
+      this.router.navigateByUrl('/shop')
       console.log(error)
     }
   }

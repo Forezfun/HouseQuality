@@ -14,7 +14,7 @@ import { loadOBJModel } from './loaders/obj.loader';
  * 
  * @throws {Error} Если тип файла не удалось определить или формат не поддерживается.
  */
-export async function loadModel(blob: Blob, manager?: LoadingManager): Promise<Object3D> {
+export async function loadModel(blob: Blob, manager?: LoadingManager): Promise<Object3D|Error> {
     const mimeType = blob.type;
     let extension: string | undefined;
 
@@ -31,30 +31,27 @@ export async function loadModel(blob: Blob, manager?: LoadingManager): Promise<O
     }
 
     const url = URL.createObjectURL(blob);
-    let loaderPromise: Promise<Object3D>;
-
     try {
-
         switch (extension) {
             case 'gltf':
             case 'glb':
-                loaderPromise = loadGLTFModel(url, manager);
-                break;
+                return await loadGLTFModel(url, manager);
             case 'fbx':
-                loaderPromise = loadFBXModel(url, manager);
-                break;
+                return await loadFBXModel(url, manager);
             case 'obj':
-                loaderPromise = loadOBJModel(url, manager);
-                break;
+                return await loadOBJModel(url, manager);
             default:
                 throw new Error('Не поддерживаемый формат модели: ' + extension);
         }
-
-        const model = await loaderPromise;
-        return model;
+    } catch (error) {
+        if (error instanceof Error) {
+            return error;
+        } else {
+            return new Error(String(error));
+        }
     } finally {
-
         URL.revokeObjectURL(url);
     }
 }
+
 

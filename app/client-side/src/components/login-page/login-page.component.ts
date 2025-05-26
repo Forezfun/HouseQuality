@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectorRef, Component, TemplateRef, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { NavigationPanelComponent } from '../navigation-panel/navigation-panel.component';
 import { FormGroup, FormControl, Validators, ReactiveFormsModule, FormsModule, AbstractControlOptions, ValidatorFn, AbstractControl } from '@angular/forms';
 import { NgIf, NgTemplateOutlet } from '@angular/common';
@@ -19,7 +19,7 @@ import { NotificationService } from '../../services/notification.service';
   templateUrl: './login-page.component.html',
   styleUrl: './login-page.component.scss'
 })
-export class LoginPageComponent implements AfterViewInit {
+export class LoginPageComponent implements AfterViewInit, OnInit {
 
   constructor(
     private accountService: AccountService,
@@ -28,7 +28,7 @@ export class LoginPageComponent implements AfterViewInit {
     private notification: NotificationService,
     private accountCookieService: AccountCookieService,
     private cdr: ChangeDetectorRef
-  ) {}
+  ) { }
 
   /** Текущий отображаемый шаблон формы */
   protected currentFormTemplate!: TemplateRef<any>;
@@ -54,7 +54,16 @@ export class LoginPageComponent implements AfterViewInit {
   @ViewChild('requestPasswordChange', { read: TemplateRef }) private requestPasswordChangeTemplate!: TemplateRef<any>;
 
   /**
-   * Инициализация компонента.
+ * Инициализация компонента.
+ * Проверяет на наличие JWT в cookie и перенаправляет на аккаунт, если он есть.
+ */
+  ngOnInit(): void {
+    const JWT = this.accountCookieService.getJwt();
+    if (JWT) {
+      this.router.navigateByUrl('/account');
+    }
+  }
+  /**
    * Устанавливает форму входа как текущую форму.
    */
   ngAfterViewInit(): void {

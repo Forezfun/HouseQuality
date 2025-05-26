@@ -165,8 +165,15 @@ export class SceneComponent implements AfterViewInit, OnChanges {
   private async loadFurnitureModel(fileModel: Blob, furnitureSize: modelInterface, furnitureCardId: string, saveRoom: boolean, moveData?: objectLoadInterface) {
     try {
       const LOAD_OBJECT = await loadModel(fileModel)
+      if (LOAD_OBJECT instanceof Error) {
+        this.notification.setError('Модель не поддерживается', 5000)
+        return
+      }
       if (moveData) { this.addObjectToScene(LOAD_OBJECT, furnitureSize, furnitureCardId, moveData) } else { this.addObjectToScene(LOAD_OBJECT, furnitureSize, furnitureCardId) }
-      if (saveRoom) this.saveRoom()
+      if (saveRoom) { 
+        this.saveRoom();
+        this.closeLoader()
+      }
     } catch (error) {
     }
   }
@@ -175,12 +182,12 @@ export class SceneComponent implements AfterViewInit, OnChanges {
     if (!JWT) return
     try {
       if (saveRoom) this.showLoader()
+      console.log(furnitureCardId)
       const PROPORTIONS = (await this.furnitureCardService.GETfurnitureCard(furnitureCardId)).furnitureCard.proportions as modelInterface
       const MODEL = await this.furnitureModelService.GETfurnitureModel(JWT, furnitureCardId, controller)
+      console.log(MODEL.type)
       await this.loadFurnitureModel(MODEL, PROPORTIONS, furnitureCardId, saveRoom, moveData)
-      this.closeLoader()
     } catch (error) {
-      this.closeLoader()
       this.notification.setError('Ошибка загрузки модели', 5000)
       console.log(error)
     }
@@ -343,6 +350,7 @@ export class SceneComponent implements AfterViewInit, OnChanges {
     object.userData = { id: furnitureCardId }
     this.scaleImportModel(object, objectProportions);
     this.scene.add(object)
+    console.log(object)
     this.renderer.render(this.scene, this.camera);
     if (!moveData) return
     object.position.set(moveData.xDistance, 0, moveData.zDistance)
@@ -371,17 +379,33 @@ export class SceneComponent implements AfterViewInit, OnChanges {
    * @param objectProportions Пропорции объекта.
    */
   private scaleImportModel(object: THREE.Object3D, objectProportions: modelInterface): void {
-    let { width, length } = objectProportions
-    width = width / 100
-    length = length / 100
+    console.log('Переданные пропорции:', objectProportions);
+
+    // Преобразуем сантиметры в метры (если нужно)
+    let { width, length, height } = objectProportions;
+    width = width / 100;
+    length = length / 100;
+    height = height / 100; // защита от undefined
 
     const UPLOAD_OBJECT_SIZE = this.getObjectSize(object);
     const RECTANGLE_SIZE = this.getObjectSize(this.rectangleMesh);
-    const SCENE_PROPORTIONS_COEFFICIENT = UPLOAD_OBJECT_SIZE.width > UPLOAD_OBJECT_SIZE.length ? RECTANGLE_SIZE.width / UPLOAD_OBJECT_SIZE.width : RECTANGLE_SIZE.length / UPLOAD_OBJECT_SIZE.length;
-    const REAL_PROPORTIONS_COEFFICIENT = UPLOAD_OBJECT_SIZE.width > UPLOAD_OBJECT_SIZE.length ? width / this.roomProportions.width : length / length;
-    const GENERAL_COEFFICIENT = REAL_PROPORTIONS_COEFFICIENT * SCENE_PROPORTIONS_COEFFICIENT;
-    object.scale.set(GENERAL_COEFFICIENT, GENERAL_COEFFICIENT, GENERAL_COEFFICIENT);
+
+
+    const SCENE_COEFF_HEIGHT = this.roomProportions.height / UPLOAD_OBJECT_SIZE.height;
+
+
+    const REAL_COEFF_HEIGHT = height / this.roomProportions.height;
+
+
+    const GENERAL_COEFFICIENT_HEIGHT = SCENE_COEFF_HEIGHT * REAL_COEFF_HEIGHT;
+
+    object.scale.set(
+      GENERAL_COEFFICIENT_HEIGHT,  // по X
+      GENERAL_COEFFICIENT_HEIGHT, // по Y (высота)
+      GENERAL_COEFFICIENT_HEIGHT  // по Z (длина/глубина)
+    );
   }
+
 
   /**
    * Загружает комнату с объектами.
