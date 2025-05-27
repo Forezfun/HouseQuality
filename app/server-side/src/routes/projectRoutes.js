@@ -212,7 +212,7 @@ async function proccessFunriture(funritureId) {
 
   const FIRST_COLOR = FURNITURE_ITEM.colors[0]==='#'?'%23'+FURNITURE_ITEM.colors[0].color.slice(1):FURNITURE_ITEM.colors[0]
   
-  const MAIN_FURNITURE_IMAGE_URL = `furniture/images/main?furnitureCardId=${funritureId}&color=${proccessColor(FIRST_COLOR)}`
+  const MAIN_FURNITURE_IMAGE_URL = `furniture/images/main?furnitureCardId=${funritureId}&color=${proccessColor(FIRST_COLOR.color)}`
   result.previewUrl = MAIN_FURNITURE_IMAGE_URL
 
   return result

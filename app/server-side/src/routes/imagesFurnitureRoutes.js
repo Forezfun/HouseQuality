@@ -67,7 +67,8 @@ const storage = multer.diskStorage({
     },
     filename: (request, file, cb) => {
         const EXTENSION = path.extname(file.originalname).toLowerCase() || '.jpg';
-        const FILE_NAME = Date.now() + EXTENSION;
+        const UNIQUE_SUFFIX = Date.now() + '-' + Math.round(Math.random() * 1E9);
+        const FILE_NAME = UNIQUE_SUFFIX + EXTENSION;
         cb(null, FILE_NAME);
     }
 });

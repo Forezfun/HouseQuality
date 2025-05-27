@@ -34,11 +34,11 @@ export class CreateFurniturePageComponent implements OnInit, OnDestroy {
   private routeSub: Subscription = new Subscription();
   /** Id страницы.*/
   protected idPage!: string;
-  
+
   @ViewChild(CreateFurnitureComponent)
   /** Переменная для взаимодействия с методами дочернего компонента.*/
   private createFurnitureComponent!: CreateFurnitureComponent;
-  
+
   @ViewChild(CreateFurnitureComponent, { read: ElementRef })
   /** Переменная для взаимодействия с html дочернего компонента.*/
   private createFurnitureComponentRef!: ElementRef<HTMLElement>;
@@ -93,7 +93,7 @@ export class CreateFurniturePageComponent implements OnInit, OnDestroy {
    * Отписка от подписки при уничтожении компонента.
    */
   ngOnDestroy() {
-    if(this.routeSub)this.routeSub.unsubscribe();
+    if (this.routeSub) this.routeSub.unsubscribe();
   }
 
   /**
@@ -126,6 +126,7 @@ export class CreateFurniturePageComponent implements OnInit, OnDestroy {
       imagesArray.map(async (blobUrl): Promise<Blob> => {
         const RESPONSE = await fetch(blobUrl.toString());
         const BLOB = await RESPONSE.blob();
+        URL.revokeObjectURL(blobUrl);
         return BLOB;
       })
     );
@@ -145,12 +146,12 @@ export class CreateFurniturePageComponent implements OnInit, OnDestroy {
       () => this.furnitureCardService.DELETEfurnitureCard(JWT, this.idPage)
     ];
 
-for (const op of operations) {
-  try {
-    await op();
-  } catch (error) {
-  }
-}
+    for (const op of operations) {
+      try {
+        await op();
+      } catch (error) {
+      }
+    }
 
     this.router.navigateByUrl('/account');
   }
@@ -171,14 +172,14 @@ for (const op of operations) {
       const FURNITURE_ID = (await this.furnitureCardService.POSTcreateFurnitureCard(FURNITURE_DATA, JWT)).furnitureData._id;
 
 
-      FURNITURE_DATA.colors.forEach(async (colorData) => {
+      for (const colorData of FURNITURE_DATA.colors) {
         const imagesBlobArray = await this.transformUrlArrayToBlob(colorData.imagesData.images);
         const imagesData: imageSliderClientData = {
           images: imagesBlobArray,
           idMainImage: colorData.imagesData.idMainImage
         };
         await this.serverImageControl.POSTuploadProjectImages(colorData.color, imagesData, JWT, FURNITURE_ID);
-      });
+      }
 
 
       const FURNITURE_MODEL_BLOB = this.createFurnitureComponent.furnitureModelInput.files![0];
@@ -219,14 +220,14 @@ for (const op of operations) {
         await this.serverImageControl.POSTuploadProjectImages(colorData.color, IMAGES_DATA, JWT, this.idPage);
         changeImagesCounter++;
       });
-      if(changeImagesCounter > 0)this.notification.setSuccess('Изображения обновлены', 2500);
+      if (changeImagesCounter > 0) this.notification.setSuccess('Изображения обновлены', 2500);
 
       const FURNITURE_MODEL_BLOB = this.createFurnitureComponent.furnitureModelInput.files!;
       if (FURNITURE_MODEL_BLOB[0]) {
         this.furnitureModelService.POSTuploadFurnitureModel(FURNITURE_MODEL_BLOB[0], JWT, this.idPage, 'update');
       }
 
-      
+
     } catch (error) {
       console.error(error);
     }
