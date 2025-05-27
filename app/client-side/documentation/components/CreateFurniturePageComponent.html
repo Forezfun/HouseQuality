@@ -756,8 +756,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="340"
-                                    class="link-to-prism">src/components/create-furniture-page/create-furniture-page.component.ts:340</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="336"
+                                    class="link-to-prism">src/components/create-furniture-page/create-furniture-page.component.ts:336</a></div>
                         </td>
                     </tr>
 
@@ -1599,10 +1599,6 @@ for (const op of operations) {
    * Если цветов один — показывает ошибку.
    */
   protected deleteColor() {
-    if (this.createFurnitureComponent.furnitureData.colors.length &lt;&#x3D; 1) {
-      this.notification.setError(&#x27;Добавьте еще цвет&#x27;, 500);
-      return;
-    }
     this.createFurnitureComponent.deleteColor();
   }
 

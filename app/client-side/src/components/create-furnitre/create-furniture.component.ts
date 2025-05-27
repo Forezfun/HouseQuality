@@ -306,7 +306,7 @@ export class CreateFurnitureComponent implements OnInit, AfterViewInit {
    */
   public deleteColor() {
     const DELETE_COLOR_ID = this.currentColorId;
-    this.currentColorId = 0;
+    this.currentColorId = this.furnitureData.colors.length===1?undefined:0;
     this.furnitureData.colors = this.furnitureData.colors.filter((colorData, index) => index !== DELETE_COLOR_ID);
   }
 

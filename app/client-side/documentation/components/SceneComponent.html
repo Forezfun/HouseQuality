@@ -3947,7 +3947,7 @@ export class SceneComponent implements AfterViewInit, OnChanges {
     &lt;button title&#x3D;&quot;Сохранить комнату&quot; (click)&#x3D;&quot;saveRoom()&quot;&gt;
       &lt;p&gt;Сохранить&lt;/p&gt;
     &lt;/button&gt;
-    &lt;span class&#x3D;&quot;changeBtns&quot;&gt;
+    &lt;span&gt;
       &lt;button title&#x3D;&quot;Удалить мебель&quot; (click)&#x3D;&quot;deleteModel()&quot; *ngIf&#x3D;&quot;targetobject!&#x3D;&#x3D;undefined&quot;&gt;
         &lt;p&gt;Удалить&lt;/p&gt;
         &lt;img src&#x3D;&quot;/assets/images/deleteIcon.svg&quot; alt&#x3D;&quot;&quot;&gt;
@@ -4024,7 +4024,7 @@ export class SceneComponent implements AfterViewInit, OnChanges {
     gap: 10px;
 
     button {
-        width: 50%;
+        width: 200px;
         height: 100%;
 
         justify-content: center;
@@ -4052,10 +4052,9 @@ export class SceneComponent implements AfterViewInit, OnChanges {
             border: 2px solid rgba($lightGreen, 0.8);
         }
     }
-    @media (max-width: 450px) {
-        &amp;{
-            display: none;
-        }
+
+    @media (max-width:450px) {
+        display: none;
     }
 }
 
@@ -4184,7 +4183,7 @@ export class SceneComponent implements AfterViewInit, OnChanges {
 <script src="../js/libs/htmlparser.js"></script>
 <script src="../js/libs/deep-iterator.js"></script>
 <script>
-        var COMPONENT_TEMPLATE = '<div><div id="canvasContainer">  <span class="functionalsBtnsTemplate">    <button title="Сохранить комнату" (click)="saveRoom()">      <p>Сохранить</p>    </button>    <span class="changeBtns">      <button title="Удалить мебель" (click)="deleteModel()" *ngIf="targetobject!==undefined">        <p>Удалить</p>        <img src="/assets/images/deleteIcon.svg" alt="">      </button>      <button title="Скачать отчет по комнате" (click)="getReport()" *ngIf="targetobject===undefined">        <p>Отчет</p>        <img src="/assets/images/uploadIcon.png" alt="">      </button>    </span>  </span></div><div *ngIf="isShowLoader" class="loader">  <span class="loaderSpan">    <span class="spinnerSpan">      <div class="spinner"></div>      <button (click)="abortLoadRoom()" title="Отменить загрузку">        <img src="/assets/images/addIcon.svg" alt="">      </button>    </span>      <p class="loadingModelsAlert">Загрузка моделей...</p>      <p class="freezeBrowserAlert">Возможны подвисания</p>  </span></div></div>'
+        var COMPONENT_TEMPLATE = '<div><div id="canvasContainer">  <span class="functionalsBtnsTemplate">    <button title="Сохранить комнату" (click)="saveRoom()">      <p>Сохранить</p>    </button>    <span>      <button title="Удалить мебель" (click)="deleteModel()" *ngIf="targetobject!==undefined">        <p>Удалить</p>        <img src="/assets/images/deleteIcon.svg" alt="">      </button>      <button title="Скачать отчет по комнате" (click)="getReport()" *ngIf="targetobject===undefined">        <p>Отчет</p>        <img src="/assets/images/uploadIcon.png" alt="">      </button>    </span>  </span></div><div *ngIf="isShowLoader" class="loader">  <span class="loaderSpan">    <span class="spinnerSpan">      <div class="spinner"></div>      <button (click)="abortLoadRoom()" title="Отменить загрузку">        <img src="/assets/images/addIcon.svg" alt="">      </button>    </span>      <p class="loadingModelsAlert">Загрузка моделей...</p>      <p class="freezeBrowserAlert">Возможны подвисания</p>  </span></div></div>'
     var COMPONENTS = [{'name': 'AccountPageComponent', 'selector': 'app-account-page'},{'name': 'AppComponent', 'selector': 'app-root'},{'name': 'CreateFurnitureComponent', 'selector': 'app-create-furniture'},{'name': 'CreateFurniturePageComponent', 'selector': 'app-create-furniture-page'},{'name': 'FinderComponent', 'selector': 'app-finder'},{'name': 'ImageSliderComponent', 'selector': 'app-image-slider'},{'name': 'LoginPageComponent', 'selector': 'app-login-page'},{'name': 'MainPageComponent', 'selector': 'app-main-page'},{'name': 'NavigationPanelComponent', 'selector': 'app-navigation-panel'},{'name': 'NotificationComponent', 'selector': 'app-notification'},{'name': 'PlanHouseComponent', 'selector': 'app-plan-house'},{'name': 'PlanHousePageComponent', 'selector': 'app-plan-house-page'},{'name': 'SceneComponent', 'selector': 'app-scene'},{'name': 'ShopPageComponent', 'selector': 'app-shop-page'},{'name': 'UploadOverlayComponent', 'selector': 'app-upload-overlay'},{'name': 'ViewFurnitureComponent', 'selector': 'app-view-furniture'}];
     var DIRECTIVES = [{'name': 'AutoHeightDirective', 'selector': '[appAutoHeight]'}];
     var ACTUAL_COMPONENT = {'name': 'SceneComponent'};

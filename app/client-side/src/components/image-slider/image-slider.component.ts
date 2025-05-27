@@ -89,7 +89,7 @@ export class ImageSliderComponent implements OnInit {
    * @returns Количество видимых элементов слайдера
    */
   protected getItemsCount(): number {
-    if (this.imagesData.images.length < 3) return this.imagesData.images.length;
+    if (this.imagesData.images.length < 3) return 1;
     return this.isMobileView ? 1 : 3;
   }
 }
