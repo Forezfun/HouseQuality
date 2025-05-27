@@ -222,7 +222,11 @@ export class ReportService {
             box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
             margin-bottom: 30px;
         }
-
+        .shopsSpan{
+            display: flex;
+            flex-direction: column;
+            gap:10px;
+        }
         .openLink {
             width:250px;
             max-width: 250px;
@@ -290,16 +294,16 @@ ${roomData.furnitures.map(furniture => `
     <li class= "paramsItem"> Длина: ${furniture.proportions.length}cм </li>
     </ul>
     </span>
-    <span class= "shopsSpan" >
+    <span>
     <p class="shopsTitle"> Магазины </p>
+    <span class= "shopsSpan">
     ${furniture.shops.map(shopData => `
-    <span >
       <a class="shopLink" href = "${shopData.url}">
       ${this.costPipe(shopData.cost)}
       </a>
-    </span>
       `).join('')
             }
+    </span>
     </span>
     </span>
     <a class= "openLink furnitureLink" href = "${baseClientUrl}shop/${furniture.category}/${furniture.furnitureCardId}"> Посмотреть мебель </a>
