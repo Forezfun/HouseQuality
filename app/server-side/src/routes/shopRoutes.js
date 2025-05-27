@@ -3,6 +3,7 @@ const ROUTER = EXPRESS.Router();
 const FURNITURE_CARD = require('../models/furnitureCard')
 const IMAGES_FURNITURE = require('../models/imagesFurniture');
 const { searchPublications, transliterateQuery } = require('../helpers/findPublicationsHelpers');
+const proccessColor = require('../helpers/colorHandler');
 
 /**
  * @module find
@@ -198,11 +199,13 @@ ROUTER.get('/', async (request, result) => {
 
                 if (!IMAGES_FURNITURE_ITEM) return undefined;
 
+                
+
                 return {
                     name: furnitureData.name,
                     cost: minCost,
                     furnitureCardId: furnitureData._id,
-                    previewUrl: `furniture/images/simple?furnitureCardId=${furnitureData._id}&color=${IMAGES_FURNITURE_ITEM.color}&idImage=${IMAGES_FURNITURE_ITEM.idMainImage}`,
+                    previewUrl: `furniture/images/simple?furnitureCardId=${furnitureData._id}&color=${proccessColor(IMAGES_FURNITURE_ITEM.color)}&idImage=${IMAGES_FURNITURE_ITEM.idMainImage}`,
                     colors: furnitureData.colors?.map(colorData => colorData.color) || [],
                     proportions: furnitureData.proportions || null
                 };

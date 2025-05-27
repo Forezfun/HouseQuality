@@ -7,6 +7,7 @@ const FURNITURE_CARD = require('../models/furnitureCard');
 const { checkUserAccess } = require('../helpers/jwtHandlers');
 const IMAGES_FURNITURE = require('../models/imagesFurniture');
 const { encryptPassword, decryptPassword } = require('../helpers/passwordHandlers');
+const proccessColor = require('../helpers/colorHandler');
 
 /**
  * @module account
@@ -209,7 +210,7 @@ async function proccessFurnitures(ACCOUNT_ID) {
       furnitures.push({
         _id: FURNITURE_DATA._id,
         name: FURNITURE_DATA.name,
-        previewUrl: `furniture/images/simple?furnitureCardId=${FURNITURE_DATA._id}&color=${IMAGES_FURNITURE_ITEM.color}&idImage=${IMAGES_FURNITURE_ITEM.idMainImage || 0}`
+        previewUrl: `furniture/images/simple?furnitureCardId=${FURNITURE_DATA._id}&color=${proccessColor(IMAGES_FURNITURE_ITEM.color)}&idImage=${IMAGES_FURNITURE_ITEM.idMainImage || 0}`
       });
     }
     return furnitures;

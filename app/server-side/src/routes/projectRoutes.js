@@ -4,6 +4,7 @@ const ROUTER = EXPRESS.Router();
 const PROJECT = require('../models/project.js');
 const { checkUserAccess } = require('../helpers/jwtHandlers');
 const FURNITURE_CARD = require('../models/furnitureCard.js');
+const proccessColor = require('../helpers/colorHandler');
 
 /**
  * @module project
@@ -209,8 +210,9 @@ async function proccessFunriture(funritureId) {
   }
   result.shops = FURNITURE_ITEM.shops.sort((a, b) => a - b).slice(0, 5)
 
-  const FIRST_COLOR = FURNITURE_ITEM.colors[0].color
-  const MAIN_FURNITURE_IMAGE_URL = `furniture/images/main?furnitureCardId=${funritureId}&color=${FIRST_COLOR}`
+  const FIRST_COLOR = FURNITURE_ITEM.colors[0]==='#'?'%23'+FURNITURE_ITEM.colors[0].color.slice(1):FURNITURE_ITEM.colors[0]
+  
+  const MAIN_FURNITURE_IMAGE_URL = `furniture/images/main?furnitureCardId=${funritureId}&color=${proccessColor(FIRST_COLOR)}`
   result.previewUrl = MAIN_FURNITURE_IMAGE_URL
 
   return result

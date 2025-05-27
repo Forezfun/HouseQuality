@@ -208,6 +208,7 @@ for (const op of operations) {
       this.notification.setSuccess('Карточка обновлена', 2500);
 
       let changeImagesCounter = 0
+      await this.serverImageControl.DELETEproject(JWT, this.idPage);
       FURNITURE_DATA.colors.forEach(async (colorData) => {
         if (colorData.imagesData.images.length === 0) return;
         const IMAGES_BLOB_ARRAY = await this.transformUrlArrayToBlob(colorData.imagesData.images);
@@ -278,7 +279,7 @@ for (const op of operations) {
       return false;
     }
     for (let colorData of colors) {
-      if (colorData.imagesData.images.length == 0 && typeRequest === 'create') {
+      if (colorData.imagesData.images.length == 0) {
         const uploadInput = this.createFurnitureComponentRef.nativeElement.querySelector(
           '.uploadImagesInput'
         ) as HTMLInputElement;
@@ -326,10 +327,6 @@ for (const op of operations) {
    * Если цветов один — показывает ошибку.
    */
   protected deleteColor() {
-    if (this.createFurnitureComponent.furnitureData.colors.length <= 1) {
-      this.notification.setError('Добавьте еще цвет', 5000);
-      return;
-    }
     this.createFurnitureComponent.deleteColor();
   }
 

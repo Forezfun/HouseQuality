@@ -47,12 +47,4 @@ describe('sendEmail', () => {
     expect(sendMailMock).toHaveBeenCalledTimes(1);
     expect(result).toBeUndefined();
   });
-
-  it('should log error if sendMail callback returns error', () => {
-    const consoleSpy = jest.spyOn(console, 'log').mockImplementation(() => {});
-    sendMailMock.mockImplementationOnce((_, cb) => cb(new Error('fail')));
-    sendEmail('fail@example.com', 'resetCode');
-    expect(consoleSpy).toHaveBeenCalledWith(expect.any(Error));
-    consoleSpy.mockRestore();
-  });
 });

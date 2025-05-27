@@ -6,6 +6,7 @@ const IMAGES_FURNITURE = require('../models/imagesFurniture');
 const PROJECT = require('../models/project');
 const AUTH_ACCOUNT = require('../models/authAccount');
 const sendEmail = require('../helpers/sendcode');
+const proccessColor = require('../helpers/colorHandler');
 
 /**
  * @module furnitureCard
@@ -94,7 +95,7 @@ ROUTER.put('/', async (request, result) => {
         FURNITURE_CARD_ITEM.name = request.body.name;
         FURNITURE_CARD_ITEM.description = request.body.description;
         FURNITURE_CARD_ITEM.proportions = request.body.proportions,
-        FURNITURE_CARD_ITEM.colors = request.body.colors.map(color => { return ({ color: color.color, idImages: '' }) })
+            FURNITURE_CARD_ITEM.colors = request.body.colors.map(color => { return ({ color: color.color, idImages: '' }) })
         FURNITURE_CARD_ITEM.shops = request.body.shops;
         FURNITURE_CARD_ITEM.additionalData = FURNITURE_CARD_ITEM.additionalData || {}
 
@@ -270,7 +271,7 @@ async function proccessColorsData(FURNITURE_CARD_ITEM) {
             if (!IMAGES_FURNITURE_ITEM) continue;
 
             const IMAGES_URLS = IMAGES_FURNITURE_ITEM.images.map((imageData, index) => {
-                return `furniture/images/simple?furnitureCardId=${FURNITURE_CARD_ITEM._id}&color=${IMAGES_FURNITURE_ITEM.color}&idImage=${index}`;
+                return `furniture/images/simple?furnitureCardId=${FURNITURE_CARD_ITEM._id}&color=${proccessColor(IMAGES_FURNITURE_ITEM.color)}&idImage=${index}`;
             });
 
             colorsFromServerData.push({

@@ -490,6 +490,7 @@ for (const op of operations) {
       this.notification.setSuccess(&#x27;Карточка обновлена&#x27;, 2500);
 
       let changeImagesCounter &#x3D; 0
+      await this.serverImageControl.DELETEproject(JWT, this.idPage);
       FURNITURE_DATA.colors.forEach(async (colorData) &#x3D;&gt; {
         if (colorData.imagesData.images.length &#x3D;&#x3D;&#x3D; 0) return;
         const IMAGES_BLOB_ARRAY &#x3D; await this.transformUrlArrayToBlob(colorData.imagesData.images);
@@ -560,7 +561,7 @@ for (const op of operations) {
       return false;
     }
     for (let colorData of colors) {
-      if (colorData.imagesData.images.length &#x3D;&#x3D; 0 &amp;&amp; typeRequest &#x3D;&#x3D;&#x3D; &#x27;create&#x27;) {
+      if (colorData.imagesData.images.length &#x3D;&#x3D; 0) {
         const uploadInput &#x3D; this.createFurnitureComponentRef.nativeElement.querySelector(
           &#x27;.uploadImagesInput&#x27;
         ) as HTMLInputElement;

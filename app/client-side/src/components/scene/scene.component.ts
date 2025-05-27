@@ -348,7 +348,6 @@ export class SceneComponent implements AfterViewInit, OnChanges {
     object.userData = { id: furnitureCardId }
     this.scaleImportModel(object, objectProportions);
     this.scene.add(object)
-    console.log(object)
     this.renderer.render(this.scene, this.camera);
     if (!moveData) return
     object.position.set(moveData.xDistance, 0, moveData.zDistance)
@@ -377,30 +376,20 @@ export class SceneComponent implements AfterViewInit, OnChanges {
    * @param objectProportions Пропорции объекта.
    */
   private scaleImportModel(object: THREE.Object3D, objectProportions: modelInterface): void {
-    console.log('Переданные пропорции:', objectProportions);
-
-    // Преобразуем сантиметры в метры (если нужно)
     let { width, length, height } = objectProportions;
+
     width = width / 100;
     length = length / 100;
-    height = height / 100; // защита от undefined
+    height = height / 100;
 
     const UPLOAD_OBJECT_SIZE = this.getObjectSize(object);
-    const RECTANGLE_SIZE = this.getObjectSize(this.rectangleMesh);
 
-
-    const SCENE_COEFF_HEIGHT = this.roomProportions.height / UPLOAD_OBJECT_SIZE.height;
-
-
-    const REAL_COEFF_HEIGHT = height / this.roomProportions.height;
-
-
-    const GENERAL_COEFFICIENT_HEIGHT = SCENE_COEFF_HEIGHT * REAL_COEFF_HEIGHT;
+    const SCALE_COEFFICIENT = height / UPLOAD_OBJECT_SIZE.height;
 
     object.scale.set(
-      GENERAL_COEFFICIENT_HEIGHT,  // по X
-      GENERAL_COEFFICIENT_HEIGHT, // по Y (высота)
-      GENERAL_COEFFICIENT_HEIGHT  // по Z (длина/глубина)
+      SCALE_COEFFICIENT,
+      SCALE_COEFFICIENT,
+      SCALE_COEFFICIENT
     );
   }
 

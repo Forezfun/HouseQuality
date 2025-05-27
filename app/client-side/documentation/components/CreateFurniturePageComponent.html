@@ -458,8 +458,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="240"
-                                    class="link-to-prism">src/components/create-furniture-page/create-furniture-page.component.ts:240</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="241"
+                                    class="link-to-prism">src/components/create-furniture-page/create-furniture-page.component.ts:241</a></div>
                         </td>
                     </tr>
 
@@ -537,8 +537,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="299"
-                                    class="link-to-prism">src/components/create-furniture-page/create-furniture-page.component.ts:299</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="300"
+                                    class="link-to-prism">src/components/create-furniture-page/create-furniture-page.component.ts:300</a></div>
                         </td>
                     </tr>
 
@@ -627,8 +627,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="328"
-                                    class="link-to-prism">src/components/create-furniture-page/create-furniture-page.component.ts:328</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="329"
+                                    class="link-to-prism">src/components/create-furniture-page/create-furniture-page.component.ts:329</a></div>
                         </td>
                     </tr>
 
@@ -669,8 +669,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="319"
-                                    class="link-to-prism">src/components/create-furniture-page/create-furniture-page.component.ts:319</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="320"
+                                    class="link-to-prism">src/components/create-furniture-page/create-furniture-page.component.ts:320</a></div>
                         </td>
                     </tr>
 
@@ -756,8 +756,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="336"
-                                    class="link-to-prism">src/components/create-furniture-page/create-furniture-page.component.ts:336</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="337"
+                                    class="link-to-prism">src/components/create-furniture-page/create-furniture-page.component.ts:337</a></div>
                         </td>
                     </tr>
 
@@ -1481,6 +1481,7 @@ for (const op of operations) {
       this.notification.setSuccess(&#x27;Карточка обновлена&#x27;, 2500);
 
       let changeImagesCounter &#x3D; 0
+      await this.serverImageControl.DELETEproject(JWT, this.idPage);
       FURNITURE_DATA.colors.forEach(async (colorData) &#x3D;&gt; {
         if (colorData.imagesData.images.length &#x3D;&#x3D;&#x3D; 0) return;
         const IMAGES_BLOB_ARRAY &#x3D; await this.transformUrlArrayToBlob(colorData.imagesData.images);
@@ -1551,7 +1552,7 @@ for (const op of operations) {
       return false;
     }
     for (let colorData of colors) {
-      if (colorData.imagesData.images.length &#x3D;&#x3D; 0 &amp;&amp; typeRequest &#x3D;&#x3D;&#x3D; &#x27;create&#x27;) {
+      if (colorData.imagesData.images.length &#x3D;&#x3D; 0) {
         const uploadInput &#x3D; this.createFurnitureComponentRef.nativeElement.querySelector(
           &#x27;.uploadImagesInput&#x27;
         ) as HTMLInputElement;

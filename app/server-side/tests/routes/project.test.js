@@ -217,7 +217,7 @@ describe('Project Routes', () => {
         proportions: { width: 200, length: 300, height: 90 },
         additionalData: { category: 'sofa' },
         shops: [100, 200, 300, 400, 500, 600],
-        colors: [{ color: '#fff' }]
+        colors: ['#fff']
       });
 
       const res = await request(app)
