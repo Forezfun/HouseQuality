@@ -326,6 +326,10 @@ for (const op of operations) {
    * Если цветов один — показывает ошибку.
    */
   protected deleteColor() {
+    if (this.createFurnitureComponent.furnitureData.colors.length <= 1) {
+      this.notification.setError('Добавьте еще цвет', 5000);
+      return;
+    }
     this.createFurnitureComponent.deleteColor();
   }
 
