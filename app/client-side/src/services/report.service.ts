@@ -291,13 +291,13 @@ ${roomData.furnitures.map(furniture => `
     </ul>
     </span>
     <span class= "shopsSpan" >
+    <p class="shopsTitle"> Магазины </p>
     ${furniture.shops.map(shopData => `
-        <p class="shopsTitle"> Магазины </p>
-        <span >
+    <span >
       <a class="shopLink" href = "${shopData.url}">
       ${this.costPipe(shopData.cost)}
       </a>
-      </span>
+    </span>
       `).join('')
             }
     </span>
