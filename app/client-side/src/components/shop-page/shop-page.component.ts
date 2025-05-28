@@ -16,6 +16,7 @@ import { AbstractControl, FormControl, FormGroup, FormsModule, ReactiveFormsModu
 import { FinderService } from '../../services/finder.service';
 import { Subscription } from 'rxjs';
 import { FinderComponent } from '../finder/finder.component';
+import { ClipboardService } from 'ngx-clipboard';
 
 @Component({
   selector: 'app-shop-page',
@@ -63,6 +64,8 @@ protected clientFiltersObject!: clientFilters;
 /** Массив выбранных пользователем цветов для фильтрации */
 protected selectedColors: string[] = [];
 
+/** Десктоп ли устройство*/
+protected checkDesktop = checkDesktop();
 
 
   constructor(
@@ -75,7 +78,8 @@ protected selectedColors: string[] = [];
     private categoryService: CategoryService,
     private location: Location,
     private elementRef: ElementRef,
-    private finderService: FinderService
+    private finderService: FinderService,
+    private clipboardService: ClipboardService
   ) { }
 
   /**
@@ -345,11 +349,6 @@ protected selectedColors: string[] = [];
   }
 
   /**
-   * Функция проверки, десктоп ли устройство (из reusable функций)
-   */
-  protected checkDesktop = checkDesktop;
-
-  /**
    * Смена категории мебели
    * @param categoryIndex - индекс выбранной категории
    */
@@ -383,6 +382,14 @@ protected selectedColors: string[] = [];
    */
   protected getPlanUrl(planId: number, roomId: number) {
     return `/plan/${planId}/${roomId}/${this.furnitureCardId}`;
+  }
+
+  /**
+   * Копирует в буфер обмена пользователя ссылку на текущую страницу
+   */
+  protected copyPageUrl() {
+    this.clipboardService.copyFromContent(window.location.href)
+    this.notification.setSuccess('Ссылка скопирована',5000)
   }
 
   /**

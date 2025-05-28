@@ -458,8 +458,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="241"
-                                    class="link-to-prism">src/components/create-furniture-page/create-furniture-page.component.ts:241</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="242"
+                                    class="link-to-prism">src/components/create-furniture-page/create-furniture-page.component.ts:242</a></div>
                         </td>
                     </tr>
 
@@ -537,8 +537,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="300"
-                                    class="link-to-prism">src/components/create-furniture-page/create-furniture-page.component.ts:300</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="301"
+                                    class="link-to-prism">src/components/create-furniture-page/create-furniture-page.component.ts:301</a></div>
                         </td>
                     </tr>
 
@@ -579,8 +579,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="166"
-                                    class="link-to-prism">src/components/create-furniture-page/create-furniture-page.component.ts:166</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="167"
+                                    class="link-to-prism">src/components/create-furniture-page/create-furniture-page.component.ts:167</a></div>
                         </td>
                     </tr>
 
@@ -627,8 +627,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="329"
-                                    class="link-to-prism">src/components/create-furniture-page/create-furniture-page.component.ts:329</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="330"
+                                    class="link-to-prism">src/components/create-furniture-page/create-furniture-page.component.ts:330</a></div>
                         </td>
                     </tr>
 
@@ -669,8 +669,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="320"
-                                    class="link-to-prism">src/components/create-furniture-page/create-furniture-page.component.ts:320</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="321"
+                                    class="link-to-prism">src/components/create-furniture-page/create-furniture-page.component.ts:321</a></div>
                         </td>
                     </tr>
 
@@ -715,8 +715,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="138"
-                                    class="link-to-prism">src/components/create-furniture-page/create-furniture-page.component.ts:138</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="139"
+                                    class="link-to-prism">src/components/create-furniture-page/create-furniture-page.component.ts:139</a></div>
                         </td>
                     </tr>
 
@@ -756,8 +756,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="337"
-                                    class="link-to-prism">src/components/create-furniture-page/create-furniture-page.component.ts:337</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="338"
+                                    class="link-to-prism">src/components/create-furniture-page/create-furniture-page.component.ts:338</a></div>
                         </td>
                     </tr>
 
@@ -1045,8 +1045,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="202"
-                                    class="link-to-prism">src/components/create-furniture-page/create-furniture-page.component.ts:202</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="203"
+                                    class="link-to-prism">src/components/create-furniture-page/create-furniture-page.component.ts:203</a></div>
                         </td>
                     </tr>
 
@@ -1307,11 +1307,11 @@ export class CreateFurniturePageComponent implements OnInit, OnDestroy {
   private routeSub: Subscription &#x3D; new Subscription();
   /** Id страницы.*/
   protected idPage!: string;
-  
+
   @ViewChild(CreateFurnitureComponent)
   /** Переменная для взаимодействия с методами дочернего компонента.*/
   private createFurnitureComponent!: CreateFurnitureComponent;
-  
+
   @ViewChild(CreateFurnitureComponent, { read: ElementRef })
   /** Переменная для взаимодействия с html дочернего компонента.*/
   private createFurnitureComponentRef!: ElementRef&lt;HTMLElement&gt;;
@@ -1366,7 +1366,7 @@ export class CreateFurniturePageComponent implements OnInit, OnDestroy {
    * Отписка от подписки при уничтожении компонента.
    */
   ngOnDestroy() {
-    if(this.routeSub)this.routeSub.unsubscribe();
+    if (this.routeSub) this.routeSub.unsubscribe();
   }
 
   /**
@@ -1399,6 +1399,7 @@ export class CreateFurniturePageComponent implements OnInit, OnDestroy {
       imagesArray.map(async (blobUrl): Promise&lt;Blob&gt; &#x3D;&gt; {
         const RESPONSE &#x3D; await fetch(blobUrl.toString());
         const BLOB &#x3D; await RESPONSE.blob();
+        URL.revokeObjectURL(blobUrl);
         return BLOB;
       })
     );
@@ -1418,12 +1419,12 @@ export class CreateFurniturePageComponent implements OnInit, OnDestroy {
       () &#x3D;&gt; this.furnitureCardService.DELETEfurnitureCard(JWT, this.idPage)
     ];
 
-for (const op of operations) {
-  try {
-    await op();
-  } catch (error) {
-  }
-}
+    for (const op of operations) {
+      try {
+        await op();
+      } catch (error) {
+      }
+    }
 
     this.router.navigateByUrl(&#x27;/account&#x27;);
   }
@@ -1444,14 +1445,14 @@ for (const op of operations) {
       const FURNITURE_ID &#x3D; (await this.furnitureCardService.POSTcreateFurnitureCard(FURNITURE_DATA, JWT)).furnitureData._id;
 
 
-      FURNITURE_DATA.colors.forEach(async (colorData) &#x3D;&gt; {
+      for (const colorData of FURNITURE_DATA.colors) {
         const imagesBlobArray &#x3D; await this.transformUrlArrayToBlob(colorData.imagesData.images);
         const imagesData: imageSliderClientData &#x3D; {
           images: imagesBlobArray,
           idMainImage: colorData.imagesData.idMainImage
         };
         await this.serverImageControl.POSTuploadProjectImages(colorData.color, imagesData, JWT, FURNITURE_ID);
-      });
+      }
 
 
       const FURNITURE_MODEL_BLOB &#x3D; this.createFurnitureComponent.furnitureModelInput.files![0];
@@ -1492,14 +1493,14 @@ for (const op of operations) {
         await this.serverImageControl.POSTuploadProjectImages(colorData.color, IMAGES_DATA, JWT, this.idPage);
         changeImagesCounter++;
       });
-      if(changeImagesCounter &gt; 0)this.notification.setSuccess(&#x27;Изображения обновлены&#x27;, 2500);
+      if (changeImagesCounter &gt; 0) this.notification.setSuccess(&#x27;Изображения обновлены&#x27;, 2500);
 
       const FURNITURE_MODEL_BLOB &#x3D; this.createFurnitureComponent.furnitureModelInput.files!;
       if (FURNITURE_MODEL_BLOB[0]) {
         this.furnitureModelService.POSTuploadFurnitureModel(FURNITURE_MODEL_BLOB[0], JWT, this.idPage, &#x27;update&#x27;);
       }
 
-      
+
     } catch (error) {
       console.error(error);
     }

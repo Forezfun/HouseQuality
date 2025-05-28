@@ -257,17 +257,18 @@ export class CreateFurnitureComponent implements OnInit, AfterViewInit {
   /**
    * Добавить или обновить магазин с ценой и ссылкой
    */
-  protected addShop() {
+  protected addOrUpdateShop() {
     if (this.lastClickedShop !== undefined) {
       this.furnitureData.shops[this.lastClickedShop] = {
-        cost: this.shopForm.value.cost!,
+        cost: +(+this.shopForm.value.cost!).toFixed(2),
         url: this.shopForm.value.url!
       };
+    } else {
+      this.furnitureData.shops.push({
+        cost: +(+this.shopForm.value.cost!).toFixed(2),
+        url: this.shopForm.value.url!
+      });
     }
-    this.furnitureData.shops.push({
-      cost: this.shopForm.value.cost!,
-      url: this.shopForm.value.url!
-    });
     this.closeAddModule();
     this.shopForm.patchValue({
       cost: null,
@@ -306,7 +307,7 @@ export class CreateFurnitureComponent implements OnInit, AfterViewInit {
    */
   public deleteColor() {
     const DELETE_COLOR_ID = this.currentColorId;
-    this.currentColorId = this.furnitureData.colors.length === 1? undefined : 0;
+    this.currentColorId = this.furnitureData.colors.length === 1 ? undefined : 0;
     this.furnitureData.colors = this.furnitureData.colors.filter((colorData, index) => index !== DELETE_COLOR_ID);
   }
 

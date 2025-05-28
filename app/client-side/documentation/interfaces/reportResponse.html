@@ -497,7 +497,11 @@ export class ReportService {
             box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
             margin-bottom: 30px;
         }
-
+        .shopsSpan{
+            display: flex;
+            flex-direction: column;
+            gap:10px;
+        }
         .openLink {
             width:250px;
             max-width: 250px;
@@ -565,16 +569,16 @@ ${roomData.furnitures.map(furniture &#x3D;&gt; &#x60;
     &lt;li class&#x3D; &quot;paramsItem&quot;&gt; Длина: ${furniture.proportions.length}cм &lt;/li&gt;
     &lt;/ul&gt;
     &lt;/span&gt;
-    &lt;span class&#x3D; &quot;shopsSpan&quot; &gt;
+    &lt;span&gt;
+    &lt;p class&#x3D;&quot;shopsTitle&quot;&gt; Магазины &lt;/p&gt;
+    &lt;span class&#x3D; &quot;shopsSpan&quot;&gt;
     ${furniture.shops.map(shopData &#x3D;&gt; &#x60;
-        &lt;p class&#x3D;&quot;shopsTitle&quot;&gt; Магазины &lt;/p&gt;
-        &lt;span &gt;
       &lt;a class&#x3D;&quot;shopLink&quot; href &#x3D; &quot;${shopData.url}&quot;&gt;
       ${this.costPipe(shopData.cost)}
       &lt;/a&gt;
-      &lt;/span&gt;
       &#x60;).join(&#x27;&#x27;)
             }
+    &lt;/span&gt;
     &lt;/span&gt;
     &lt;/span&gt;
     &lt;a class&#x3D; &quot;openLink furnitureLink&quot; href &#x3D; &quot;${baseClientUrl}shop/${furniture.category}/${furniture.furnitureCardId}&quot;&gt; Посмотреть мебель &lt;/a&gt;

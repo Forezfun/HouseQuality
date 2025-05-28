@@ -10,7 +10,7 @@ export class CostFormatPipe implements PipeTransform {
    * @returns Отформатированная строка, например: "1.234.567 ₽"
    */
   transform(value: number): string {
-    return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') + ' ₽';
+    return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') + ' ₽';
   }
 
 }

@@ -9,7 +9,8 @@
       </button>
       <span class="furnitureCard">
         <app-view-furniture [furnitureCardId]="furnitureCardId"></app-view-furniture>
-        <button (click)="openAddModule()" class="chooseAddProjectBtn" title="Добавить мебель">Добавить</button>
+        <button *ngIf="checkDesktop" (click)="openAddModule()" class="chooseAddProjectBtn" title="Добавить мебель">Добавить</button>
+        <button *ngIf="!checkDesktop" style="cursor: copy;" (click)="copyPageUrl()" class="chooseAddProjectBtn">Скопировать ссылку</button>
       </span>
     </span>
     <span *ngIf="!furnitureCardId" class="mainArea">

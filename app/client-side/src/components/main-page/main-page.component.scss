@@ -166,7 +166,7 @@
     font-family: Gloock;
     font-size: 8vw;
     font-weight: 400;
-    color:black;
+    color: black;
 
     @media (max-width: 600px) {
         font-size: 12vw;
@@ -227,6 +227,8 @@
     font: 3.5vw/1 Calypso;
     color: $light;
     width: 60%;
+    margin-bottom: 0;
+
 
     @media (max-width:1024px) {
         font-size: 5vw;

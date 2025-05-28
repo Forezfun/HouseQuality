@@ -810,6 +810,7 @@ export class ViewFurnitureComponent implements OnChanges {
   /** Копирование ссылки на магазин */
   protected copyShopLink(furnitureUrl: string) {
     this.clipboardService.copyFromContent(furnitureUrl)
+    this.notification.setSuccess(&#x27;Ссылка скопирована&#x27;,5000)
   }
 }
 </code></pre>

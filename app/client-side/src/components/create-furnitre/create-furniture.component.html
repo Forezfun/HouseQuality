@@ -90,7 +90,7 @@
     </form>
 </ng-template>
 <ng-template #shopsModule>
-    <form class="addModuleSpan" [formGroup]="shopForm" (ngSubmit)="addShop()">
+    <form class="addModuleSpan" [formGroup]="shopForm" (ngSubmit)="addOrUpdateShop()">
         <button (click)="closeAddModule()" class="closeAddModuleBtn" type="button">
             <img loading="lazy" src="/assets/images/addIcon.svg" alt="Закрыть">
         </button>
