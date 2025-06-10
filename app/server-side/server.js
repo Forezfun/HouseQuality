@@ -29,7 +29,18 @@ const APP = EXPRESS();
 
 CONNECT_DB();
 
-APP.use(CORS());
+const CORS_OPTIONS = {
+  origin: 'https://housequality.site',
+  methods: ['GET', 'POST', 'PUT', 'DELETE']
+};
+
+APP.use((req, res, next) => {
+  if (req.path.startsWith('/assets/')) {
+    next();
+  } else {
+    CORS(CORS_OPTIONS)(req, res, next);
+  }
+});
 APP.use(BODYPARSER.json());
 APP.use(BODYPARSER.urlencoded({ extended: true }));
 
