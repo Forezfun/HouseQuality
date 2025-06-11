@@ -134,7 +134,7 @@ export class SceneComponent implements AfterViewInit, OnChanges {
     this.initThreeJs();
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
+  async ngOnChanges(changes: SimpleChanges) {
     this.roomData = changes['roomData'].currentValue as roomDataPlan
 
     if (!this.roomData || this.scene === undefined) return
@@ -152,7 +152,7 @@ export class SceneComponent implements AfterViewInit, OnChanges {
       return
     }
 
-    this.loadRoom()
+    await this.loadRoom()
 
     const FURNITURE_ID = this.route.snapshot.params['furnitureCardId']
     if (!FURNITURE_ID || changes['roomData'].previousValue) return
